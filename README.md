@@ -62,23 +62,13 @@ A powerful web application that scrapes Google search results and extracts heade
    ```
 2. Edit `.env` and fill in your actual API keys and secrets. **Never commit `.env` to source control!**
 
-- `.env.template` provides example variable names and usage.
+- `.env.template` provides example variable names and usage (e.g., `SERPAPI_KEY=your_serpapi_key_here`).
 
 ## Running Locally
 
 ```bash
-# Install dependencies
 pip install -r requirements.txt
-
-# Run the application
 streamlit run app/ui/enhanced_google_scraper.py
-```
-
-## Environment Variables
-
-Create a `.env` file with the following variables:
-```
-SERPAPI_KEY=your_serpapi_key_here
 ```
 
 ## Notes
