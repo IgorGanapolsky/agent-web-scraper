@@ -35,6 +35,10 @@ A powerful web application that scrapes Google search results and extracts heade
 - **Avoids Blocks**: Prevents IP blocking that direct scraping would encounter
 - **Structured Data**: Returns well-formatted JSON for easy processing
 
+## Logging
+
+- The application includes logging to help with debugging and troubleshooting.
+
 ## How It Works
 
 1. **User Input:**  
@@ -70,9 +74,3 @@ A powerful web application that scrapes Google search results and extracts heade
 pip install -r requirements.txt
 streamlit run app/ui/enhanced_google_scraper.py
 ```
-
-## Notes
-
-- This application is for educational and research purposes only
-- Respect website terms of service and implement appropriate rate limiting
-- The application includes logging to help with debugging and troubleshooting
