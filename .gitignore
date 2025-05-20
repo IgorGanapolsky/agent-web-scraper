@@ -22,3 +22,6 @@ venv/
 
 # Misc
 scraper.log
+
+# Credentials
+**/service_account.json
