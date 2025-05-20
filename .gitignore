@@ -25,3 +25,4 @@ scraper.log
 
 # Credentials
 **/service_account.json
+.streamlit/secrets.toml
