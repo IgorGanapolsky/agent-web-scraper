@@ -1,0 +1,47 @@
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"] # Test against supported Python versions
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt # For linters and tests
+        pre-commit install # Ensure hooks are set up for linting step (optional here if directly calling pre-commit)
+
+    - name: Lint with pre-commit
+      run: |
+        pre-commit run --all-files
+
+    - name: Test with pytest
+      run: |
+        pytest --cov=app --cov-report=xml # Generate coverage report for SonarQube
+
+    # Optional: Upload coverage to SonarQube (if configured)
+    # - name: SonarQube Scan
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main' # Or your main branch
+    #   uses: SonarSource/sonarcloud-github-action@master
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Secret SonarQube token
+    #   with:
+    #     # Additional arguments for SonarQube scanner
+    #     args: >
+    #       -Dsonar.projectKey=your_project_key
+    #       -Dsonar.organization=your_organization_key # if using SonarCloud
+    #       # -Dsonar.python.coverage.reportPaths=coverage.xml # Already in sonar-project.properties but can be overridden
