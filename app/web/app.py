@@ -19,11 +19,6 @@ import urllib.parse
 from io import BytesIO
 from dotenv import load_dotenv
 
-# PDF generation imports
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-
 # Search API - fix import
 from serpapi.google_search import GoogleSearch
 
