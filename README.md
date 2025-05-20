@@ -8,23 +8,33 @@ A powerful web application that scrapes data from websites using undetected_chro
 ```
 agent-web-scraper/
 ├── run.py                  # Main entry point
-├── app/
+├── app/                    # Application code
 │   ├── __init__.py
-│   ├── api/                # FastAPI application
-│   │   └── app.py         # API routes and setup
-│   ├── web/                # Streamlit web interface
-│   │   └── app.py         # Streamlit application
-│   ├── core/               # Core functionality
-│   │   ├── scraper.py     # Base scraper implementation
-│   │   └── undetected_scraper.py  # Undetected Chrome scraper
-│   ├── ui/                 # UI components
-│   ├── utils/              # Utility functions
-│   └── config/             # Configuration
-│       ├── __init__.py
-│       ├── safe_logger.py  # Safe logging configuration
-│       └── settings.py     # Application settings
+│   ├── api/
+│   ├── web/
+│   ├── core/
+│   ├── ui/
+│   ├── utils/
+│   └── config/
 ├── tests/                  # Test suite
-└── requirements.txt        # Project dependencies
+│   ├── __init__.py
+│   ├── unit/
+│   │   ├── __init__.py
+│   │   └── test_example.py
+│   └── integration/
+│       └── __init__.py
+├── .env.template           # Environment variable template
+├── .gitignore              # Git ignore file
+├── .pre-commit-config.yaml # Pre-commit hook configuration
+├── LICENSE                 # Project license
+├── README.md               # This file
+├── pyproject.toml          # Project configuration (for Black, isort, etc.)
+├── requirements-dev.txt    # Development dependencies
+├── requirements.txt        # Project dependencies
+├── sonar-project.properties # SonarQube configuration
+└── docs/                   # Documentation
+    └── adr/
+        └── 0001-use-undetected-chromedriver.md
 ```
 
 ### Core Components
@@ -35,7 +45,7 @@ agent-web-scraper/
 - **Logging**: Safe logging configuration to prevent common issues
 
 ### Technology Stack
-- **Python 3.11+**: Core programming language
+- **Python 3.9+**: Core programming language
 - **FastAPI**: Modern, fast web framework for building APIs
 - **Streamlit**: Rapid web app development
 - **undetected_chromedriver**: For browser automation that avoids detection
@@ -46,7 +56,7 @@ agent-web-scraper/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.11+
+- Python 3.9+
 - Google Chrome browser installed
 - ChromeDriver (will be installed automatically)
 - Environment variables set in `.env` file (copy `.env.example` if needed)
@@ -175,6 +185,29 @@ SENTRY_DSN=your_sentry_dsn_here
    # Edit .env with your configuration
    ```
 
+### Tool Configuration
+Project code style and formatting are managed by tools like Black and isort. Their configurations are stored in `pyproject.toml`.
+
+### Pre-commit Hooks
+
+This project uses pre-commit hooks to ensure code style and quality before committing.
+To set them up:
+
+1. Install pre-commit (if not already installed via `requirements-dev.txt`):
+   ```bash
+   pip install pre-commit
+   ```
+2. Install the git hooks:
+   ```bash
+   pre-commit install
+   ```
+
+Now, Black, isort, Flake8, and Mypy will run automatically on changed files before each commit.
+You can also run them manually on all files:
+```bash
+pre-commit run --all-files
+```
+
 ### Development Workflow
 
 1. **Run tests**
@@ -182,13 +215,12 @@ SENTRY_DSN=your_sentry_dsn_here
    pytest
    ```
 
-2. **Run linters**
+2. **Run linters and formatters**
+   To manually run all configured linters and formatters across the entire project, use:
    ```bash
-   black .
-   isort .
-   flake8
-   mypy .
+   pre-commit run --all-files
    ```
+   Individual linters can also be run if needed (e.g., `flake8`, `mypy .`), but pre-commit provides a unified way to manage them.
 
 3. **Run the CLI**
    ```bash
@@ -196,6 +228,8 @@ SENTRY_DSN=your_sentry_dsn_here
    ```
 
 ## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
 
 1. Fork the repository
 2. Create a feature branch
@@ -213,7 +247,7 @@ SENTRY_DSN=your_sentry_dsn_here
 
 ### Current Test Coverage
 
-Our current test coverage is lower than desired. We're actively working to improve it to reach our goal of 80% coverage. Current coverage is around 24%.
+The basic testing structure (`tests/unit`, `tests/integration`) has been set up, and a placeholder test (`tests/unit/test_example.py`) is in place. Our current test coverage is lower than desired (around 24%), and we are actively working to improve it to reach our goal of 80%.
 
 ### Running Tests
 
@@ -224,9 +258,9 @@ pytest --cov=app --cov-report=term-missing
 
 ### Running Specific Tests
 
-Run a specific test file:
+Run a specific test file (e.g., the placeholder test):
 ```bash
-pytest tests/unit/test_scraper.py -v
+pytest tests/unit/test_example.py -v
 ```
 
 Run tests with HTML coverage report:
@@ -245,7 +279,7 @@ We need to add more tests for:
 
 ### SonarQube Integration
 
-SonarQube is configured to enforce 80% test coverage. The current configuration can be found in `sonar-project.properties`.
+SonarQube analysis is configured via the `sonar-project.properties` file in the project root. This file specifies the project key, source and test directories, and other analysis parameters, including the path to coverage reports. SonarQube is typically used to enforce test coverage goals (e.g., 80%).
 
 ## 📚 Documentation
 
@@ -253,7 +287,7 @@ SonarQube is configured to enforce 80% test coverage. The current configuration 
 
 We use Architecture Decision Records (ADRs) to document important architectural decisions made throughout the project.
 
-1. [0001-use-undetected-chromedriver.md](docs/adr/0001-use-undetected-chromedriver.md) - Decision to use undetected_chromedriver with Selenium for web scraping
+1. [0001-use-undetected-chromedriver.md](docs/adr/0001-use-undetected-chromedriver.md) - Decision to use `undetected_chromedriver` with Selenium for web scraping. (Ensure ADR filenames are consistent with the project structure, e.g., `docs/adr/0001-use-undetected-chromedriver.md`).
 
 Key decisions:
 - Using undetected_chromedriver to avoid bot detection
@@ -265,6 +299,22 @@ To create a new ADR:
 ```bash
 python scripts/new_adr.py "Title of the decision"
 ```
+Consider creating ADRs for any other significant architectural choices, such as the selection of the observability stack or key data handling strategies, to maintain a clear record of decisions.
+
+## 🔄 CI/CD
+
+This project uses GitHub Actions for Continuous Integration. A basic CI pipeline is defined in `.github/workflows/ci.yml`.
+
+### Features
+- **Automated Testing**: Every push and pull request triggers the test suite to ensure code quality and prevent regressions.
+- **Linting & Formatting**: Code is automatically checked for style consistency using pre-commit hooks.
+- **Multi-Python Version Testing**: Tests are run against multiple Python versions (3.9, 3.10, 3.11) to ensure compatibility.
+
+### Future Enhancements
+- Integration with SonarQube for advanced code quality analysis.
+- Automated builds and deployments (Continuous Deployment).
+
+You can view the status of CI runs in the "Actions" tab of the GitHub repository.
 
 ## 📄 License
 
