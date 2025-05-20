@@ -40,7 +40,6 @@ app/
 - streamlit: Web interface
 - google-search-results: SerpAPI client
 - pandas: Data processing
-- reportlab: PDF generation
 
 ## Setup
 
