@@ -1,0 +1,17 @@
+# Default owners for everything in the repo
+*       @yourusername
+
+# Core code owners
+/app/core/            @yourusername @team/core
+/tests/               @yourusername @team/qa
+
+# Documentation
+/docs/                @yourusername @team/docs
+README.md             @yourusername @team/docs
+CONTRIBUTING.md       @yourusername @team/docs
+CHANGELOG.md          @yourusername @team/docs
+
+# Configuration files
+/.github/             @yourusername @team/devops
+/Makefile             @yourusername @team/devops
+/requirements*.txt    @yourusername @team/devops
