@@ -1,0 +1,55 @@
+name: Build, Test, and Analyze
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_and_analyze:
+    name: Build, Test, and Analyze
+    runs-on: ubuntu-latest # Using ubuntu-latest as it's generally faster
+    strategy:
+      matrix:
+        python-version: ["3.11"] # Let's use the latest stable Python for the main analysis. Can add more if strict multi-version compatibility is key for Sonar.
+      fail-fast: false # If one Python version fails, others can continue
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for SonarCloud analysis
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then
+            pip install -r requirements-dev.txt
+          else
+            pip install -r requirements.txt
+          fi
+          # Consider pre-commit install if you use it locally and want to ensure hooks are active
+
+      - name: Lint with pre-commit
+        run: |
+          pre-commit run --all-files
+
+      - name: Test with pytest and generate coverage
+        run: |
+          pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term
+
+      - name: SonarCloud Scan
+        if: success() # Only run SonarCloud if previous steps were successful
+        uses: SonarSource/sonarqube-scan-action@v5 # This action works for SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io # Explicitly set for SonarCloud
+        # No 'args' needed here if sonar-project.properties is fully configured
+        # projectBaseDir defaults to '.' which is usually correct
