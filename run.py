@@ -17,7 +17,7 @@ from app.utils.port_utils import find_available_port
 def run_web():
     """Run the Streamlit web application."""
     # Set up logging
-    setup_logging()
+    setup_logging(log_file="logs/app.log")
     logger = get_logger(__name__)
 
     @log_exceptions
@@ -50,8 +50,6 @@ if __name__ == "__main__":
     project_root = str(Path(__file__).parent.absolute())
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
-
-    import streamlit.web.cli as stcli
 
     sys.argv = ["streamlit", "run", "app/web/app.py"]
     run_web()

@@ -1,9 +1,8 @@
 """Module for tracking API usage and costs."""
 import json
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, cast
 
 # Default cost per API call (in USD)
 DEFAULT_COST_PER_CALL = 0.01

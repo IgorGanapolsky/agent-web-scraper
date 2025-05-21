@@ -1,6 +1,6 @@
 """Unit tests for the web application."""
+# import asyncio # F401
 import sys
-import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, mock_open, patch
 

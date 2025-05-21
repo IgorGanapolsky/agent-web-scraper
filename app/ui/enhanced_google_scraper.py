@@ -1,12 +1,6 @@
-import io
-import json
 import logging
 import os
-import random
-import re
-import time
 import urllib.parse
-from datetime import datetime
 from io import BytesIO
 
 import pandas as pd
@@ -15,7 +9,7 @@ import streamlit as st
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, letter
+from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 from serpapi import GoogleSearch
@@ -28,7 +22,8 @@ logging.basicConfig(
     filename="scraper.log",
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    filemode="a",  # Use append mode by default, but we'll clear it when running search_and_scrape
+    # Use append mode by default, but we'll clear it when running search_and_scrape
+    filemode="a",
 )
 
 # API Keys
@@ -81,6 +76,11 @@ FIRECRAWL_BLOCKLIST = [
     "seekingalpha.com",
 ]
 
+# Define constants for UI elements
+GOOGLE_LOGO_URL = (
+    "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+)
+
 
 def is_blocked_url(url):
     """Check if URL domain is in the blocklist."""
@@ -96,7 +96,11 @@ def extract_headers_with_soup(url, tags_to_analyze):
     Fallback scraper using BeautifulSoup for simple sites
     """
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/91.0.4472.124 Safari/537.36"
+        )
     }
 
     try:
@@ -186,12 +190,9 @@ def search_and_scrape():
     # Clear the scraper.log file
     try:
         with open("scraper.log", "w") as f:
-            f.write(
-                f"Starting new scraping session for: {st.session_state['search_term']}\n"
-            )
-        logging.info(
-            f"Starting new scraping session for: {st.session_state['search_term']}"
-        )
+            search_val = st.session_state["search_term"]
+            f.write(f"Starting new scraping session for: {search_val}\n")
+        logging.info(f"Starting new scraping session for: {search_val}")
     except Exception as e:
         logging.error(f"Failed to clear log file: {str(e)}")
 
@@ -239,15 +240,19 @@ def search_and_scrape():
 
                 # Make sure we get the number requested by the user
                 if len(urls_to_scrape) < st.session_state["num_results"]:
+                    num_found = len(urls_to_scrape)
+                    num_requested = st.session_state["num_results"]
                     logging.warning(
-                        f"Only found {len(urls_to_scrape)} results, but {st.session_state['num_results']} were requested"
+                        f"Only found {num_found} results, "
+                        f"but {num_requested} were requested"
                     )
 
                 # Limit to the number requested (or get all available if fewer)
                 urls_to_scrape = urls_to_scrape[: st.session_state["num_results"]]
 
+                num_urls = len(urls_to_scrape)
                 status_container.info(
-                    f"Found {len(urls_to_scrape)} URLs to scrape. Starting scraping process..."
+                    f"Found {num_urls} URLs to scrape. Starting scraping process..."
                 )
                 logging.info(f"URLs to scrape: {urls_to_scrape}")
             else:
@@ -327,7 +332,8 @@ def search_and_scrape():
 
             status_message = f"Completed scraping {len(scrape_status)} URLs. "
             if failed > 0:
-                status_message += f"Successfully scraped {successful} URLs, failed to scrape {failed} URLs."
+                status_message += f"Successfully scraped {successful} URLs, "
+                status_message += f"failed to scrape {failed} URLs."
             else:
                 status_message += "All URLs were successfully scraped."
 
@@ -369,7 +375,7 @@ def main():
         page_title="Enhanced Web Scraper",
         page_icon="🔍",
         layout="wide",
-        initial_sidebar_state="expanded",  # Make sure the sidebar is expanded by default
+        initial_sidebar_state="expanded",
     )
 
     # Force sidebar expansion using custom CSS
@@ -398,7 +404,7 @@ def main():
     # Configure and lay out the sidebar
     with st.sidebar:
         st.image(
-            "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            GOOGLE_LOGO_URL,
             width=150,
         )
         st.subheader("Web Scraper Parameters")
@@ -494,7 +500,8 @@ def main():
     st.markdown(
         """
     This app uses enhanced browser technology to extract headers from web pages.
-    Enter a search term in the sidebar, select which headers you want to extract, and click 'Search and Scrape'.
+    Enter a search term in the sidebar, select which headers you want to extract,
+    and click 'Search and Scrape'.
     """
     )
 
@@ -520,7 +527,7 @@ def main():
 
         # Try to export to Excel if xlsxwriter is available
         try:
-            import xlsxwriter
+            import xlsxwriter  # noqa: F401
 
             buffer = BytesIO()
             with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
@@ -531,11 +538,14 @@ def main():
                 writer.close()
 
             excel_data = buffer.getvalue()
+            excel_mime_type = (
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
             st.download_button(
                 label="Download Excel",
                 data=excel_data,
                 file_name="scraped_results.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                mime=excel_mime_type,
             )
         except ImportError:
             st.warning("Excel export not available. 'xlsxwriter' package not found.")
@@ -597,7 +607,8 @@ def main():
     doc.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && doc.activeElement.id.endsWith('search_term')) {
             const buttons = Array.from(doc.querySelectorAll('button'));
-            const scrapeButton = buttons.find(button => button.innerText === 'Search and Scrape');
+            const isScrapeButton = button => button.innerText === 'Search and Scrape';
+            const scrapeButton = buttons.find(isScrapeButton);
             if (scrapeButton) {
                 scrapeButton.click();
             }

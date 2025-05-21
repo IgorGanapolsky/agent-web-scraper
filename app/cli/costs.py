@@ -1,11 +1,10 @@
 """CLI commands for managing and checking API costs."""
-from datetime import datetime
-
 import click
 from rich import box
 from rich.console import Console
 from rich.table import Table
 
+from ..cli import cli as main_cli
 from ..core.cost_tracker import cost_tracker, get_usage_summary
 
 console = Console()
@@ -61,6 +60,5 @@ def history(all: bool):
 
 
 # Add the costs command group to the main CLI
-from ..cli import cli as main_cli
 
 main_cli.add_command(costs, name="costs")

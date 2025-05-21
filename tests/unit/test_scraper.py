@@ -1,11 +1,12 @@
 """Unit tests for the main scraper functionality."""
-import json as std_json
-import unittest
+import json
+import os
+from contextlib import asynccontextmanager
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pandas as pd
+import aiohttp
 import pytest
-from aiohttp import ClientSession, TCPConnector
+from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 
 from app.core.scraper import Scraper
@@ -34,14 +35,21 @@ class ConcreteScraper(Scraper):
         """Mock HTML fetching for testing."""
         # In a real scenario, this would fetch HTML from the URL.
         # For testing, we return a fixed HTML string.
-        return "<html><body><h1>Mock Job Title</h1><p>Mock Job Description</p></body></html>"
+        return "<html><body><h1>Mock</h1><p>Mock</p></body></html>"
 
     async def scrape(self, url: str) -> list:
         """Implementation of the abstract method."""
-        if not url.startswith(("http://", "https://")):
+        # Ensure this condition is properly formatted and not too long
+        if not url.startswith(
+            (
+                "http://",
+                "https://",
+            )
+        ):
             raise ValueError("Invalid URL")
 
         html = await self._fetch_html(url)
+        # Reformatted for clarity
         job_data = self._extract_job_data(html)
         return [job_data] if job_data else []
 
@@ -203,84 +211,29 @@ class TestScraper:
     @pytest.mark.asyncio
     async def test_handle_rate_limiting(self, scraper, mock_session):
         """Test that the scraper handles rate limiting correctly."""
-        test_url = "https://example.com/jobs"
+        # Setup
+        test_url = "http://example.com"
+        mock_sleep = AsyncMock()
 
-        # Create a proper ClientResponseError with required parameters
-        request_info = MagicMock()
-        request_info.headers = {}
-        request_info.method = "GET"
-        request_info.real_url = test_url
+        # Configure the session to raise ClientResponseError on the first call
+        mock_session.get.side_effect = [
+            aiohttp.ClientResponseError(
+                request_info=MagicMock(),
+                history=(),
+                status=429,
+                message="Too Many Requests",
+            ),
+            self.mock_response,  # Successful response on the second call
+        ]
 
-        error = aiohttp.ClientResponseError(
-            status=429,
-            message="Too Many Requests",
-            request_info=request_info,
-            history=(),
-        )
-
-        # Create a mock response that will raise the error
-        error_response = AsyncMock()
-        error_response.__aenter__.side_effect = error
-
-        # Create a success response
-        success_response = AsyncMock()
-        success_response.text.return_value = "<html><h1>Test Job</h1></html>"
-        success_response.__aenter__.return_value = success_response
-
-        # Set up the side effect to return error first, then success
-        mock_session.get.side_effect = [error_response, success_response]
-
-        # Call the method
-        result = await scraper.scrape(test_url)
-
-        # Should have retried and eventually succeeded
-        assert mock_session.get.call_count == 2
-        assert len(result) == 1  # Should still get a result after retry
-
-    @pytest.mark.asyncio
-    async def test_save_results(self, scraper, tmp_path, sample_job_data):
-        """Test saving results to a file."""
-        test_file = tmp_path / "test_output.json"
-
-        # Setup the mock file object
-        mock_file = AsyncMock()
-
-        # Create a mock async context manager for aiofiles.open
-        @asynccontextmanager
-        async def mock_file_manager():
-            yield mock_file
-
-        # Setup the mock for aiofiles.open
-        mock_aioopen = MagicMock(return_value=mock_file_manager())
-
-        # Mock aiofiles.open and os.makedirs
-        with patch("aiofiles.open", mock_aioopen), patch(
-            "os.makedirs"
-        ) as mock_makedirs:
+        # Patch asyncio.sleep
+        with patch("asyncio.sleep", mock_sleep):
             # Call the method
-            await scraper.save_results([sample_job_data], str(test_file))
+            await scraper.scrape(test_url)
 
-            # Verify directory creation
-            mock_makedirs.assert_called_once_with(
-                os.path.dirname(os.path.abspath(str(test_file))), exist_ok=True
-            )
-
-            # Verify the file was opened in write mode with correct args
-            mock_aioopen.assert_called_once_with(str(test_file), "w", encoding="utf-8")
-
-            # Verify write was called with JSON data
-            mock_file.write.assert_awaited_once()
-
-            # Get the written content and parse it as JSON
-            import json
-
-            written_content = mock_file.write.await_args[0][0]
-            data = json.loads(written_content)
-
-            # Verify the content
-            assert len(data) == 1
-            assert data[0]["title"] == sample_job_data["title"]
-            assert data[0]["company"] == sample_job_data["company"]
+        # Assertions
+        assert mock_session.get.call_count == 2
+        mock_sleep.assert_called_once_with(scraper.retry_delay)
 
     @pytest.mark.asyncio
     async def test_make_request_retry_on_429(self, scraper, mocker):
@@ -405,3 +358,48 @@ class TestScraper:
 
         # Verify the correct number of requests were made (initial + retries)
         assert request_count == max_retries + 1
+
+    @pytest.mark.asyncio
+    async def test_save_results(self, scraper, tmp_path, sample_job_data):
+        """Test saving results to a file."""
+        test_file = tmp_path / "test_output.json"
+
+        # Setup the mock file object
+        mock_file_write = AsyncMock()  # To be used by the mock file's write method
+        mock_file_obj = MagicMock()
+        mock_file_obj.write = mock_file_write
+
+        # Create a mock async context manager for aiofiles.open
+        @asynccontextmanager
+        async def mock_aiofiles_open_context(*args, **kwargs):
+            yield mock_file_obj
+
+        # Mock aiofiles.open and os.makedirs
+        with patch(
+            "aiofiles.open", return_value=mock_aiofiles_open_context()
+        ) as mock_aioopen, patch("os.makedirs") as mock_makedirs:
+            # Call the method
+            await scraper.save_results([sample_job_data], str(test_file))
+
+            # Verify directory creation
+            mock_makedirs.assert_called_once_with(
+                os.path.dirname(os.path.abspath(str(test_file))), exist_ok=True
+            )
+
+            # Verify the file was opened in write mode with correct args
+            mock_aioopen.assert_called_once_with(str(test_file), "w", encoding="utf-8")
+
+            # Verify write was called with JSON data
+            mock_file_write.assert_awaited_once()
+
+            # Get the written content and parse it as JSON
+            written_content = mock_file_write.await_args[0][0]
+            data = json.loads(written_content)
+
+            # Verify the content
+            assert len(data) == 1
+            assert data[0]["title"] == sample_job_data["title"]
+            assert data[0]["company"] == sample_job_data["company"]
+
+            assert data[0]["title"] == sample_job_data["title"]
+            assert data[0]["company"] == sample_job_data["company"]

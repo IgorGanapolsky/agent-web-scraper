@@ -3,18 +3,20 @@
 Script to test and demonstrate the logging configuration.
 """
 import asyncio
-import json
 import os
 import sys
-from pathlib import Path
+
+from app.config.logging import get_logger, setup_logging
+from app.core.utils import log_audit_event, log_performance
+
+# from pathlib import Path # F401: Remove unused import
+
 
 # Add the project root to the Python path
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from app.config.logging import get_logger, setup_logging
-from app.core.utils import log_audit_event, log_performance
 
 # Configure logging
 setup_logging(log_level="DEBUG")
@@ -60,7 +62,7 @@ async def demo_logging():
 
     # Log an error
     try:
-        result = 1 / 0
+        1 / 0
     except Exception:
         logger.error(
             "An error occurred",

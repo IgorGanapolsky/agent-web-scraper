@@ -6,7 +6,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 # Configure logging for tests
-logging.basicConfig(level=logging.WARNING)  # Set to WARNING to reduce test output noise
+# Set to WARNING to reduce test output noise
+logging.basicConfig(level=logging.WARNING)
 
 # Enable asyncio debug mode for better error messages
 pytest_plugins = ("pytest_asyncio",)

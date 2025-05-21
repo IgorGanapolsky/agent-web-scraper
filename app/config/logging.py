@@ -4,8 +4,10 @@ This module provides a basic logging configuration that avoids the 'args' key er
 by using a custom LogRecord class that handles the 'args' key properly.
 """
 import logging
+import os
 import sys
-from typing import Any, Dict, Optional, Union
+from logging.handlers import RotatingFileHandler
+from typing import Optional, Union
 
 # Type alias for log levels
 LogLevel = Union[int, str]  # Can be either logging.XXX or string name
@@ -52,14 +54,17 @@ def safe_make_record(
 
 
 def setup_logging(
-    log_level: Optional[LogLevel] = None, log_to_console: Optional[bool] = None
+    log_level: Optional[LogLevel] = None,
+    log_to_console: Optional[bool] = None,
+    log_file_path: Optional[str] = None,
 ) -> None:
     """Configure basic logging for the application.
 
     Args:
-        log_level: The log level as a string (DEBUG, INFO, WARNING, ERROR, CRITICAL) or logging constant.
-                  If None, defaults to INFO.
+        log_level: The log level as a string (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            or logging constant. If None, defaults to INFO.
         log_to_console: Whether to log to console. If None, defaults to True.
+        log_file_path: Optional path for rotating file log. If None, no file log.
     """
     effective_log_level: Union[int, str]
     # Set default log level if not provided
@@ -99,6 +104,26 @@ def setup_logging(
         )
         console_handler.setFormatter(formatter)
         root_logger.addHandler(console_handler)
+
+    # Add file handler if log_file_path is provided
+    if log_file_path:
+        # Ensure the log directory exists
+        log_dir = os.path.dirname(log_file_path)
+        if log_dir and not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        # Create a rotating file handler
+        # Rotate log file when it reaches 5MB, keep 5 backup files
+        file_handler = RotatingFileHandler(
+            log_file_path, maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
+        )
+        file_handler.setLevel(numeric_log_level)
+        file_formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+        file_handler.setFormatter(file_formatter)
+        root_logger.addHandler(file_handler)
 
     # Suppress noisy loggers
     for logger_name in ["urllib3", "playwright", "asyncio"]:

@@ -25,7 +25,7 @@ def find_available_port(start_port=8501, max_port=8600):
         raise ValueError(f"Port numbers must be integers: {e}")
 
     if not (1024 <= start_port <= 65535) or not (1024 <= max_port <= 65535):
-        raise ValueError(f"Port numbers must be between 1024 and 65535")
+        raise ValueError("Port numbers must be between 1024 and 65535")
 
     for port in range(start_port, max_port + 1):
         with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:

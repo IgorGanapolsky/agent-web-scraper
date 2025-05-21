@@ -1,7 +1,7 @@
 """Unit tests for the undetected scraper functionality."""
+# import asyncio # F401
 import logging
-import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch  # AsyncMock was unused
 
 import pytest
 
