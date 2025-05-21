@@ -381,7 +381,9 @@ def extract_headers_with_undetected_chrome(
     }
 
 
-def _create_error_result(url: str, max_retries: int, error: Optional[str] = None) -> dict:
+def _create_error_result(
+    url: str, max_retries: int, error: Optional[str] = None
+) -> dict:
     """Create an error result dictionary."""
     return {
         "Title": f"Error: Failed to fetch data after {max_retries} attempts",

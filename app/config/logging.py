@@ -51,7 +51,9 @@ def safe_make_record(
     return record
 
 
-def setup_logging(log_level: Optional[LogLevel] = None, log_to_console: Optional[bool] = None) -> None:
+def setup_logging(
+    log_level: Optional[LogLevel] = None, log_to_console: Optional[bool] = None
+) -> None:
     """Configure basic logging for the application.
 
     Args:
@@ -70,7 +72,7 @@ def setup_logging(log_level: Optional[LogLevel] = None, log_to_console: Optional
     numeric_log_level: int
     if isinstance(effective_log_level, str):
         numeric_log_level = getattr(logging, effective_log_level.upper(), logging.INFO)
-    else: # it's an int
+    else:  # it's an int
         numeric_log_level = effective_log_level
 
     # Default to True if not specified
@@ -104,7 +106,9 @@ def setup_logging(log_level: Optional[LogLevel] = None, log_to_console: Optional
 
     # Log that logging is configured
     logger = logging.getLogger(__name__)
-    logger.info("Logging configured at level %s", logging.getLevelName(numeric_log_level))
+    logger.info(
+        "Logging configured at level %s", logging.getLevelName(numeric_log_level)
+    )
 
 
 def get_logger(name: Optional[str] = None) -> logging.Logger:
