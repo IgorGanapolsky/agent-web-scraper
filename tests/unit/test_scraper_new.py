@@ -1,7 +1,7 @@
 """Unit tests for the undetected scraper functionality."""
+import logging
 import unittest
 from unittest.mock import MagicMock, patch
-import logging
 
 import pytest
 

@@ -1,11 +1,12 @@
 """Unit tests for the main scraper functionality."""
 import json as std_json
-from unittest.mock import AsyncMock, MagicMock, patch
 import unittest
-from bs4 import BeautifulSoup
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pandas as pd
 import pytest
 from aiohttp import ClientSession, TCPConnector
+from bs4 import BeautifulSoup
 
 from app.core.scraper import Scraper
 

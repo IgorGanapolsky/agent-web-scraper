@@ -2,6 +2,7 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from aiohttp import ClientError, ClientResponse, ClientSession
 
 from app.core.scraper import Scraper
 

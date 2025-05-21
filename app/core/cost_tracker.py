@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any, cast
+from typing import Any, Dict, List, Optional, cast
 
 # Default cost per API call (in USD)
 DEFAULT_COST_PER_CALL = 0.01
@@ -40,7 +40,9 @@ class CostTracker:
         with open(self.usage_file, "w") as f:
             json.dump(data, f, indent=2)
 
-    def track_usage(self, cost: float = DEFAULT_COST_PER_CALL, **metadata) -> Dict[str, Any]:
+    def track_usage(
+        self, cost: float = DEFAULT_COST_PER_CALL, **metadata
+    ) -> Dict[str, Any]:
         """Track an API call with its associated cost.
 
         Args:
