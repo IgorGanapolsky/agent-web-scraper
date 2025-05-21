@@ -47,7 +47,7 @@ def test_sentry():
         # Test an error
         try:
             1 / 0
-        except Exception as e_info:
+        except Exception:
             logger.error("This is an ERROR with exception", exc_info=True)
 
         # Test a critical error

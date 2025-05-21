@@ -1,26 +1,31 @@
 import datetime
 import logging
+import logging.handlers  # Add this import for RotatingFileHandler
 import os
 import sys
 import time
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-from urllib.parse import unquote, urlparse
+from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlparse
 
 import pandas as pd
 import requests
 import streamlit as st
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+from serpapi.google_search import GoogleSearch
 
-# Add the project root to the Python path
-project_root = str(Path(__file__).parent.parent.parent.absolute())
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+# Add the project root to the Python path to allow for absolute imports
+# This ensures that 'app' can be found as a top-level package.
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+from app.config.safe_logger import setup_logging  # New import # noqa: E402
+from app.observability import log_exceptions  # noqa: E402
 
 # Search API - fix import
-from serpapi.google_search import GoogleSearch
 
 # Constants
 HTML_PARSER = "html.parser"
@@ -31,15 +36,22 @@ ALL_ATTEMPTS_FAILED_MSG = (
     "All attempts with BeautifulSoup failed, falling back to UndetectedChromeScraper"
 )
 
+# Define logs directory and log file path
+LOGS_DIR = _PROJECT_ROOT / "logs"
+APP_LOG_FILE = LOGS_DIR / "app.log"
+
+# Ensure logs directory exists
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
+
 # Load environment variables
 load_dotenv()
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging using setup_logging from safe_logger
+# This replaces: logging.basicConfig(level=logging.INFO)
+setup_logging(log_file=str(APP_LOG_FILE))
 logger = logging.getLogger(__name__)
 
 # Import the observability module
-from app.observability import log_exceptions
 
 
 # Import the UndetectedChromeScraper with improved error handling
@@ -66,7 +78,8 @@ def get_undetected_scraper_class():
             return Scraper
         except ImportError:
             logging.error(
-                "Failed to import UndetectedChromeScraper. Make sure the module is in the correct location.",
+                "Failed to import UndetectedChromeScraper. "
+                "Make sure the module is in the correct location.",
                 exc_info=True,
             )
 
@@ -74,7 +87,8 @@ def get_undetected_scraper_class():
             class MockUndetectedChromeScraper:
                 def __init__(self, *args, **kwargs):
                     raise ImportError(
-                        "Failed to import UndetectedChromeScraper. Check logs for details."
+                        "Failed to import UndetectedChromeScraper. "
+                        "Check logs for details."
                     )
 
             return MockUndetectedChromeScraper
@@ -153,14 +167,17 @@ def _make_request_with_retry(url, headers, attempt, max_attempts):
 
     if response.status_code in (403, 429) and attempt < max_attempts - 1:
         raise requests.exceptions.RequestException(
-            f"Access denied ({response.status_code}), will retry with different user agent"
+            f"Access denied ({response.status_code}), "
+            f"will retry with different user agent"
         )
 
     response.raise_for_status()
     return response
 
 
-def _extract_headers_from_soup(soup, tags_to_analyze):
+def _extract_headers_from_soup(
+    soup: BeautifulSoup, tags_to_analyze: List[str]
+) -> Dict[str, str]:
     """Extract headers and metadata from a BeautifulSoup object."""
     results = {}
 
@@ -204,33 +221,64 @@ def _extract_headers_from_soup(soup, tags_to_analyze):
 
 
 def extract_headers_with_soup(
-    url, tags_to_analyze, retry_count=2, use_undetected_fallback=True
-):
-    """Extract HTML headers and metadata from a web page using BeautifulSoup.
+    url: str,
+    tags_to_analyze: List[str],
+    retry_count: int = 2,
+    use_undetected_fallback: bool = True,
+) -> Dict[str, str]:
+    """
+    Extract HTML headers and metadata from a web page using BeautifulSoup.
 
     Args:
-        url (str): The URL to scrape
-        tags_to_analyze (list): List of HTML elements to extract (e.g., ['h1', 'h2', 'h3'])
-        retry_count (int, optional): Number of retry attempts. Defaults to 2.
-        use_undetected_fallback (bool, optional): Whether to try alternative methods if this one fails.
-                                                Defaults to True.
+        url (str):
+            The URL to scrape
+        tags_to_analyze (list):
+            List of HTML elements to extract (e.g., ['h1', 'h2', 'h3'])
+        retry_count (int, optional):
+            Retry attempts. Defaults to 2.
+        use_undetected_fallback (bool, optional):
+            Whether to try alternative methods if this one fails.
+            Defaults to True.
 
     Returns:
-        dict: Dictionary containing the extracted content by element type
+        dict:
+            Dictionary containing the extracted content by element type
     """
     user_agents = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.59",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+        (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/91.0.4472.124 Safari/537.36"
+        ),
+        (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/91.0.4472.124 Safari/537.36"
+        ),
+        (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.59"
+        ),
+        (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+            "Version/14.1.1 Safari/605.1.15"
+        ),
+        (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) "
+            "Gecko/20100101 Firefox/89.0"
+        ),
     ]
 
     for attempt in range(retry_count + 1):
         try:
             headers = {
                 "User-Agent": user_agents[attempt % len(user_agents)],
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept": (
+                    "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                    "image/webp,*/*;q=0.8"
+                ),
                 "Accept-Language": "en-US,en;q=0.5",
                 "Connection": "keep-alive",
                 "Upgrade-Insecure-Requests": "1",
@@ -249,7 +297,9 @@ def extract_headers_with_soup(
                 if use_undetected_fallback:
                     logging.info(ALL_ATTEMPTS_FAILED_MSG)
                     return extract_headers_with_undetected_chrome(url, tags_to_analyze)
-                return {tag: f"Error: {str(e)[:100]}" for tag in tags_to_analyze}
+                e_str = str(e)[:70]  # Truncate error string
+                error_msg = f"Error: {e_str}"
+                return {tag: error_msg for tag in tags_to_analyze}
         except Exception as e:
             logging.error(
                 f"Unexpected error in extract_headers_with_soup for {url}: {str(e)}"
@@ -258,16 +308,16 @@ def extract_headers_with_soup(
                 if use_undetected_fallback:
                     logging.info(ALL_ATTEMPTS_FAILED_MSG)
                     return extract_headers_with_undetected_chrome(url, tags_to_analyze)
-                return {tag: f"Error: {str(e)[:100]}" for tag in tags_to_analyze}
+                e_str = str(e)[:70]  # Truncate error string
+                error_msg = f"Error: {e_str}"
+                return {tag: error_msg for tag in tags_to_analyze}
 
     # If we get here, all retries failed
     if use_undetected_fallback:
         logging.info(ALL_ATTEMPTS_FAILED_MSG)
         return extract_headers_with_undetected_chrome(url, tags_to_analyze)
-    return {
-        tag: "Error: Failed to fetch data after multiple attempts"
-        for tag in tags_to_analyze
-    }
+    error_msg = "Error: Failed to fetch data after multiple attempts"
+    return {tag: error_msg for tag in tags_to_analyze}
 
 
 def _parse_scraper_result(result):
@@ -516,13 +566,18 @@ def _extract_urls(search_results, max_results=10):
 
 
 def _process_single_url(
-    url, progress, results, current_url_info=None, progress_details=None
-):
-    """Process a single URL and update progress with detailed information in main window"""
+    url: str,
+    progress: st.delta_generator.DeltaGenerator,
+    results: List[Dict[str, str]],
+    current_url_info: Optional[st.delta_generator.DeltaGenerator] = None,
+    progress_details: Optional[st.delta_generator.DeltaGenerator] = None,
+) -> None:
+    """Process a URL and update progress in the main window."""
     try:
         # Update the current URL being processed in the main window
         if current_url_info:
-            current_url_info.info(f"Currently scraping: **{url}**")
+            info_message = f"Currently scraping: **{url}**"
+            current_url_info.info(info_message)
 
         # Fetch the data
         result = fetch_data(url)
@@ -542,14 +597,15 @@ def _process_single_url(
         # Add a small delay to prevent overwhelming the server
         time.sleep(0.5)
     except Exception as e:
-        error_msg = f"Error processing {url}: {str(e)}"
-        st.error(error_msg)
+        e_str = str(e)
+        error_message = f"Error processing {url}: " + e_str
+        st.error(error_message)
         if progress_details:
-            progress_details.error(error_msg)
+            progress_details.error(error_message)
 
         results.append(
             {
-                "Title": f"Error: {str(e)[:50]}...",
+                "Title": f"Error: {e_str[:50]}...",
                 "URL": url,
                 "Snippet": "Error occurred while scraping this page.",
                 "Status": "❌ Error",
@@ -573,6 +629,24 @@ def _process_final_results(results):
 
 def search_and_scrape():
     """Main function to perform search and scraping with progress updates"""
+
+    # --- BEGIN Log Rotation ---
+    # Ensure log is rotated at the start of a new scraping session
+    try:
+        root_logger = logging.getLogger()  # Get the root logger
+        for handler in root_logger.handlers[:]:  # Iterate over a copy of handlers
+            if isinstance(handler, logging.handlers.RotatingFileHandler):
+                # APP_LOG_FILE is defined globally in this module
+                if handler.baseFilename == str(APP_LOG_FILE):
+                    handler.doRollover()
+                    logging.info(
+                        "Log file rotated successfully at the start of scraping."
+                    )
+                    break  # Found and rolled over the correct handler
+    except Exception as e:
+        logging.error(f"Error during log rotation: {e}", exc_info=True)
+    # --- END Log Rotation ---
+
     if not st.session_state.get("search_term"):
         st.warning("Please enter a search term.")
         return
@@ -642,7 +716,7 @@ def search_and_scrape():
                 progress_bar.progress(
                     progress, text=f"Scraping {i} of {total_results} pages..."
                 )
-                # Pass the progress placeholders to show real-time updates in main window
+                # Pass placeholders for real-time updates in main window
                 _process_single_url(
                     url, progress, results, current_url_info, progress_details
                 )
@@ -667,6 +741,11 @@ def search_and_scrape():
         ):
             try:
                 buffer = BytesIO()
+                excel_mime_type = (
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+                current_time_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                download_file_name = f"scraped_results_{current_time_str}.xlsx"
                 with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
                     st.session_state["results_df"].to_excel(
                         writer, sheet_name="Results", index=False
@@ -676,11 +755,13 @@ def search_and_scrape():
                 st.download_button(
                     label="📥 Download Results (Excel)",
                     data=buffer,
-                    file_name=f"scraped_results_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    file_name=download_file_name,
+                    mime=excel_mime_type,
                 )
             except Exception as excel_error:
-                st.error(f"Failed to generate Excel file: {str(excel_error)}")
+                excel_error_str = str(excel_error)
+                error_message = "Failed to generate Excel file: " + excel_error_str
+                st.error(error_message)
 
 
 def show_export_options():
@@ -697,34 +778,27 @@ def show_export_options():
 
             # Create Excel file in memory
             buffer = BytesIO()
+            excel_mime_type = (
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+            current_time_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            download_file_name = f"scraped_results_{current_time_str}.xlsx"
             with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
                 st.session_state["results_df"].to_excel(
                     writer, index=False, sheet_name="Scraped Data"
                 )
-                # Get the worksheet object to set column widths
-                worksheet = writer.sheets["Scraped Data"]
 
-                # Auto-fit columns
-                for i, col in enumerate(st.session_state["results_df"].columns):
-                    max_len = max(
-                        st.session_state["results_df"][col]
-                        .astype(str)
-                        .apply(len)
-                        .max(),
-                        len(col),
-                    )
-                    worksheet.set_column(i, i, max_len + 2)
-
-            # Provide Excel download button only (no CSV)
             st.download_button(
                 label="📥 Download Results as Excel",
                 data=buffer.getvalue(),
-                file_name=f"scraped_results_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                file_name=download_file_name,
+                mime=excel_mime_type,
                 use_container_width=True,
             )
         except Exception as excel_error:
-            st.error(f"Failed to generate Excel file: {str(excel_error)}")
+            excel_error_str = str(excel_error)
+            error_message = "Failed to generate Excel file: " + excel_error_str
+            st.error(error_message)
 
 
 def initialize_session_state():
@@ -768,7 +842,9 @@ def main():
         """
     <style>
         .main .block-container {padding-top: 2rem;}
-        div[data-testid="stDecoration"] {background-image: linear-gradient(90deg, #4f8bf9, #a37bf7);}
+        div[data-testid="stDecoration"] {
+            background-image: linear-gradient(90deg, #4f8bf9, #a37bf7);
+        }
         button {border-radius: 5px;}
         #search-scrape-button {width: 100%;}
         .block-container {
@@ -801,8 +877,12 @@ def main():
 
     # Configure and lay out the sidebar
     with st.sidebar:
+        google_logo_url = (
+            "https://www.google.com/images/branding/googlelogo/1x/"
+            "googlelogo_color_272x92dp.png"
+        )
         st.image(
-            "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            google_logo_url,
             width=150,
         )
         st.subheader("Web Scraper Parameters")
@@ -836,7 +916,7 @@ def main():
 
         # STATE-BASED UI: Either show the form OR the scraping controls, never both
         if st.session_state.get("is_processing", False):
-            # SCRAPING STATE: When scraping is running, only show progress UI and stop button
+            # SCRAPING STATE: Show progress UI and stop button
             st.info("Scraping in progress... Please wait.")
             # Call the search and scrape function
             search_and_scrape()
@@ -949,8 +1029,12 @@ def main():
                         headers_to_extract.append(META_DESCRIPTION)
                 st.session_state["selected_headers"] = headers_to_extract
 
+                additional_headers_title_html = (
+                    "<h5 style='margin-top:1.5rem;'>"
+                    "Additional headers (comma separated):</h5>"
+                )
                 st.markdown(
-                    "<h5 style='margin-top:1.5rem;'>Additional headers (comma separated):</h5>",
+                    additional_headers_title_html,
                     unsafe_allow_html=True,
                 )
                 st.session_state["additional_headers"] = st.text_input(
@@ -964,7 +1048,7 @@ def main():
                     "🔍 Start Scraping", use_container_width=True, type="primary"
                 )
 
-                # If the submit button was clicked, update the session state to start processing
+                # On submit, set processing state and rerun
                 if submit_clicked:
                     st.session_state.is_processing = True
                     st.session_state.should_stop = False
@@ -983,24 +1067,28 @@ def main():
                             e.preventDefault();
                             return false;
                         }
-                        
+
                         // Disable all form inputs
-                        const inputs = form.querySelectorAll('input, button, [role="button"]');
+                        const inputs = form.querySelectorAll(
+                            'input, button, [role="button"]'
+                        );
                         inputs.forEach(input => {
-                            if (!input.closest('.stButton')) {  // Don't disable the stop button
+                            // Don't disable the stop button
+                            if (!input.closest('.stButton')) {
                                 input.disabled = true;
                                 input.style.opacity = '0.7';
                                 input.style.cursor = 'not-allowed';
                             }
                         });
-                        
+
                         // Show loading state on button
-                        const submitButton = form.querySelector('button[type="submit"]');
+                        const submitButtonSelector = 'button[type="submit"]';
+                        const submitButton = form.querySelector(submitButtonSelector);
                         if (submitButton) {
                             submitButton.innerHTML = '⏳ Processing...';
                             submitButton.disabled = true;
                         }
-                        
+
                         return true;
                     });
                 }
@@ -1017,7 +1105,8 @@ def main():
     st.markdown(
         """
     This app uses enhanced browser technology to extract headers from web pages.
-    Enter a search term in the sidebar, select which headers you want to extract, and click '🔍 Start Scraping'.
+    Enter a search term in the sidebar, select which headers you want to extract,
+    and click '🔍 Start Scraping'.
     """
     )
 
@@ -1115,9 +1204,12 @@ def main():
 
             # Format the DataFrame for better display
             display_df = df.copy()
-            display_df["Status"] = display_df["Status"].apply(
-                lambda x: f'<span class="status-{"success" if "✅" in str(x) else "error"}">{x}</span>'
-            )
+
+            def format_status_cell(x: Any) -> str:
+                status_class = "success" if "✅" in str(x) else "error"
+                return f'<span class="status-{status_class}">{x}</span>'
+
+            display_df["Status"] = display_df["Status"].apply(format_status_cell)
 
             # Display the table
             st.markdown(
@@ -1134,7 +1226,9 @@ def main():
     doc.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && doc.activeElement.id.endsWith('search_term')) {
             const buttons = Array.from(doc.querySelectorAll('button'));
-            const scrapeButton = buttons.find(button => button.innerText === 'Search and Scrape');
+            const scrapeButton = buttons.find(
+                button => button.innerText === 'Search and Scrape'
+            );
             if (scrapeButton) {
                 scrapeButton.click();
             }

@@ -1,7 +1,9 @@
 """A safe logging configuration that avoids the 'args' key error."""
 import logging
+import os
 import sys
-from typing import Any, Dict, Optional
+from logging.handlers import RotatingFileHandler
+from typing import Optional
 
 
 class SafeLogger(logging.Logger):
@@ -90,7 +92,16 @@ def setup_logging(
 
     # Add file handler if log file is specified
     if log_file:
-        file_handler = logging.FileHandler(log_file)
+        # Ensure the log directory exists
+        log_dir = os.path.dirname(log_file)
+        if log_dir and not os.path.exists(log_dir):
+            os.makedirs(log_dir, exist_ok=True)
+
+        # Create a rotating file handler
+        # Rotate log file when it reaches 5MB, keep 5 backup files
+        file_handler = RotatingFileHandler(
+            log_file, maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
+        )
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 

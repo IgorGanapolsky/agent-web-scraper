@@ -1,7 +1,9 @@
 """Script to clean up log files by removing test entries."""
+# import re # F401: Remove unused import
+# import argparse # F401
+# import glob # F401
 import os
-import re
-from datetime import datetime
+from datetime import datetime  # timedelta was unused
 from pathlib import Path
 
 # Get the project root directory (one level up from scripts/)

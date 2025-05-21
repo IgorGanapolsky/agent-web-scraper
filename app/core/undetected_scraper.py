@@ -1,26 +1,24 @@
 """
 Undetected Chrome Scraper module.
 
-This module provides the UndetectedChromeScraper class which uses undetected_chromedriver
-to bypass anti-bot measures when scraping websites.
+This module provides the UndetectedChromeScraper class which uses
+undetected_chromedriver to bypass anti-bot measures when scraping
+websites.
 """
-import logging
 import os
 import platform
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
-from selenium.common.exceptions import TimeoutException, WebDriverException
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from app.config.logging import get_logger
-from app.utils.env_utils import get_bool_env
 
 logger = get_logger(__name__)
 
@@ -53,26 +51,30 @@ class UndetectedChromeScraper:
 
     def _setup_driver(self):
         """Set up the undetected Chrome WebDriver"""
-        options = uc.ChromeOptions()
-
-        if self.headless:
-            options.add_argument("--headless=new")
-
-        if self.user_agent:
-            options.add_argument(f"user-agent={self.user_agent}")
-
-        # Add common options to avoid detection
-        options.add_argument("--disable-blink-features=AutomationControlled")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--disable-popup-blocking")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
 
         # Set Chrome binary location
-        if os.path.exists(CHROME_BINARY_LOCATION):
-            options.binary_location = CHROME_BINARY_LOCATION
+        # This check can remain outside if CHROME_BINARY_LOCATION is static
+        # and options.binary_location is set after options are created.
 
         try:
+            options = uc.ChromeOptions()
+
+            if self.headless:
+                options.add_argument("--headless=new")
+
+            if self.user_agent:
+                options.add_argument(f"user-agent={self.user_agent}")
+
+            # Add common options to avoid detection
+            options.add_argument("--disable-blink-features=AutomationControlled")
+            options.add_argument("--disable-extensions")
+            options.add_argument("--disable-popup-blocking")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+
+            if os.path.exists(CHROME_BINARY_LOCATION):
+                options.binary_location = CHROME_BINARY_LOCATION
+
             self.driver = uc.Chrome(
                 options=options,
                 use_subprocess=True,
@@ -233,6 +235,17 @@ class UndetectedChromeScraper:
                 logger.info("Browser closed successfully")
             except Exception as e:
                 logger.error(f"Error closing browser: {str(e)}")
+            finally:
+                self.driver = None
+
+    def quit(self):
+        """Quit the WebDriver and close the browser."""
+        if self.driver:
+            try:
+                self.driver.quit()
+                logger.info("Undetected Chrome WebDriver quit successfully")
+            except Exception as e:
+                logger.error(f"Error quitting WebDriver: {str(e)}")
             finally:
                 self.driver = None
 

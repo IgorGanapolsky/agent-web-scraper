@@ -1,5 +1,4 @@
 import logging
-import os
 import time
 
 import undetected_chromedriver as uc
@@ -49,9 +48,12 @@ class UndetectedChromeScraper:
                 options.add_argument("--window-size=1920,1080")
 
                 # Add user agent
-                options.add_argument(
-                    "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+                user_agent_string = (
+                    "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/122.0.0.0 Safari/537.36"
                 )
+                options.add_argument(user_agent_string)
 
                 # Initialize the undetected Chrome driver
                 self.driver = uc.Chrome(options=options)
@@ -77,7 +79,7 @@ class UndetectedChromeScraper:
         """
         if not self.is_initialized and not self.initialize():
             return {
-                "html": "<html><body><p>Failed to initialize Chrome driver</p></body></html>",
+                "html": "<html><body><p>Driver init failed</p></body></html>",
                 "error": "Chrome initialization failed",
             }
 
