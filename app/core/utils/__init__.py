@@ -1,10 +1,10 @@
 """Utility functions for the application."""
 
+from .audit import audit_logger, log_audit_event
 from .performance import log_performance
-from .audit import log_audit_event, audit_logger
 
 __all__ = [
-    'log_performance',
-    'log_audit_event',
-    'audit_logger',
+    "log_performance",
+    "log_audit_event",
+    "audit_logger",
 ]
