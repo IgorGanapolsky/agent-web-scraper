@@ -1,5 +1,7 @@
 # tests/unit/test_example.py
-import pytest
+import unittest
 
-def test_example_passes():
-    assert True
+
+class TestExample(unittest.TestCase):
+    def test_example_addition(self):
+        assert True

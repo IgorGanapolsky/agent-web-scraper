@@ -5,6 +5,7 @@ from typing import Any, Dict, Optional
 # Create a separate logger for audit logs
 audit_logger = logging.getLogger("audit")
 
+
 def log_audit_event(
     event_type: str,
     user: Optional[str] = None,
@@ -14,7 +15,7 @@ def log_audit_event(
     details: Optional[Dict[str, Any]] = None,
 ):
     """Log an audit event.
-    
+
     Args:
         event_type: Type of the event (e.g., 'user_login', 'data_export')
         user: User who performed the action
@@ -30,10 +31,10 @@ def log_audit_event(
             "resource": resource,
             "action": action,
             "status": status,
-            **({} if details is None else {"details": details})
+            **({} if details is None else {"details": details}),
         }
     }
-    
+
     # Use INFO level for successful events, WARNING for failures
     log_level = logging.INFO if status == "success" else logging.WARNING
     audit_logger.log(
@@ -42,5 +43,5 @@ def log_audit_event(
         event_type,
         action or "",
         status,
-        extra={"data": extra}
+        extra={"data": extra},
     )

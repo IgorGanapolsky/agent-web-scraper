@@ -1,29 +1,35 @@
 import os
-import pytest
 from unittest.mock import patch
+
+import pytest
+
 from app.utils.env_utils import get_bool_env
+
 
 class TestGetBoolEnv:
     """Test cases for get_bool_env function."""
 
-    @pytest.mark.parametrize("env_value,expected", [
-        ("true", True),
-        ("True", True),
-        ("TRUE", True),
-        ("yes", True),
-        ("y", True),
-        ("1", True),
-        ("on", True),
-        ("false", False),
-        ("False", False),
-        ("FALSE", False),
-        ("no", False),
-        ("n", False),
-        ("0", False),
-        ("off", False),
-        ("", False),
-        ("invalid", False),
-    ])
+    @pytest.mark.parametrize(
+        "env_value,expected",
+        [
+            ("true", True),
+            ("True", True),
+            ("TRUE", True),
+            ("yes", True),
+            ("y", True),
+            ("1", True),
+            ("on", True),
+            ("false", False),
+            ("False", False),
+            ("FALSE", False),
+            ("no", False),
+            ("n", False),
+            ("0", False),
+            ("off", False),
+            ("", False),
+            ("invalid", False),
+        ],
+    )
     def test_get_bool_env_variations(self, env_value, expected):
         """Test various string inputs for get_bool_env."""
         with patch.dict(os.environ, {"TEST_VAR": env_value}):
