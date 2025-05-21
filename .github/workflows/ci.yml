@@ -1,56 +1,47 @@
-name: CI
+name: Python CI
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
-  test:
-    name: Test with Python ${{ matrix.python-version }}
+  build:
     runs-on: ubuntu-latest
-    
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11']
-    
+        python-version: ["3.9", "3.10", "3.11"] # Test against supported Python versions
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements-dev.txt
-    
-    - name: Run linting
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt # For linters and tests
+        pre-commit install # Ensure hooks are set up for linting step (optional here if directly calling pre-commit)
+
+    - name: Lint with pre-commit
       run: |
-        black --check .
-        isort --check-only .
-        flake8 .
-    
-    - name: Run type checking
+        pre-commit run --all-files
+
+    - name: Test with pytest
       run: |
-        mypy .
-    
-    - name: Run tests with coverage
-      run: |
-        pytest --cov=app --cov-report=xml
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
-        fail_ci_if_error: false
-    
-    - name: Build documentation
-      if: matrix.python-version == '3.10'
-      run: |
-        pip install sphinx sphinx-rtd-theme
-        cd docs && make html
+        pytest --cov=app --cov-report=xml # Generate coverage report for SonarQube
+
+    # Optional: Upload coverage to SonarQube (if configured)
+    # - name: SonarQube Scan
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main' # Or your main branch
+    #   uses: SonarSource/sonarcloud-github-action@master
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Secret SonarQube token
+    #   with:
+    #     # Additional arguments for SonarQube scanner
+    #     args: >
+    #       -Dsonar.projectKey=your_project_key
+    #       -Dsonar.organization=your_organization_key # if using SonarCloud
+    #       # -Dsonar.python.coverage.reportPaths=coverage.xml # Already in sonar-project.properties but can be overridden
