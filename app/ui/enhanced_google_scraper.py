@@ -13,6 +13,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 from serpapi import GoogleSearch
+from security import safe_requests
 
 # Load environment variables
 load_dotenv()
@@ -105,7 +106,7 @@ def extract_headers_with_soup(url, tags_to_analyze):
 
     try:
         logging.info(f"Using BeautifulSoup fallback scraper for {url}")
-        response = requests.get(url, headers=headers, timeout=20)
+        response = safe_requests.get(url, headers=headers, timeout=20)
         response.raise_for_status()
 
         logging.info(f"Successfully fetched content from {url}")

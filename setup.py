@@ -25,6 +25,7 @@ setup(
         "google-auth>=2.15.0",
         "python-dotenv>=0.21.0",
         "aiohttp>=3.8.0",
+        "security==1.3.1",
     ],
     extras_require={
         "dev": [

@@ -15,6 +15,7 @@ import streamlit as st
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from serpapi.google_search import GoogleSearch
+from security import safe_requests
 
 # Add the project root to the Python path to allow for absolute imports
 # This ensures that 'app' can be found as a top-level package.
@@ -163,7 +164,7 @@ def _make_request_with_retry(url, headers, attempt, max_attempts):
         time.sleep(1)  # Add delay between retries
 
     logging.info(f"Making request to {url} (attempt {attempt + 1}/{max_attempts})")
-    response = requests.get(url, headers=headers, timeout=15)
+    response = safe_requests.get(url, headers=headers, timeout=15)
 
     if response.status_code in (403, 429) and attempt < max_attempts - 1:
         raise requests.exceptions.RequestException(
@@ -471,7 +472,7 @@ def _make_http_request(url: str) -> Tuple[Optional[requests.Response], Optional[
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
-        response = requests.get(url, timeout=15, headers=headers)
+        response = safe_requests.get(url, timeout=15, headers=headers)
         if response.status_code == 200:
             return response, None
         return None, f"HTTP Status: {response.status_code}"
