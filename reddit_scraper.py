@@ -87,4 +87,10 @@ def run_scraper(search_term):
 
 
 if __name__ == "__main__":
-    run_scraper("ecommerce content marketing")
+import argparse
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Scrape Reddit for pain points')
+    parser.add_argument('search_term', help='Search term for Reddit posts')
+    args = parser.parse_args()
+    run_scraper(args.search_term)
