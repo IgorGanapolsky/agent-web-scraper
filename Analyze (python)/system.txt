@@ -1,0 +1,5 @@
+2025-05-28T20:27:30.6852006Z Requested labels: ubuntu-latest
+2025-05-28T20:27:30.6852006Z Job defined at: IgorGanapolsky/agent-web-scraper/.github/workflows/codeql.yml@refs/pull/5/merge
+2025-05-28T20:27:30.6852006Z Waiting for a runner to pick up this job...
+2025-05-28T20:27:31.2954015Z Job is waiting for a hosted runner to come online.
+2025-05-28T20:27:31.2954064Z Job is about to start running on the hosted runner: GitHub Actions 1000000312
