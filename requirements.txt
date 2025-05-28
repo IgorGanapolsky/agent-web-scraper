@@ -10,3 +10,4 @@ pillow==11.2.1
 
 # Additional utilities
 urllib3==1.26.9
+pytest_asyncio
