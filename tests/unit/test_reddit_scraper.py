@@ -10,9 +10,19 @@ class TestRedditScraper(unittest.TestCase):
 
     @patch("reddit_scraper.SERPAPI_KEY", "test_key")
     @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("reddit_scraper.OpenAI")
     @patch("reddit_scraper.RedditScraper._init_google_sheets")
-    def setUp(self, mock_init_sheets):
+    def setUp(self, mock_init_sheets, mock_openai):
         """Set up the test environment."""
+        # Mock OpenAI client
+        mock_client = MagicMock()
+        mock_completion = MagicMock()
+        mock_completion.choices = [MagicMock()]
+        mock_completion.choices[0].message.content = "Test summary of pain points"
+        mock_client.chat.completions.create.return_value = mock_completion
+        mock_openai.return_value = mock_client
+        
         self.scraper = RedditScraper("test search", max_results=2)
         mock_init_sheets.assert_called_once()
 
