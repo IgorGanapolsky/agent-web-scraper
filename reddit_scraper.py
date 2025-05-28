@@ -54,7 +54,7 @@ def scrape_reddit_post(url):
     Returns:
         A tuple containing the post title and a list of up to three comment texts.
     """
-    resp = requests.get(url, headers={"User-Agent": "Mozilla"})
+    resp = requests.get(url, headers={"User-Agent": "Mozilla"}, timeout=60)
     soup = BeautifulSoup(resp.text, "html.parser")
     title = soup.find("title").text
     comments = soup.find_all("div", class_="md")[:3]
