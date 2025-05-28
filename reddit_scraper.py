@@ -22,11 +22,6 @@ load_dotenv()
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-response = client.chat.completions.create(
-    model="gpt-4", messages=[{"role": "user", "content": "Hi!"}]
-)
-
-print(response.choices[0].message.content)
 
 
 def google_search(query):
