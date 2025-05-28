@@ -5,7 +5,7 @@ import gspread
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 from openai import OpenAI
 from serpapi.google_search import GoogleSearch
 
@@ -40,7 +40,7 @@ def scrape_reddit_post(url):
     resp = requests.get(
         url,
         headers={"User-Agent": "Mozilla/5.0 (compatible; RedditScraper/1.0)"},
-        timeout=30
+        timeout=30,
     )
     soup = BeautifulSoup(resp.text, "html.parser")
     title = soup.find("title").text
@@ -66,11 +66,6 @@ def connect_sheet():
         "https://spreadsheets.google.com/feeds",
         "https://www.googleapis.com/auth/drive",
     ]
-# Replace this import at the top of reddit_scraper.py:
-from google.auth.exceptions import DefaultCredentialsError
-from google.oauth2.service_account import Credentials
-
-# In your connect_sheet function, update to:
     creds = Credentials.from_service_account_file(
         "secrets/service_account.json", scopes=scope
     )
@@ -107,10 +102,10 @@ for url in urls:
 
 
 if __name__ == "__main__":
-import argparse
+    import argparse
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Scrape Reddit for pain points')
-    parser.add_argument('search_term', help='Search term for Reddit posts')
+    parser = argparse.ArgumentParser(description="Scrape Reddit for pain points")
+    parser.add_argument("search_term", help="Search term for Reddit posts")
     args = parser.parse_args()
     run_scraper(args.search_term)
