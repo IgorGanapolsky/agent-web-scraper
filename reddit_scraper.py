@@ -2,7 +2,6 @@ import os
 import time
 
 import gspread
-import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
@@ -10,6 +9,7 @@ from openai import OpenAI
 from serpapi.google_search import GoogleSearch
 
 from config import SERPAPI_KEY, SPREADSHEET_NAME
+from security import safe_requests
 
 load_dotenv()
 
@@ -36,7 +36,7 @@ def google_search(query):
 
 
 def scrape_reddit_post(url):
-    resp = requests.get(url, headers={"User-Agent": "Mozilla"}, timeout=60)
+    resp = safe_requests.get(url, headers={"User-Agent": "Mozilla"}, timeout=60)
     soup = BeautifulSoup(resp.text, "html.parser")
     title = soup.find("title").text
     comments = soup.find_all("div", class_="md")[:3]
