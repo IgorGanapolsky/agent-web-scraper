@@ -25,7 +25,7 @@ jobs:
         run: git fetch --all
       - name: Run Tests and Generate Coverage
         run: |
-          pip install -r requirements-dev.txt
+          pip install -r requirements-dev.txt streamlit undetected-chromedriver
           pytest --cov=reddit_scraper --cov-report=xml
       - name: SonarQube Scan
         uses: SonarSource/sonarcloud-github-action@master
