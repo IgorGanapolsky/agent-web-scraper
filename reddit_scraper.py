@@ -65,8 +65,13 @@ def connect_sheet():
         "https://spreadsheets.google.com/feeds",
         "https://www.googleapis.com/auth/drive",
     ]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "secrets/service_account.json", scope
+# Replace this import at the top of reddit_scraper.py:
+from google.auth.exceptions import DefaultCredentialsError
+from google.oauth2.service_account import Credentials
+
+# In your connect_sheet function, update to:
+    creds = Credentials.from_service_account_file(
+        "secrets/service_account.json", scopes=scope
     )
     client = gspread.authorize(creds)
     sheet = client.open(SPREADSHEET_NAME).sheet1
