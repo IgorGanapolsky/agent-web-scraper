@@ -1,40 +1,29 @@
-import pytest
-from reddit_scraper import RedditScraper
+name: SonarQube Scan
 
-def test_scraper_instantiation():
-    scraper = RedditScraper(query="test query")
-    assert scraper.query == "test query"
-    assert scraper.results == []
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-def test_scraper_search(monkeypatch):
-    class MockResult:
-        def __init__(self):
-            self.title = "Sample Post"
-            self.selftext = "Details of the sample post"
-            self.url = "https://reddit.com/sample"
-
-    class MockReddit:
-        def subreddit(self, name):
-            return self
-
-        def search(self, query, limit=5):
-            return [MockResult()]
-
-    monkeypatch.setattr("reddit_scraper.reddit", MockReddit())
-    scraper = RedditScraper(query="test")
-    scraper.search()
-    assert len(scraper.results) == 1
-    assert scraper.results[0]["title"] == "Sample Post"
-
-def test_scraper_summarize(monkeypatch):
-    mock_summary = "This is a summary"
-
-    def mock_gpt_summarize(text):
-        return mock_summary
-
-    monkeypatch.setattr("reddit_scraper.gpt_summarize", mock_gpt_summarize)
-
-    scraper = RedditScraper(query="test")
-    scraper.results = [{"title": "a", "content": "b", "url": "c"}]
-    summary = scraper.summarize()
-    assert summary == mock_summary
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Fetch all branches
+        run: git fetch --all
+      - name: SonarQube Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
