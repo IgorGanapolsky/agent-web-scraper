@@ -1,8 +1,6 @@
 """Unit tests for the Reddit scraper."""
 import unittest
-from unittest.mock import patch, MagicMock
-
-import pytest
+from unittest.mock import MagicMock, patch
 
 from reddit_scraper import RedditScraper
 
@@ -27,12 +25,9 @@ class TestRedditScraper(unittest.TestCase):
             "organic_results": [
                 {
                     "title": "Test Reddit Post",
-                    "link": "https://www.reddit.com/r/test/comments/123/test_post"
+                    "link": "https://www.reddit.com/r/test/comments/123/test_post",
                 },
-                {
-                    "title": "Not a Reddit Post",
-                    "link": "https://example.com"
-                }
+                {"title": "Not a Reddit Post", "link": "https://example.com"},
             ]
         }
         mock_google_search.return_value = mock_instance
@@ -43,7 +38,9 @@ class TestRedditScraper(unittest.TestCase):
         # Verify the results
         assert len(results) == 1
         assert results[0]["title"] == "Test Reddit Post"
-        assert results[0]["url"] == "https://www.reddit.com/r/test/comments/123/test_post"
+        assert (
+            results[0]["url"] == "https://www.reddit.com/r/test/comments/123/test_post"
+        )
 
     @patch("reddit_scraper.requests.get")
     def test_scrape_reddit_post(self, mock_get):
@@ -55,8 +52,8 @@ class TestRedditScraper(unittest.TestCase):
             <head><title>Test</title></head>
             <body>
                 <h1>Test Reddit Post</h1>
-                <div class="Comment">This is a test comment that is long enough to be included.</div>
-                <div class="Comment">This is another test comment that should be included.</div>
+                <div class="Comment">This is a test comment to include.</div>
+                <div class="Comment">This is another comment to include.</div>
                 <div class="Comment">short</div>
             </body>
         </html>
@@ -64,7 +61,9 @@ class TestRedditScraper(unittest.TestCase):
         mock_get.return_value = mock_response
 
         # Call the method
-        result = self.scraper.scrape_reddit_post("https://www.reddit.com/r/test/comments/123/test_post")
+        result = self.scraper.scrape_reddit_post(
+            "https://www.reddit.com/r/test/comments/123/test_post"
+        )
 
         # Verify the results
         assert result["title"] == "Test Reddit Post"
@@ -85,7 +84,7 @@ class TestRedditScraper(unittest.TestCase):
         post_data = {
             "title": "Test Post",
             "url": "https://example.com",
-            "comments": ["This is a test comment", "This is another test comment"]
+            "comments": ["This is a test comment", "This is another test comment"],
         }
         result = self.scraper.summarize_pain_points(post_data)
 
@@ -96,11 +95,7 @@ class TestRedditScraper(unittest.TestCase):
     def test_summarize_pain_points_no_comments(self):
         """Test summarizing pain points with no comments."""
         # Call the method
-        post_data = {
-            "title": "Test Post",
-            "url": "https://example.com",
-            "comments": []
-        }
+        post_data = {"title": "Test Post", "url": "https://example.com", "comments": []}
         result = self.scraper.summarize_pain_points(post_data)
 
         # Verify the results

@@ -1,0 +1,454 @@
+﻿2025-05-28T20:27:58.3709160Z ##[group]Run github/codeql-action/analyze@v3
+2025-05-28T20:27:58.3709455Z with:
+2025-05-28T20:27:58.3709639Z   category: /language:python
+2025-05-28T20:27:58.3709855Z   output: ../results
+2025-05-28T20:27:58.3710035Z   upload: always
+2025-05-28T20:27:58.3710213Z   cleanup-level: brutal
+2025-05-28T20:27:58.3710410Z   add-snippets: false
+2025-05-28T20:27:58.3710604Z   skip-queries: false
+2025-05-28T20:27:58.3710894Z   checkout_path: /home/runner/work/agent-web-scraper/agent-web-scraper
+2025-05-28T20:27:58.3711235Z   upload-database: true
+2025-05-28T20:27:58.3711437Z   wait-for-processing: true
+2025-05-28T20:27:58.3711754Z   token: ***
+2025-05-28T20:27:58.3711934Z   matrix: {
+  "language": "python"
+}
+2025-05-28T20:27:58.3712620Z   expect-error: false
+2025-05-28T20:27:58.3712818Z env:
+2025-05-28T20:27:58.3712993Z   CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+2025-05-28T20:27:58.3713255Z   CODEQL_ACTION_FEATURE_SANDWICH: false
+2025-05-28T20:27:58.3713502Z   CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+2025-05-28T20:27:58.3713787Z   CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+2025-05-28T20:27:58.3714032Z   CODEQL_ACTION_VERSION: 3.28.18
+2025-05-28T20:27:58.3714272Z   JOB_RUN_UUID: 0d101759-f0f5-45b6-990c-0a929aacc5ea
+2025-05-28T20:27:58.3714540Z   CODEQL_ACTION_INIT_HAS_RUN: true
+2025-05-28T20:27:58.3714836Z   CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/codeql.yml:analyze
+2025-05-28T20:27:58.3715181Z   CODEQL_WORKFLOW_STARTED_AT: 2025-05-28T20:27:42.484Z
+2025-05-28T20:27:58.3715448Z   CODEQL_RAM: 14581
+2025-05-28T20:27:58.3715616Z   CODEQL_THREADS: 4
+2025-05-28T20:27:58.3715847Z   CODEQL_ACTION_AUTOBUILD_DID_COMPLETE_SUCCESSFULLY: true
+2025-05-28T20:27:58.3716119Z ##[endgroup]
+2025-05-28T20:27:59.5066232Z While resolving threads, found a cgroup CPUs file with 4 CPUs in /sys/fs/cgroup/cpuset.cpus.effective.
+2025-05-28T20:27:59.5102179Z ##[group]Generating diff range extension pack
+2025-05-28T20:27:59.5103225Z Calculating diff ranges for main...IgorGanapolsky:reddit
+2025-05-28T20:27:59.7166760Z Successfully created diff range extension pack at /home/runner/work/_temp/pr-diff-range.
+2025-05-28T20:27:59.7167577Z ##[endgroup]
+2025-05-28T20:27:59.7254087Z ##[group]Extracting python
+2025-05-28T20:27:59.7257280Z [command]/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/codeql database trace-command --index-traceless-dbs /home/runner/work/_temp/codeql_databases/python
+2025-05-28T20:28:00.4923049Z Running command in /home/runner/work/agent-web-scraper/agent-web-scraper: [/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/python/tools/autobuild.sh]
+2025-05-28T20:28:00.5853029Z [2025-05-28 20:28:00] [build-stderr] /bin/sh: 1: python2: not found
+2025-05-28T20:28:00.6184832Z [2025-05-28 20:28:00] [build-stdout] Source root appears to be the real root.
+2025-05-28T20:28:00.6191694Z [2025-05-28 20:28:00] [build-stdout] Will try to guess Python version, as it was not specified in `lgtm.yml`
+2025-05-28T20:28:00.6193025Z [2025-05-28 20:28:00] [build-stdout] Trying to guess Python version based on Trove classifiers in setup.py
+2025-05-28T20:28:00.6194086Z [2025-05-28 20:28:00] [build-stdout] Found Trove classifier for Python 3 in setup.py -- will use that version
+2025-05-28T20:28:00.6195076Z [2025-05-28 20:28:00] [build-stdout] Trying to guess Python version based on installed versions
+2025-05-28T20:28:00.6196006Z [2025-05-28 20:28:00] [build-stdout] Wanted to run Python 2, but it is not available. Using Python 3 instead
+2025-05-28T20:28:00.6197020Z [2025-05-28 20:28:00] [build-stdout] This script is running Python 3, but Python 2 is also available (as 'python3')
+2025-05-28T20:28:00.6199089Z [2025-05-28 20:28:00] [build-stdout] Calling python3 -S /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/python/tools/python_tracer.py --verbosity 3 -z all -c /home/runner/work/_temp/codeql_databases/python/working/trap_cache -R /home/runner/work/agent-web-scraper/agent-web-scraper
+2025-05-28T20:28:01.0136033Z [2025-05-28 20:28:01] [build-stdout] INFO: The Python extractor has recently stopped extracting the standard library by default. If you encounter problems, please let us know by submitting an issue to https://github.com/github/codeql. It is possible to re-enable extraction of the standard library by setting the environment variable CODEQL_EXTRACTOR_PYTHON_EXTRACT_STDLIB.
+2025-05-28T20:28:01.0158739Z [2025-05-28 20:28:01] [build-stdout] [INFO] Extraction will use the Python 3 standard library.
+2025-05-28T20:28:01.0160289Z [2025-05-28 20:28:01] [build-stdout] [INFO] sys_path is: ['/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/python/tools', '/usr/lib/python312.zip', '/usr/lib/python3.12', '/usr/lib/python3.12/lib-dynload']
+2025-05-28T20:28:01.0164045Z [2025-05-28 20:28:01] [build-stdout] [INFO] Python version 3.12.3
+2025-05-28T20:28:01.0164740Z [2025-05-28 20:28:01] [build-stdout] [INFO] Python extractor version 7.1.2
+2025-05-28T20:28:01.0993802Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/config.py in 12ms
+2025-05-28T20:28:01.1133803Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/web/__init__.py in 4ms
+2025-05-28T20:28:01.1135537Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/setup.py in 26ms
+2025-05-28T20:28:01.1164025Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/web in 1ms
+2025-05-28T20:28:01.1231122Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/scraper.py in 10ms
+2025-05-28T20:28:01.1263437Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/ui/__init__.py in 2ms
+2025-05-28T20:28:01.1388054Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/test_sentry.py in 52ms
+2025-05-28T20:28:01.1406792Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/run.py in 40ms
+2025-05-28T20:28:01.1816151Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_env_utils.py in 46ms
+2025-05-28T20:28:01.2052959Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_scraper_new.py in 65ms
+2025-05-28T20:28:01.2057205Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/__init__.py in 2ms
+2025-05-28T20:28:01.2084146Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/utils in 1ms
+2025-05-28T20:28:01.2124110Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/config/__init__.py in 2ms
+2025-05-28T20:28:01.2323718Z [2025-05-28 20:28:01] [build-stdout] [WARN] [2] Failed to find .undetected_scraper, Package at /home/runner/work/agent-web-scraper/agent-web-scraper/app/web has no module undetected_scraper
+2025-05-28T20:28:01.2360227Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/utils/port_utils.py in 26ms
+2025-05-28T20:28:01.2388441Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/utils/__init__.py in 2ms
+2025-05-28T20:28:01.2468245Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/__init__.py in 2ms
+2025-05-28T20:28:01.2774636Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/scripts/setup_logging.py in 36ms
+2025-05-28T20:28:01.2797719Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app in 0ms
+2025-05-28T20:28:01.3065902Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_base_scraper.py in 181ms
+2025-05-28T20:28:01.3427050Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/scripts/cleanup_logs.py in 35ms
+2025-05-28T20:28:01.3563185Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/config/logging.py in 75ms
+2025-05-28T20:28:01.3564577Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Skipped built-in file /usr/lib/python3.12/unittest/mock.py
+2025-05-28T20:28:01.3858317Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/reddit_scraper.py in 204ms
+2025-05-28T20:28:01.5053531Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/undetected_scraper.py in 151ms
+2025-05-28T20:28:01.5055035Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Skipped built-in file /usr/lib/python3.12/logging/__init__.py
+2025-05-28T20:28:01.5086022Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/__init__.py in 2ms
+2025-05-28T20:28:01.5087413Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Skipped built-in file /usr/lib/python3.12/abc.py
+2025-05-28T20:28:01.5093619Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Skipped built-in file /usr/lib/python3.12/pathlib.py
+2025-05-28T20:28:01.5236693Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_web_app.py in 129ms
+2025-05-28T20:28:01.5238895Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/indeed_scraper.py in 2ms
+2025-05-28T20:28:01.5357050Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/config/minimal_logging.py in 26ms
+2025-05-28T20:28:01.5358619Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/__init__.py in 2ms
+2025-05-28T20:28:01.5599881Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/config/simple_logger.py in 41ms
+2025-05-28T20:28:01.5623170Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/os.py
+2025-05-28T20:28:01.6434268Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/observability/__init__.py in 80ms
+2025-05-28T20:28:01.6466741Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted module time in 7ms
+2025-05-28T20:28:01.6468137Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /usr/lib/python3.12/json in 1ms
+2025-05-28T20:28:01.6504339Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/google_api.py in 2ms
+2025-05-28T20:28:01.6522911Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/argparse.py
+2025-05-28T20:28:01.7156228Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_reddit_scraper.py in 62ms
+2025-05-28T20:28:01.7157817Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /usr/lib/python3.12/logging in 0ms
+2025-05-28T20:28:01.7242008Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/utils/env_utils.py in 11ms
+2025-05-28T20:28:01.7247803Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /usr/lib/python3.12/asyncio in 0ms
+2025-05-28T20:28:01.7474367Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/utils/audit.py in 22ms
+2025-05-28T20:28:01.7490607Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/config in 1ms
+2025-05-28T20:28:01.7493758Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/tests/integration in 0ms
+2025-05-28T20:28:01.7546361Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/typing.py
+2025-05-28T20:28:01.7549542Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/scripts in 0ms
+2025-05-28T20:28:01.7773644Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_scraper.py in 240ms
+2025-05-28T20:28:01.7820118Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Skipped built-in file /usr/lib/python3.12/logging/handlers.py
+2025-05-28T20:28:01.7825458Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit in 0ms
+2025-05-28T20:28:01.7873328Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/web/app.py in 686ms
+2025-05-28T20:28:01.7889734Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/ui in 1ms
+2025-05-28T20:28:01.7899679Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Skipped built-in file /usr/lib/python3.12/socket.py
+2025-05-28T20:28:01.7902193Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/cli in 1ms
+2025-05-28T20:28:01.7987001Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/cli/costs.py in 48ms
+2025-05-28T20:28:01.7997619Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/core in 0ms
+2025-05-28T20:28:01.8002491Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/unittest/__init__.py
+2025-05-28T20:28:01.8004675Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/contextlib.py
+2025-05-28T20:28:01.8006939Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/json/__init__.py
+2025-05-28T20:28:01.8015752Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/utils in 1ms
+2025-05-28T20:28:01.8100578Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/ui/enhanced_google_scraper.py in 468ms
+2025-05-28T20:28:01.8453782Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/conftest.py in 62ms
+2025-05-28T20:28:01.8505385Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_undetected_scraper.py in 2ms
+2025-05-28T20:28:01.8507026Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/tests in 0ms
+2025-05-28T20:28:01.8508183Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted folder /usr/lib/python3.12/unittest in 0ms
+2025-05-28T20:28:01.8751096Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/cli/__init__.py in 84ms
+2025-05-28T20:28:01.8784037Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/config/safe_logger.py in 74ms
+2025-05-28T20:28:01.8785665Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/config/settings.py in 2ms
+2025-05-28T20:28:01.8788169Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Skipped built-in file /usr/lib/python3.12/io.py
+2025-05-28T20:28:01.8790733Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/agent-web-scraper/agent-web-scraper/app/observability in 0ms
+2025-05-28T20:28:01.8794351Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/integration/__init__.py in 2ms
+2025-05-28T20:28:01.8804943Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted folder /usr/lib/python3.12/urllib in 0ms
+2025-05-28T20:28:01.8835491Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Skipped built-in file /usr/lib/python3.12/asyncio/__init__.py
+2025-05-28T20:28:01.8837079Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/platform.py
+2025-05-28T20:28:01.8870235Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/tests/unit/test_example.py in 6ms
+2025-05-28T20:28:01.8877345Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/datetime.py
+2025-05-28T20:28:01.8882188Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/urllib/__init__.py
+2025-05-28T20:28:01.8890268Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted module sys in 0ms
+2025-05-28T20:28:01.8950749Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/utils/__init__.py in 5ms
+2025-05-28T20:28:01.8956119Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/traceback.py
+2025-05-28T20:28:01.8960917Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/urllib/parse.py
+2025-05-28T20:28:01.8984528Z [2025-05-28 20:28:01] [build-stdout] [INFO] [4] Skipped built-in file /usr/lib/python3.12/functools.py
+2025-05-28T20:28:01.9163028Z [2025-05-28 20:28:01] [build-stdout] [INFO] [2] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/utils/performance.py in 35ms
+2025-05-28T20:28:01.9202034Z [2025-05-28 20:28:01] [build-stdout] [INFO] [3] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/core/cost_tracker.py in 110ms
+2025-05-28T20:28:01.9368493Z [2025-05-28 20:28:01] [build-stdout] [INFO] [1] Extracted file /home/runner/work/agent-web-scraper/agent-web-scraper/app/ui/undetected_scraper.py in 92ms
+2025-05-28T20:28:01.9742222Z [2025-05-28 20:28:01] [build-stdout] [INFO] Processed 86 modules in 0.95s
+2025-05-28T20:28:02.0166268Z ##[endgroup]
+2025-05-28T20:28:02.0173629Z ##[group]Finalizing python
+2025-05-28T20:28:02.0175796Z [command]/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/codeql database finalize --finalize-dataset --threads=4 --ram=14581 /home/runner/work/_temp/codeql_databases/python
+2025-05-28T20:28:02.7873982Z Running pre-finalize script /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/python/tools/pre-finalize.sh in /home/runner/work/agent-web-scraper/agent-web-scraper.
+2025-05-28T20:28:02.8632716Z Running command in /home/runner/work/agent-web-scraper/agent-web-scraper: [/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/python/tools/pre-finalize.sh]
+2025-05-28T20:28:03.6161219Z [2025-05-28 20:28:03] [build-stderr] Scanning for files in /home/runner/work/agent-web-scraper/agent-web-scraper...
+2025-05-28T20:28:03.7329182Z [2025-05-28 20:28:03] [build-stderr] /home/runner/work/_temp/codeql_databases/python: Indexing files in in /home/runner/work/agent-web-scraper/agent-web-scraper...
+2025-05-28T20:28:03.7657891Z [2025-05-28 20:28:03] [build-stderr] Running command in /home/runner/work/agent-web-scraper/agent-web-scraper: [/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/yaml/tools/index-files.sh, /home/runner/work/_temp/codeql_databases/python/working/files-to-index7070133230287723102.list]
+2025-05-28T20:28:04.1443715Z Running TRAP import for CodeQL database at /home/runner/work/_temp/codeql_databases/python...
+2025-05-28T20:28:04.8994623Z Importing TRAP files
+2025-05-28T20:28:05.4809889Z Merging relations
+2025-05-28T20:28:05.8828315Z Finished writing database (relations: 447.67 KiB; string pool: 2.22 MiB).
+2025-05-28T20:28:05.9177372Z TRAP import complete (1.8s).
+2025-05-28T20:28:06.1610152Z Finished zipping source archive (66.33 KiB).
+2025-05-28T20:28:06.1940173Z ##[endgroup]
+2025-05-28T20:28:06.1944365Z ##[group]Running queries for python
+2025-05-28T20:28:06.1946965Z [command]/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/codeql database run-queries --ram=14581 --threads=4 --expect-discarded-cache --additional-packs=/home/runner/work/_temp/pr-diff-range --extension-packs=codeql-action/pr-diff-range /home/runner/work/_temp/codeql_databases/python --intra-layer-parallelism --min-disk-free=1024 -v
+2025-05-28T20:28:06.9366615Z Writing logs to /home/runner/work/_temp/codeql_databases/python/log/database-run-queries-20250528.202806.933.log.
+2025-05-28T20:28:06.9887194Z Stringpool size measured as 2326938
+2025-05-28T20:28:07.6046061Z Writing logs to /home/runner/work/_temp/codeql_databases/python/log/execute-queries-20250528.202807.600.log.
+2025-05-28T20:28:07.9299450Z Recording pack reference codeql/python-queries at /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0.
+2025-05-28T20:28:10.0309391Z Compiling in 3 threads due to RAM limits.
+2025-05-28T20:28:11.0856877Z [1/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-326/WeakCryptoKey.qlx.
+2025-05-28T20:28:11.4036724Z [2/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-918/FullServerSideRequestForgery.qlx.
+2025-05-28T20:28:11.4214148Z [3/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-113/HeaderInjection.qlx.
+2025-05-28T20:28:11.4601609Z [4/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-090/LdapInjection.qlx.
+2025-05-28T20:28:11.6000973Z [5/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-079/ReflectedXss.qlx.
+2025-05-28T20:28:11.6721962Z [6/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-078/CommandInjection.qlx.
+2025-05-28T20:28:11.6804292Z [7/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-502/UnsafeDeserialization.qlx.
+2025-05-28T20:28:11.7879373Z [8/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-022/PathInjection.qlx.
+2025-05-28T20:28:11.8931262Z [9/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-730/ReDoS.qlx.
+2025-05-28T20:28:11.9463927Z [10/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-730/RegexInjection.qlx.
+2025-05-28T20:28:12.0079171Z [11/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-730/PolynomialReDoS.qlx.
+2025-05-28T20:28:12.1033937Z [12/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-312/CleartextLogging.qlx.
+2025-05-28T20:28:12.1166917Z [13/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-312/CleartextStorage.qlx.
+2025-05-28T20:28:12.1547147Z [14/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-089/SqlInjection.qlx.
+2025-05-28T20:28:12.1975922Z [15/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-352/CSRFProtectionDisabled.qlx.
+2025-05-28T20:28:12.3393420Z [16/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-074/TemplateInjection.qlx.
+2025-05-28T20:28:12.3608461Z [17/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-643/XpathInjection.qlx.
+2025-05-28T20:28:12.3824143Z [18/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-614/InsecureCookie.qlx.
+2025-05-28T20:28:12.4327212Z [19/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CVE-2018-1281/BindToAllInterfaces.qlx.
+2025-05-28T20:28:12.4997775Z [20/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-094/CodeInjection.qlx.
+2025-05-28T20:28:12.5471637Z [21/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-601/UrlRedirect.qlx.
+2025-05-28T20:28:12.5555061Z [22/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/IncompleteHostnameRegExp.qlx.
+2025-05-28T20:28:12.6256501Z [23/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-943/NoSqlInjection.qlx.
+2025-05-28T20:28:12.6436578Z [24/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/IncompleteUrlSubstringSanitization.qlx.
+2025-05-28T20:28:12.6442583Z [25/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/OverlyLargeRange.qlx.
+2025-05-28T20:28:12.6895691Z [26/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/CookieInjection.qlx.
+2025-05-28T20:28:12.7203440Z [27/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-116/BadTagFilter.qlx.
+2025-05-28T20:28:12.7936826Z [28/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-776/XmlBomb.qlx.
+2025-05-28T20:28:12.9128334Z [29/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-285/PamAuthorization.qlx.
+2025-05-28T20:28:12.9129884Z [30/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-209/StackTraceExposure.qlx.
+2025-05-28T20:28:12.9954750Z [31/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/BrokenCryptoAlgorithm.qlx.
+2025-05-28T20:28:13.0072247Z [32/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/InsecureProtocol.qlx.
+2025-05-28T20:28:13.0397986Z [33/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/InsecureDefaultProtocol.qlx.
+2025-05-28T20:28:13.0742880Z [34/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-215/FlaskDebug.qlx.
+2025-05-28T20:28:13.0994140Z [35/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/WeakSensitiveDataHashing.qlx.
+2025-05-28T20:28:13.1129597Z [36/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-295/MissingHostKeyValidation.qlx.
+2025-05-28T20:28:13.1505919Z [37/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Expressions/UseofInput.qlx.
+2025-05-28T20:28:13.1636587Z [38/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Diagnostics/ExtractionWarnings.qlx.
+2025-05-28T20:28:13.1696741Z [39/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Diagnostics/ExtractedFiles.qlx.
+2025-05-28T20:28:13.1785378Z [40/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-377/InsecureTemporaryFile.qlx.
+2025-05-28T20:28:13.1883524Z [41/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Summary/LinesOfCode.qlx.
+2025-05-28T20:28:13.2003335Z [42/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Summary/LinesOfUserCode.qlx.
+2025-05-28T20:28:13.2135089Z [43/43] Loaded /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-611/Xxe.qlx.
+2025-05-28T20:28:13.5663930Z Starting evaluation of codeql/python-queries/Diagnostics/ExtractionWarnings.ql.
+2025-05-28T20:28:13.5666499Z Starting evaluation of codeql/python-queries/Diagnostics/ExtractedFiles.ql.
+2025-05-28T20:28:13.5667473Z Starting evaluation of codeql/python-queries/Expressions/UseofInput.ql.
+2025-05-28T20:28:13.5669521Z Starting evaluation of codeql/python-queries/Security/CVE-2018-1281/BindToAllInterfaces.ql.
+2025-05-28T20:28:13.6054688Z Starting evaluation of codeql/python-queries/Security/CWE-020/CookieInjection.ql.
+2025-05-28T20:28:13.6056821Z Starting evaluation of codeql/python-queries/Security/CWE-020/IncompleteHostnameRegExp.ql.
+2025-05-28T20:28:13.8454141Z [1/43 eval 267ms] Evaluation done; writing results to codeql/python-queries/Diagnostics/ExtractionWarnings.bqrs.
+2025-05-28T20:28:13.8600227Z [2/43 eval 293ms] Evaluation done; writing results to codeql/python-queries/Diagnostics/ExtractedFiles.bqrs.
+2025-05-28T20:28:15.1778071Z Starting evaluation of codeql/python-queries/Security/CWE-020/IncompleteUrlSubstringSanitization.ql.
+2025-05-28T20:28:15.1805144Z Starting evaluation of codeql/python-queries/Security/CWE-020/OverlyLargeRange.ql.
+2025-05-28T20:28:15.1825581Z Starting evaluation of codeql/python-queries/Security/CWE-022/PathInjection.ql.
+2025-05-28T20:28:15.2506079Z Starting evaluation of codeql/python-queries/Security/CWE-074/TemplateInjection.ql.
+2025-05-28T20:28:15.3353843Z [3/43 eval 153ms] Evaluation done; writing results to codeql/python-queries/Security/CWE-020/IncompleteUrlSubstringSanitization.bqrs.
+2025-05-28T20:28:15.3636327Z Starting evaluation of codeql/python-queries/Security/CWE-078/CommandInjection.ql.
+2025-05-28T20:28:15.3999268Z Starting evaluation of codeql/python-queries/Security/CWE-079/ReflectedXss.ql.
+2025-05-28T20:28:15.4206017Z Starting evaluation of codeql/python-queries/Security/CWE-089/SqlInjection.ql.
+2025-05-28T20:28:15.4654368Z Starting evaluation of codeql/python-queries/Security/CWE-090/LdapInjection.ql.
+2025-05-28T20:28:15.4755955Z Starting evaluation of codeql/python-queries/Security/CWE-094/CodeInjection.ql.
+2025-05-28T20:28:15.4805076Z Starting evaluation of codeql/python-queries/Security/CWE-113/HeaderInjection.ql.
+2025-05-28T20:28:15.5153089Z Starting evaluation of codeql/python-queries/Security/CWE-116/BadTagFilter.ql.
+2025-05-28T20:28:15.5215027Z Starting evaluation of codeql/python-queries/Security/CWE-209/StackTraceExposure.ql.
+2025-05-28T20:28:15.5220169Z Starting evaluation of codeql/python-queries/Security/CWE-215/FlaskDebug.ql.
+2025-05-28T20:28:15.5245324Z Starting evaluation of codeql/python-queries/Security/CWE-285/PamAuthorization.ql.
+2025-05-28T20:28:15.5522133Z Starting evaluation of codeql/python-queries/Security/CWE-295/MissingHostKeyValidation.ql.
+2025-05-28T20:28:15.5531949Z Starting evaluation of codeql/python-queries/Security/CWE-312/CleartextLogging.ql.
+2025-05-28T20:28:15.5739807Z Starting evaluation of codeql/python-queries/Security/CWE-312/CleartextStorage.ql.
+2025-05-28T20:28:15.6435280Z Starting evaluation of codeql/python-queries/Security/CWE-326/WeakCryptoKey.ql.
+2025-05-28T20:28:15.6445953Z Starting evaluation of codeql/python-queries/Security/CWE-327/BrokenCryptoAlgorithm.ql.
+2025-05-28T20:28:15.6449645Z Starting evaluation of codeql/python-queries/Security/CWE-327/InsecureDefaultProtocol.ql.
+2025-05-28T20:28:15.6512160Z Starting evaluation of codeql/python-queries/Security/CWE-327/InsecureProtocol.ql.
+2025-05-28T20:28:15.6516897Z Starting evaluation of codeql/python-queries/Security/CWE-327/WeakSensitiveDataHashing.ql.
+2025-05-28T20:28:15.6521406Z Starting evaluation of codeql/python-queries/Security/CWE-352/CSRFProtectionDisabled.ql.
+2025-05-28T20:28:15.6525900Z Starting evaluation of codeql/python-queries/Security/CWE-377/InsecureTemporaryFile.ql.
+2025-05-28T20:28:15.6530247Z Starting evaluation of codeql/python-queries/Security/CWE-502/UnsafeDeserialization.ql.
+2025-05-28T20:28:15.6544108Z Starting evaluation of codeql/python-queries/Security/CWE-601/UrlRedirect.ql.
+2025-05-28T20:28:15.6548641Z Starting evaluation of codeql/python-queries/Security/CWE-611/Xxe.ql.
+2025-05-28T20:28:15.6549852Z Starting evaluation of codeql/python-queries/Security/CWE-614/InsecureCookie.ql.
+2025-05-28T20:28:15.6550983Z Starting evaluation of codeql/python-queries/Security/CWE-643/XpathInjection.ql.
+2025-05-28T20:28:15.6552082Z Starting evaluation of codeql/python-queries/Security/CWE-730/PolynomialReDoS.ql.
+2025-05-28T20:28:15.6553396Z Starting evaluation of codeql/python-queries/Security/CWE-730/ReDoS.ql.
+2025-05-28T20:28:15.6555001Z Starting evaluation of codeql/python-queries/Security/CWE-730/RegexInjection.ql.
+2025-05-28T20:28:15.6556263Z Starting evaluation of codeql/python-queries/Security/CWE-776/XmlBomb.ql.
+2025-05-28T20:28:15.7405540Z [4/43 eval 89ms] Evaluation done; writing results to codeql/python-queries/Security/CWE-352/CSRFProtectionDisabled.bqrs.
+2025-05-28T20:28:15.9930959Z Starting evaluation of codeql/python-queries/Security/CWE-918/FullServerSideRequestForgery.ql.
+2025-05-28T20:28:15.9937040Z Starting evaluation of codeql/python-queries/Security/CWE-943/NoSqlInjection.ql.
+2025-05-28T20:28:15.9937931Z Starting evaluation of codeql/python-queries/Summary/LinesOfCode.ql.
+2025-05-28T20:28:16.0268029Z [5/43 eval 33ms] Evaluation done; writing results to codeql/python-queries/Summary/LinesOfCode.bqrs.
+2025-05-28T20:28:16.1296111Z Starting evaluation of codeql/python-queries/Summary/LinesOfUserCode.ql.
+2025-05-28T20:28:16.1932706Z [6/43 eval 63ms] Evaluation done; writing results to codeql/python-queries/Summary/LinesOfUserCode.bqrs.
+2025-05-28T20:28:16.3724066Z [7/43 eval 725ms] Evaluation done; writing results to codeql/python-queries/Security/CWE-327/InsecureDefaultProtocol.bqrs.
+2025-05-28T20:28:16.3725762Z [8/43 eval 2.8s] Evaluation done; writing results to codeql/python-queries/Expressions/UseofInput.bqrs.
+2025-05-28T20:28:16.3727386Z [9/43 eval 820ms] Evaluation done; writing results to codeql/python-queries/Security/CWE-295/MissingHostKeyValidation.bqrs.
+2025-05-28T20:28:16.3957663Z [10/43 eval 751ms] Evaluation done; writing results to codeql/python-queries/Security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+2025-05-28T20:28:16.7402814Z [11/43 eval 1.1s] Evaluation done; writing results to codeql/python-queries/Security/CWE-326/WeakCryptoKey.bqrs.
+2025-05-28T20:28:16.8066596Z [12/43 eval 1.2s] Evaluation done; writing results to codeql/python-queries/Security/CWE-327/WeakSensitiveDataHashing.bqrs.
+2025-05-28T20:28:17.4222529Z [13/43 eval 1.4s] Evaluation done; writing results to codeql/python-queries/Security/CWE-943/NoSqlInjection.bqrs.
+2025-05-28T20:28:17.4456546Z [14/43 eval 3.9s] Evaluation done; writing results to codeql/python-queries/Security/CVE-2018-1281/BindToAllInterfaces.bqrs.
+2025-05-28T20:28:17.5539945Z [15/43 eval 1.9s] Evaluation done; writing results to codeql/python-queries/Security/CWE-643/XpathInjection.bqrs.
+2025-05-28T20:28:17.5728872Z [16/43 eval 1.9s] Evaluation done; writing results to codeql/python-queries/Security/CWE-601/UrlRedirect.bqrs.
+2025-05-28T20:28:17.6725628Z [17/43 eval 4.1s] Evaluation done; writing results to codeql/python-queries/Security/CWE-020/IncompleteHostnameRegExp.bqrs.
+2025-05-28T20:28:17.7227048Z [18/43 eval 2.5s] Evaluation done; writing results to codeql/python-queries/Security/CWE-020/OverlyLargeRange.bqrs.
+2025-05-28T20:28:17.7235954Z [19/43 eval 2.2s] Evaluation done; writing results to codeql/python-queries/Security/CWE-116/BadTagFilter.bqrs.
+2025-05-28T20:28:17.7273735Z [20/43 eval 2.1s] Evaluation done; writing results to codeql/python-queries/Security/CWE-730/PolynomialReDoS.bqrs.
+2025-05-28T20:28:17.7282992Z [21/43 eval 2.1s] Evaluation done; writing results to codeql/python-queries/Security/CWE-730/ReDoS.bqrs.
+2025-05-28T20:28:17.7581643Z [22/43 eval 2.3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-094/CodeInjection.bqrs.
+2025-05-28T20:28:17.7741980Z [23/43 eval 4.2s] Evaluation done; writing results to codeql/python-queries/Security/CWE-020/CookieInjection.bqrs.
+2025-05-28T20:28:17.8377063Z [24/43 eval 2.6s] Evaluation done; writing results to codeql/python-queries/Security/CWE-074/TemplateInjection.bqrs.
+2025-05-28T20:28:17.8586283Z [25/43 eval 2.2s] Evaluation done; writing results to codeql/python-queries/Security/CWE-611/Xxe.bqrs.
+2025-05-28T20:28:17.9034392Z [26/43 eval 2.5s] Evaluation done; writing results to codeql/python-queries/Security/CWE-078/CommandInjection.bqrs.
+2025-05-28T20:28:17.9515805Z [27/43 eval 2.5s] Evaluation done; writing results to codeql/python-queries/Security/CWE-089/SqlInjection.bqrs.
+2025-05-28T20:28:17.9751255Z [28/43 eval 2.6s] Evaluation done; writing results to codeql/python-queries/Security/CWE-079/ReflectedXss.bqrs.
+2025-05-28T20:28:18.0303887Z [29/43 eval 2.6s] Evaluation done; writing results to codeql/python-queries/Security/CWE-113/HeaderInjection.bqrs.
+2025-05-28T20:28:18.0653804Z [30/43 eval 2.5s] Evaluation done; writing results to codeql/python-queries/Security/CWE-209/StackTraceExposure.bqrs.
+2025-05-28T20:28:18.1470308Z [31/43 eval 2.6s] Evaluation done; writing results to codeql/python-queries/Security/CWE-285/PamAuthorization.bqrs.
+2025-05-28T20:28:18.1555283Z [32/43 eval 2.6s] Evaluation done; writing results to codeql/python-queries/Security/CWE-215/FlaskDebug.bqrs.
+2025-05-28T20:28:18.4530418Z [33/43 eval 3.3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-022/PathInjection.bqrs.
+2025-05-28T20:28:18.4665626Z [34/43 eval 3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-090/LdapInjection.bqrs.
+2025-05-28T20:28:18.5196792Z [35/43 eval 2.9s] Evaluation done; writing results to codeql/python-queries/Security/CWE-312/CleartextStorage.bqrs.
+2025-05-28T20:28:18.5486426Z [36/43 eval 3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-312/CleartextLogging.bqrs.
+2025-05-28T20:28:18.5889530Z [37/43 eval 2.9s] Evaluation done; writing results to codeql/python-queries/Security/CWE-327/InsecureProtocol.bqrs.
+2025-05-28T20:28:18.5972173Z [38/43 eval 2.9s] Evaluation done; writing results to codeql/python-queries/Security/CWE-502/UnsafeDeserialization.bqrs.
+2025-05-28T20:28:18.6146006Z [39/43 eval 3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-377/InsecureTemporaryFile.bqrs.
+2025-05-28T20:28:18.6515448Z [40/43 eval 3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-776/XmlBomb.bqrs.
+2025-05-28T20:28:18.6776966Z [41/43 eval 3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-730/RegexInjection.bqrs.
+2025-05-28T20:28:18.6933161Z [42/43 eval 3s] Evaluation done; writing results to codeql/python-queries/Security/CWE-614/InsecureCookie.bqrs.
+2025-05-28T20:28:18.8207619Z [43/43 eval 2.8s] Evaluation done; writing results to codeql/python-queries/Security/CWE-918/FullServerSideRequestForgery.bqrs.
+2025-05-28T20:28:18.8212116Z Shutting down query evaluator.
+2025-05-28T20:28:18.9073507Z ##[group]Interpreting results for python
+2025-05-28T20:28:19.6247501Z Writing logs to /home/runner/work/_temp/codeql_databases/python/log/database-interpret-results-20250528.202819.621.log.
+2025-05-28T20:28:19.7793774Z Recording pack reference codeql/python-queries at /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0.
+2025-05-28T20:28:19.8266911Z Resolving extensions
+2025-05-28T20:28:21.2804495Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-918/FullServerSideRequestForgery.ql...
+2025-05-28T20:28:21.3041281Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-918/FullServerSideRequestForgery.bqrs.
+2025-05-28T20:28:21.3216715Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-326/WeakCryptoKey.ql...
+2025-05-28T20:28:21.3332006Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-326/WeakCryptoKey.bqrs.
+2025-05-28T20:28:21.3346156Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-090/LdapInjection.ql...
+2025-05-28T20:28:21.3463807Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-090/LdapInjection.bqrs.
+2025-05-28T20:28:21.3474517Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-113/HeaderInjection.ql...
+2025-05-28T20:28:21.3586579Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-113/HeaderInjection.bqrs.
+2025-05-28T20:28:21.3596231Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-079/ReflectedXss.ql...
+2025-05-28T20:28:21.3696801Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-079/ReflectedXss.bqrs.
+2025-05-28T20:28:21.3724116Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-078/CommandInjection.ql...
+2025-05-28T20:28:21.3815994Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-078/CommandInjection.bqrs.
+2025-05-28T20:28:21.3823439Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-502/UnsafeDeserialization.ql...
+2025-05-28T20:28:21.3914249Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-502/UnsafeDeserialization.bqrs.
+2025-05-28T20:28:21.3924640Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-022/PathInjection.ql...
+2025-05-28T20:28:21.4019954Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-022/PathInjection.bqrs.
+2025-05-28T20:28:21.4030153Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-730/PolynomialReDoS.ql...
+2025-05-28T20:28:21.4123390Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-730/PolynomialReDoS.bqrs.
+2025-05-28T20:28:21.4132091Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-730/RegexInjection.ql...
+2025-05-28T20:28:21.4222887Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-730/RegexInjection.bqrs.
+2025-05-28T20:28:21.4231996Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-730/ReDoS.ql...
+2025-05-28T20:28:21.4321081Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-730/ReDoS.bqrs.
+2025-05-28T20:28:21.4345448Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-312/CleartextStorage.ql...
+2025-05-28T20:28:21.4409037Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-312/CleartextStorage.bqrs.
+2025-05-28T20:28:21.4419211Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-312/CleartextLogging.ql...
+2025-05-28T20:28:21.4496551Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-312/CleartextLogging.bqrs.
+2025-05-28T20:28:21.4511903Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-089/SqlInjection.ql...
+2025-05-28T20:28:21.4593837Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-089/SqlInjection.bqrs.
+2025-05-28T20:28:21.4612703Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-074/TemplateInjection.ql...
+2025-05-28T20:28:21.4675823Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-074/TemplateInjection.bqrs.
+2025-05-28T20:28:21.4700467Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-352/CSRFProtectionDisabled.ql...
+2025-05-28T20:28:21.4758691Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-352/CSRFProtectionDisabled.bqrs.
+2025-05-28T20:28:21.4769029Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-643/XpathInjection.ql...
+2025-05-28T20:28:21.4836560Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-643/XpathInjection.bqrs.
+2025-05-28T20:28:21.4864198Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-614/InsecureCookie.ql...
+2025-05-28T20:28:21.4922791Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-614/InsecureCookie.bqrs.
+2025-05-28T20:28:21.4933766Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-094/CodeInjection.ql...
+2025-05-28T20:28:21.4988252Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-094/CodeInjection.bqrs.
+2025-05-28T20:28:21.4993432Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CVE-2018-1281/BindToAllInterfaces.ql...
+2025-05-28T20:28:21.5056316Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CVE-2018-1281/BindToAllInterfaces.bqrs.
+2025-05-28T20:28:21.5058106Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-601/UrlRedirect.ql...
+2025-05-28T20:28:21.5114039Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-601/UrlRedirect.bqrs.
+2025-05-28T20:28:21.5120753Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-943/NoSqlInjection.ql...
+2025-05-28T20:28:21.5195974Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-943/NoSqlInjection.bqrs.
+2025-05-28T20:28:21.5197774Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/IncompleteHostnameRegExp.ql...
+2025-05-28T20:28:21.5241566Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/IncompleteHostnameRegExp.bqrs.
+2025-05-28T20:28:21.5250312Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/CookieInjection.ql...
+2025-05-28T20:28:21.5339046Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/CookieInjection.bqrs.
+2025-05-28T20:28:21.5347823Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/OverlyLargeRange.ql...
+2025-05-28T20:28:21.5398485Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/OverlyLargeRange.bqrs.
+2025-05-28T20:28:21.5406257Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-020/IncompleteUrlSubstringSanitization.ql...
+2025-05-28T20:28:21.5499061Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/IncompleteUrlSubstringSanitization.bqrs.
+2025-05-28T20:28:21.5503506Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-116/BadTagFilter.ql...
+2025-05-28T20:28:21.5557467Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-116/BadTagFilter.bqrs.
+2025-05-28T20:28:21.5567157Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-776/XmlBomb.ql...
+2025-05-28T20:28:21.5665398Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-776/XmlBomb.bqrs.
+2025-05-28T20:28:21.5667461Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-285/PamAuthorization.ql...
+2025-05-28T20:28:21.5721714Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-285/PamAuthorization.bqrs.
+2025-05-28T20:28:21.5730335Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-209/StackTraceExposure.ql...
+2025-05-28T20:28:21.5801375Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-209/StackTraceExposure.bqrs.
+2025-05-28T20:28:21.5809645Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/InsecureProtocol.ql...
+2025-05-28T20:28:21.5888502Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/InsecureProtocol.bqrs.
+2025-05-28T20:28:21.5892296Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/WeakSensitiveDataHashing.ql...
+2025-05-28T20:28:21.5986419Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/WeakSensitiveDataHashing.bqrs.
+2025-05-28T20:28:21.5990193Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/BrokenCryptoAlgorithm.ql...
+2025-05-28T20:28:21.6038389Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+2025-05-28T20:28:21.6045908Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-327/InsecureDefaultProtocol.ql...
+2025-05-28T20:28:21.6104049Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/InsecureDefaultProtocol.bqrs.
+2025-05-28T20:28:21.6115369Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-611/Xxe.ql...
+2025-05-28T20:28:21.6174983Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-611/Xxe.bqrs.
+2025-05-28T20:28:21.6178988Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-215/FlaskDebug.ql...
+2025-05-28T20:28:21.6251786Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-215/FlaskDebug.bqrs.
+2025-05-28T20:28:21.6253915Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-295/MissingHostKeyValidation.ql...
+2025-05-28T20:28:21.6324568Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-295/MissingHostKeyValidation.bqrs.
+2025-05-28T20:28:21.6327786Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Security/CWE-377/InsecureTemporaryFile.ql...
+2025-05-28T20:28:21.6388917Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-377/InsecureTemporaryFile.bqrs.
+2025-05-28T20:28:21.6394037Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Expressions/UseofInput.ql...
+2025-05-28T20:28:21.6440441Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Expressions/UseofInput.bqrs.
+2025-05-28T20:28:21.6448449Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Diagnostics/ExtractionWarnings.ql...
+2025-05-28T20:28:21.6525891Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Diagnostics/ExtractionWarnings.bqrs.
+2025-05-28T20:28:21.6527571Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Diagnostics/ExtractedFiles.ql...
+2025-05-28T20:28:21.6558448Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Diagnostics/ExtractedFiles.bqrs.
+2025-05-28T20:28:21.6571147Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Summary/LinesOfCode.ql...
+2025-05-28T20:28:21.6617607Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Summary/LinesOfCode.bqrs.
+2025-05-28T20:28:21.6625825Z Interpreting /opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/qlpacks/codeql/python-queries/1.5.0/Summary/LinesOfUserCode.ql...
+2025-05-28T20:28:21.6695615Z  ... found results file at /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Summary/LinesOfUserCode.bqrs.
+2025-05-28T20:28:21.7275014Z Interpreted pathproblem query "Full server-side request forgery" (py/full-ssrf) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-918/FullServerSideRequestForgery.bqrs.
+2025-05-28T20:28:21.7287201Z Interpreted problem query "Use of weak cryptographic key" (py/weak-crypto-key) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-326/WeakCryptoKey.bqrs.
+2025-05-28T20:28:21.7296600Z Interpreted pathproblem query "LDAP query built from user-controlled sources" (py/ldap-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-090/LdapInjection.bqrs.
+2025-05-28T20:28:21.7310513Z Interpreted pathproblem query "HTTP Response Splitting" (py/http-response-splitting) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-113/HeaderInjection.bqrs.
+2025-05-28T20:28:21.7319711Z Interpreted pathproblem query "Reflected server-side cross-site scripting" (py/reflective-xss) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-079/ReflectedXss.bqrs.
+2025-05-28T20:28:21.7322661Z Interpreted pathproblem query "Uncontrolled command line" (py/command-line-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-078/CommandInjection.bqrs.
+2025-05-28T20:28:21.7325509Z Interpreted pathproblem query "Deserialization of user-controlled data" (py/unsafe-deserialization) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-502/UnsafeDeserialization.bqrs.
+2025-05-28T20:28:21.7342205Z Interpreted pathproblem query "Uncontrolled data used in path expression" (py/path-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-022/PathInjection.bqrs.
+2025-05-28T20:28:21.7349050Z Interpreted pathproblem query "Polynomial regular expression used on uncontrolled data" (py/polynomial-redos) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-730/PolynomialReDoS.bqrs.
+2025-05-28T20:28:21.7354814Z Interpreted pathproblem query "Regular expression injection" (py/regex-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-730/RegexInjection.bqrs.
+2025-05-28T20:28:21.7364585Z Interpreted problem query "Inefficient regular expression" (py/redos) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-730/ReDoS.bqrs.
+2025-05-28T20:28:21.7369930Z Interpreted pathproblem query "Clear-text storage of sensitive information" (py/clear-text-storage-sensitive-data) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-312/CleartextStorage.bqrs.
+2025-05-28T20:28:21.7373063Z Interpreted pathproblem query "Clear-text logging of sensitive information" (py/clear-text-logging-sensitive-data) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-312/CleartextLogging.bqrs.
+2025-05-28T20:28:21.7379516Z Interpreted pathproblem query "SQL query built from user-controlled sources" (py/sql-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-089/SqlInjection.bqrs.
+2025-05-28T20:28:21.7382107Z Interpreted pathproblem query "Server Side Template Injection" (py/template-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-074/TemplateInjection.bqrs.
+2025-05-28T20:28:21.7391629Z Interpreted problem query "CSRF protection weakened or disabled" (py/csrf-protection-disabled) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-352/CSRFProtectionDisabled.bqrs.
+2025-05-28T20:28:21.7398103Z Interpreted pathproblem query "XPath query built from user-controlled sources" (py/xpath-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-643/XpathInjection.bqrs.
+2025-05-28T20:28:21.7403996Z Interpreted problem query "Failure to use secure cookies" (py/insecure-cookie) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-614/InsecureCookie.bqrs.
+2025-05-28T20:28:21.7406346Z Interpreted pathproblem query "Code injection" (py/code-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-094/CodeInjection.bqrs.
+2025-05-28T20:28:21.7410548Z Interpreted problem query "Binding a socket to all network interfaces" (py/bind-socket-all-network-interfaces) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CVE-2018-1281/BindToAllInterfaces.bqrs.
+2025-05-28T20:28:21.7413359Z Interpreted pathproblem query "URL redirection from remote source" (py/url-redirection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-601/UrlRedirect.bqrs.
+2025-05-28T20:28:21.7423304Z Interpreted pathproblem query "NoSQL Injection" (py/nosql-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-943/NoSqlInjection.bqrs.
+2025-05-28T20:28:21.7436527Z Interpreted problem query "Incomplete regular expression for hostnames" (py/incomplete-hostname-regexp) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/IncompleteHostnameRegExp.bqrs.
+2025-05-28T20:28:21.7445431Z Interpreted pathproblem query "Construction of a cookie using user-supplied input" (py/cookie-injection) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/CookieInjection.bqrs.
+2025-05-28T20:28:21.7451429Z Interpreted problem query "Overly permissive regular expression range" (py/overly-large-range) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/OverlyLargeRange.bqrs.
+2025-05-28T20:28:21.7454691Z Interpreted problem query "Incomplete URL substring sanitization" (py/incomplete-url-substring-sanitization) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-020/IncompleteUrlSubstringSanitization.bqrs.
+2025-05-28T20:28:21.7457588Z Interpreted problem query "Bad HTML filtering regexp" (py/bad-tag-filter) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-116/BadTagFilter.bqrs.
+2025-05-28T20:28:21.7460801Z Interpreted pathproblem query "XML internal entity expansion" (py/xml-bomb) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-776/XmlBomb.bqrs.
+2025-05-28T20:28:21.7468413Z Interpreted pathproblem query "PAM authorization bypass due to incorrect usage" (py/pam-auth-bypass) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-285/PamAuthorization.bqrs.
+2025-05-28T20:28:21.7475848Z Interpreted pathproblem query "Information exposure through an exception" (py/stack-trace-exposure) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-209/StackTraceExposure.bqrs.
+2025-05-28T20:28:21.7478706Z Interpreted problem query "Use of insecure SSL/TLS version" (py/insecure-protocol) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/InsecureProtocol.bqrs.
+2025-05-28T20:28:21.7487769Z Interpreted pathproblem query "Use of a broken or weak cryptographic hashing algorithm on sensitive data" (py/weak-sensitive-data-hashing) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/WeakSensitiveDataHashing.bqrs.
+2025-05-28T20:28:21.7497117Z Interpreted problem query "Use of a broken or weak cryptographic algorithm" (py/weak-cryptographic-algorithm) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+2025-05-28T20:28:21.7508011Z Interpreted problem query "Default version of SSL/TLS may be insecure" (py/insecure-default-protocol) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-327/InsecureDefaultProtocol.bqrs.
+2025-05-28T20:28:21.7526962Z Interpreted pathproblem query "XML external entity expansion" (py/xxe) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-611/Xxe.bqrs.
+2025-05-28T20:28:21.7531868Z Interpreted problem query "Flask app is run in debug mode" (py/flask-debug) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-215/FlaskDebug.bqrs.
+2025-05-28T20:28:21.7534775Z Interpreted problem query "Accepting unknown SSH host keys when using Paramiko" (py/paramiko-missing-host-key-validation) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-295/MissingHostKeyValidation.bqrs.
+2025-05-28T20:28:21.7537787Z Interpreted problem query "Insecure temporary file" (py/insecure-temporary-file) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Security/CWE-377/InsecureTemporaryFile.bqrs.
+2025-05-28T20:28:21.7540177Z Interpreted problem query "'input' function used in Python 2" (py/use-of-input) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Expressions/UseofInput.bqrs.
+2025-05-28T20:28:21.7560042Z Interpreted diagnostic query "Python extraction warnings" (py/diagnostics/extraction-warnings) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Diagnostics/ExtractionWarnings.bqrs.
+2025-05-28T20:28:21.7563697Z Interpreted diagnostic query "Extracted Python files" (py/diagnostics/successfully-extracted-files) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Diagnostics/ExtractedFiles.bqrs.
+2025-05-28T20:28:21.7566809Z Interpreted metric query "Total lines of Python code in the database" (py/summary/lines-of-code) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Summary/LinesOfCode.bqrs.
+2025-05-28T20:28:21.7575503Z Interpreted metric query "Total lines of user written Python code in the database" (py/summary/lines-of-user-code) at path /home/runner/work/_temp/codeql_databases/python/results/codeql/python-queries/Summary/LinesOfUserCode.bqrs.
+2025-05-28T20:28:21.7577355Z Reading source archive /home/runner/work/_temp/codeql_databases/python/src.zip
+2025-05-28T20:28:21.8563676Z Interpreting file coverage baseline information
+2025-05-28T20:28:21.8564632Z Finished interpreting file coverage baseline information.
+2025-05-28T20:28:21.8565238Z Interpreting diagnostic messages...
+2025-05-28T20:28:21.8869121Z Found 1 raw diagnostic messages.
+2025-05-28T20:28:21.8951338Z Processed diagnostic messages (removed 0 due to limits, created 0 summary diagnostics for status page).
+2025-05-28T20:28:21.8970749Z Interpreted diagnostic messages (39ms).
+2025-05-28T20:28:22.0600974Z Exporting results to SARIF...
+2025-05-28T20:28:22.2010816Z Exported results to SARIF (141ms).
+2025-05-28T20:28:22.2335805Z ##[endgroup]
+2025-05-28T20:28:22.2337127Z CodeQL scanned 46 out of 46 Python files in this invocation. Check the status page for overall coverage information: https://github.com/IgorGanapolsky/agent-web-scraper/security/code-scanning/tools/CodeQL/status/
+2025-05-28T20:28:22.2338368Z 
+2025-05-28T20:28:22.2338927Z ##[group]Cleaning up databases
+2025-05-28T20:28:22.2339976Z [command]/opt/hostedtoolcache/CodeQL/2.21.3/x64/codeql/codeql database cleanup /home/runner/work/_temp/codeql_databases/python --cache-cleanup=brutal
+2025-05-28T20:28:22.9091314Z Cleaning up existing TRAP files after import...
+2025-05-28T20:28:22.9141781Z TRAP files cleaned up (3ms).
+2025-05-28T20:28:22.9144442Z Cleaning up scratch directory...
+2025-05-28T20:28:22.9144915Z Scratch directory cleaned up (0ms).
+2025-05-28T20:28:22.9924566Z ##[endgroup]
+2025-05-28T20:28:22.9934971Z ##[group]Uploading results
+2025-05-28T20:28:22.9935552Z Processing sarif files: ["/home/runner/work/agent-web-scraper/results/python.sarif"]
+2025-05-28T20:28:22.9961644Z Adding fingerprints to SARIF file. See https://docs.github.com/en/enterprise-cloud@latest/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning#providing-data-to-track-code-scanning-alerts-across-runs for more information.
+2025-05-28T20:28:23.0182289Z Uploading results
+2025-05-28T20:28:23.5613608Z Successfully uploaded results
+2025-05-28T20:28:23.5614288Z ##[endgroup]
+2025-05-28T20:28:23.5711176Z ##[group]Waiting for processing to finish
+2025-05-28T20:28:23.6878676Z Analysis upload status is pending.
+2025-05-28T20:28:28.8334744Z Analysis upload status is complete.
+2025-05-28T20:28:28.8337153Z ##[endgroup]

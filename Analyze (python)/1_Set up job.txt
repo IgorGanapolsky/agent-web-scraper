@@ -1,0 +1,36 @@
+﻿2025-05-28T20:27:35.7625989Z Current runner version: '2.324.0'
+2025-05-28T20:27:35.7653750Z ##[group]Operating System
+2025-05-28T20:27:35.7654517Z Ubuntu
+2025-05-28T20:27:35.7655104Z 24.04.2
+2025-05-28T20:27:35.7655557Z LTS
+2025-05-28T20:27:35.7656030Z ##[endgroup]
+2025-05-28T20:27:35.7656557Z ##[group]Runner Image
+2025-05-28T20:27:35.7657187Z Image: ubuntu-24.04
+2025-05-28T20:27:35.7657718Z Version: 20250511.1.0
+2025-05-28T20:27:35.7658802Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250511.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-05-28T20:27:35.7660152Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250511.1
+2025-05-28T20:27:35.7661006Z ##[endgroup]
+2025-05-28T20:27:35.7661551Z ##[group]Runner Image Provisioner
+2025-05-28T20:27:35.7662144Z 2.0.437.1
+2025-05-28T20:27:35.7662870Z ##[endgroup]
+2025-05-28T20:27:35.7664135Z ##[group]GITHUB_TOKEN Permissions
+2025-05-28T20:27:35.7666257Z Actions: read
+2025-05-28T20:27:35.7666785Z Contents: read
+2025-05-28T20:27:35.7667369Z Metadata: read
+2025-05-28T20:27:35.7668095Z SecurityEvents: write
+2025-05-28T20:27:35.7668702Z ##[endgroup]
+2025-05-28T20:27:35.7670673Z Secret source: Actions
+2025-05-28T20:27:35.7671360Z Prepare workflow directory
+2025-05-28T20:27:35.8096527Z Prepare all required actions
+2025-05-28T20:27:35.8151534Z Getting action download info
+2025-05-28T20:27:36.1143557Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-05-28T20:27:36.1144563Z Version: 4.2.2
+2025-05-28T20:27:36.1145635Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-05-28T20:27:36.1146843Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-05-28T20:27:36.1147543Z ##[endgroup]
+2025-05-28T20:27:36.1982184Z ##[group]Download immutable action package 'github/codeql-action@v3'
+2025-05-28T20:27:36.1983256Z Version: 3.28.18
+2025-05-28T20:27:36.1984014Z Digest: sha256:0b41304c3837968c577fdb6c0aa2845a72b559482f30bae7cb59d4bed90065ac
+2025-05-28T20:27:36.1985024Z Source commit SHA: ff0a06e83cb2de871e5a09832bc6a81e7276941f
+2025-05-28T20:27:36.1985700Z ##[endgroup]
+2025-05-28T20:27:41.3506824Z Complete job name: Analyze (python)
