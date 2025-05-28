@@ -36,3 +36,6 @@ jobs:
           args: >
             -Dsonar.projectBaseDir=.
             -Dsonar.coverage.exclusions=tests/**
+            -Dsonar.sources=.
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.inclusions=reddit_scraper.py
