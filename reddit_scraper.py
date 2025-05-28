@@ -24,6 +24,15 @@ print(response.choices[0].message.content)
 
 
 def google_search(query):
+    """
+    Performs a Google search for the given query and returns Reddit post URLs.
+    
+    Args:
+        query: The search query string.
+    
+    Returns:
+        A list of URLs from the organic search results that point to Reddit posts.
+    """
     search = GoogleSearch(
         {"q": query, "location": "United States", "num": 10, "api_key": SERPAPI_KEY}
     )
@@ -36,6 +45,15 @@ def google_search(query):
 
 
 def scrape_reddit_post(url):
+    """
+    Fetches the title and up to three top comment texts from a Reddit post.
+    
+    Args:
+        url: The URL of the Reddit post to scrape.
+    
+    Returns:
+        A tuple containing the post title and a list of up to three comment texts.
+    """
     resp = requests.get(url, headers={"User-Agent": "Mozilla"})
     soup = BeautifulSoup(resp.text, "html.parser")
     title = soup.find("title").text
@@ -45,6 +63,16 @@ def scrape_reddit_post(url):
 
 
 def summarize_pain_points(title, comments):
+    """
+    Generates a summary of user pain points from a Reddit post using GPT-4.
+    
+    Args:
+        title: The title of the Reddit post.
+        comments: A list of comment texts from the post.
+    
+    Returns:
+        A string summarizing the main user pain points extracted from the post.
+    """
     prompt = (
         f"Extract the user pain point from this Reddit post:\n\n"
         f"Title: {title}\nComments:\n" + "\n".join(comments)
@@ -56,6 +84,12 @@ def summarize_pain_points(title, comments):
 
 
 def connect_sheet():
+    """
+    Connects to the specified Google Spreadsheet and returns the first worksheet.
+    
+    Returns:
+        The first worksheet of the target Google Spreadsheet as a gspread worksheet object.
+    """
     print("Looking for:", SPREADSHEET_NAME)
     scope = [
         "https://spreadsheets.google.com/feeds",
@@ -70,6 +104,14 @@ def connect_sheet():
 
 
 def run_scraper(search_term):
+    """
+    Searches for Reddit posts related to a search term, summarizes user pain points, and logs results to a Google Sheet.
+    
+    Performs a Google search for Reddit posts about the given search term and "pain point," scrapes each post for its title and comments, summarizes user pain points using GPT-4, and appends the results to a connected Google Spreadsheet. Skips posts without comments and continues processing even if individual posts fail.
+     
+    Args:
+        search_term: The topic or keyword to search for in Reddit posts.
+    """
     urls = google_search(f"site:reddit.com {search_term} pain point")
     sheet = connect_sheet()
 
