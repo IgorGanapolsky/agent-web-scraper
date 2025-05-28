@@ -73,7 +73,8 @@ from google.oauth2.service_account import Credentials
     creds = Credentials.from_service_account_file(
         "secrets/service_account.json", scopes=scope
     )
-    client = gspread.authorize(creds)
+    gc = gspread.authorize(creds)
+    sheet = gc.open(SPREADSHEET_NAME).sheet1
     sheet = client.open(SPREADSHEET_NAME).sheet1
     return sheet
 
