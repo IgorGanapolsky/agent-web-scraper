@@ -32,8 +32,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-          # Install missing dependencies for tests
-          pip install serpapi beautifulsoup4 openai==1.12.0 gspread==6.0.0 oauth2client==4.1.3
 
       - name: Lint with pre-commit
         run: |
