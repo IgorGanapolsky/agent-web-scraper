@@ -36,7 +36,11 @@ def google_search(query):
 
 
 def scrape_reddit_post(url):
-    resp = requests.get(url, headers={"User-Agent": "Mozilla"})
+    resp = requests.get(
+        url,
+        headers={"User-Agent": "Mozilla/5.0 (compatible; RedditScraper/1.0)"},
+        timeout=30
+    )
     soup = BeautifulSoup(resp.text, "html.parser")
     title = soup.find("title").text
     comments = soup.find_all("div", class_="md")[:3]
