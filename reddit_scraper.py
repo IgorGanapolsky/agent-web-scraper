@@ -10,7 +10,7 @@ from google.oauth2.service_account import Credentials
 from openai import OpenAI
 from serpapi.google_search import GoogleSearch
 
-from config import SERPAPI_KEY, SPREADSHEET_NAME
+from config import SERPAPI_KEY, SPREADSHEET_NAME  # OPENAI_API_KEY no longer needed
 
 # reddit_scraper.py
 
