@@ -9,7 +9,13 @@ from oauth2client.service_account import ServiceAccountCredentials
 from openai import OpenAI
 from serpapi.google_search import GoogleSearch
 
-from config import SERPAPI_KEY, SPREADSHEET_NAME
+# reddit_scraper.py
+
+from config import SERPAPI_KEY, OPENAI_API_KEY, SPREADSHEET_NAME
+
+# … other imports and code …
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 load_dotenv()
 
