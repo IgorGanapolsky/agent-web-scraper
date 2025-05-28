@@ -155,8 +155,11 @@ class RedditScraper:
         logger.info(f"Scraping Reddit post: {url}")
 
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/91.0.4472.124 Safari/537.36"
+            )
         }
 
         try:
@@ -212,9 +215,11 @@ class RedditScraper:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are an analyst identifying user pain points "
-                        "from Reddit discussions. Summarize the key pain points, "
-                        "frustrations, and needs expressed in this content.",
+                        "content": (
+                            "You are an analyst identifying user pain points "
+                            "from Reddit discussions. Summarize the key pain points, "
+                            "frustrations, and needs expressed in this content."
+                        ),
                     },
                     {"role": "user", "content": content},
                 ],
