@@ -22,7 +22,7 @@ class TestRedditScraper(unittest.TestCase):
         mock_completion.choices[0].message.content = "Test summary of pain points"
         mock_client.chat.completions.create.return_value = mock_completion
         mock_openai.return_value = mock_client
-        
+
         self.scraper = RedditScraper("test search", max_results=2)
         mock_init_sheets.assert_called_once()
 
