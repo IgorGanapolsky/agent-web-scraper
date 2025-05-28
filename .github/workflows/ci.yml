@@ -30,7 +30,7 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pytest --cov=app --cov-report=xml # Generate coverage report for SonarQube
+        pytest --cov=app --cov=reddit_scraper.py --cov-report=xml # Generate coverage report for SonarQube
 
     # Optional: Upload coverage to SonarQube (if configured)
     # - name: SonarQube Scan
