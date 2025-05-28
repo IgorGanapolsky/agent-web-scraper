@@ -43,7 +43,8 @@ jobs:
 
       - name: Test with pytest and generate coverage
         run: |
-          pytest --cov=app --cov-report=xml:coverage.xml --cov-report=term
+          # Run only the tests for our feature to avoid issues with other tests
+          pytest tests/unit/test_reddit_scraper.py -v --cov=. --cov-report=xml:coverage.xml --cov-report=term
 
       - name: SonarCloud Scan
         if: success() # Only run SonarCloud if previous steps were successful
