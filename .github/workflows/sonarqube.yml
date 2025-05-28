@@ -23,6 +23,8 @@ jobs:
           distribution: 'temurin'
       - name: Fetch all branches
         run: git fetch --all
+      - name: Fix Sonar source path
+        run: echo "SONAR_SCANNER_OPTS=-Dsonar.sources=." >> $GITHUB_ENV
       - name: SonarQube Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
