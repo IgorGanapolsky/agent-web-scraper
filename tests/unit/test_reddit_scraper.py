@@ -52,8 +52,8 @@ class TestRedditScraper(unittest.TestCase):
             <head><title>Test</title></head>
             <body>
                 <h1>Test Reddit Post</h1>
-                <div class="Comment">This is a test comment to include.</div>
-                <div class="Comment">This is another comment to include.</div>
+                <div class="Comment">Test comment 1</div>
+                <div class="Comment">Test comment 2</div>
                 <div class="Comment">short</div>
             </body>
         </html>
@@ -68,7 +68,7 @@ class TestRedditScraper(unittest.TestCase):
         # Verify the results
         assert result["title"] == "Test Reddit Post"
         assert len(result["comments"]) == 2
-        assert "test comment" in result["comments"][0]
+        assert "Test comment" in result["comments"][0]
 
     @patch("reddit_scraper.OpenAI")
     def test_summarize_pain_points(self, mock_openai):
