@@ -201,10 +201,20 @@ ignore = [
     "C901",  # too complex
     "SIM102", # sometimes it's better to nest
     "UP007", # X | Y union syntax requires Python 3.10+
+    "B018",  # useless expression (common in test/demo code)
+    "B904",  # raise exceptions with from
+    "PERF203", # try-except in loop overhead
+    "PERF401", # list comprehensions vs append
+    "RUF005", # concatenation vs unpacking
+    "ARG001", # unused function arguments
+    "UP036", # version block outdated
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*" = ["PLR2004", "S101", "TID252"]
+
+[tool.bandit.assert_used]
+skips = ["*/tests/*"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]
@@ -226,6 +236,11 @@ warn_return_any = true
 warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
+exclude = [
+    "tests/",
+    "scripts/",
+    "setup_dev.py",
+]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

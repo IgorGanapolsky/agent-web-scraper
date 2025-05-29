@@ -27,32 +27,37 @@ class JSONFormatter(logging.Formatter):
         }
 
         # Add extra fields from the record
-        for key, value in record.__dict__.items():
-            if key not in [
-                "name",
-                "msg",
-                "args",
-                "levelname",
-                "levelno",
-                "pathname",
-                "filename",
-                "module",
-                "lineno",
-                "funcName",
-                "created",
-                "msecs",
-                "relativeCreated",
-                "thread",
-                "threadName",
-                "processName",
-                "process",
-                "message",
-                "exc_info",
-                "exc_text",
-                "stack_info",
-                "getMessage",
-            ]:
-                log_data[key] = value
+        reserved_attrs = {
+            "name",
+            "msg",
+            "args",
+            "levelname",
+            "levelno",
+            "pathname",
+            "filename",
+            "module",
+            "lineno",
+            "funcName",
+            "created",
+            "msecs",
+            "relativeCreated",
+            "thread",
+            "threadName",
+            "processName",
+            "process",
+            "message",
+            "exc_info",
+            "exc_text",
+            "stack_info",
+            "getMessage",
+        }
+        log_data.update(
+            {
+                key: value
+                for key, value in record.__dict__.items()
+                if key not in reserved_attrs
+            }
+        )
 
         # Add exception info if present
         if record.exc_info:

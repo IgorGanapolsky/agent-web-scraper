@@ -5,10 +5,11 @@ This module provides the UndetectedChromeScraper class which uses
 undetected_chromedriver to bypass anti-bot measures when scraping
 websites.
 """
+
 import os
 import platform
 import time
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
@@ -93,7 +94,7 @@ class UndetectedChromeScraper:
             logger.info("Undetected Chrome WebDriver initialized successfully")
 
         except Exception as e:
-            logger.error(f"Failed to initialize undetected Chrome: {str(e)}")
+            logger.error(f"Failed to initialize undetected Chrome: {e!s}")
             raise
 
     def get_page(
@@ -114,7 +115,7 @@ class UndetectedChromeScraper:
             try:
                 self._setup_driver()
             except Exception as e:
-                logger.error(f"Failed to setup driver in get_page: {str(e)}")
+                logger.error(f"Failed to setup driver in get_page: {e!s}")
                 return None  # Driver setup failed
 
         # Ensure driver was initialized
@@ -140,7 +141,7 @@ class UndetectedChromeScraper:
             return self.driver.page_source if self.driver else None
 
         except Exception as e:
-            logger.error(f"Error loading page {url}: {str(e)}")
+            logger.error(f"Error loading page {url}: {e!s}")
             return None
 
     def find_elements(
@@ -166,12 +167,12 @@ class UndetectedChromeScraper:
             )
             return self.driver.find_elements(by, selector)
         except Exception as e:
-            logger.warning(f"Error finding elements {selector}: {str(e)}")
+            logger.warning(f"Error finding elements {selector}: {e!s}")
             return []
 
     def extract_text(
         self, selector: str, by: str = By.CSS_SELECTOR, timeout: int = 10
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract text content from elements matching the selector.
 
@@ -192,7 +193,7 @@ class UndetectedChromeScraper:
         attribute: str,
         by: str = By.CSS_SELECTOR,
         timeout: int = 10,
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract attribute values from elements matching the selector.
 
@@ -234,7 +235,7 @@ class UndetectedChromeScraper:
                 self.driver.quit()
                 logger.info("Browser closed successfully")
             except Exception as e:
-                logger.error(f"Error closing browser: {str(e)}")
+                logger.error(f"Error closing browser: {e!s}")
             finally:
                 self.driver = None
 
@@ -245,7 +246,7 @@ class UndetectedChromeScraper:
                 self.driver.quit()
                 logger.info("Undetected Chrome WebDriver quit successfully")
             except Exception as e:
-                logger.error(f"Error quitting WebDriver: {str(e)}")
+                logger.error(f"Error quitting WebDriver: {e!s}")
             finally:
                 self.driver = None
 

@@ -61,9 +61,7 @@ class UndetectedChromeScraper:
                 logging.info("Undetected Chrome driver initialized successfully")
                 return True
             except Exception as e:
-                logging.error(
-                    f"Failed to initialize undetected Chrome driver: {str(e)}"
-                )
+                logging.error(f"Failed to initialize undetected Chrome driver: {e!s}")
                 return False
         return True
 
@@ -106,13 +104,13 @@ class UndetectedChromeScraper:
                 "error": "Page load timeout",
             }
         except WebDriverException as e:
-            logging.error(f"WebDriver error for {url}: {str(e)}")
+            logging.error(f"WebDriver error for {url}: {e!s}")
             return {
                 "html": "<html><body><p>WebDriver error</p></body></html>",
                 "error": str(e),
             }
         except Exception as e:
-            logging.error(f"Error scraping {url} with undetected Chrome: {str(e)}")
+            logging.error(f"Error scraping {url} with undetected Chrome: {e!s}")
             return {
                 "html": "<html><body><p>Error scraping page</p></body></html>",
                 "error": str(e),
@@ -143,7 +141,7 @@ class UndetectedChromeScraper:
 
             return headers
         except Exception as e:
-            logging.error(f"Error extracting headers: {str(e)}")
+            logging.error(f"Error extracting headers: {e!s}")
             return []
 
     def quit(self):
@@ -154,7 +152,7 @@ class UndetectedChromeScraper:
                 self.is_initialized = False
                 logging.info("Undetected Chrome driver closed")
             except Exception as e:
-                logging.error(f"Error closing Chrome driver: {str(e)}")
+                logging.error(f"Error closing Chrome driver: {e!s}")
 
 
 # Example usage

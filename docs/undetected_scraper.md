@@ -37,23 +37,23 @@ scraper = UndetectedChromeScraper(headless=True)
 try:
     # Scrape a URL
     result = scraper.scrape("https://example.com")
-    
+
     if "error" in result:
         print(f"Error: {result['error']}")
     else:
         print(f"Successfully retrieved {len(result['html'])} characters of HTML")
-        
+
         # Extract headers
         headers = scraper.extract_headers(
-            result["html"], 
-            ["h1", "h2", "h3"], 
+            result["html"],
+            ["h1", "h2", "h3"],
             "https://example.com"
         )
-        
+
         # Process results
         for header in headers:
             print(f"{header['tag']}: {header['text']}")
-            
+
 finally:
     # Clean up
     scraper.quit()

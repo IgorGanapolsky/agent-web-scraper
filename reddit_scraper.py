@@ -7,7 +7,7 @@ import logging
 import os
 import time
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 import gspread
 import requests
@@ -104,7 +104,7 @@ class RedditScraper:
             logger.error(f"Error initializing Google Sheets: {e}")
             self.sheets_client = None
 
-    def search_reddit_urls(self) -> List[Dict[str, str]]:
+    def search_reddit_urls(self) -> list[dict[str, str]]:
         """
         Search for Reddit URLs using SerpAPI.
 
@@ -142,7 +142,7 @@ class RedditScraper:
             logger.error(f"Error searching Reddit URLs: {e}")
             return []
 
-    def scrape_reddit_post(self, url: str) -> Dict[str, Any]:
+    def scrape_reddit_post(self, url: str) -> dict[str, Any]:
         """
         Scrape a Reddit post and its comments.
 
@@ -191,7 +191,7 @@ class RedditScraper:
             logger.error(f"Error scraping Reddit post: {e}")
             return {"title": "Error", "url": url, "comments": []}
 
-    def summarize_pain_points(self, post_data: Dict[str, Any]) -> str:
+    def summarize_pain_points(self, post_data: dict[str, Any]) -> str:
         """
         Use OpenAI to summarize pain points from a Reddit post.
 
@@ -234,7 +234,7 @@ class RedditScraper:
             logger.error(f"Error summarizing pain points: {e}")
             return "Error generating summary"
 
-    def log_to_spreadsheet(self, post_data: Dict[str, Any], summary: str) -> bool:
+    def log_to_spreadsheet(self, post_data: dict[str, Any], summary: str) -> bool:
         """
         Log the results to Google Sheets.
 
@@ -267,7 +267,7 @@ class RedditScraper:
             logger.error(f"Error logging to spreadsheet: {e}")
             return False
 
-    def run(self) -> List[Dict[str, Any]]:
+    def run(self) -> list[dict[str, Any]]:
         """
         Run the Reddit scraper pipeline.
 

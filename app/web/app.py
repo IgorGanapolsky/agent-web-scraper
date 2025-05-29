@@ -6,7 +6,7 @@ import sys
 import time
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 from urllib.parse import urlparse
 
 import pandas as pd
@@ -176,8 +176,8 @@ def _make_request_with_retry(url, headers, attempt, max_attempts):
 
 
 def _extract_headers_from_soup(
-    soup: BeautifulSoup, tags_to_analyze: List[str]
-) -> Dict[str, str]:
+    soup: BeautifulSoup, tags_to_analyze: list[str]
+) -> dict[str, str]:
     """Extract headers and metadata from a BeautifulSoup object."""
     results = {}
 
@@ -222,10 +222,10 @@ def _extract_headers_from_soup(
 
 def extract_headers_with_soup(
     url: str,
-    tags_to_analyze: List[str],
+    tags_to_analyze: list[str],
     retry_count: int = 2,
     use_undetected_fallback: bool = True,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Extract HTML headers and metadata from a web page using BeautifulSoup.
 
@@ -291,7 +291,7 @@ def extract_headers_with_soup(
 
         except requests.exceptions.RequestException as e:
             logging.warning(
-                f"Request error in extract_headers_with_soup for {url}: {str(e)}"
+                f"Request error in extract_headers_with_soup for {url}: {e!s}"
             )
             if attempt == retry_count:  # Last attempt failed
                 if use_undetected_fallback:
@@ -302,7 +302,7 @@ def extract_headers_with_soup(
                 return {tag: error_msg for tag in tags_to_analyze}
         except Exception as e:
             logging.error(
-                f"Unexpected error in extract_headers_with_soup for {url}: {str(e)}"
+                f"Unexpected error in extract_headers_with_soup for {url}: {e!s}"
             )
             if attempt == retry_count:  # Last attempt failed
                 if use_undetected_fallback:
@@ -342,10 +342,10 @@ def _extract_meta_description(soup):
 
 
 def _extract_headers_from_soup_undetected(
-    soup: BeautifulSoup, tags_to_analyze: List[str]
-) -> Dict[str, str]:
+    soup: BeautifulSoup, tags_to_analyze: list[str]
+) -> dict[str, str]:
     """Extract headers from soup object for undetected chrome."""
-    results: Dict[str, str] = {}
+    results: dict[str, str] = {}
 
     # Extract title if requested
     if "Title" in tags_to_analyze and soup.title:
@@ -370,8 +370,8 @@ def _extract_headers_from_soup_undetected(
 
 @log_exceptions
 def extract_headers_with_undetected_chrome(
-    url: str, tags_to_analyze: List[str], max_retries: int = 3
-) -> Dict[str, str]:
+    url: str, tags_to_analyze: list[str], max_retries: int = 3
+) -> dict[str, str]:
     """
     Use UndetectedChromeScraper to extract headers from a URL.
     This is used as a fallback when the standard BeautifulSoup approach fails.
@@ -465,7 +465,7 @@ def _create_success_result(url: str, soup: BeautifulSoup) -> dict:
     }
 
 
-def _make_http_request(url: str) -> Tuple[Optional[requests.Response], Optional[str]]:
+def _make_http_request(url: str) -> tuple[Optional[requests.Response], Optional[str]]:
     """Make an HTTP request and return response and error tuple."""
     try:
         headers = {
@@ -568,7 +568,7 @@ def _extract_urls(search_results, max_results=10):
 def _process_single_url(
     url: str,
     progress: st.delta_generator.DeltaGenerator,
-    results: List[Dict[str, str]],
+    results: list[dict[str, str]],
     current_url_info: Optional[st.delta_generator.DeltaGenerator] = None,
     progress_details: Optional[st.delta_generator.DeltaGenerator] = None,
 ) -> None:
@@ -731,7 +731,7 @@ def search_and_scrape():
             st.rerun()
 
     except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
+        st.error(f"An error occurred: {e!s}")
         st.session_state["is_processing"] = False
 
         # Only try to generate Excel if we have results

@@ -9,7 +9,7 @@ import os
 import time
 import uuid
 from collections.abc import Callable
-from typing import Any, Dict, Optional, TypeVar, cast
+from typing import Any, Optional, TypeVar, cast
 
 import structlog
 

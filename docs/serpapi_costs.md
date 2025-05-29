@@ -36,7 +36,7 @@ def track_api_usage(cost: float):
     """Track API usage and cost."""
     month = datetime.now().strftime('%Y-%m')
     usage_file = f'api_usage_{month}.json'
-    
+
     # Load existing data
     if os.path.exists(usage_file):
         with open(usage_file, 'r') as f:
@@ -48,7 +48,7 @@ def track_api_usage(cost: float):
             'total_cost': 0.0,
             'searches': []
         }
-    
+
     # Update data
     search_data = {
         'timestamp': datetime.now().isoformat(),
@@ -57,11 +57,11 @@ def track_api_usage(cost: float):
     data['searches'].append(search_data)
     data['total_searches'] += 1
     data['total_cost'] = round(data['total_cost'] + cost, 2)
-    
+
     # Save updated data
     with open(usage_file, 'w') as f:
         json.dump(data, f, indent=2)
-    
+
     return data['total_cost']
 ```
 

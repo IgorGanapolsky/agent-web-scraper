@@ -1,4 +1,5 @@
 """Unit tests for the main scraper functionality."""
+
 import json
 import os
 from contextlib import asynccontextmanager
@@ -375,9 +376,12 @@ class TestScraper:
             yield mock_file_obj
 
         # Mock aiofiles.open and os.makedirs
-        with patch(
-            "aiofiles.open", return_value=mock_aiofiles_open_context()
-        ) as mock_aioopen, patch("os.makedirs") as mock_makedirs:
+        with (
+            patch(
+                "aiofiles.open", return_value=mock_aiofiles_open_context()
+            ) as mock_aioopen,
+            patch("os.makedirs") as mock_makedirs,
+        ):
             # Call the method
             await scraper.save_results([sample_job_data], str(test_file))
 

@@ -1,8 +1,9 @@
 """Module for tracking API usage and costs."""
+
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, cast
+from typing import Any, cast
 
 # Default cost per API call (in USD)
 DEFAULT_COST_PER_CALL = 0.01
@@ -41,7 +42,7 @@ class CostTracker:
 
     def track_usage(
         self, cost: float = DEFAULT_COST_PER_CALL, **metadata
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Track an API call with its associated cost.
 
         Args:
@@ -59,8 +60,8 @@ class CostTracker:
             self._ensure_usage_file()
 
         # Load existing data
-        with open(self.usage_file, "r") as f:
-            data = cast(Dict[str, Any], json.load(f))
+        with open(self.usage_file) as f:
+            data = cast(dict[str, Any], json.load(f))
 
         # Update data
         search_data = {
@@ -79,7 +80,7 @@ class CostTracker:
 
         return data
 
-    def get_current_month_usage(self) -> Dict[str, Any]:
+    def get_current_month_usage(self) -> dict[str, Any]:
         """Get the current month's usage data.
 
         Returns:
@@ -93,11 +94,11 @@ class CostTracker:
                 "searches": [],
             }
 
-        with open(self.usage_file, "r") as f:
+        with open(self.usage_file) as f:
             # Assuming the loaded JSON conforms to Dict[str, Any]
-            return cast(Dict[str, Any], json.load(f))
+            return cast(dict[str, Any], json.load(f))
 
-    def get_historical_usage(self) -> List[Dict[str, Any]]:
+    def get_historical_usage(self) -> list[dict[str, Any]]:
         """Get historical usage data for all months.
 
         Returns:
@@ -107,9 +108,9 @@ class CostTracker:
         historical_data = []
 
         for file in usage_files:
-            with open(file, "r") as f:
+            with open(file) as f:
                 # Assuming the loaded JSON conforms to Dict[str, Any]
-                historical_data.append(cast(Dict[str, Any], json.load(f)))
+                historical_data.append(cast(dict[str, Any], json.load(f)))
 
         return historical_data
 
@@ -118,7 +119,7 @@ class CostTracker:
 cost_tracker = CostTracker()
 
 
-def track_api_usage(cost: float = DEFAULT_COST_PER_CALL, **metadata) -> Dict[str, Any]:
+def track_api_usage(cost: float = DEFAULT_COST_PER_CALL, **metadata) -> dict[str, Any]:
     """Convenience function to track API usage.
 
     Args:
@@ -131,7 +132,7 @@ def track_api_usage(cost: float = DEFAULT_COST_PER_CALL, **metadata) -> Dict[str
     return cost_tracker.track_usage(cost, **metadata)
 
 
-def get_usage_summary() -> Dict[str, Any]:
+def get_usage_summary() -> dict[str, Any]:
     """Get a summary of the current month's API usage.
 
     Returns:
@@ -142,9 +143,9 @@ def get_usage_summary() -> Dict[str, Any]:
         "month": usage["month"],
         "total_searches": usage["total_searches"],
         "total_cost": usage["total_cost"],
-        "average_cost_per_search": round(
-            usage["total_cost"] / usage["total_searches"], 4
-        )
-        if usage["total_searches"] > 0
-        else 0,
+        "average_cost_per_search": (
+            round(usage["total_cost"] / usage["total_searches"], 4)
+            if usage["total_searches"] > 0
+            else 0
+        ),
     }

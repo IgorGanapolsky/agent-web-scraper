@@ -3,6 +3,7 @@
 This module provides a basic logging configuration that avoids the 'args' key error
 by using a custom LogRecord class that handles the 'args' key properly.
 """
+
 import logging
 import os
 import sys
@@ -33,15 +34,10 @@ def safe_make_record(
     func=None,
     extra=None,
     sinfo=None,
-    **kwargs,
 ):
     """Create a log record safely, avoiding the 'args' key error."""
     # Ensure extra doesn't contain 'args' key
-    safe_extra = {}
-    if extra is not None:
-        for key, value in extra.items():
-            if key != "args":
-                safe_extra[key] = value
+    safe_extra = {key: value for key, value in (extra or {}).items() if key != "args"}
 
     # Create the record with safe extra data
     record = SafeLogRecord(name, level, fn, lno, msg, args, exc_info, func, sinfo)
@@ -66,12 +62,8 @@ def setup_logging(
         log_to_console: Whether to log to console. If None, defaults to True.
         log_file_path: Optional path for rotating file log. If None, no file log.
     """
-    effective_log_level: Union[int, str]
     # Set default log level if not provided
-    if log_level is None:
-        effective_log_level = logging.INFO  # Default to INFO if not set
-    else:
-        effective_log_level = log_level
+    effective_log_level = logging.INFO if log_level is None else log_level
 
     # Convert string log level to int if needed
     numeric_log_level: int

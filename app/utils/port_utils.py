@@ -33,7 +33,7 @@ def find_available_port(start_port=8501, max_port=8600):
                 sock.bind(("", port))
                 logging.info(f"Found available port: {port}")
                 return port
-            except socket.error:
+            except OSError:
                 logging.debug(f"Port {port} is in use, trying next port")
                 continue
     raise RuntimeError(f"No available ports in range {start_port}-{max_port}")
