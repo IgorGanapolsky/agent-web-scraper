@@ -318,6 +318,27 @@ class RedditScraper:
             # Add to results
             results.append({"post": post_data, "summary": summary})
 
+        # Step 5: Log daily metrics after all posts are scraped
+        try:
+            from app.utils.metrics import (
+                append_daily_metrics_row,
+                extract_top_pain_points,
+            )
+
+            # Extract top 3 pain points from results
+            top_3 = extract_top_pain_points(results, max_points=3)
+
+            # Log daily metrics
+            append_daily_metrics_row(
+                query=self.search_term,
+                leads=len(results),
+                replies=1,  # Default placeholder
+                revenue=0,  # Default for tracking purposes
+                top_3=top_3,
+            )
+        except Exception as e:
+            logger.error(f"Error logging daily metrics: {e}")
+
         return results
 
 
