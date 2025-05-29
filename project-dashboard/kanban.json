@@ -1,0 +1,30 @@
+{
+  "Input Sources": {
+    "Reddit Scraper": "Completed",
+    "Google Search": "In-progress",
+    "Twitter Scraper": "Backlog"
+  },
+  "Processing Pipelines": {
+    "Summarizer (GPT-4)": "Completed",
+    "Pain Point Extractor": "In-progress",
+    "Trend Analyzer": "Backlog"
+  },
+  "Outputs": {
+    "Google Sheet Logs": "Completed",
+    "Email Digests": "In-progress",
+    "Cold Outreach Emails": "Backlog",
+    "CRM Integration": "Backlog"
+  },
+  "Automation / Infra": {
+    "GitHub Actions Scheduler": "Completed",
+    "Secrets Management": "Completed",
+    "Zoho SMTP Emailer": "In-progress",
+    "Backup Logging (CSV / DB)": "Backlog"
+  },
+  "Business Outcomes": {
+    "Leads Generated": "In-progress",
+    "Responses Received": "Backlog",
+    "Appointments Booked": "Backlog",
+    "Revenue Earned": "Backlog"
+  }
+}
