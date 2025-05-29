@@ -167,14 +167,12 @@ def extract_headers_with_soup(url, tags_to_analyze):
         return results
 
     except requests.RequestException as e:
-        logging.error(f"Request error in extract_headers_with_soup for {url}: {str(e)}")
-        return {tag: [f"Error: {str(e)}"] for tag in tags_to_analyze}
+        logging.error(f"Request error in extract_headers_with_soup for {url}: {e!s}")
+        return {tag: [f"Error: {e!s}"] for tag in tags_to_analyze}
 
     except Exception as e:
-        logging.error(
-            f"Unexpected error in extract_headers_with_soup for {url}: {str(e)}"
-        )
-        return {tag: [f"Error: {str(e)}"] for tag in tags_to_analyze}
+        logging.error(f"Unexpected error in extract_headers_with_soup for {url}: {e!s}")
+        return {tag: [f"Error: {e!s}"] for tag in tags_to_analyze}
 
 
 def search_and_scrape():
@@ -194,7 +192,7 @@ def search_and_scrape():
             f.write(f"Starting new scraping session for: {search_val}\n")
         logging.info(f"Starting new scraping session for: {search_val}")
     except Exception as e:
-        logging.error(f"Failed to clear log file: {str(e)}")
+        logging.error(f"Failed to clear log file: {e!s}")
 
     # Create a placeholder for status messages
     status_container = st.empty()
@@ -231,7 +229,7 @@ def search_and_scrape():
             results = search.get_dict()
 
             # Extract organic results
-            if "organic_results" in results and results["organic_results"]:
+            if results.get("organic_results"):
                 urls_to_scrape = [
                     result["link"]
                     for result in results["organic_results"]
@@ -261,8 +259,8 @@ def search_and_scrape():
                 )
                 return
         except Exception as e:
-            status_container.error(f"Error performing search: {str(e)}")
-            logging.error(f"Search error: {str(e)}")
+            status_container.error(f"Error performing search: {e!s}")
+            logging.error(f"Search error: {e!s}")
             return
 
         # Process each URL
@@ -306,11 +304,11 @@ def search_and_scrape():
                 scrape_status[url] = True
 
             except Exception as e:
-                logging.error(f"Error processing {url}: {str(e)}")
+                logging.error(f"Error processing {url}: {e!s}")
                 # Add error entry
                 error_dict = {"URL": url}
                 for header_type in selected_headers:
-                    error_dict[header_type] = f"Error: {str(e)}"
+                    error_dict[header_type] = f"Error: {e!s}"
                 all_headers.append(error_dict)
                 scrape_status[url] = False
 
@@ -342,8 +340,8 @@ def search_and_scrape():
             status_container.error("Failed to extract any data from the URLs")
 
     except Exception as e:
-        logging.error(f"Unexpected error in search_and_scrape: {str(e)}")
-        status_container.error(f"An unexpected error occurred: {str(e)}")
+        logging.error(f"Unexpected error in search_and_scrape: {e!s}")
+        status_container.error(f"An unexpected error occurred: {e!s}")
 
 
 def initialize_session_state():
@@ -596,8 +594,8 @@ def main():
                 mime="application/pdf",
             )
         except Exception as e:
-            st.error(f"Error creating PDF: {str(e)}")
-            logging.error(f"Error creating PDF: {str(e)}")
+            st.error(f"Error creating PDF: {e!s}")
+            logging.error(f"Error creating PDF: {e!s}")
 
     # Listen for "Enter" key in search input
     st.markdown(

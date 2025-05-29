@@ -2,6 +2,7 @@
 """
 Test script to verify Sentry integration.
 """
+
 import logging
 import os
 import time

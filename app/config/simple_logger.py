@@ -1,4 +1,5 @@
 """A simple logger configuration that avoids the 'args' key error."""
+
 import logging
 import sys
 from typing import Optional

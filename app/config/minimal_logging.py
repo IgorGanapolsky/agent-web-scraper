@@ -3,6 +3,7 @@
 This module provides a basic logging configuration that avoids the 'args' key error
 by using a very simple setup.
 """
+
 import logging
 import sys
 from typing import Optional, Union

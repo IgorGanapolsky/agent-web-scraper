@@ -1,14 +1,15 @@
 """Performance monitoring utilities."""
+
 import logging
 import time
 from contextlib import contextmanager
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 logger = logging.getLogger("performance")
 
 
 @contextmanager
-def log_performance(operation_name: str, extra_data: Optional[Dict[str, Any]] = None):
+def log_performance(operation_name: str, extra_data: Optional[dict[str, Any]] = None):
     """Context manager to log the performance of a code block.
 
     Args:

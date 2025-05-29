@@ -1,4 +1,5 @@
 """Unit tests for the web application."""
+
 # import asyncio # F401
 import sys
 from pathlib import Path
@@ -17,36 +18,26 @@ class MockGoogleSearch:
 
 
 # Mock the necessary modules before importing the app
-with patch("streamlit.set_page_config"), patch("streamlit.sidebar"), patch(
-    "streamlit.title"
-), patch("streamlit.markdown"), patch("streamlit.progress"), patch(
-    "streamlit.empty"
-), patch(
-    "streamlit.spinner"
-), patch(
-    "streamlit.error"
-), patch(
-    "streamlit.warning"
-), patch(
-    "streamlit.info"
-), patch(
-    "streamlit.expander"
-), patch(
-    "streamlit.text_input"
-), patch(
-    "streamlit.slider"
-), patch(
-    "streamlit.checkbox"
-), patch(
-    "streamlit.button"
-), patch(
-    "streamlit.download_button"
-), patch(
-    "serpapi.google_search.GoogleSearch", new=MockGoogleSearch
-), patch(
-    "builtins.open", mock_open(read_data="mocked")
-), patch(
-    "logging.basicConfig"
+with (
+    patch("streamlit.set_page_config"),
+    patch("streamlit.sidebar"),
+    patch("streamlit.title"),
+    patch("streamlit.markdown"),
+    patch("streamlit.progress"),
+    patch("streamlit.empty"),
+    patch("streamlit.spinner"),
+    patch("streamlit.error"),
+    patch("streamlit.warning"),
+    patch("streamlit.info"),
+    patch("streamlit.expander"),
+    patch("streamlit.text_input"),
+    patch("streamlit.slider"),
+    patch("streamlit.checkbox"),
+    patch("streamlit.button"),
+    patch("streamlit.download_button"),
+    patch("serpapi.google_search.GoogleSearch", new=MockGoogleSearch),
+    patch("builtins.open", mock_open(read_data="mocked")),
+    patch("logging.basicConfig"),
 ):
     from app.web.app import (
         extract_headers_with_soup,

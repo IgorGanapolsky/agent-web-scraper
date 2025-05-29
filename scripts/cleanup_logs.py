@@ -1,4 +1,5 @@
 """Script to clean up log files by removing test entries."""
+
 # import re # F401: Remove unused import
 # import argparse # F401
 # import glob # F401
@@ -23,7 +24,7 @@ def clean_log_file():
 
     try:
         # Read the log file
-        with open(LOG_FILE, "r", encoding="utf-8") as f:
+        with open(LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
 
         # Filter out test.com entries

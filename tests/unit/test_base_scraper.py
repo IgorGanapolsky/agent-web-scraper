@@ -1,4 +1,5 @@
 """Tests for the base Scraper class."""
+
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest

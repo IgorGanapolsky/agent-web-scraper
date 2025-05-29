@@ -241,3 +241,6 @@ playwright-browsers/
 # Local configuration overrides
 config.local.py
 settings.local.py
+
+# Claude Code settings
+.claude/

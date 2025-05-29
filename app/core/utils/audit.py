@@ -1,6 +1,7 @@
 """Audit logging utilities."""
+
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 # Create a separate logger for audit logs
 audit_logger = logging.getLogger("audit")
@@ -12,7 +13,7 @@ def log_audit_event(
     resource: Optional[str] = None,
     action: Optional[str] = None,
     status: str = "success",
-    details: Optional[Dict[str, Any]] = None,
+    details: Optional[dict[str, Any]] = None,
 ):
     """Log an audit event.
 

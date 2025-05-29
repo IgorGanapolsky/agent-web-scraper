@@ -1,4 +1,5 @@
 """Unit tests for the Reddit scraper."""
+
 import unittest
 from unittest.mock import MagicMock, patch
 

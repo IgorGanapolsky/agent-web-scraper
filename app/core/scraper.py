@@ -2,7 +2,7 @@
 # (Moved from project root)
 
 from abc import ABC, abstractmethod
-from typing import Any, List  # Removed Coroutine
+from typing import Any  # Removed Coroutine
 
 
 class Scraper(ABC):
@@ -13,7 +13,7 @@ class Scraper(ABC):
     @abstractmethod
     async def scrape(
         self, url: str
-    ) -> List[
+    ) -> list[
         Any
         # Made async, return type is still List[Any] as it's what the coroutine yields
     ]:

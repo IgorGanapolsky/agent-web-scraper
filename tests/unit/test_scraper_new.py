@@ -1,4 +1,5 @@
 """Unit tests for the undetected scraper functionality."""
+
 # import asyncio # F401
 import logging
 from unittest.mock import MagicMock, patch  # AsyncMock was unused
@@ -64,9 +65,10 @@ class TestUndetectedChromeScraper:
     @pytest.fixture
     def scraper(self):
         """Create an UndetectedChromeScraper instance for testing."""
-        with patch("undetected_chromedriver.Chrome", MockUndetectedChrome), patch(
-            "webdriver_manager.chrome.ChromeDriverManager"
-        ) as mock_manager:
+        with (
+            patch("undetected_chromedriver.Chrome", MockUndetectedChrome),
+            patch("webdriver_manager.chrome.ChromeDriverManager") as mock_manager,
+        ):
             mock_manager.return_value.install.return_value = "/fake/path/chromedriver"
             scraper = UndetectedChromeScraper(headless=True)
             yield scraper
@@ -78,9 +80,10 @@ class TestUndetectedChromeScraper:
 
     def test_scraper_context_manager(self):
         """Test that the scraper works as a context manager."""
-        with patch("undetected_chromedriver.Chrome", MockUndetectedChrome), patch(
-            "webdriver_manager.chrome.ChromeDriverManager"
-        ) as mock_manager:
+        with (
+            patch("undetected_chromedriver.Chrome", MockUndetectedChrome),
+            patch("webdriver_manager.chrome.ChromeDriverManager") as mock_manager,
+        ):
             mock_manager.return_value.install.return_value = "/fake/path/chromedriver"
             with UndetectedChromeScraper() as scraper:
                 assert scraper.driver is not None

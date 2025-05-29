@@ -2,6 +2,7 @@
 """
 Script to test and demonstrate the logging configuration.
 """
+
 import asyncio
 import os
 import sys

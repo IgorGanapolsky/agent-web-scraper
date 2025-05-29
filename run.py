@@ -4,6 +4,7 @@ Main entry point for the application.
 
 This script runs the Streamlit web interface.
 """
+
 import sys
 from pathlib import Path
 
@@ -39,7 +40,7 @@ def run_web():
                 },
             )
         except Exception as e:
-            logger.error(f"Failed to start Streamlit: {str(e)}")
+            logger.error(f"Failed to start Streamlit: {e!s}")
             sys.exit(1)
 
     run_streamlit()
