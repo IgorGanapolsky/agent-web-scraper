@@ -1,9 +1,16 @@
-import os
+"""Legacy configuration compatibility layer."""
 
-from dotenv import load_dotenv
+import warnings
 
-load_dotenv()
+from app.config.settings import settings
 
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-SPREADSHEET_NAME = "Reddit Market Research"
+# Backward compatibility - deprecated, use app.config.settings instead
+warnings.warn(
+    "Using config.py is deprecated. Please use 'from app.config.settings import settings' instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
+
+SERPAPI_KEY = settings.serpapi_key
+OPENAI_API_KEY = settings.openai_api_key
+SPREADSHEET_NAME = settings.spreadsheet_name
