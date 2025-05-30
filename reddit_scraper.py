@@ -193,34 +193,47 @@ class RedditScraper:
 
             # Process comments with GPT-4 for pain point analysis
             llm = GPT4Client()
-            summaries = []
 
-            for comment in comments:
-                if len(comment.strip()) > 20:  # Filter out very short comments
-                    prompt = f"""
-You are an AI product analyst. Read the following Reddit comment and identify the core pain point and its root cause.
+            # Join all comments into a single string
+            combined_comments = "\n\n".join(comments)
 
-Comment:
----
-{comment}
----
+            prompt = f"""
+Extract 3 core pain points from the following Reddit discussion. For each, return:
+- pain_point_label: A short label
+- explanation: What the issue is and why it's painful
+- gsheet_link: Leave this empty for now
 
-Return in JSON:
-{{
-  "pain_point_label": "...",
-  "root_cause_explanation": "..."
-}}
+Respond in JSON array format:
+[
+  {{
+    "pain_point_label": "...",
+    "explanation": "...",
+    "gsheet_link": ""
+  }},
+  ...
+]
+
+Reddit Comments:
+\"\"\"
+{combined_comments}
+\"\"\"
 """
-                    result = llm.simple_json(prompt)
-                    summaries.append(result)
 
-            logger.info(f"Processed {len(summaries)} comments with GPT-4 analysis")
+            top_3 = llm.simple_json(prompt)
+
+            # Print output for debugging
+            print("Extracted top_3 pain points:")
+            print(json.dumps(top_3, indent=2))
+
+            logger.info(
+                f"Extracted {len(top_3) if isinstance(top_3, list) else 'unknown'} pain points from {len(comments)} comments"
+            )
 
             return {
                 "title": post_title,
                 "url": url,
                 "comments": comments,
-                "pain_point_summaries": summaries,
+                "pain_point_summaries": top_3,
             }
 
         except Exception as e:
@@ -383,20 +396,31 @@ Return in JSON:
 
         # Step 5: Log daily metrics after all posts are scraped
         try:
-            from app.utils.top_insights import (
-                append_daily_metrics_row,
-                extract_top_pain_points,
-            )
+            from app.utils.top_insights import append_daily_metrics_row
 
-            # Extract top 3 pain points from results
-            top_3 = extract_top_pain_points(results, max_points=3)
+            # Collect all pain points from all scraped posts
+            all_pain_points = []
+            for result in results:
+                if result.get("pain_point_summaries") and isinstance(
+                    result["pain_point_summaries"], list
+                ):
+                    all_pain_points.extend(result["pain_point_summaries"])
+
+            # Take the first 3 pain points (or pad if fewer)
+            top_3 = (
+                all_pain_points[:3] if len(all_pain_points) >= 3 else all_pain_points
+            )
+            while len(top_3) < 3:
+                top_3.append(
+                    {"pain_point_label": "", "explanation": "", "gsheet_link": ""}
+                )
 
             # Log daily metrics
             append_daily_metrics_row(
                 query=self.search_term,
                 leads=len(results),
-                replies=1,  # Default placeholder
-                revenue=0,  # Default for tracking purposes
+                replies=2,  # Example value
+                revenue=0,
                 top_3=top_3,
             )
         except Exception as e:
