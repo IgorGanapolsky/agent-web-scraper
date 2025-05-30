@@ -373,6 +373,24 @@ def main():
             print(f"   URL: {result['post']['url']}")
             print(f"   Summary: {result['summary']}")
 
+        # Send daily email digest
+        try:
+            from app.utils.email_digest import send_daily_digest_email
+            from app.utils.top_insights import extract_top_pain_points
+
+            # Extract top 3 pain points for email
+            top_3 = extract_top_pain_points(results, max_points=3)
+
+            send_daily_digest_email(
+                query=args.search_term,
+                top_3=top_3,
+                leads=len(results),
+                replies=1,
+                revenue=0.00,
+            )
+        except Exception as e:
+            logger.error(f"Error sending daily digest email: {e}")
+
     except Exception as e:
         logger.error(f"Error running Reddit scraper: {e}")
         return 1
