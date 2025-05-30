@@ -166,52 +166,115 @@ class RedditScraper:
 
     def scrape_reddit_post(self, url: str) -> dict[str, Any]:
         """
-        Scrape a Reddit post and its comments.
+        Scrape a Reddit post and its comments using Reddit API.
 
         Args:
             url: URL of the Reddit post
 
         Returns:
-            Dictionary containing post title, content, and comments
+            Dictionary containing post title, content, and comments with GPT-4 analysis
         """
         logger.info(f"Scraping Reddit post: {url}")
 
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/91.0.4472.124 Safari/537.36"
-            )
-        }
-
         try:
-            response = requests.get(url, headers=headers)
-            response.raise_for_status()
+            # Try Reddit API first for better comment extraction
+            from app.core.llm_client import GPT4Client
+            from app.core.reddit_api import RedditClient
 
-            soup = BeautifulSoup(response.text, "html.parser")
+            client = RedditClient()
+            comments = client.fetch_comments(url, limit=10)
 
-            # Extract post title
-            title_element = soup.find("h1")
-            title = title_element.text.strip() if title_element else "No title found"
-
-            # Extract post content and comments
-            comments = []
-            comment_elements = soup.find_all(
-                "div", class_=lambda c: c and "Comment" in c
+            # Get post title from URL or use a fallback
+            post_title = (
+                url.split("/")[-2].replace("_", " ").title()
+                if "/" in url
+                else "Reddit Post"
             )
 
-            for comment in comment_elements[:10]:  # Limit to first 10 comments
-                comment_text = comment.get_text(strip=True)
-                # In production, we filter out comments shorter than 50 chars
-                # For testing, we accept comments of any length except "short"
-                if comment_text and (len(comment_text) > 50 or comment_text != "short"):
-                    comments.append(comment_text)
+            # Process comments with GPT-4 for pain point analysis
+            llm = GPT4Client()
+            summaries = []
 
-            return {"title": title, "url": url, "comments": comments}
+            for comment in comments:
+                if len(comment.strip()) > 20:  # Filter out very short comments
+                    prompt = f"""
+You are an AI product analyst. Read the following Reddit comment and identify the core pain point and its root cause.
+
+Comment:
+---
+{comment}
+---
+
+Return in JSON:
+{{
+  "pain_point_label": "...",
+  "root_cause_explanation": "..."
+}}
+"""
+                    result = llm.simple_json(prompt)
+                    summaries.append(result)
+
+            logger.info(f"Processed {len(summaries)} comments with GPT-4 analysis")
+
+            return {
+                "title": post_title,
+                "url": url,
+                "comments": comments,
+                "pain_point_summaries": summaries,
+            }
 
         except Exception as e:
-            logger.error(f"Error scraping Reddit post: {e}")
-            return {"title": "Error", "url": url, "comments": []}
+            logger.error(
+                f"Error scraping Reddit post with API: {e}, falling back to web scraping"
+            )
+
+            # Fallback to web scraping if Reddit API fails
+            headers = {
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/91.0.4472.124 Safari/537.36"
+                )
+            }
+
+            try:
+                response = requests.get(url, headers=headers)
+                response.raise_for_status()
+
+                soup = BeautifulSoup(response.text, "html.parser")
+
+                # Extract post title
+                title_element = soup.find("h1")
+                title = (
+                    title_element.text.strip() if title_element else "No title found"
+                )
+
+                # Extract post content and comments
+                comments = []
+                comment_elements = soup.find_all(
+                    "div", class_=lambda c: c and "Comment" in c
+                )
+
+                for comment in comment_elements[:10]:  # Limit to first 10 comments
+                    comment_text = comment.get_text(strip=True)
+                    if comment_text and len(comment_text) > 50:
+                        comments.append(comment_text)
+
+                return {
+                    "title": title,
+                    "url": url,
+                    "comments": comments,
+                    "pain_point_summaries": [],
+                }
+
+            except Exception as fallback_error:
+                logger.error(f"Error with fallback scraping: {fallback_error}")
+                return {
+                    "title": "Error",
+                    "url": url,
+                    "comments": [],
+                    "pain_point_summaries": [],
+                }
 
     def summarize_pain_points(self, post_data: dict[str, Any]) -> str:
         """
