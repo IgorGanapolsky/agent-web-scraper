@@ -1,6 +1,5 @@
 import json
 import os
-from typing import Any
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -12,7 +11,37 @@ class GPT4Client:
     def __init__(self):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def simple_json(self, prompt: str) -> dict[str, Any]:
+    def chat(
+        self,
+        messages: list[dict[str, str]],
+        model: str = "gpt-4",
+        max_tokens: int = 300,
+        temperature: float = 0.3,
+    ) -> str:
+        """
+        Send messages to GPT-4 and get a text response.
+
+        Args:
+            messages: List of message dictionaries with 'role' and 'content'
+            model: The model to use (default: gpt-4)
+            max_tokens: Maximum tokens in response
+            temperature: Response randomness (0.0 to 1.0)
+
+        Returns:
+            String response from GPT-4
+        """
+        try:
+            response = self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            return f"GPT-4 API error: {e!s}"
+
+    def simple_json(self, prompt: str) -> dict:
         """
         Send a prompt to GPT-4 and get a JSON response.
 
@@ -22,34 +51,17 @@ class GPT4Client:
         Returns:
             Dict containing the parsed JSON response
         """
+        messages = [
+            {
+                "role": "system",
+                "content": "You are a helpful AI assistant that responds in valid JSON format only.",
+            },
+            {"role": "user", "content": prompt},
+        ]
+
+        response = self.chat(messages=messages)
+
         try:
-            response = self.client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a helpful AI assistant that responds in valid JSON format only.",
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                max_tokens=300,
-                temperature=0.3,
-            )
-
-            content = response.choices[0].message.content.strip()
-
-            # Try to parse as JSON
-            try:
-                return json.loads(content)
-            except json.JSONDecodeError:
-                # If JSON parsing fails, return a structured error
-                return {
-                    "pain_point_label": "Parse Error",
-                    "root_cause_explanation": f"Failed to parse GPT-4 response: {content[:100]}...",
-                }
-
-        except Exception as e:
-            return {
-                "pain_point_label": "API Error",
-                "root_cause_explanation": f"GPT-4 API error: {e!s}",
-            }
+            return json.loads(response)
+        except json.JSONDecodeError:
+            return {"error": "Failed to parse JSON", "raw": response}
