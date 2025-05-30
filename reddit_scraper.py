@@ -216,17 +216,6 @@ Reddit Comments:
             print("🔍 Extracted top_3 pain points:")
             print(json.dumps(top_3, indent=2))
 
-            # Log daily metrics for this post
-            from app.utils.top_insights import append_daily_metrics_row
-
-            append_daily_metrics_row(
-                query=self.search_term,
-                leads=1,  # This single post
-                replies=len(comments),
-                revenue=0,
-                top_3=top_3,
-            )
-
             # Get post title from URL or use a fallback
             post_title = (
                 url.split("/")[-2].replace("_", " ").title()
@@ -382,6 +371,7 @@ Reddit Comments:
             List of dictionaries containing post data and summaries
         """
         results = []
+        all_pain_points = []  # Accumulate pain points from all posts
 
         # Step 1: Search for Reddit URLs
         reddit_posts = self.search_reddit_urls()
@@ -403,7 +393,46 @@ Reddit Comments:
             # Add to results
             results.append({"post": post_data, "summary": summary})
 
-        # Note: Daily metrics are now logged per post during processing
+            # Accumulate pain points from this post
+            if post_data.get("pain_point_summaries"):
+                summary_data = post_data["pain_point_summaries"]
+                if not isinstance(summary_data, list):
+                    print(f"⚠️ Unexpected LLM format: {summary_data}")
+                    continue
+                all_pain_points.extend(summary_data)
+
+        # Step 5: Log daily metrics with accumulated pain points from all posts
+        try:
+            from app.utils.top_insights import append_daily_metrics_row
+
+            # Select final top 3 from all posts
+            top_3 = (
+                all_pain_points[:3] if len(all_pain_points) >= 3 else all_pain_points
+            )
+
+            # Pad if fewer than 3 pain points
+            while len(top_3) < 3:
+                top_3.append(
+                    {"pain_point_label": "", "explanation": "", "gsheet_link": ""}
+                )
+
+            # Log final metrics only if we have content
+            if top_3 and any(point.get("pain_point_label") for point in top_3):
+                append_daily_metrics_row(
+                    query=self.search_term,
+                    leads=len(results),
+                    replies=sum(len(r["post"].get("comments", [])) for r in results),
+                    revenue=0,
+                    top_3=top_3,
+                )
+
+                print(f"📊 Final top_3 pain points from {len(results)} posts:")
+                print(json.dumps(top_3, indent=2))
+            else:
+                print("❌ Skipping daily metrics append — no top_3 insights extracted.")
+
+        except Exception as e:
+            logger.error(f"Error logging daily metrics: {e}")
 
         return results
 
