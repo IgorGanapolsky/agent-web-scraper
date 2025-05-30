@@ -12,6 +12,7 @@ help:
 	@echo "  lint        Run code style and type checks"
 	@echo "  format      Format code using black and ruff"
 	@echo "  check       Run all checks (lint, typecheck, test)"
+	@echo "  lead-magnet Generate weekly lead magnet (monetization ready!)"
 	@echo "  clean       Clean up temporary files and caches"
 	@echo "  docs        Build and serve documentation"
 	@echo "  health      Check application health"
@@ -60,6 +61,13 @@ typecheck:
 # Run all checks
 check: lint test
 	@echo "✅ All checks completed!"
+
+# Generate weekly lead magnet (monetization ready!)
+lead-magnet:
+	@echo "💰 Generating weekly lead magnet..."
+	@echo "📊 This creates your revenue-ready PDF report!"
+	hatch run python generate_lead_magnet.py --save-json --email-report
+	@echo "🎉 Lead magnet ready for monetization!"
 
 # Build documentation
 docs:

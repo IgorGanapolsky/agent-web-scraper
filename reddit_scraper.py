@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from openai import OpenAI
 
+from app.core.gemini_client import GeminiClient
 from app.core.llm_client import GPT4Client
 from app.utils.analytics import calculate_pain_point_metrics, format_enhanced_email_body
 from app.utils.query_rotation import get_daily_query
@@ -164,9 +165,32 @@ Reddit Comments:
 \"\"\"
 """
 
-            top_3 = llm.simple_json(prompt)
-            print("🔍 Extracted top_3 pain points:")
-            print(json.dumps(top_3, indent=2))
+            # Try GPT-4 first
+            try:
+                top_3 = llm.simple_json(prompt)
+                print("🔍 GPT-4 extracted top_3 pain points:")
+                print(json.dumps(top_3, indent=2))
+
+                # Validate GPT response
+                if not isinstance(top_3, list) or len(top_3) == 0:
+                    raise ValueError("Invalid GPT response format")
+
+            except Exception as gpt_error:
+                print(f"⚠️ GPT-4 failed: {gpt_error}, trying Gemini...")
+
+                # Fallback to Gemini
+                try:
+                    gemini = GeminiClient()
+                    top_3 = gemini.summarize_reddit_thread(comments, self.search_term)
+                    print("🔍 Gemini extracted top_3 pain points:")
+                    print(json.dumps(top_3, indent=2))
+
+                    if not top_3:
+                        raise ValueError("No insights from Gemini")
+
+                except Exception as gemini_error:
+                    print(f"⚠️ Gemini also failed: {gemini_error}")
+                    top_3 = []
 
             # Get post title from URL or use a fallback
             post_title = (
