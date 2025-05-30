@@ -19,6 +19,7 @@ from google.oauth2.service_account import Credentials
 from oauth2client.service_account import ServiceAccountCredentials
 from openai import OpenAI
 
+from app.core.llm_client import GPT4Client
 from config import OPENAI_API_KEY, SERPAPI_KEY, SPREADSHEET_NAME
 
 # Load environment variables from .env file
@@ -178,7 +179,6 @@ class RedditScraper:
 
         try:
             # Try Reddit API first for better comment extraction
-            from app.core.llm_client import GPT4Client
             from app.core.reddit_api import RedditClient
 
             client = RedditClient()
