@@ -244,3 +244,12 @@ settings.local.py
 
 # Claude Code settings
 .claude/
+
+# Reports - Ignore all timestamped reports to keep repo lean
+reports/*.json
+reports/*.pdf
+reports/*.png
+
+# Except the latest versions (optional)
+!reports/weekly_report_latest.json
+!reports/SaaS_Pain_Point_Report_latest.pdf
