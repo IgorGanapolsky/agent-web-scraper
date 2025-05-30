@@ -5,44 +5,22 @@ summarizes key insights, and logs results into a Google Sheets spreadsheet.
 
 import json
 import logging
-import os
 import time
-from datetime import datetime
 from typing import Any
 
-import gspread
 import requests
 import serpapi
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from google.oauth2.service_account import Credentials
-from oauth2client.service_account import ServiceAccountCredentials
 from openai import OpenAI
 
 from app.core.llm_client import GPT4Client
 from app.utils.analytics import calculate_pain_point_metrics, format_enhanced_email_body
 from app.utils.query_rotation import get_daily_query
-from config import OPENAI_API_KEY, SERPAPI_KEY, SPREADSHEET_NAME
+from config import OPENAI_API_KEY, SERPAPI_KEY
 
 # Load environment variables from .env file
 load_dotenv()
-
-creds_path = os.getenv(
-    "GSPREAD_CREDENTIALS_PATH", "secrets/gsheet_service_account.json"
-)
-with open(creds_path) as f:
-    creds_json = json.load(f)
-
-scopes = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
-]
-credentials = Credentials.from_service_account_info(creds_json, scopes=scopes)
-gc = gspread.authorize(credentials)
-
-# Example: open the metrics sheet
-spreadsheet = gc.open_by_key("1KJYQCX-cJsEkUPh7GKwigI71CODun504VOdC4NfNLfY")
-worksheet = spreadsheet.sheet1  # defaults to first sheet
 
 # Configure logging
 logging.basicConfig(
@@ -70,7 +48,6 @@ class RedditScraper:
         self.max_results = max_results
         self.serpapi_key = SERPAPI_KEY
         self.openai_api_key = OPENAI_API_KEY
-        self.spreadsheet_name = SPREADSHEET_NAME
 
         if not self.serpapi_key:
             raise ValueError("SERPAPI_KEY environment variable is not set")
@@ -80,55 +57,10 @@ class RedditScraper:
         # Initialize OpenAI client
         self.openai_client = OpenAI(api_key=self.openai_api_key)
 
-        # Initialize Google Sheets client
-        self._init_google_sheets()
+        # Google Sheets logging handled by app.utils.top_insights
 
-    def _init_google_sheets(self):
-        """Initialize Google Sheets API client."""
-        try:
-            # Use credentials from service account file
-            scope = [
-                "https://spreadsheets.google.com/feeds",
-                "https://www.googleapis.com/auth/drive",
-            ]
-
-            # Check if service account file exists
-            if not os.path.exists("secrets/service_account.json"):
-                logger.warning(
-                    "Google Sheets service account file not found. "
-                    "Spreadsheet logging disabled."
-                )
-                self.sheets_client = None
-                return
-
-            credentials = ServiceAccountCredentials.from_json_keyfile_name(
-                "secrets/service_account.json", scope
-            )
-            self.sheets_client = gspread.authorize(credentials)
-
-            # Try to open the spreadsheet, create it if it doesn't exist
-            try:
-                self.spreadsheet = self.sheets_client.open(self.spreadsheet_name)
-                self.worksheet = self.spreadsheet.sheet1
-
-                # Check if headers exist, add them if not
-                headers = self.worksheet.row_values(1)
-                if not headers:
-                    self.worksheet.append_row(
-                        ["Date", "Search Term", "Post Title", "URL", "Summary"]
-                    )
-
-            except gspread.exceptions.SpreadsheetNotFound:
-                logger.info(f"Creating new spreadsheet: {self.spreadsheet_name}")
-                self.spreadsheet = self.sheets_client.create(self.spreadsheet_name)
-                self.worksheet = self.spreadsheet.sheet1
-                self.worksheet.append_row(
-                    ["Date", "Search Term", "Post Title", "URL", "Summary"]
-                )
-
-        except Exception as e:
-            logger.error(f"Error initializing Google Sheets: {e}")
-            self.sheets_client = None
+    # Removed: Fallback Google Sheets initialization
+    # All spreadsheet logging now handled by app.utils.top_insights
 
     def search_reddit_urls(self) -> list[dict[str, str]]:
         """
@@ -350,38 +282,8 @@ Reddit Comments:
             logger.error(f"Error summarizing pain points: {e}")
             return "Error generating summary"
 
-    def log_to_spreadsheet(self, post_data: dict[str, Any], summary: str) -> bool:
-        """
-        Log the results to Google Sheets.
-
-        Args:
-            post_data: Dictionary containing post data
-            summary: Summary of pain points
-
-        Returns:
-            True if successful, False otherwise
-        """
-        if not self.sheets_client:
-            logger.warning("Google Sheets client not initialized. Skipping logging.")
-            return False
-
-        try:
-            # Add a new row with the data
-            row = [
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                self.search_term,
-                post_data["title"],
-                post_data["url"],
-                summary,
-            ]
-
-            self.worksheet.append_row(row)
-            logger.info(f"Logged results to spreadsheet: {self.spreadsheet_name}")
-            return True
-
-        except Exception as e:
-            logger.error(f"Error logging to spreadsheet: {e}")
-            return False
+    # Removed: Fallback log_to_spreadsheet method
+    # All spreadsheet logging now handled by app.utils.top_insights
 
     def run(self) -> list[dict[str, Any]]:
         """
@@ -407,8 +309,7 @@ Reddit Comments:
             # Step 3: Summarize pain points
             summary = self.summarize_pain_points(post_data)
 
-            # Step 4: Log to spreadsheet
-            self.log_to_spreadsheet(post_data, summary)
+            # Step 4: Spreadsheet logging handled by top_insights module
 
             # Add to results
             results.append({"post": post_data, "summary": summary})
@@ -488,27 +389,13 @@ def main():
             print(f"   URL: {result['post']['url']}")
             print(f"   Summary: {result['summary']}")
 
-        # Send daily email digest
+        # Send enhanced analytics email digest
         try:
-            from app.utils.email_digest import send_daily_digest_email
+            from app.utils.email_utils import send_email
             from app.utils.top_insights import extract_top_pain_points
 
             # Extract top 3 pain points for email
             top_3 = extract_top_pain_points(results, max_points=3)
-
-            send_daily_digest_email(
-                query=args.search_term,
-                top_3=top_3,
-                leads=len(results),
-                replies=1,
-                revenue=0.00,
-            )
-        except Exception as e:
-            logger.error(f"Error sending daily digest email: {e}")
-
-        # Send enhanced analytics email digest
-        try:
-            from app.utils.email_utils import send_email
 
             # Calculate comprehensive analytics
             analytics = calculate_pain_point_metrics(results)
@@ -524,7 +411,7 @@ def main():
                 body=enhanced_digest,
             )
         except Exception as e:
-            logger.error(f"Error sending simple digest email: {e}")
+            logger.error(f"Error sending enhanced analytics email: {e}")
 
     except Exception as e:
         logger.error(f"Error running Reddit scraper: {e}")
