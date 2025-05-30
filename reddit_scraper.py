@@ -20,6 +20,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 from openai import OpenAI
 
 from app.core.llm_client import GPT4Client
+from app.utils.analytics import calculate_pain_point_metrics, format_enhanced_email_body
+from app.utils.query_rotation import get_daily_query
 from config import OPENAI_API_KEY, SERPAPI_KEY, SPREADSHEET_NAME
 
 # Load environment variables from .env file
@@ -191,16 +193,34 @@ class RedditScraper:
             # Compose summarization prompt
             combined_comments = "\n\n".join(comments)
             prompt = f"""
-Extract 3 core pain points from the following Reddit discussion. For each, return:
-- pain_point_label: A short label
-- explanation: What the issue is and why it's painful
-- gsheet_link: Leave this empty for now
+You are an expert SaaS market researcher analyzing Reddit discussions to identify business pain points and opportunities.
+
+CONTEXT: Analyzing discussions about "{self.search_term}" to find actionable business insights.
+
+TASK: Extract the 3 most significant pain points from this Reddit discussion. Focus on:
+- Business problems that could be solved with software/services
+- Frustrations that indicate market gaps
+- Workflow inefficiencies mentioned by users
+- Cost/time wasters that businesses face
+
+For each pain point, provide:
+- pain_point_label: Concise business problem (max 8 words)
+- explanation: Why this is painful and what it costs businesses (2-3 sentences)
+- gsheet_link: Leave empty for now
+
+PRIORITIZE pain points that:
+✅ Affect multiple users/businesses
+✅ Have clear business impact (time, money, efficiency)
+✅ Could be solved with technology/services
+✅ Show strong emotional language (frustration, complaints)
+
+AVOID generic complaints or one-off issues.
 
 Respond in JSON array format:
 [
   {{
-    "pain_point_label": "...",
-    "explanation": "...",
+    "pain_point_label": "Short business problem description",
+    "explanation": "Why this costs businesses time/money and the impact on operations...",
     "gsheet_link": ""
   }},
   ...
@@ -445,8 +465,8 @@ def main():
     parser.add_argument(
         "search_term",
         nargs="?",
-        default="AI tools for business automation",
-        help="Search term to look for on Reddit",
+        default=get_daily_query(),
+        help="Search term to look for on Reddit (defaults to daily rotation)",
     )
     parser.add_argument(
         "--max-results",
@@ -486,20 +506,22 @@ def main():
         except Exception as e:
             logger.error(f"Error sending daily digest email: {e}")
 
-        # Send simple pain point digest email
+        # Send enhanced analytics email digest
         try:
             from app.utils.email_utils import send_email
 
-            # Use the same top_3 from above
-            digest = "\n\n".join(
-                f"🔹 {p['pain_point_label']}\n{p['explanation']}\n{p['gsheet_link']}"
-                for p in top_3
+            # Calculate comprehensive analytics
+            analytics = calculate_pain_point_metrics(results)
+
+            # Generate enhanced email body with analytics
+            enhanced_digest = format_enhanced_email_body(
+                top_3, analytics, args.search_term
             )
 
             send_email(
                 to="support@saasgrowthdispatch.com",
-                subject="📈 Daily SaaS Pain Point Digest",
-                body=digest,
+                subject=f"📈 Daily SaaS Insights: {analytics['top_category']} Trends",
+                body=enhanced_digest,
             )
         except Exception as e:
             logger.error(f"Error sending simple digest email: {e}")
