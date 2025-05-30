@@ -43,7 +43,7 @@ class GPT4Client:
 
     def simple_json(self, prompt: str) -> dict:
         """
-        Send a prompt to GPT-4 and get a JSON response.
+        Send a prompt to GPT-4 and get a JSON response with retry logic.
 
         Args:
             prompt: The prompt to send to GPT-4
@@ -59,9 +59,22 @@ class GPT4Client:
             {"role": "user", "content": prompt},
         ]
 
-        response = self.chat(messages=messages)
+        # First attempt with gpt-4
+        response = self.chat(messages=messages, model="gpt-4")
 
         try:
             return json.loads(response)
         except json.JSONDecodeError:
-            return {"error": "Failed to parse JSON", "raw": response}
+            print("⚠️ GPT-4 JSON parsing failed, retrying with gpt-4-turbo...")
+
+            # Retry with gpt-4-turbo
+            retry_response = self.chat(messages=messages, model="gpt-4-turbo")
+
+            try:
+                return json.loads(retry_response)
+            except json.JSONDecodeError:
+                return {
+                    "error": "Failed to parse JSON after retry",
+                    "gpt4_raw": response,
+                    "turbo_raw": retry_response,
+                }

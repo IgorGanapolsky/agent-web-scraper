@@ -486,6 +486,24 @@ def main():
         except Exception as e:
             logger.error(f"Error sending daily digest email: {e}")
 
+        # Send simple pain point digest email
+        try:
+            from app.utils.email_utils import send_email
+
+            # Use the same top_3 from above
+            digest = "\n\n".join(
+                f"🔹 {p['pain_point_label']}\n{p['explanation']}\n{p['gsheet_link']}"
+                for p in top_3
+            )
+
+            send_email(
+                to="support@saasgrowthdispatch.com",
+                subject="📈 Daily SaaS Pain Point Digest",
+                body=digest,
+            )
+        except Exception as e:
+            logger.error(f"Error sending simple digest email: {e}")
+
     except Exception as e:
         logger.error(f"Error running Reddit scraper: {e}")
         return 1
