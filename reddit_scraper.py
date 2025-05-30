@@ -183,20 +183,13 @@ class RedditScraper:
 
             client = RedditClient()
             comments = client.fetch_comments(url, limit=10)
+            print(comments)
 
-            # Get post title from URL or use a fallback
-            post_title = (
-                url.split("/")[-2].replace("_", " ").title()
-                if "/" in url
-                else "Reddit Post"
-            )
-
-            # Process comments with GPT-4 for pain point analysis
+            # Initialize GPT client
             llm = GPT4Client()
 
-            # Join all comments into a single string
+            # Compose summarization prompt
             combined_comments = "\n\n".join(comments)
-
             prompt = f"""
 Extract 3 core pain points from the following Reddit discussion. For each, return:
 - pain_point_label: A short label
@@ -220,10 +213,15 @@ Reddit Comments:
 """
 
             top_3 = llm.simple_json(prompt)
-
-            # Print output for debugging
-            print("Extracted top_3 pain points:")
+            print("🔍 Extracted top_3 pain points:")
             print(json.dumps(top_3, indent=2))
+
+            # Get post title from URL or use a fallback
+            post_title = (
+                url.split("/")[-2].replace("_", " ").title()
+                if "/" in url
+                else "Reddit Post"
+            )
 
             logger.info(
                 f"Extracted {len(top_3) if isinstance(top_3, list) else 'unknown'} pain points from {len(comments)} comments"
@@ -419,7 +417,7 @@ Reddit Comments:
             append_daily_metrics_row(
                 query=self.search_term,
                 leads=len(results),
-                replies=2,  # Example value
+                replies=sum(len(r.get("comments", [])) for r in results),
                 revenue=0,
                 top_3=top_3,
             )
