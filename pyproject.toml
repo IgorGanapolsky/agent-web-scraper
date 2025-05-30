@@ -40,6 +40,7 @@ dependencies = [
     # AI and API integrations
     "openai>=1.54.0",
     "serpapi>=0.1.5",
+    "praw>=7.7.0",
 
     # Google Sheets integration
     "gspread>=6.1.0",
