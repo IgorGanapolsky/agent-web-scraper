@@ -216,6 +216,17 @@ Reddit Comments:
             print("🔍 Extracted top_3 pain points:")
             print(json.dumps(top_3, indent=2))
 
+            # Log daily metrics for this post
+            from app.utils.top_insights import append_daily_metrics_row
+
+            append_daily_metrics_row(
+                query=self.search_term,
+                leads=1,  # This single post
+                replies=len(comments),
+                revenue=0,
+                top_3=top_3,
+            )
+
             # Get post title from URL or use a fallback
             post_title = (
                 url.split("/")[-2].replace("_", " ").title()
@@ -392,37 +403,7 @@ Reddit Comments:
             # Add to results
             results.append({"post": post_data, "summary": summary})
 
-        # Step 5: Log daily metrics after all posts are scraped
-        try:
-            from app.utils.top_insights import append_daily_metrics_row
-
-            # Collect all pain points from all scraped posts
-            all_pain_points = []
-            for result in results:
-                if result.get("pain_point_summaries") and isinstance(
-                    result["pain_point_summaries"], list
-                ):
-                    all_pain_points.extend(result["pain_point_summaries"])
-
-            # Take the first 3 pain points (or pad if fewer)
-            top_3 = (
-                all_pain_points[:3] if len(all_pain_points) >= 3 else all_pain_points
-            )
-            while len(top_3) < 3:
-                top_3.append(
-                    {"pain_point_label": "", "explanation": "", "gsheet_link": ""}
-                )
-
-            # Log daily metrics
-            append_daily_metrics_row(
-                query=self.search_term,
-                leads=len(results),
-                replies=sum(len(r.get("comments", [])) for r in results),
-                revenue=0,
-                top_3=top_3,
-            )
-        except Exception as e:
-            logger.error(f"Error logging daily metrics: {e}")
+        # Note: Daily metrics are now logged per post during processing
 
         return results
 
