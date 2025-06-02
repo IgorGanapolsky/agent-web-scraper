@@ -1,0 +1,172 @@
+<svg width="1400" height="600" viewBox="0 0 1400 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for modern look -->
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D97706;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Drop shadow filter -->
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.1)"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="600" fill="#FAFAFA"/>
+
+  <!-- Title -->
+  <text x="700" y="50" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="600" fill="#1F2937">
+    AI-Powered Pain Point Discovery &amp; Monetization Pipeline
+  </text>
+
+  <!-- Data Sources Block -->
+  <g transform="translate(50, 120)">
+    <rect width="140" height="120" rx="12" fill="url(#blueGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">📡</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Data Sources</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">Reddit + SerpAPI</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Collect pain points</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">from communities</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <path d="M 205 180 L 235 180" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- GPT-4 Summarizer Block -->
+  <g transform="translate(250, 120)">
+    <rect width="140" height="120" rx="12" fill="url(#purpleGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">🧠</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">GPT-4 Summarizer</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">OpenAI Processing</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Extract &amp; summarize</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">key insights</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <path d="M 405 180 L 435 180" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Gemini Clustering Block -->
+  <g transform="translate(450, 120)">
+    <rect width="140" height="120" rx="12" fill="url(#purpleGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">🟣</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Gemini Clustering</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">Google AI Analysis</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Group similar</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">pain points</text>
+  </g>
+
+  <!-- Arrow 3 -->
+  <path d="M 605 180 L 635 180" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Report Generator Block -->
+  <g transform="translate(650, 120)">
+    <rect width="140" height="120" rx="12" fill="url(#blueGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">📄</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Report Generator</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">LaTeX + JSON</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Generate formatted</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">insights reports</text>
+  </g>
+
+  <!-- Arrow 4 -->
+  <path d="M 805 180 L 835 180" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Email Dispatcher Block -->
+  <g transform="translate(850, 120)">
+    <rect width="140" height="120" rx="12" fill="url(#blueGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">✉️</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Email Dispatcher</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">Zoho SMTP</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Deliver reports</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">to subscribers</text>
+  </g>
+
+  <!-- Arrow 5 (curve down) -->
+  <path d="M 920 250 Q 920 300 850 320" stroke="#6B7280" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Landing Page Block -->
+  <g transform="translate(650, 320)">
+    <rect width="140" height="120" rx="12" fill="url(#blueGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">📬</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Landing Page</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">GitHub Pages</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Static site with</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Formspree forms</text>
+  </g>
+
+  <!-- Arrow 6 -->
+  <path d="M 605 380 L 535 380" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Stripe Checkout Block -->
+  <g transform="translate(350, 320)">
+    <rect width="140" height="120" rx="12" fill="url(#yellowGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="24" fill="white">💰</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Stripe Checkout</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">Payment Processing</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Secure payment</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">collection</text>
+  </g>
+
+  <!-- Arrow 7 -->
+  <path d="M 305 380 L 235 380" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Revenue Block -->
+  <g transform="translate(50, 320)">
+    <rect width="140" height="120" rx="12" fill="url(#yellowGrad)" filter="url(#dropShadow)"/>
+    <text x="70" y="30" text-anchor="middle" font-family="Inter" font-size="28" fill="white">💸</text>
+    <text x="70" y="55" text-anchor="middle" font-family="Inter" font-size="14" font-weight="600" fill="white">Revenue</text>
+    <text x="70" y="75" text-anchor="middle" font-family="Inter" font-size="11" fill="rgba(255,255,255,0.9)">Monetization</text>
+    <text x="70" y="95" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">Recurring revenue</text>
+    <text x="70" y="108" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.8)">from insights</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(1050, 120)">
+    <text x="0" y="0" font-family="Inter" font-size="16" font-weight="600" fill="#1F2937">Legend</text>
+
+    <!-- Purple - AI -->
+    <circle cx="10" cy="25" r="6" fill="url(#purpleGrad)"/>
+    <text x="25" y="30" font-family="Inter" font-size="12" fill="#1F2937">AI Processing</text>
+
+    <!-- Blue - Infra -->
+    <circle cx="10" cy="50" r="6" fill="url(#blueGrad)"/>
+    <text x="25" y="55" font-family="Inter" font-size="12" fill="#1F2937">Infrastructure</text>
+
+    <!-- Yellow - Revenue -->
+    <circle cx="10" cy="75" r="6" fill="url(#yellowGrad)"/>
+    <text x="25" y="80" font-family="Inter" font-size="12" fill="#1F2937">Revenue</text>
+  </g>
+
+  <!-- Data Flow Labels -->
+  <text x="220" y="170" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Raw Data</text>
+  <text x="420" y="170" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Insights</text>
+  <text x="620" y="170" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Clusters</text>
+  <text x="820" y="170" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Reports</text>
+  <text x="850" y="290" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Delivery</text>
+  <text x="570" y="370" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Leads</text>
+  <text x="270" y="370" text-anchor="middle" font-family="Inter" font-size="10" fill="#6B7280">Payment</text>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <!-- Subtle grid background -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#F3F4F6" stroke-width="1" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="1400" height="600" fill="url(#grid)"/>
+</svg>
