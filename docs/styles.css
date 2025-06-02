@@ -652,3 +652,42 @@ button:disabled {
 html {
     scroll-behavior: smooth;
 }
+
+/* Bonus CTA Styles */
+.bonus-cta {
+  background-color: #f3f6fc;
+  border-left: 4px solid #3b82f6;
+  padding: 1.5em;
+  margin: 2em 0;
+  border-radius: 6px;
+}
+
+.bonus-cta h2 {
+  font-size: 1.4em;
+  margin-top: 0;
+}
+
+.bonus-cta form {
+  margin-top: 1em;
+}
+
+.bonus-cta input[type="email"] {
+  padding: 0.5em;
+  width: 60%;
+  margin-right: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.bonus-cta button {
+  padding: 0.5em 1em;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bonus-cta button:hover {
+  background-color: #2563eb;
+}
