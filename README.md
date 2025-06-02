@@ -17,6 +17,14 @@
 - **🏗️ Modern Architecture**: Built with 2025 best practices using Hatch, Ruff, and structured logging
 - **📋 Visual Dashboard**: Real-time Kanban board tracking business outcomes
 
+## 🏗️ Architecture
+
+![AI-Powered Pain Point Discovery & Monetization Pipeline](docs/assets/architecture-2025.svg)
+
+Our AI-powered pipeline transforms Reddit conversations into actionable SaaS insights and revenue:
+
+**🟣 AI Processing** (GPT-4 + Gemini) → **🔵 Infrastructure** (Data + Reports + Email) → **🟡 Monetization** (Stripe + Revenue)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -110,7 +118,7 @@ hatch run lint:fmt
 hatch shell
 ```
 
-## 🏗️ Architecture
+## 📁 Project Structure
 
 ```
 app/
