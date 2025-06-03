@@ -139,3 +139,11 @@
     * **Partner for Deeper Insights:** Contact us for custom reports on specific niches, competitor analysis, or strategic product validation.
 * **[SaaS Growth Dispatch Logo]**
 * **Contact:** `support@saasgrowthdispatch.com`
+
+---
+
+**(Referral Bonus)**
+
+**📧 Know another SaaS founder who would benefit from this?** Share this report and we'll gift you our next premium bonus report — **FREE**.
+
+Forward this report to a fellow founder and email us at `support@saasgrowthdispatch.com` with "REFERRAL" in the subject line. We'll send you exclusive access to our upcoming premium insights package.
