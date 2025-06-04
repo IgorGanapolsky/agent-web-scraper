@@ -11,6 +11,7 @@ from typing import Any
 import requests
 import serpapi
 from bs4 import BeautifulSoup
+from config import OPENAI_API_KEY, SERPAPI_KEY
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -18,7 +19,6 @@ from app.core.gemini_client import GeminiClient
 from app.core.llm_client import GPT4Client
 from app.utils.analytics import calculate_pain_point_metrics, format_enhanced_email_body
 from app.utils.query_rotation import get_daily_query
-from config import OPENAI_API_KEY, SERPAPI_KEY
 
 # Load environment variables from .env file
 load_dotenv()
