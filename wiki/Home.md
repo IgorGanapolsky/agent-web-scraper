@@ -19,6 +19,7 @@ Our platform uses **modern 2025 architecture** with MCP, n8n, and BMAD to create
 ## 📖 **Wiki Navigation**
 
 ### **🏗️ Technical Architecture**
+- **[[Modern Stack 2025]]** - MCP + n8n + BMAD architecture overview
 - **[[Agentic RAG System]]** - Core intelligence engine architecture
 - **[[Vector Store Management]]** - ChromaDB integration and data persistence
 - **[[Knowledge Base Pipeline]]** - Multi-source data ingestion system
@@ -67,23 +68,24 @@ Our platform uses **modern 2025 architecture** with MCP, n8n, and BMAD to create
 ## 🔧 **Current Status**
 
 ### ✅ **Production Ready Components**
-- **Agentic RAG Engine**: Multi-source intelligent retrieval
+- **Agentic RAG Engine**: Multi-source intelligent retrieval with Claude 4 Sonnet
+- **Stripe Integration**: Complete subscription and payment system
 - **Vector Storage**: ChromaDB with persistent storage
 - **Knowledge Builder**: Automated data ingestion from Reddit, GitHub, SerpAPI
 - **Business Metrics**: Real-time revenue and customer tracking
-- **Test Coverage**: Comprehensive validation for revenue-critical paths
+- **Test Coverage**: 51 tests passing with comprehensive validation
 
 ### 🔄 **Active Development**
-- **Payment Integration**: Stripe subscription system (JetBrains Air)
-- **Customer Dashboard**: Real-time analytics and usage tracking
-- **API Marketplace**: Third-party integrations and partnerships
+- **MCP Agent Coordination**: Multi-agent workflow orchestration
+- **n8n Revenue Automation**: Business process automation for $300/day target
+- **BMAD Processing Engine**: High-volume batch and stream processing
 - **Enterprise Features**: Multi-tenant and white-label capabilities
 
 ### 📋 **Roadmap**
-- **Real-time Intelligence**: Live market monitoring and alerts
-- **Advanced Analytics**: Predictive modeling and forecasting
-- **Global Expansion**: Multi-language and regional intelligence
-- **Partner Ecosystem**: Third-party app marketplace
+- **Advanced MCP Coordination**: Cross-platform agent integration
+- **n8n Marketplace**: Custom workflow templates and sharing
+- **BMAD Real-time**: Sub-second data processing capabilities
+- **Partner Ecosystem**: Third-party integration marketplace
 
 ---
 

@@ -4,22 +4,16 @@ The core of our SaaS Market Intelligence Platform is a sophisticated **agentic R
 
 ## 🏗️ **Architecture Overview**
 
-```mermaid
-graph TB
-    A[User Query] --> B[Agentic RAG Engine]
-    B --> C[Intelligent Router]
-    C --> D[Reddit Pain Points]
-    C --> E[Market Trends]
-    C --> F[GitHub Insights]
-    C --> G[Historical Reports]
-    D --> H[ReAct Agent]
-    E --> H
-    F --> H
-    G --> H
-    H --> I[Cross-Source Synthesis]
-    I --> J[Actionable Intelligence]
-    J --> K[Confidence Scoring]
-    K --> L[Business Recommendations]
+Our agentic RAG system is integrated with the modern 2025 stack (MCP + n8n + BMAD):
+
+![Modern Architecture 2025](../docs/assets/modern-architecture-2025.png)
+
+### RAG Engine Flow
+```
+User Query → MCP Agent Coordination → Agentic RAG Engine →
+Multi-Source Retrieval → Cross-Source Synthesis →
+Confidence Scoring → Business Recommendations →
+n8n Workflow Triggers → Revenue Actions
 ```
 
 ## 🎯 **Core Components**
@@ -255,6 +249,7 @@ The system continuously improves through:
 
 ## 🔗 **Related Pages**
 
+- **[[Modern Stack 2025]]** - MCP + n8n + BMAD integration architecture
 - **[[Vector Store Management]]** - ChromaDB configuration and optimization
 - **[[Knowledge Base Pipeline]]** - Data ingestion and processing
 - **[[API Reference]]** - Integration endpoints and examples
