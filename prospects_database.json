@@ -1,0 +1,1152 @@
+[
+  {
+    "id": "hr_tech_1",
+    "name": "David Miller",
+    "company": "CloudHRTech",
+    "title": "Founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@cloudhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.04727384104642271,
+    "conversion_probability": 0.1976462914339627,
+    "created_at": "2025-06-04T10:46:16.889407"
+  },
+  {
+    "id": "hr_tech_2",
+    "name": "Emma Smith",
+    "company": "CloudHRTech",
+    "title": "Founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@quickhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.03296490393754672,
+    "conversion_probability": 0.25909129202787806,
+    "created_at": "2025-06-04T10:46:16.889423"
+  },
+  {
+    "id": "hr_tech_3",
+    "name": "Jessica Brown",
+    "company": "QuickHRTech",
+    "title": "CEO",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@cloudhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.02824963819048239,
+    "conversion_probability": 0.3078619212743542,
+    "created_at": "2025-06-04T10:46:16.889427"
+  },
+  {
+    "id": "hr_tech_4",
+    "name": "David Smith",
+    "company": "CloudHRTech",
+    "title": "Founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@cloudhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06910531540932033,
+    "conversion_probability": 0.3163213549543866,
+    "created_at": "2025-06-04T10:46:16.889430"
+  },
+  {
+    "id": "hr_tech_5",
+    "name": "Sarah Smith",
+    "company": "QuickHRTech",
+    "title": "Co-founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@cloudhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.03439058483452609,
+    "conversion_probability": 0.3428527431668598,
+    "created_at": "2025-06-04T10:46:16.889432"
+  },
+  {
+    "id": "hr_tech_6",
+    "name": "Sarah Davis",
+    "company": "CloudHRTech",
+    "title": "Co-founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@techhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05983935340695169,
+    "conversion_probability": 0.1806074663643061,
+    "created_at": "2025-06-04T10:46:16.889434"
+  },
+  {
+    "id": "hr_tech_7",
+    "name": "Michael Smith",
+    "company": "CloudHRTech",
+    "title": "CEO",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@prohrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07402811905493732,
+    "conversion_probability": 0.17982095107330287,
+    "created_at": "2025-06-04T10:46:16.889437"
+  },
+  {
+    "id": "hr_tech_8",
+    "name": "Michael Miller",
+    "company": "CloudHRTech",
+    "title": "Founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@cloudhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.04299446473415532,
+    "conversion_probability": 0.2934613962221787,
+    "created_at": "2025-06-04T10:46:16.889439"
+  },
+  {
+    "id": "hr_tech_9",
+    "name": "Sarah Smith",
+    "company": "TechHRTech",
+    "title": "CEO",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@quickhrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.034261080833231955,
+    "conversion_probability": 0.19607120654606766,
+    "created_at": "2025-06-04T10:46:16.889442"
+  },
+  {
+    "id": "hr_tech_10",
+    "name": "Michael Smith",
+    "company": "ProHRTech",
+    "title": "Founder",
+    "industry": "HR Tech",
+    "company_size": "10-50",
+    "email": "contact@smarthrtech.com",
+    "pain_points": [
+      "employee onboarding",
+      "performance tracking",
+      "compliance"
+    ],
+    "niche_opportunities": [
+      "AI-powered performance reviews",
+      "automated compliance reporting"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.023099186811295865,
+    "conversion_probability": 0.3480498757853465,
+    "created_at": "2025-06-04T10:46:16.889444"
+  },
+  {
+    "id": "fintech_1",
+    "name": "Sarah Johnson",
+    "company": "CloudFinTech",
+    "title": "CTO",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@quickfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05084775879034552,
+    "conversion_probability": 0.24789641525565279,
+    "created_at": "2025-06-04T10:46:16.889447"
+  },
+  {
+    "id": "fintech_2",
+    "name": "Sarah Smith",
+    "company": "CloudFinTech",
+    "title": "Head of Product",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@quickfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.0761670452021327,
+    "conversion_probability": 0.2729742173495545,
+    "created_at": "2025-06-04T10:46:16.889449"
+  },
+  {
+    "id": "fintech_3",
+    "name": "Emma Davis",
+    "company": "ProFinTech",
+    "title": "CTO",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@smartfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05492867500721786,
+    "conversion_probability": 0.2000956454646432,
+    "created_at": "2025-06-04T10:46:16.889452"
+  },
+  {
+    "id": "fintech_4",
+    "name": "Alex Smith",
+    "company": "DigitalFinTech",
+    "title": "Head of Product",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@digitalfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.024597080338068206,
+    "conversion_probability": 0.17785028373462186,
+    "created_at": "2025-06-04T10:46:16.889454"
+  },
+  {
+    "id": "fintech_5",
+    "name": "Alex Brown",
+    "company": "TechFinTech",
+    "title": "VP Engineering",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@cloudfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06111791366528396,
+    "conversion_probability": 0.3386287646235844,
+    "created_at": "2025-06-04T10:46:16.889457"
+  },
+  {
+    "id": "fintech_6",
+    "name": "Jessica Smith",
+    "company": "DigitalFinTech",
+    "title": "VP Engineering",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@profintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05694685072359662,
+    "conversion_probability": 0.23987521576837872,
+    "created_at": "2025-06-04T10:46:16.889459"
+  },
+  {
+    "id": "fintech_7",
+    "name": "David Smith",
+    "company": "DigitalFinTech",
+    "title": "Head of Product",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@smartfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.027168666060813633,
+    "conversion_probability": 0.2180753978062201,
+    "created_at": "2025-06-04T10:46:16.889461"
+  },
+  {
+    "id": "fintech_8",
+    "name": "Michael Smith",
+    "company": "SmartFinTech",
+    "title": "Head of Product",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@quickfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.024294045864314814,
+    "conversion_probability": 0.2020897038838247,
+    "created_at": "2025-06-04T10:46:16.889463"
+  },
+  {
+    "id": "fintech_9",
+    "name": "Michael Williams",
+    "company": "DigitalFinTech",
+    "title": "VP Engineering",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@smartfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07822683300966456,
+    "conversion_probability": 0.2441682355967561,
+    "created_at": "2025-06-04T10:46:16.889468"
+  },
+  {
+    "id": "fintech_10",
+    "name": "Alex Williams",
+    "company": "ProFinTech",
+    "title": "CTO",
+    "industry": "FinTech",
+    "company_size": "20-100",
+    "email": "contact@quickfintech.com",
+    "pain_points": [
+      "payment processing",
+      "fraud detection",
+      "regulatory compliance"
+    ],
+    "niche_opportunities": [
+      "SMB payment automation",
+      "real-time fraud scoring"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07492338078062176,
+    "conversion_probability": 0.26929043017999255,
+    "created_at": "2025-06-04T10:46:16.889470"
+  },
+  {
+    "id": "healthcare_tech_1",
+    "name": "Jessica Smith",
+    "company": "SmartHealthcareTech",
+    "title": "Founder",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@techhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.026642378204314726,
+    "conversion_probability": 0.21908219352783465,
+    "created_at": "2025-06-04T10:46:16.889473"
+  },
+  {
+    "id": "healthcare_tech_2",
+    "name": "Emma Brown",
+    "company": "ProHealthcareTech",
+    "title": "Chief Medical Officer",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@techhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05555240502116113,
+    "conversion_probability": 0.1930799890107303,
+    "created_at": "2025-06-04T10:46:16.889475"
+  },
+  {
+    "id": "healthcare_tech_3",
+    "name": "Alex Miller",
+    "company": "QuickHealthcareTech",
+    "title": "Chief Medical Officer",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@smarthealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.04903322056536499,
+    "conversion_probability": 0.290562783792782,
+    "created_at": "2025-06-04T10:46:16.889478"
+  },
+  {
+    "id": "healthcare_tech_4",
+    "name": "Sarah Miller",
+    "company": "DigitalHealthcareTech",
+    "title": "Founder",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@prohealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07129803525995453,
+    "conversion_probability": 0.328628816039531,
+    "created_at": "2025-06-04T10:46:16.889480"
+  },
+  {
+    "id": "healthcare_tech_5",
+    "name": "Jessica Miller",
+    "company": "SmartHealthcareTech",
+    "title": "CEO",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@digitalhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.037073946117937386,
+    "conversion_probability": 0.34192212052890053,
+    "created_at": "2025-06-04T10:46:16.889483"
+  },
+  {
+    "id": "healthcare_tech_6",
+    "name": "Michael Johnson",
+    "company": "SmartHealthcareTech",
+    "title": "CEO",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@digitalhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.03689908605368237,
+    "conversion_probability": 0.15899908487824166,
+    "created_at": "2025-06-04T10:46:16.889485"
+  },
+  {
+    "id": "healthcare_tech_7",
+    "name": "Emma Miller",
+    "company": "TechHealthcareTech",
+    "title": "CEO",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@cloudhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07694600145415037,
+    "conversion_probability": 0.28488368409888587,
+    "created_at": "2025-06-04T10:46:16.889487"
+  },
+  {
+    "id": "healthcare_tech_8",
+    "name": "Alex Brown",
+    "company": "TechHealthcareTech",
+    "title": "Founder",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@digitalhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06591552709146763,
+    "conversion_probability": 0.2753047183184094,
+    "created_at": "2025-06-04T10:46:16.889491"
+  },
+  {
+    "id": "healthcare_tech_9",
+    "name": "Jessica Davis",
+    "company": "TechHealthcareTech",
+    "title": "Founder",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@techhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.0777030878088867,
+    "conversion_probability": 0.25132856963781547,
+    "created_at": "2025-06-04T10:46:16.889493"
+  },
+  {
+    "id": "healthcare_tech_10",
+    "name": "David Brown",
+    "company": "QuickHealthcareTech",
+    "title": "Founder",
+    "industry": "Healthcare Tech",
+    "company_size": "5-30",
+    "email": "contact@quickhealthcaretech.com",
+    "pain_points": [
+      "patient data management",
+      "telehealth integration",
+      "HIPAA compliance"
+    ],
+    "niche_opportunities": [
+      "patient engagement automation",
+      "telehealth workflow tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06297530001334589,
+    "conversion_probability": 0.3071788571266074,
+    "created_at": "2025-06-04T10:46:16.889495"
+  },
+  {
+    "id": "edtech_1",
+    "name": "Jessica Smith",
+    "company": "QuickEdTech",
+    "title": "Head of Growth",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@cloudedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.025389625290655634,
+    "conversion_probability": 0.30206973859115427,
+    "created_at": "2025-06-04T10:46:16.889498"
+  },
+  {
+    "id": "edtech_2",
+    "name": "Alex Brown",
+    "company": "DigitalEdTech",
+    "title": "Head of Growth",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@cloudedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.02381288619014234,
+    "conversion_probability": 0.33226049872826663,
+    "created_at": "2025-06-04T10:46:16.889500"
+  },
+  {
+    "id": "edtech_3",
+    "name": "Jessica Smith",
+    "company": "DigitalEdTech",
+    "title": "VP Product",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@quickedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06961152494544537,
+    "conversion_probability": 0.3093234125454022,
+    "created_at": "2025-06-04T10:46:16.889502"
+  },
+  {
+    "id": "edtech_4",
+    "name": "Sarah Miller",
+    "company": "ProEdTech",
+    "title": "VP Product",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@techedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07977891350939112,
+    "conversion_probability": 0.2874181133871291,
+    "created_at": "2025-06-04T10:46:16.889506"
+  },
+  {
+    "id": "edtech_5",
+    "name": "Michael Smith",
+    "company": "DigitalEdTech",
+    "title": "Founder",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@smartedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06159563982779366,
+    "conversion_probability": 0.16931036365881275,
+    "created_at": "2025-06-04T10:46:16.889508"
+  },
+  {
+    "id": "edtech_6",
+    "name": "Michael Smith",
+    "company": "QuickEdTech",
+    "title": "VP Product",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@quickedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.061847892544085445,
+    "conversion_probability": 0.3155149808998582,
+    "created_at": "2025-06-04T10:46:16.889511"
+  },
+  {
+    "id": "edtech_7",
+    "name": "Michael Davis",
+    "company": "DigitalEdTech",
+    "title": "VP Product",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@techedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.060794989941031025,
+    "conversion_probability": 0.2661463309335816,
+    "created_at": "2025-06-04T10:46:16.889513"
+  },
+  {
+    "id": "edtech_8",
+    "name": "Sarah Miller",
+    "company": "SmartEdTech",
+    "title": "VP Product",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@smartedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.058086092285127205,
+    "conversion_probability": 0.23490736191406236,
+    "created_at": "2025-06-04T10:46:16.889515"
+  },
+  {
+    "id": "edtech_9",
+    "name": "Alex Davis",
+    "company": "SmartEdTech",
+    "title": "Founder",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@smartedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05262073765867026,
+    "conversion_probability": 0.23303717817187264,
+    "created_at": "2025-06-04T10:46:16.889517"
+  },
+  {
+    "id": "edtech_10",
+    "name": "David Brown",
+    "company": "CloudEdTech",
+    "title": "VP Product",
+    "industry": "EdTech",
+    "company_size": "15-75",
+    "email": "contact@proedtech.com",
+    "pain_points": [
+      "student engagement",
+      "course completion rates",
+      "learning analytics"
+    ],
+    "niche_opportunities": [
+      "AI tutoring systems",
+      "engagement prediction tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.0759738770846143,
+    "conversion_probability": 0.15691077003253764,
+    "created_at": "2025-06-04T10:46:16.889519"
+  },
+  {
+    "id": "real_estate_tech_1",
+    "name": "Jessica Smith",
+    "company": "CloudRealEstateTech",
+    "title": "CEO",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@techrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05453218309256028,
+    "conversion_probability": 0.2531949118037435,
+    "created_at": "2025-06-04T10:46:16.889522"
+  },
+  {
+    "id": "real_estate_tech_2",
+    "name": "Jessica Miller",
+    "company": "TechRealEstateTech",
+    "title": "CEO",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@digitalrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07888685296791556,
+    "conversion_probability": 0.3401129216062908,
+    "created_at": "2025-06-04T10:46:16.889524"
+  },
+  {
+    "id": "real_estate_tech_3",
+    "name": "Sarah Brown",
+    "company": "TechRealEstateTech",
+    "title": "CEO",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@digitalrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.05094933152717432,
+    "conversion_probability": 0.1521209595334378,
+    "created_at": "2025-06-04T10:46:16.889527"
+  },
+  {
+    "id": "real_estate_tech_4",
+    "name": "David Davis",
+    "company": "ProRealEstateTech",
+    "title": "CEO",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@techrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.04543188509691193,
+    "conversion_probability": 0.15165839272591672,
+    "created_at": "2025-06-04T10:46:16.889529"
+  },
+  {
+    "id": "real_estate_tech_5",
+    "name": "Emma Williams",
+    "company": "ProRealEstateTech",
+    "title": "CEO",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@digitalrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.03897402389694847,
+    "conversion_probability": 0.30802062516946105,
+    "created_at": "2025-06-04T10:46:16.889531"
+  },
+  {
+    "id": "real_estate_tech_6",
+    "name": "David Williams",
+    "company": "SmartRealEstateTech",
+    "title": "CEO",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@quickrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.0692789046277108,
+    "conversion_probability": 0.19417569134519594,
+    "created_at": "2025-06-04T10:46:16.889534"
+  },
+  {
+    "id": "real_estate_tech_7",
+    "name": "Michael Smith",
+    "company": "CloudRealEstateTech",
+    "title": "Founder",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@techrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.0707370851713283,
+    "conversion_probability": 0.23581825602803358,
+    "created_at": "2025-06-04T10:46:16.889536"
+  },
+  {
+    "id": "real_estate_tech_8",
+    "name": "Emma Johnson",
+    "company": "SmartRealEstateTech",
+    "title": "Head of Technology",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@smartrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.06273196979494984,
+    "conversion_probability": 0.2720935145784781,
+    "created_at": "2025-06-04T10:46:16.889538"
+  },
+  {
+    "id": "real_estate_tech_9",
+    "name": "Alex Williams",
+    "company": "TechRealEstateTech",
+    "title": "Founder",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@smartrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.07267622698577716,
+    "conversion_probability": 0.2491392793788372,
+    "created_at": "2025-06-04T10:46:16.889540"
+  },
+  {
+    "id": "real_estate_tech_10",
+    "name": "Michael Williams",
+    "company": "SmartRealEstateTech",
+    "title": "Head of Technology",
+    "industry": "Real Estate Tech",
+    "company_size": "8-40",
+    "email": "contact@techrealestatetech.com",
+    "pain_points": [
+      "lead management",
+      "property analytics",
+      "client communication"
+    ],
+    "niche_opportunities": [
+      "automated property valuation",
+      "investor matching tools"
+    ],
+    "status": "new",
+    "last_contact": null,
+    "response_probability": 0.073640282571053,
+    "conversion_probability": 0.3218444070188852,
+    "created_at": "2025-06-04T10:46:16.889543"
+  }
+]
