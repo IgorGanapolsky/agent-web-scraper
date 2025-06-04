@@ -8,8 +8,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
+from app.api.stripe_webhooks import router as stripe_router
 from app.core.cost_tracker import CostTracker, RevenueEvent
 from app.services.payment_service import PaymentService
+from app.web.stripe_funnel import router as funnel_router
 
 app = FastAPI(
     title="SaaS Market Intelligence Platform",
@@ -32,6 +34,10 @@ security = HTTPBearer()
 # Services
 payment_service = PaymentService(test_mode=True)
 cost_tracker = CostTracker(test_mode=True)
+
+# Include routers
+app.include_router(funnel_router, prefix="", tags=["stripe-funnel"])
+app.include_router(stripe_router, prefix="", tags=["stripe-webhooks"])
 
 
 # Models
