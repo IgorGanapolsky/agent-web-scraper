@@ -4,80 +4,45 @@ Handles Stripe integration and subscription management for $300/day revenue targ
 """
 
 import json
-import logging
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 
 import stripe
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-try:
-    from app.config.logging import get_logger
-except ImportError:
-    import logging
-
-    def get_logger(name):
-        return logging.getLogger(name)
-
-
+from app.config.logging import get_logger
 from app.core.cost_tracker import CostTracker
+from app.models.customer import Customer, Subscription
+from app.services.api_key_service import APIKeyService
 
 logger = get_logger(__name__)
-
-
-class PaymentResult(BaseModel):
-    """Result of a payment operation."""
-
-    success: bool
-    transaction_id: Optional[str] = None
-    error_message: Optional[str] = None
-    amount: Optional[float] = None
 
 
 class SubscriptionTier(BaseModel):
     """Subscription tier configuration"""
 
     name: str
-    price_id: str
-    amount: float
+    price_id_monthly: str
+    price_id_annual: str
+    amount_monthly: float
+    amount_annual: float
     features: list[str]
     query_limit: int
     api_access: bool = False
 
 
-class Customer(BaseModel):
-    """Customer model"""
-
-    stripe_id: str
-    email: str
-    name: Optional[str] = None
-    company: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.now)
-    subscription_tier: Optional[str] = None
-
-
-class Subscription(BaseModel):
-    """Subscription model"""
-
-    stripe_id: str
-    customer_id: str
-    tier: str
-    amount: float
-    status: str
-    current_period_start: datetime
-    current_period_end: datetime
-    canceled_at: Optional[datetime] = None
-
-
 class PaymentService:
     """Handles all payment and subscription operations"""
 
-    # Pricing tiers
+    # Pricing tiers with annual options
     TIERS = {
         "basic": SubscriptionTier(
             name="Basic",
-            price_id="price_basic_monthly",
-            amount=29.00,
+            price_id_monthly="price_basic_monthly",
+            price_id_annual="price_basic_annual",
+            amount_monthly=29.00,
+            amount_annual=290.00,  # 2 months free
             features=[
                 "Daily market intelligence reports",
                 "Niche opportunity scoring",
@@ -85,12 +50,14 @@ class PaymentService:
                 "Email delivery",
                 "Basic support",
             ],
-            query_limit=100,
+            query_limit=10000,
         ),
         "pro": SubscriptionTier(
             name="Pro",
-            price_id="price_pro_monthly",
-            amount=99.00,
+            price_id_monthly="price_pro_monthly",
+            price_id_annual="price_pro_annual",
+            amount_monthly=99.00,
+            amount_annual=990.00,  # 2 months free
             features=[
                 "Everything in Basic",
                 "API access to insights",
@@ -99,13 +66,15 @@ class PaymentService:
                 "Priority support",
                 "Custom lead magnets",
             ],
-            query_limit=1000,
+            query_limit=100000,
             api_access=True,
         ),
         "enterprise": SubscriptionTier(
             name="Enterprise",
-            price_id="price_enterprise_monthly",
-            amount=299.00,
+            price_id_monthly="price_enterprise_monthly",
+            price_id_annual="price_enterprise_annual",
+            amount_monthly=299.00,
+            amount_annual=2990.00,  # 2 months free
             features=[
                 "Everything in Pro",
                 "Weekly 1:1 strategy calls",
@@ -114,155 +83,247 @@ class PaymentService:
                 "Go-to-market planning",
                 "Dedicated account manager",
             ],
-            query_limit=10000,
+            query_limit=1000000,
             api_access=True,
         ),
     }
+
+    # Trial configuration
+    TRIAL_DAYS = 14
 
     def __init__(self, test_mode: bool = False):
         """Initialize payment service"""
         self.test_mode = test_mode
         self.cost_tracker = CostTracker()
+        self.api_key_service = APIKeyService()
 
         if not test_mode:
-            import os
-
             stripe.api_key = os.getenv("STRIPE_API_KEY")
             if not stripe.api_key:
                 raise ValueError("STRIPE_API_KEY not configured")
 
-    def create_customer(self, customer_data: dict) -> Customer:
-        """Create a new Stripe customer"""
-        logger.info(f"Creating customer: {customer_data.get('email')}")
+            # Set webhook endpoint secret
+            self.webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
-        try:
-            if self.test_mode:
-                # Return mock customer for testing
-                return Customer(
-                    stripe_id=f"cus_test_{datetime.now().timestamp()}",
-                    email=customer_data["email"],
-                    name=customer_data.get("name"),
-                    company=customer_data.get("company"),
-                )
-
-            stripe_customer = stripe.Customer.create(
-                email=customer_data["email"],
-                name=customer_data.get("name"),
-                metadata={
-                    "company": customer_data.get("company", ""),
-                    "source": customer_data.get("source", "organic"),
-                },
-            )
-
-            customer = Customer(
-                stripe_id=stripe_customer.id,
-                email=stripe_customer.email,
-                name=stripe_customer.name,
-            )
-
-            logger.info(f"Customer created: {customer.stripe_id}")
-            return customer
-
-        except stripe.error.StripeError as e:
-            logger.error(f"Stripe error creating customer: {e!s}")
-            raise
-        except Exception as e:
-            logger.error(f"Error creating customer: {e!s}")
-            raise
-
-    def create_subscription(self, subscription_data: dict) -> Subscription:
-        """Create a new subscription"""
-        customer_id = subscription_data["customer_id"]
-        tier = subscription_data["tier"]
-
+    def create_checkout_session(
+        self,
+        tier: str,
+        interval: str = "month",
+        customer_email: Optional[str] = None,
+        trial: bool = True,
+    ) -> dict:
+        """Create Stripe checkout session for subscription."""
         if tier not in self.TIERS:
             raise ValueError(f"Invalid subscription tier: {tier}")
 
         tier_config = self.TIERS[tier]
-        logger.info(f"Creating {tier} subscription for customer {customer_id}")
+        price_id = (
+            tier_config.price_id_annual
+            if interval == "year"
+            else tier_config.price_id_monthly
+        )
 
         try:
-            if self.test_mode:
-                # Return mock subscription for testing
-                return Subscription(
-                    stripe_id=f"sub_test_{datetime.now().timestamp()}",
-                    customer_id=customer_id,
-                    tier=tier,
-                    amount=tier_config.amount,
-                    status="active",
-                    current_period_start=datetime.now(),
-                    current_period_end=datetime.now() + timedelta(days=30),
-                )
-
-            stripe_subscription = stripe.Subscription.create(
-                customer=customer_id,
-                items=[{"price": tier_config.price_id}],
-                metadata={"tier": tier},
-            )
-
-            subscription = Subscription(
-                stripe_id=stripe_subscription.id,
-                customer_id=stripe_subscription.customer,
-                tier=tier,
-                amount=tier_config.amount,
-                status=stripe_subscription.status,
-                current_period_start=datetime.fromtimestamp(
-                    stripe_subscription.current_period_start
+            session_params = {
+                "payment_method_types": ["card"],
+                "mode": "subscription",
+                "line_items": [{"price": price_id, "quantity": 1}],
+                "success_url": os.getenv(
+                    "STRIPE_SUCCESS_URL",
+                    "https://saasgrowthdispatch.com/success?session_id={CHECKOUT_SESSION_ID}",
                 ),
-                current_period_end=datetime.fromtimestamp(
-                    stripe_subscription.current_period_end
+                "cancel_url": os.getenv(
+                    "STRIPE_CANCEL_URL", "https://saasgrowthdispatch.com/pricing"
                 ),
-            )
+                "metadata": {"tier": tier, "interval": interval},
+            }
 
-            # Track revenue event
-            self.cost_tracker.add_revenue_event(
-                {
-                    "customer_id": customer_id,
-                    "amount": tier_config.amount,
-                    "tier": tier,
-                    "event_type": "subscription_created",
+            # Add customer email if provided
+            if customer_email:
+                session_params["customer_email"] = customer_email
+
+            # Add trial period
+            if trial and tier != "basic":  # No trial for basic tier
+                session_params["subscription_data"] = {
+                    "trial_period_days": self.TRIAL_DAYS,
+                    "metadata": {"tier": tier, "trial": "true"},
                 }
-            )
 
-            logger.info(f"Subscription created: {subscription.stripe_id}")
-            return subscription
+            # Add customer portal for managing subscriptions
+            session_params["billing_address_collection"] = "required"
+            session_params["customer_creation"] = "always"
+
+            if self.test_mode:
+                # Return mock session for testing
+                return {
+                    "id": f"cs_test_{datetime.now().timestamp()}",
+                    "url": "https://checkout.stripe.com/test",
+                    "metadata": session_params["metadata"],
+                }
+
+            session = stripe.checkout.Session.create(**session_params)
+
+            logger.info(f"Created checkout session for {tier} {interval} plan")
+            return {"id": session.id, "url": session.url, "metadata": session.metadata}
 
         except stripe.error.StripeError as e:
-            logger.error(f"Stripe error creating subscription: {e!s}")
+            logger.error(f"Stripe error creating checkout session: {e!s}")
             raise
         except Exception as e:
-            logger.error(f"Error creating subscription: {e!s}")
+            logger.error(f"Error creating checkout session: {e!s}")
             raise
 
-    def handle_webhook(self, webhook_data: dict) -> dict:
-        """Handle Stripe webhook events"""
-        event_type = webhook_data.get("type")
-        logger.info(f"Processing webhook: {event_type}")
+    def create_customer_portal_session(self, customer_id: str) -> dict:
+        """Create customer portal session for subscription management."""
+        try:
+            if self.test_mode:
+                return {"url": "https://billing.stripe.com/test"}
 
-        handlers = {
-            "customer.subscription.created": self._handle_subscription_created,
-            "customer.subscription.updated": self._handle_subscription_updated,
-            "customer.subscription.deleted": self._handle_subscription_deleted,
-            "invoice.payment_succeeded": self._handle_payment_succeeded,
-            "invoice.payment_failed": self._handle_payment_failed,
+            session = stripe.billing_portal.Session.create(
+                customer=customer_id,
+                return_url=os.getenv(
+                    "STRIPE_RETURN_URL", "https://saasgrowthdispatch.com/account"
+                ),
+            )
+
+            return {"url": session.url}
+
+        except Exception as e:
+            logger.error(f"Error creating portal session: {e!s}")
+            raise
+
+    def handle_webhook(self, payload: str, signature: str) -> dict:
+        """Handle Stripe webhook events."""
+        try:
+            # Verify webhook signature
+            if not self.test_mode and self.webhook_secret:
+                event = stripe.Webhook.construct_event(
+                    payload, signature, self.webhook_secret
+                )
+            else:
+                # For testing, parse the payload directly
+                event = json.loads(payload)
+
+            event_type = event.get("type")
+            event_data = event.get("data", {}).get("object", {})
+
+            logger.info(f"Processing webhook: {event_type}")
+
+            # Route to appropriate handler
+            handlers = {
+                "checkout.session.completed": self._handle_checkout_completed,
+                "customer.subscription.created": self._handle_subscription_created,
+                "customer.subscription.updated": self._handle_subscription_updated,
+                "customer.subscription.deleted": self._handle_subscription_deleted,
+                "customer.subscription.trial_will_end": self._handle_trial_ending,
+                "invoice.payment_succeeded": self._handle_payment_succeeded,
+                "invoice.payment_failed": self._handle_payment_failed,
+                "customer.created": self._handle_customer_created,
+            }
+
+            handler = handlers.get(event_type)
+            if handler:
+                return handler(event_data)
+            else:
+                logger.warning(f"Unhandled webhook event: {event_type}")
+                return {"status": "unhandled", "event": event_type}
+
+        except stripe.error.SignatureVerificationError as e:
+            logger.error(f"Invalid webhook signature: {e!s}")
+            raise
+        except Exception as e:
+            logger.error(f"Error handling webhook: {e!s}")
+            raise
+
+    def _handle_checkout_completed(self, session_data: dict) -> dict:
+        """Handle successful checkout completion."""
+        customer_id = session_data.get("customer")
+        subscription_id = session_data.get("subscription")
+
+        # Customer and subscription will be created via other webhooks
+        logger.info(f"Checkout completed for customer {customer_id}")
+
+        return {
+            "status": "success",
+            "action": "checkout_completed",
+            "customer_id": customer_id,
+            "subscription_id": subscription_id,
         }
 
-        handler = handlers.get(event_type)
-        if handler:
-            return handler(webhook_data["data"]["object"])
-        else:
-            logger.warning(f"Unhandled webhook event: {event_type}")
-            return {"status": "unhandled", "event": event_type}
+    def _handle_customer_created(self, customer_data: dict) -> dict:
+        """Handle new customer creation."""
+        # Create internal customer record
+        customer = Customer(
+            id=f"cust_{datetime.now().timestamp()}",
+            stripe_customer_id=customer_data["id"],
+            email=customer_data["email"],
+            name=customer_data.get("name"),
+            created_at=datetime.now(),
+        )
+
+        # In production, save to database
+        logger.info(f"Created customer record for {customer.email}")
+
+        return {
+            "status": "success",
+            "action": "customer_created",
+            "customer_id": customer.id,
+        }
 
     def _handle_subscription_created(self, subscription_data: dict) -> dict:
-        """Handle new subscription creation"""
-        amount = subscription_data["items"]["data"][0]["price"]["unit_amount"] / 100
+        """Handle new subscription creation."""
+        stripe_customer_id = subscription_data["customer"]
+        items = subscription_data.get("items", {}).get("data", [])
+
+        if not items:
+            logger.error("No subscription items found")
+            return {"status": "error", "message": "No subscription items"}
+
+        price = items[0].get("price", {})
+        amount = price.get("unit_amount", 0) / 100
+        interval = price.get("recurring", {}).get("interval", "month")
+
+        # Determine tier from metadata or price
+        tier = subscription_data.get("metadata", {}).get("tier", "pro")
+
+        # Create subscription record
+        subscription = Subscription(
+            id=f"sub_{datetime.now().timestamp()}",
+            stripe_subscription_id=subscription_data["id"],
+            customer_id=stripe_customer_id,
+            tier=tier,
+            interval=interval,
+            amount=amount,
+            status=subscription_data["status"],
+            current_period_start=datetime.fromtimestamp(
+                subscription_data["current_period_start"]
+            ),
+            current_period_end=datetime.fromtimestamp(
+                subscription_data["current_period_end"]
+            ),
+        )
+
+        # Create API key if tier includes API access
+        if self.TIERS[tier].api_access:
+            # In production, load customer from database
+            customer = Customer(
+                id="cust_temp",
+                stripe_customer_id=stripe_customer_id,
+                email="temp@example.com",  # Would be loaded from DB
+            )
+
+            api_key = self.api_key_service.create_api_key(customer, subscription)
+            logger.info(f"Created API key for {tier} subscription")
+
+            # Send API key to customer via email
+            # TODO: Implement email sending
 
         # Track revenue event
         self.cost_tracker.add_revenue_event(
             {
-                "customer_id": subscription_data["customer"],
+                "customer_id": stripe_customer_id,
                 "amount": amount,
+                "tier": tier,
                 "event_type": "subscription_created",
             }
         )
@@ -270,62 +331,131 @@ class PaymentService:
         return {
             "status": "success",
             "action": "subscription_created",
-            "revenue_impact": amount,
+            "subscription_id": subscription.id,
+            "tier": tier,
+            "amount": amount,
+        }
+
+    def _handle_subscription_updated(self, subscription_data: dict) -> dict:
+        """Handle subscription updates (upgrades/downgrades)."""
+        old_items = (
+            subscription_data.get("previous_attributes", {})
+            .get("items", {})
+            .get("data", [])
+        )
+        new_items = subscription_data.get("items", {}).get("data", [])
+
+        if old_items and new_items:
+            old_amount = old_items[0].get("price", {}).get("unit_amount", 0) / 100
+            new_amount = new_items[0].get("price", {}).get("unit_amount", 0) / 100
+
+            if new_amount > old_amount:
+                action = "upgraded"
+            elif new_amount < old_amount:
+                action = "downgraded"
+            else:
+                action = "updated"
+
+            # Update API key tier if needed
+            # TODO: Update API key rate limits based on new tier
+
+            return {
+                "status": "success",
+                "action": f"subscription_{action}",
+                "old_amount": old_amount,
+                "new_amount": new_amount,
+            }
+
+        return {"status": "success", "action": "subscription_updated"}
+
+    def _handle_subscription_deleted(self, subscription_data: dict) -> dict:
+        """Handle subscription cancellation."""
+        customer_id = subscription_data["customer"]
+
+        # Deactivate API keys
+        api_keys = self.api_key_service.get_customer_api_keys(customer_id)
+        for api_key in api_keys:
+            self.api_key_service.deactivate_api_key(api_key.key)
+
+        logger.info(f"Subscription cancelled for customer {customer_id}")
+
+        return {
+            "status": "success",
+            "action": "subscription_cancelled",
+            "customer_id": customer_id,
+        }
+
+    def _handle_trial_ending(self, subscription_data: dict) -> dict:
+        """Handle trial ending notification (3 days before)."""
+        customer_id = subscription_data["customer"]
+        trial_end = datetime.fromtimestamp(subscription_data["trial_end"])
+
+        # Send email reminder about trial ending
+        # TODO: Implement email notification
+
+        logger.info(f"Trial ending soon for customer {customer_id} on {trial_end}")
+
+        return {
+            "status": "success",
+            "action": "trial_ending_notification",
+            "customer_id": customer_id,
+            "trial_end": trial_end.isoformat(),
         }
 
     def _handle_payment_succeeded(self, invoice_data: dict) -> dict:
-        """Handle successful payment"""
+        """Handle successful payment."""
         amount = invoice_data["amount_paid"] / 100
+        customer_id = invoice_data["customer"]
 
         # Track revenue event
         self.cost_tracker.add_revenue_event(
             {
-                "customer_id": invoice_data["customer"],
+                "customer_id": customer_id,
                 "amount": amount,
                 "event_type": "payment_succeeded",
             }
         )
 
-        return {"status": "success", "action": "payment_received", "amount": amount}
+        # Reset usage counters for the new billing period
+        # TODO: Reset monthly usage counters
+
+        return {
+            "status": "success",
+            "action": "payment_received",
+            "amount": amount,
+            "customer_id": customer_id,
+        }
 
     def _handle_payment_failed(self, invoice_data: dict) -> dict:
-        """Handle failed payment"""
+        """Handle failed payment."""
         amount = invoice_data["amount_due"] / 100
         attempt_count = invoice_data.get("attempt_count", 1)
+        customer_id = invoice_data["customer"]
 
         logger.warning(
-            f"Payment failed for customer {invoice_data['customer']}, "
+            f"Payment failed for customer {customer_id}, "
             f"amount: ${amount}, attempt: {attempt_count}"
         )
 
-        # Implement retry logic
+        # Send payment failure notification
+        # TODO: Implement email notification
+
         if attempt_count < 3:
             return {
                 "status": "retry_scheduled",
                 "retry_attempt": attempt_count + 1,
-                "next_retry": datetime.now() + timedelta(days=3),
+                "next_retry": (datetime.now() + timedelta(days=3)).isoformat(),
             }
         else:
-            # Cancel subscription after 3 failed attempts
+            # After 3 failed attempts, subscription will be cancelled
             return {
                 "status": "subscription_at_risk",
-                "action": "manual_intervention_required",
+                "action": "final_payment_failure",
+                "customer_id": customer_id,
             }
 
-    def _handle_subscription_deleted(self, subscription_data: dict) -> dict:
-        """Handle subscription cancellation"""
-        logger.info(f"Subscription cancelled: {subscription_data['id']}")
-
-        return {"status": "success", "action": "subscription_cancelled"}
-
-    def _handle_subscription_updated(self, subscription_data: dict) -> dict:
-        """Handle subscription updates (upgrades/downgrades)"""
-        logger.info(f"Subscription updated: {subscription_data['id']}")
-
-        return {"status": "success", "action": "subscription_updated"}
-
     def calculate_subscription_metrics(self, customers: list[dict]) -> dict:
-        """Calculate key subscription metrics"""
+        """Calculate key subscription metrics."""
         total_mrr = sum(c["amount"] * c["count"] for c in customers)
         daily_revenue = total_mrr / 30
         customer_count = sum(c["count"] for c in customers)
@@ -339,136 +469,71 @@ class PaymentService:
             # Assuming 15% monthly growth
         }
 
-    def upgrade_subscription(self, subscription_id: str, new_price_id: str) -> dict:
-        """Upgrade an existing subscription"""
+    def get_customer_subscription(self, stripe_customer_id: str) -> Optional[dict]:
+        """Get customer's active subscription details."""
         try:
             if self.test_mode:
                 return {
-                    "new_tier": "enterprise",
-                    "new_amount": 299.00,
-                    "upgrade_value": 200.00,
+                    "id": "sub_test",
+                    "status": "active",
+                    "tier": "pro",
+                    "current_period_end": datetime.now() + timedelta(days=30),
                 }
 
-            # Implement actual Stripe upgrade logic
-            subscription = stripe.Subscription.retrieve(subscription_id)
-            updated = stripe.Subscription.modify(
-                subscription_id,
-                items=[
-                    {"id": subscription["items"]["data"][0].id, "price": new_price_id}
-                ],
+            subscriptions = stripe.Subscription.list(
+                customer=stripe_customer_id, status="active", limit=1
             )
 
-            return {
-                "new_tier": updated.metadata.get("tier"),
-                "new_amount": updated["items"]["data"][0]["price"]["unit_amount"] / 100,
-                "upgrade_value": (
-                    updated["items"]["data"][0]["price"]["unit_amount"]
-                    - subscription["items"]["data"][0]["price"]["unit_amount"]
-                )
-                / 100,
-            }
-
-        except Exception as e:
-            logger.error(f"Error upgrading subscription: {e!s}")
-            raise
-
-    def preview_upcoming_invoice(self, customer_id: str) -> dict:
-        """Preview upcoming invoice including usage charges"""
-        try:
-            if self.test_mode:
+            if subscriptions.data:
+                sub = subscriptions.data[0]
                 return {
-                    "base_subscription": 99.00,
-                    "usage_charges": 25.00,
-                    "total": 124.00,
+                    "id": sub.id,
+                    "status": sub.status,
+                    "tier": sub.metadata.get("tier", "pro"),
+                    "current_period_end": datetime.fromtimestamp(
+                        sub.current_period_end
+                    ),
+                    "cancel_at_period_end": sub.cancel_at_period_end,
                 }
 
-            upcoming = stripe.Invoice.upcoming(customer=customer_id)
-
-            base_subscription = 0
-            usage_charges = 0
-
-            for line in upcoming.lines.data:
-                if line.type == "subscription":
-                    base_subscription += line.amount / 100
-                else:
-                    usage_charges += line.amount / 100
-
-            return {
-                "base_subscription": base_subscription,
-                "usage_charges": usage_charges,
-                "total": upcoming.total / 100,
-            }
+            return None
 
         except Exception as e:
-            logger.error(f"Error previewing invoice: {e!s}")
-            raise
+            logger.error(f"Error fetching subscription: {e!s}")
+            return None
 
-    def convert_trial_to_paid(self, customer_id: str, price_id: str) -> dict:
-        """Convert trial customer to paid subscription"""
-        logger.info(f"Converting trial customer {customer_id} to paid")
-
-        try:
-            subscription_data = {
-                "customer_id": customer_id,
-                "tier": self._get_tier_from_price_id(price_id),
-            }
-
-            subscription = self.create_subscription(subscription_data)
-
-            return {
-                "status": "converted",
-                "subscription_id": subscription.stripe_id,
-                "new_mrr": subscription.amount,
-            }
-
-        except Exception as e:
-            logger.error(f"Error converting trial: {e!s}")
-            raise
-
-    def _get_tier_from_price_id(self, price_id: str) -> str:
-        """Get tier name from price ID"""
-        for tier_name, tier_config in self.TIERS.items():
-            if tier_config.price_id == price_id:
-                return tier_name
-        raise ValueError(f"Unknown price ID: {price_id}")
-
-    def export_analytics(self, filepath: str, analytics_data: dict):
-        """Export subscription analytics"""
-        with open(filepath, "w") as f:
-            json.dump(analytics_data, f, indent=2, default=str)
-
-    def manage_dunning(self, failed_payment_data: dict) -> dict:
-        """Manage dunning process for failed payments"""
-        failure_count = failed_payment_data["failure_count"]
-
-        if failure_count < 2:
-            action = "retry"
-        elif failure_count < 4:
-            action = "pause"
-        else:
-            action = "cancel"
-
-        # In production, send dunning emails
-        return {
-            "action": action,
-            "email_sent": True,
-            "next_retry": failed_payment_data.get("next_retry"),
-        }
-
-    def update_payment_method(self, customer_id: str, payment_method_id: str) -> dict:
-        """Update customer payment method"""
+    def create_usage_record(
+        self, subscription_id: str, quantity: int, timestamp: Optional[datetime] = None
+    ):
+        """Create usage record for metered billing."""
         try:
             if self.test_mode:
-                return {"status": "updated", "new_payment_method": payment_method_id}
+                return {"id": f"mbur_test_{datetime.now().timestamp()}"}
 
-            # Update in Stripe
-            stripe.Customer.modify(customer_id, default_source=payment_method_id)
+            # Get subscription item ID for usage-based pricing
+            subscription = stripe.Subscription.retrieve(subscription_id)
+            usage_item = None
 
-            return {"status": "updated", "new_payment_method": payment_method_id}
+            for item in subscription["items"]["data"]:
+                if item["price"].get("recurring", {}).get("usage_type") == "metered":
+                    usage_item = item
+                    break
+
+            if not usage_item:
+                logger.warning(
+                    f"No metered pricing item found for subscription {subscription_id}"
+                )
+                return None
+
+            # Create usage record
+            usage_record = stripe.SubscriptionItem.create_usage_record(
+                usage_item["id"],
+                quantity=quantity,
+                timestamp=int((timestamp or datetime.now()).timestamp()),
+            )
+
+            return usage_record
 
         except Exception as e:
-            logger.error(f"Error updating payment method: {e!s}")
+            logger.error(f"Error creating usage record: {e!s}")
             raise
-
-
-# Missing import
