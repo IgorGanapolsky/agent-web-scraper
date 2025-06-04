@@ -2,8 +2,57 @@
 Enhanced analytics for email reporting and insights.
 """
 
+import time
+from collections.abc import Callable
 from datetime import datetime
+from functools import wraps
 from typing import Any
+
+
+def performance_monitor(func: Callable) -> Callable:
+    """
+    Decorator to monitor function performance and execution time.
+
+    Args:
+        func: Function to monitor
+
+    Returns:
+        Wrapped function with performance monitoring
+    """
+
+    @wraps(func)
+    async def async_wrapper(*args, **kwargs):
+        start_time = time.time()
+        try:
+            result = await func(*args, **kwargs)
+            execution_time = time.time() - start_time
+            print(f"⚡ {func.__name__} completed in {execution_time:.2f}s")
+            return result
+        except Exception as e:
+            execution_time = time.time() - start_time
+            print(f"❌ {func.__name__} failed after {execution_time:.2f}s: {e}")
+            raise
+
+    @wraps(func)
+    def sync_wrapper(*args, **kwargs):
+        start_time = time.time()
+        try:
+            result = func(*args, **kwargs)
+            execution_time = time.time() - start_time
+            print(f"⚡ {func.__name__} completed in {execution_time:.2f}s")
+            return result
+        except Exception as e:
+            execution_time = time.time() - start_time
+            print(f"❌ {func.__name__} failed after {execution_time:.2f}s: {e}")
+            raise
+
+    # Return appropriate wrapper based on function type
+    import asyncio
+
+    if asyncio.iscoroutinefunction(func):
+        return async_wrapper
+    else:
+        return sync_wrapper
 
 
 def calculate_pain_point_metrics(results: list[dict[str, Any]]) -> dict[str, Any]:
