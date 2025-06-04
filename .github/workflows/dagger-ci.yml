@@ -1,0 +1,71 @@
+name: "🚀 Dagger CI/CD Pipeline"
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DAGGER_VERSION: "0.9.0"
+
+jobs:
+  test-and-deploy:
+    name: "Test & Deploy SaaS Platform"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Checkout Code"
+        uses: actions/checkout@v4
+
+      - name: "🐍 Setup Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: "⚡ Install Dagger"
+        run: |
+          curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=$DAGGER_VERSION sh
+          sudo mv bin/dagger /usr/local/bin
+          dagger version
+
+      - name: "📦 Install Dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          pip install dagger-io
+
+      - name: "🏥 Quick Health Check"
+        run: dagger call quick-health-check
+
+      - name: "🧪 Run Test Suite"
+        run: dagger call test-suite
+
+      - name: "💳 Test Stripe Integration"
+        run: dagger call test-stripe-integration
+        env:
+          STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_API_KEY }}
+
+      - name: "🧠 Test RAG Engine"
+        run: dagger call test-rag-engine
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: "📊 Verify Revenue Metrics"
+        run: dagger call verify-revenue-metrics
+
+      - name: "🐳 Build Production Image"
+        run: dagger call build-production-image
+
+      - name: "🚀 Deploy to Staging"
+        if: github.ref == 'refs/heads/main'
+        run: dagger call deploy-to-staging
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: "🎯 Full CI Pipeline"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: dagger call full-ci-pipeline
+        env:
+          STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

@@ -185,6 +185,12 @@ Backend_Services:
   - ChromaDB for vector storage
   - Stripe for payments
 
+CI_CD_Pipeline:
+  - Dagger.io for programmable pipelines
+  - GitHub Actions for orchestration
+  - Automated testing and deployment
+  - Revenue-protection validation
+
 Deployment:
   - Docker containers
   - AWS ECS Fargate
@@ -225,8 +231,24 @@ export KAFKA_BROKERS="localhost:9092"
 export REDIS_URL="redis://localhost:6379"
 ```
 
-### 4. Verify Integration
+### 4. Dagger CI/CD Setup
 ```bash
+# Install Dagger.io
+curl -L https://dl.dagger.io/dagger/install.sh | sh
+pip install dagger-io
+
+# Run setup script
+./scripts/setup_dagger.sh
+
+# Test pipeline
+dagger call quick-health-check
+```
+
+### 5. Verify Integration
+```bash
+# Run full Dagger CI/CD pipeline
+dagger call full-ci-pipeline
+
 # Test end-to-end workflow
 python scripts/test_revenue_automation.py
 

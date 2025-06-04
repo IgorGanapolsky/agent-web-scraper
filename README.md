@@ -31,6 +31,7 @@ Our system uses cutting-edge automation and AI coordination:
 | **AI Agents** | Claude 4 Sonnet | Market intelligence generation |
 | **Backend API** | FastAPI + Stripe | Revenue & subscription management |
 | **Vector DB** | ChromaDB | Semantic search & retrieval |
+| **CI/CD Pipeline** | Dagger.io | Programmable deployment automation |
 
 ## ⚡ Quick Start
 
@@ -116,15 +117,18 @@ pytest tests/integration/
 - **Cloud**: AWS/GCP with auto-scaling
 - **Database**: PostgreSQL + ChromaDB
 - **Monitoring**: Sentry AI integration
-- **CI/CD**: GitHub Actions + automated testing
+- **CI/CD**: Dagger.io + GitHub Actions + automated testing
 
 ### Quick Deploy
 ```bash
+# Run Dagger CI/CD pipeline
+dagger call full-ci-pipeline
+
+# Quick health check
+dagger call quick-health-check
+
 # Deploy to production
 make deploy
-
-# Monitor health
-make health-check
 ```
 
 ## 💡 Key Features
@@ -134,6 +138,7 @@ make health-check
 - ✅ **Stripe Integration** - Complete subscription management
 - ✅ **Real-time Dashboard** - Business metrics & forecasting
 - ✅ **Automated Workflows** - n8n + MCP coordination
+- ✅ **Dagger CI/CD** - Programmable deployment pipelines
 - ✅ **Enterprise Security** - SOC2 ready architecture
 
 ## 🤝 Contributing
