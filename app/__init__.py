@@ -4,7 +4,7 @@ __version__ = "0.2.0"
 __author__ = "Igor Ganapolsky"
 __email__ = "your.email@example.com"
 
-from app.config.safe_logger import get_logger, setup_logging
+from app.config.logging import get_logger, setup_logging
 
 # Set up default logging
 setup_logging()
