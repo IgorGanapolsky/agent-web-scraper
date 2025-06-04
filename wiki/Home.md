@@ -1,16 +1,18 @@
 # 🧠 SaaS Market Intelligence Platform Wiki
 
+**Autonomous revenue generation through AI-powered market intelligence**
+
 Welcome to the comprehensive wiki for our **enterprise-grade agentic RAG system** that generates $300/day autonomous revenue through AI-powered market intelligence.
 
 ## 🚀 **Platform Overview**
 
-We've transformed from a basic web scraper into a sophisticated **agentic RAG (Retrieval Augmented Generation)** platform that provides dynamic, multi-source market intelligence with enterprise capabilities.
+Our platform uses **modern 2025 architecture** with MCP, n8n, and BMAD to create an autonomous market intelligence system that drives real revenue.
 
 ### **🎯 Business Impact**
 - **Revenue Model**: $99-299/month premium tiers
 - **Target**: $300/day autonomous generation ($108K annually)
-- **Market Position**: Advanced agentic intelligence vs traditional static reports
-- **Competitive Advantage**: 3-10x value vs existing tools
+- **Architecture**: MCP + n8n + BMAD + Claude 4 Sonnet
+- **Competitive Advantage**: Autonomous vs manual intelligence gathering
 
 ---
 
