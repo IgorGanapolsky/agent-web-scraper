@@ -19,20 +19,7 @@ Transform SaaS market research through **autonomous AI agents** that discover pa
 
 Our system uses cutting-edge automation and AI coordination:
 
-```mermaid
-graph TB
-    A[User Query] --> B[MCP Bridge]
-    B --> C[Claude 4 Agents]
-    C --> D[n8n Workflow Engine]
-    D --> E[BMAD Processing]
-    E --> F[FastAPI Backend]
-    F --> G[Stripe Revenue]
-
-    H[Reddit/GitHub] --> I[Agentic RAG]
-    I --> J[Vector Storage]
-    J --> K[Intelligence Reports]
-    K --> L[Email Automation]
-```
+![Modern Architecture 2025](docs/assets/modern-architecture-2025.png)
 
 ### Key Technologies
 
