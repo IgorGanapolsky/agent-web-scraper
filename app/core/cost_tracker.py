@@ -1,151 +1,292 @@
-"""Module for tracking API usage and costs."""
+"""
+Cost Tracker Module
+Tracks API costs, revenue, and business metrics for $300/day target
+"""
 
 import json
-from datetime import datetime
-from pathlib import Path
-from typing import Any, cast
+from datetime import datetime, timedelta
+from typing import Optional
 
-# Default cost per API call (in USD)
-DEFAULT_COST_PER_CALL = 0.01
+from pydantic import BaseModel, Field, validator
+
+from app.config.logging import get_logger
+
+logger = get_logger(__name__)
+
+
+class RevenueEvent(BaseModel):
+    """Revenue event model"""
+
+    customer_id: str
+    amount: float
+    tier: str = "pro"
+    event_type: str = "subscription"
+    timestamp: datetime = Field(default_factory=datetime.now)
+
+    @validator("amount")
+    def validate_amount(cls, v):
+        if v <= 0:
+            raise ValueError("Amount must be positive")
+        return v
+
+    @validator("tier")
+    def validate_tier(cls, v):
+        valid_tiers = ["basic", "pro", "enterprise"]
+        if v not in valid_tiers:
+            raise ValueError(f"Invalid tier: {v}")
+        return v
+
+    @validator("customer_id")
+    def validate_customer_id(cls, v):
+        if not v:
+            raise ValueError("Customer ID cannot be empty")
+        return v
+
+
+class CostEvent(BaseModel):
+    """Cost event model"""
+
+    service: str
+    cost: float
+    timestamp: datetime = Field(default_factory=datetime.now)
+    metadata: dict = Field(default_factory=dict)
 
 
 class CostTracker:
-    """Track API usage and costs."""
+    """Tracks costs and revenue for business metrics"""
 
-    def __init__(self, data_dir: str = "data/usage"):
-        """Initialize the cost tracker.
+    def __init__(self, test_mode: bool = False):
+        self.test_mode = test_mode
+        self.revenue_events: list[RevenueEvent] = []
+        self.cost_events: list[CostEvent] = []
+        self.subscriptions: dict[str, dict] = {}
 
-        Args:
-            data_dir: Directory to store usage data
-        """
-        self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(parents=True, exist_ok=True)
-        self.current_month = datetime.now().strftime("%Y-%m")
-        self.usage_file = self.data_dir / f"api_usage_{self.current_month}.json"
-        self._ensure_usage_file()
+    def add_revenue_event(self, event_data: dict):
+        """Add a revenue event"""
+        if isinstance(event_data, dict):
+            event = RevenueEvent(**event_data)
+        else:
+            event = event_data
 
-    def _ensure_usage_file(self) -> None:
-        """Ensure the usage file exists with proper structure."""
-        if not self.usage_file.exists():
-            self._initialize_usage_file()
+        self.revenue_events.append(event)
+        logger.info(f"Revenue event tracked: ${event.amount} from {event.customer_id}")
 
-    def _initialize_usage_file(self) -> None:
-        """Initialize a new usage file for the current month."""
-        data = {
-            "month": self.current_month,
-            "total_searches": 0,
-            "total_cost": 0.0,
-            "searches": [],
-        }
-        with open(self.usage_file, "w") as f:
-            json.dump(data, f, indent=2)
+        # Track in Sentry if not in test mode
+        if not self.test_mode:
+            try:
+                from app.observability.sentry_config import track_revenue_event
 
-    def track_usage(
-        self, cost: float = DEFAULT_COST_PER_CALL, **metadata
-    ) -> dict[str, Any]:
-        """Track an API call with its associated cost.
+                track_revenue_event(amount=event.amount, customer_id=event.customer_id)
+            except ImportError:
+                pass
 
-        Args:
-            cost: Cost of the API call in USD
-            **metadata: Additional metadata to store with the usage record
+    def add_cost_event(self, service: str, cost: float, metadata: dict | None = None):
+        """Add a cost event"""
+        event = CostEvent(service=service, cost=cost, metadata=metadata or {})
+        self.cost_events.append(event)
+        logger.info(f"Cost event tracked: ${cost} for {service}")
 
-        Returns:
-            Dict containing the updated usage data
-        """
-        # Check if we need to rotate to a new month
-        current_month = datetime.now().strftime("%Y-%m")
-        if current_month != self.current_month:
-            self.current_month = current_month
-            self.usage_file = self.data_dir / f"api_usage_{self.current_month}.json"
-            self._ensure_usage_file()
-
-        # Load existing data
-        with open(self.usage_file) as f:
-            data = cast(dict[str, Any], json.load(f))
-
-        # Update data
-        search_data = {
-            "timestamp": datetime.now().isoformat(),
-            "cost": cost,
-            **metadata,
+    def add_subscription(self, customer_id: str, tier: str, amount: float):
+        """Add or update a subscription"""
+        self.subscriptions[customer_id] = {
+            "tier": tier,
+            "amount": amount,
+            "created_at": datetime.now(),
         }
 
-        data["searches"].append(search_data)
-        data["total_searches"] += 1
-        data["total_cost"] = round(data["total_cost"] + cost, 2)
-
-        # Save updated data
-        with open(self.usage_file, "w") as f:
-            json.dump(data, f, indent=2)
-
-        return data
-
-    def get_current_month_usage(self) -> dict[str, Any]:
-        """Get the current month's usage data.
-
-        Returns:
-            Dict containing the current month's usage data
-        """
-        if not self.usage_file.exists():
-            return {
-                "month": self.current_month,
-                "total_searches": 0,
-                "total_cost": 0.0,
-                "searches": [],
+        # Also track as revenue event
+        self.add_revenue_event(
+            {
+                "customer_id": customer_id,
+                "amount": amount,
+                "tier": tier,
+                "event_type": "subscription",
             }
+        )
 
-        with open(self.usage_file) as f:
-            # Assuming the loaded JSON conforms to Dict[str, Any]
-            return cast(dict[str, Any], json.load(f))
+    def get_daily_revenue(self, date: Optional[datetime] = None) -> float:
+        """Get revenue for a specific day"""
+        if date is None:
+            date = datetime.now()
 
-    def get_historical_usage(self) -> list[dict[str, Any]]:
-        """Get historical usage data for all months.
+        start_of_day = date.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_of_day = start_of_day + timedelta(days=1)
 
-        Returns:
-            List of monthly usage data
-        """
-        usage_files = sorted(self.data_dir.glob("api_usage_*.json"))
-        historical_data = []
+        daily_revenue = sum(
+            event.amount
+            for event in self.revenue_events
+            if start_of_day <= event.timestamp < end_of_day
+        )
 
-        for file in usage_files:
-            with open(file) as f:
-                # Assuming the loaded JSON conforms to Dict[str, Any]
-                historical_data.append(cast(dict[str, Any], json.load(f)))
+        return daily_revenue
 
-        return historical_data
+    def get_daily_costs(self, date: Optional[datetime] = None) -> float:
+        """Get costs for a specific day"""
+        if date is None:
+            date = datetime.now()
 
+        start_of_day = date.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_of_day = start_of_day + timedelta(days=1)
 
-# Global instance for easy importing
-cost_tracker = CostTracker()
+        daily_costs = sum(
+            event.cost
+            for event in self.cost_events
+            if start_of_day <= event.timestamp < end_of_day
+        )
 
+        return daily_costs
 
-def track_api_usage(cost: float = DEFAULT_COST_PER_CALL, **metadata) -> dict[str, Any]:
-    """Convenience function to track API usage.
+    def is_daily_target_met(self, target: float = 300.0) -> bool:
+        """Check if daily revenue target is met"""
+        return self.get_daily_revenue() >= target
 
-    Args:
-        cost: Cost of the API call in USD
-        **metadata: Additional metadata to store with the usage record
+    def calculate_mrr(self) -> float:
+        """Calculate Monthly Recurring Revenue"""
+        return sum(sub["amount"] for sub in self.subscriptions.values())
 
-    Returns:
-        Dict containing the updated usage data
-    """
-    return cost_tracker.track_usage(cost, **metadata)
+    def calculate_ltv(
+        self, monthly_revenue: float, churn_rate: float, months: Optional[int] = None
+    ) -> float:
+        """Calculate Customer Lifetime Value"""
+        if churn_rate == 0:
+            return monthly_revenue * (months or 24)  # Default to 2 years if no churn
 
+        # LTV = Monthly Revenue / Monthly Churn Rate
+        ltv = monthly_revenue / churn_rate
 
-def get_usage_summary() -> dict[str, Any]:
-    """Get a summary of the current month's API usage.
+        # Cap at reasonable maximum
+        if months:
+            ltv = min(ltv, monthly_revenue * months)
 
-    Returns:
-        Dict containing usage summary
-    """
-    usage = cost_tracker.get_current_month_usage()
-    return {
-        "month": usage["month"],
-        "total_searches": usage["total_searches"],
-        "total_cost": usage["total_cost"],
-        "average_cost_per_search": (
-            round(usage["total_cost"] / usage["total_searches"], 4)
-            if usage["total_searches"] > 0
-            else 0
-        ),
-    }
+        return ltv
+
+    def calculate_growth_rate(self, period_days: int = 30) -> float:
+        """Calculate revenue growth rate over period"""
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=period_days)
+
+        # Get revenue for start and end periods
+        start_revenue = sum(
+            event.amount
+            for event in self.revenue_events
+            if start_date <= event.timestamp < start_date + timedelta(days=1)
+        )
+
+        end_revenue = sum(
+            event.amount
+            for event in self.revenue_events
+            if end_date - timedelta(days=1) <= event.timestamp < end_date
+        )
+
+        if start_revenue == 0:
+            return 100.0 if end_revenue > 0 else 0.0
+
+        growth_rate = ((end_revenue - start_revenue) / start_revenue) * 100
+        return growth_rate
+
+    def get_tier_distribution(self) -> dict[str, dict]:
+        """Get customer distribution across tiers"""
+        tier_data = {}
+
+        for sub_data in self.subscriptions.values():
+            tier = sub_data["tier"]
+            if tier not in tier_data:
+                tier_data[tier] = {
+                    "customer_count": 0,
+                    "revenue": 0,
+                    "average_value": 0,
+                }
+
+            tier_data[tier]["customer_count"] += 1
+            tier_data[tier]["revenue"] += sub_data["amount"]
+
+        # Calculate percentages and averages
+        total_revenue = sum(data["revenue"] for data in tier_data.values())
+
+        for data in tier_data.values():
+            data["revenue_share"] = (
+                (data["revenue"] / total_revenue * 100) if total_revenue > 0 else 0
+            )
+            data["average_value"] = (
+                data["revenue"] / data["customer_count"]
+                if data["customer_count"] > 0
+                else 0
+            )
+
+        return tier_data
+
+    def forecast_revenue(
+        self, current_mrr: float, growth_rate: float, months: int
+    ) -> dict:
+        """Forecast revenue based on growth rate"""
+        forecast = {}
+
+        for month in range(1, months + 1):
+            projected_mrr = current_mrr * ((1 + growth_rate) ** month)
+            forecast[f"month_{month}"] = projected_mrr
+
+        return forecast
+
+    def find_target_achievement_month(
+        self, current_mrr: float, target_mrr: float, growth_rate: float
+    ) -> int:
+        """Find when target MRR will be achieved"""
+        if current_mrr >= target_mrr:
+            return 0
+
+        months = 0
+        projected_mrr = current_mrr
+
+        while projected_mrr < target_mrr and months < 36:  # Cap at 3 years
+            months += 1
+            projected_mrr = current_mrr * ((1 + growth_rate) ** months)
+
+        return months
+
+    def calculate_cac(self, marketing_spend: float, customers_acquired: int) -> float:
+        """Calculate Customer Acquisition Cost"""
+        if customers_acquired == 0:
+            return 0
+
+        return marketing_spend / customers_acquired
+
+    def export_metrics(self, filepath: str):
+        """Export metrics to JSON file"""
+        metrics = {
+            "daily_revenue": self.get_daily_revenue(),
+            "daily_costs": self.get_daily_costs(),
+            "customer_count": len(self.subscriptions),
+            "mrr": self.calculate_mrr(),
+            "growth_rate": self.calculate_growth_rate(),
+            "tier_distribution": self.get_tier_distribution(),
+            "generated_at": datetime.now().isoformat(),
+        }
+
+        with open(filepath, "w") as f:
+            json.dump(metrics, f, indent=2)
+
+        logger.info(f"Metrics exported to {filepath}")
+
+    def get_dashboard_metrics(self) -> dict:
+        """Get real-time metrics for dashboard"""
+        current_mrr = self.calculate_mrr()
+        daily_revenue = self.get_daily_revenue()
+        daily_costs = self.get_daily_costs()
+
+        return {
+            "current_mrr": current_mrr,
+            "daily_revenue": daily_revenue,
+            "customer_count": len(self.subscriptions),
+            "growth_rate": self.calculate_growth_rate(),
+            "days_to_target": self.find_target_achievement_month(
+                current_mrr,
+                9000,
+                0.15,  # $300/day = $9000/month, 15% growth
+            ),
+            "profit_margin": (
+                ((daily_revenue - daily_costs) / daily_revenue * 100)
+                if daily_revenue > 0
+                else 0
+            ),
+            "last_updated": datetime.now().isoformat(),
+        }
