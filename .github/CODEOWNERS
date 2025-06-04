@@ -1,17 +1,27 @@
 # Default owners for everything in the repo
-*       @yourusername
+*       @IgorGanapolsky
 
-# Core code owners
-/app/core/            @yourusername @team/core
-/tests/               @yourusername @team/qa
+# Core application code
+/app/core/            @IgorGanapolsky
+/app/api/             @IgorGanapolsky
+/app/mcp/             @IgorGanapolsky
+/app/web/             @IgorGanapolsky
+/tests/               @IgorGanapolsky
 
-# Documentation
-/docs/                @yourusername @team/docs
-README.md             @yourusername @team/docs
-CONTRIBUTING.md       @yourusername @team/docs
-CHANGELOG.md          @yourusername @team/docs
+# Documentation and strategy
+/docs/                @IgorGanapolsky
+/wiki/                @IgorGanapolsky
+README.md             @IgorGanapolsky
+CONTRIBUTING.md       @IgorGanapolsky
+CHANGELOG.md          @IgorGanapolsky
 
-# Configuration files
-/.github/             @yourusername @team/devops
-/Makefile             @yourusername @team/devops
-/requirements*.txt    @yourusername @team/devops
+# Infrastructure and configuration
+/.github/             @IgorGanapolsky
+/Makefile             @IgorGanapolsky
+/requirements*.txt    @IgorGanapolsky
+/pyproject.toml       @IgorGanapolsky
+/sonar-project.properties @IgorGanapolsky
+
+# Business and automation scripts
+/scripts/             @IgorGanapolsky
+/project-dashboard/   @IgorGanapolsky
