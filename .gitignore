@@ -253,3 +253,23 @@ reports/*.png
 # Except the latest versions (optional)
 !reports/weekly_report_latest.json
 !reports/SaaS_Pain_Point_Report_latest.pdf
+
+# Business Data (sensitive/large files) - NEW ORGANIZATION
+data/prospects/
+data/metrics/
+data/backups/
+data/vector_stores/
+.chroma/
+
+# Business sensitive files
+outreach_templates.json
+payment_config.json
+prospects_database.json
+github_prospects_database.json
+customer_data.json
+revenue_reports.json
+
+# Keep important template files
+!app/data/templates/
+!tests/fixtures/
+!docs/examples/
