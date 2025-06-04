@@ -19,11 +19,12 @@ Our platform uses **modern 2025 architecture** with MCP, n8n, and BMAD to create
 ## 📖 **Wiki Navigation**
 
 ### **🏗️ Technical Architecture**
-- **[[Modern Stack 2025]]** - MCP + n8n + BMAD architecture overview
+- **[[Modern Stack 2025]]** - MCP + n8n + BMAD + Dagger architecture overview
 - **[[Agentic RAG System]]** - Core intelligence engine architecture
 - **[[Vector Store Management]]** - ChromaDB integration and data persistence
 - **[[Knowledge Base Pipeline]]** - Multi-source data ingestion system
 - **[[API Reference]]** - Complete endpoint documentation
+- **[[Dagger CI/CD Pipeline]]** - Programmable deployment automation
 - **[[Testing Strategy]]** - Business-critical test coverage
 
 ### **💼 Business & Strategy**
@@ -70,6 +71,7 @@ Our platform uses **modern 2025 architecture** with MCP, n8n, and BMAD to create
 ### ✅ **Production Ready Components**
 - **Agentic RAG Engine**: Multi-source intelligent retrieval with Claude 4 Sonnet
 - **Stripe Integration**: Complete subscription and payment system
+- **Dagger CI/CD**: Programmable deployment pipelines with revenue protection
 - **Vector Storage**: ChromaDB with persistent storage
 - **Knowledge Builder**: Automated data ingestion from Reddit, GitHub, SerpAPI
 - **Business Metrics**: Real-time revenue and customer tracking
