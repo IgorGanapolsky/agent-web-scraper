@@ -1,0 +1,322 @@
+name: Automated Kanban Board Management
+
+on:
+  issues:
+    types: [opened, edited, labeled, unlabeled, closed, reopened]
+  issue_comment:
+    types: [created]
+  push:
+    branches: [main]
+  schedule:
+    # Run every hour to keep board organized
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PROJECT_ID: "2"  # Your project ID
+
+jobs:
+  auto-organize-kanban:
+    runs-on: ubuntu-latest
+    name: Auto-organize GitHub Project Board
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub requests
+
+      - name: Organize Board Based on Issue Labels and Titles
+        run: |
+          python -c "
+          import os
+          import requests
+          from github import Github
+
+          github_token = os.getenv('GITHUB_TOKEN')
+          repo_name = 'IgorGanapolsky/agent-web-scraper'
+          project_number = 2
+
+          github = Github(github_token)
+          repo = github.get_repo(repo_name)
+
+          # GraphQL API setup
+          graphql_url = 'https://api.github.com/graphql'
+          headers = {
+              'Authorization': f'Bearer {github_token}',
+              'Content-Type': 'application/json'
+          }
+
+          def move_issue_to_status(issue_number, status_name):
+              '''Move issue to specific status using GraphQL'''
+
+              # Get project item ID for the issue
+              query = '''
+              query(\$owner: String!, \$repo: String!, \$issueNumber: Int!) {
+                  repository(owner: \$owner, name: \$repo) {
+                      issue(number: \$issueNumber) {
+                          id
+                          projectItems(first: 10) {
+                              nodes {
+                                  id
+                                  project {
+                                      number
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+              '''
+
+              variables = {
+                  'owner': 'IgorGanapolsky',
+                  'repo': 'agent-web-scraper',
+                  'issueNumber': issue_number
+              }
+
+              response = requests.post(graphql_url, json={'query': query, 'variables': variables}, headers=headers)
+
+              if response.status_code != 200:
+                  print(f'Failed to get issue data: {response.text}')
+                  return False
+
+              data = response.json()
+              issue_data = data['data']['repository']['issue']
+
+              # Find project item for our project
+              project_item_id = None
+              for item in issue_data['projectItems']['nodes']:
+                  if item['project']['number'] == project_number:
+                      project_item_id = item['id']
+                      break
+
+              if not project_item_id:
+                  print(f'Issue #{issue_number} not in project, adding it...')
+
+                  # Add issue to project first
+                  add_mutation = '''
+                  mutation(\$projectId: ID!, \$contentId: ID!) {
+                      addProjectV2ItemByContentId(input: {
+                          projectId: \$projectId
+                          contentId: \$contentId
+                      }) {
+                          item {
+                              id
+                          }
+                      }
+                  }
+                  '''
+
+                  # Get project ID
+                  project_query = '''
+                  query(\$owner: String!, \$number: Int!) {
+                      user(login: \$owner) {
+                          projectV2(number: \$number) {
+                              id
+                          }
+                      }
+                  }
+                  '''
+
+                  project_vars = {'owner': 'IgorGanapolsky', 'number': project_number}
+                  project_response = requests.post(graphql_url, json={'query': project_query, 'variables': project_vars}, headers=headers)
+
+                  if project_response.status_code == 200:
+                      project_data = project_response.json()
+                      project_id = project_data['data']['user']['projectV2']['id']
+
+                      add_vars = {
+                          'projectId': project_id,
+                          'contentId': issue_data['id']
+                      }
+
+                      add_response = requests.post(graphql_url, json={'query': add_mutation, 'variables': add_vars}, headers=headers)
+
+                      if add_response.status_code == 200:
+                          add_result = add_response.json()
+                          project_item_id = add_result['data']['addProjectV2ItemByContentId']['item']['id']
+                          print(f'Added issue #{issue_number} to project')
+                      else:
+                          print(f'Failed to add issue to project: {add_response.text}')
+                          return False
+                  else:
+                      print(f'Failed to get project data: {project_response.text}')
+                      return False
+
+              if not project_item_id:
+                  print(f'Still no project item ID for issue #{issue_number}')
+                  return False
+
+              # Now update the status
+              # First get the status field and option IDs
+              status_query = '''
+              query(\$owner: String!, \$number: Int!) {
+                  user(login: \$owner) {
+                      projectV2(number: \$number) {
+                          id
+                          fields(first: 20) {
+                              nodes {
+                                  ... on ProjectV2SingleSelectField {
+                                      id
+                                      name
+                                      options {
+                                          id
+                                          name
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+              '''
+
+              status_vars = {'owner': 'IgorGanapolsky', 'number': project_number}
+              status_response = requests.post(graphql_url, json={'query': status_query, 'variables': status_vars}, headers=headers)
+
+              if status_response.status_code != 200:
+                  print(f'Failed to get status field: {status_response.text}')
+                  return False
+
+              status_data = status_response.json()
+              project = status_data['data']['user']['projectV2']
+
+              # Find Status field and option
+              status_field_id = None
+              status_option_id = None
+
+              for field in project['fields']['nodes']:
+                  if field.get('name') == 'Status':
+                      status_field_id = field['id']
+                      for option in field['options']:
+                          if option['name'] == status_name:
+                              status_option_id = option['id']
+                              break
+                      break
+
+              if not status_field_id or not status_option_id:
+                  print(f'Status field or option \'{status_name}\' not found')
+                  return False
+
+              # Update the item status
+              update_mutation = '''
+              mutation(\$projectId: ID!, \$itemId: ID!, \$fieldId: ID!, \$optionId: String!) {
+                  updateProjectV2ItemFieldValue(input: {
+                      projectId: \$projectId
+                      itemId: \$itemId
+                      fieldId: \$fieldId
+                      value: {singleSelectOptionId: \$optionId}
+                  }) {
+                      projectV2Item {
+                          id
+                      }
+                  }
+              }
+              '''
+
+              update_vars = {
+                  'projectId': project['id'],
+                  'itemId': project_item_id,
+                  'fieldId': status_field_id,
+                  'optionId': status_option_id
+              }
+
+              update_response = requests.post(graphql_url, json={'query': update_mutation, 'variables': update_vars}, headers=headers)
+
+              if update_response.status_code == 200:
+                  print(f'✅ Moved issue #{issue_number} to \"{status_name}\"')
+                  return True
+              else:
+                  print(f'Failed to update issue status: {update_response.text}')
+                  return False
+
+          # Automation rules based on issue titles and labels
+          automation_rules = [
+              # Completed items
+              {'pattern': '✅ COMPLETED', 'status': 'Done'},
+              {'pattern': '✅', 'status': 'Done'},
+
+              # In Progress items
+              {'pattern': '🚀 n8n', 'status': 'In Progress'},
+              {'pattern': '🚀 Dagger', 'status': 'In Progress'},
+              {'pattern': 'in-progress', 'status': 'In Progress'},
+
+              # Backlog items
+              {'pattern': '🚀 Gamma', 'status': 'Backlog'},
+              {'pattern': '🚀 Meta', 'status': 'Backlog'},
+              {'pattern': 'planned', 'status': 'Backlog'},
+
+              # Todo items (default)
+              {'pattern': 'enhancement', 'status': 'Todo'},
+              {'pattern': '🔐 API', 'status': 'Todo'},
+              {'pattern': '🎯', 'status': 'Todo'}
+          ]
+
+          print('🤖 Starting automated Kanban board organization...')
+
+          # Get open issues
+          issues = repo.get_issues(state='open', sort='created', direction='desc')
+          moved_count = 0
+
+          for issue in list(issues)[:30]:  # Process last 30 issues
+              print(f'Processing issue #{issue.number}: {issue.title[:50]}...')
+
+              target_status = None
+
+              # Check title for patterns
+              for rule in automation_rules:
+                  if rule['pattern'] in issue.title:
+                      target_status = rule['status']
+                      print(f'  📍 Title pattern \"{rule[\"pattern\"]}\" → {target_status}')
+                      break
+
+              # If no title match, check labels
+              if not target_status:
+                  for label in issue.labels:
+                      for rule in automation_rules:
+                          if rule['pattern'] in label.name:
+                              target_status = rule['status']
+                              print(f'  🏷️ Label pattern \"{rule[\"pattern\"]}\" → {target_status}')
+                              break
+                      if target_status:
+                          break
+
+              # Default to Todo if no patterns match
+              if not target_status:
+                  target_status = 'Todo'
+                  print(f'  📝 No pattern match → {target_status}')
+
+              # Move issue to target status
+              if move_issue_to_status(issue.number, target_status):
+                  moved_count += 1
+              else:
+                  print(f'  ❌ Failed to move issue #{issue.number}')
+
+          print(f'\\n🎯 Kanban automation completed: {moved_count} issues organized')
+          "
+
+      - name: Generate Board Summary
+        run: |
+          echo "## 🤖 Automated Kanban Board Update" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Organization Rules Applied:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ **Done**: Issues with '✅ COMPLETED' or '✅' in title" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚧 **In Progress**: Issues with '🚀 n8n', '🚀 Dagger' in title" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 **Backlog**: Issues with '🚀 Gamma', '🚀 Meta' in title" >> $GITHUB_STEP_SUMMARY
+          echo "- 📝 **Todo**: All other issues (default)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Project Board Status:" >> $GITHUB_STEP_SUMMARY
+          echo "Your Kanban board has been automatically organized based on issue titles and labels." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**View Board:** [GitHub Project Board](https://github.com/users/IgorGanapolsky/projects/2/views/1)" >> $GITHUB_STEP_SUMMARY
