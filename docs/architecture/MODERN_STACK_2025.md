@@ -6,36 +6,7 @@
 
 Our platform leverages cutting-edge 2025 technologies for autonomous market intelligence and revenue generation:
 
-```mermaid
-graph TB
-    subgraph "AI Coordination Layer"
-        A[MCP Bridge] --> B[Claude 4 Sonnet Agents]
-        B --> C[Multi-Agent Orchestration]
-    end
-
-    subgraph "Workflow Automation"
-        D[n8n Workflow Engine] --> E[Business Process Automation]
-        E --> F[Revenue Workflows]
-        F --> G[Customer Lifecycle]
-    end
-
-    subgraph "Data Processing"
-        H[BMAD Engine] --> I[Batch Processing]
-        H --> J[Stream Processing]
-        I --> K[Market Intelligence]
-        J --> L[Real-time Insights]
-    end
-
-    subgraph "Revenue Infrastructure"
-        M[FastAPI Backend] --> N[Stripe Integration]
-        N --> O[Subscription Management]
-        O --> P[$300/day Target]
-    end
-
-    C --> D
-    K --> M
-    L --> M
-```
+![Complete Architecture 2025](../assets/modern-architecture-2025.png)
 
 ## 🤖 MCP (Model Context Protocol)
 
