@@ -4,16 +4,27 @@ The core of our SaaS Market Intelligence Platform is a sophisticated **agentic R
 
 ## 🏗️ **Architecture Overview**
 
-Our agentic RAG system is integrated with the modern 2025 stack (MCP + n8n + BMAD):
+Our agentic RAG system is integrated with the modern 2025 stack (MCP + n8n + BMAD + Dagger):
 
-![Modern Architecture 2025](../docs/assets/modern-architecture-2025.png)
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   MCP Agents    │───▶│  n8n Workflows  │───▶│ BMAD Processing │
+│ Claude Sonnet   │    │ Revenue Auto.   │    │ High-Volume     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  Agentic RAG    │    │ Stripe API      │    │ Dagger CI/CD    │
+│  Multi-Source   │    │ $300/day Rev    │    │ Deploy Auto     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
 ### RAG Engine Flow
 ```
 User Query → MCP Agent Coordination → Agentic RAG Engine →
 Multi-Source Retrieval → Cross-Source Synthesis →
 Confidence Scoring → Business Recommendations →
-n8n Workflow Triggers → Revenue Actions
+n8n Workflow Triggers → Dagger CI/CD → Revenue Actions
 ```
 
 ## 🎯 **Core Components**

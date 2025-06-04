@@ -19,7 +19,18 @@ Transform SaaS market research through **autonomous AI agents** that discover pa
 
 Our system uses cutting-edge automation and AI coordination:
 
-![Modern Architecture 2025](docs/assets/modern-architecture-2025.png)
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   MCP Agents    │───▶│  n8n Workflows  │───▶│ BMAD Processing │
+│ Claude Sonnet   │    │ Revenue Auto.   │    │ High-Volume     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  Agentic RAG    │    │ Stripe API      │    │ Dagger CI/CD    │
+│  Multi-Source   │    │ $300/day Rev    │    │ Deploy Auto     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
 ### Key Technologies
 
