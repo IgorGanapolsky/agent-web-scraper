@@ -5,13 +5,16 @@ summarizes key insights, and logs results into a Google Sheets spreadsheet.
 
 import json
 import logging
+import os
 import time
 from typing import Any
 
 import requests
 import serpapi
 from bs4 import BeautifulSoup
-from config import OPENAI_API_KEY, SERPAPI_KEY
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 from dotenv import load_dotenv
 from openai import OpenAI
 

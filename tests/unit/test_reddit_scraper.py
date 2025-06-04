@@ -5,17 +5,19 @@ from unittest.mock import MagicMock, patch
 
 import gspread
 
-from reddit_scraper import RedditScraper, main
+from app.scrapers.reddit_scraper import RedditScraper, main
 
 
 class TestRedditScraper(unittest.TestCase):
     """Test suite for the RedditScraper class."""
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
-    @patch("reddit_scraper.RedditScraper._init_google_sheets")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch(
+        "app.scrapers.app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet"
+    )
+    @patch("app.scrapers.app.scrapers.reddit_scraper.OpenAI")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.RedditScraper._init_google_sheets")
     def setUp(self, mock_init_sheets, mock_openai):
         """Set up the test environment."""
         # Mock OpenAI client
@@ -29,7 +31,7 @@ class TestRedditScraper(unittest.TestCase):
         self.scraper = RedditScraper("test search", max_results=2)
         mock_init_sheets.assert_called_once()
 
-    @patch("reddit_scraper.GoogleSearch")
+    @patch("app.scrapers.reddit_scraper.GoogleSearch")
     def test_search_reddit_urls(self, mock_google_search):
         """Test searching for Reddit URLs."""
         # Mock the GoogleSearch response
@@ -55,7 +57,7 @@ class TestRedditScraper(unittest.TestCase):
             results[0]["url"] == "https://www.reddit.com/r/test/comments/123/test_post"
         )
 
-    @patch("reddit_scraper.requests.get")
+    @patch("app.scrapers.reddit_scraper.requests.get")
     def test_scrape_reddit_post(self, mock_get):
         """Test scraping a Reddit post."""
         # Mock the response
@@ -83,7 +85,7 @@ class TestRedditScraper(unittest.TestCase):
         assert len(result["comments"]) == 2
         assert "Test comment" in result["comments"][0]
 
-    @patch("reddit_scraper.OpenAI")
+    @patch("app.scrapers.reddit_scraper.OpenAI")
     def test_summarize_pain_points(self, mock_openai):
         """Test summarizing pain points."""
         # Mock the OpenAI response
@@ -114,18 +116,18 @@ class TestRedditScraper(unittest.TestCase):
         # Verify the results
         assert result == "No comments found to analyze"
 
-    @patch("reddit_scraper.SERPAPI_KEY", "")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.SERPAPI_KEY", "")
+    @patch("app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
     def test_init_missing_serpapi_key(self):
         """Test initialization with missing SERPAPI_KEY."""
         with self.assertRaises(ValueError) as context:
             RedditScraper("test search")
         assert "SERPAPI_KEY environment variable is not set" in str(context.exception)
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.OPENAI_API_KEY", "")
+    @patch("app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
     def test_init_missing_openai_key(self):
         """Test initialization with missing OPENAI_API_KEY."""
         with self.assertRaises(ValueError) as context:
@@ -134,10 +136,10 @@ class TestRedditScraper(unittest.TestCase):
             context.exception
         )
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
+    @patch("app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.OpenAI")
     @patch("os.path.exists")
     def test_init_google_sheets_no_service_account(self, mock_exists, mock_openai):
         """Test Google Sheets initialization without service account file."""
@@ -145,13 +147,15 @@ class TestRedditScraper(unittest.TestCase):
         scraper = RedditScraper("test search")
         assert scraper.sheets_client is None
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
+    @patch("app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.OpenAI")
     @patch("os.path.exists")
-    @patch("reddit_scraper.ServiceAccountCredentials.from_json_keyfile_name")
-    @patch("reddit_scraper.gspread.authorize")
+    @patch(
+        "app.scrapers.reddit_scraper.ServiceAccountCredentials.from_json_keyfile_name"
+    )
+    @patch("app.scrapers.reddit_scraper.gspread.authorize")
     def test_init_google_sheets_success(
         self, mock_gspread, mock_creds, mock_exists, mock_openai
     ):
@@ -169,13 +173,15 @@ class TestRedditScraper(unittest.TestCase):
         assert scraper.sheets_client == mock_client
         mock_worksheet.append_row.assert_called_once()
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
+    @patch("app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.OpenAI")
     @patch("os.path.exists")
-    @patch("reddit_scraper.ServiceAccountCredentials.from_json_keyfile_name")
-    @patch("reddit_scraper.gspread.authorize")
+    @patch(
+        "app.scrapers.reddit_scraper.ServiceAccountCredentials.from_json_keyfile_name"
+    )
+    @patch("app.scrapers.reddit_scraper.gspread.authorize")
     def test_init_google_sheets_create_new_spreadsheet(
         self, mock_gspread, mock_creds, mock_exists, mock_openai
     ):
@@ -194,12 +200,14 @@ class TestRedditScraper(unittest.TestCase):
         mock_client.create.assert_called_once()
         mock_worksheet.append_row.assert_called_once()
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
+    @patch("app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch("app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.OpenAI")
     @patch("os.path.exists")
-    @patch("reddit_scraper.ServiceAccountCredentials.from_json_keyfile_name")
+    @patch(
+        "app.scrapers.reddit_scraper.ServiceAccountCredentials.from_json_keyfile_name"
+    )
     def test_init_google_sheets_exception(self, mock_creds, mock_exists, mock_openai):
         """Test Google Sheets initialization with exception."""
         mock_exists.return_value = True
@@ -208,7 +216,7 @@ class TestRedditScraper(unittest.TestCase):
         scraper = RedditScraper("test search")
         assert scraper.sheets_client is None
 
-    @patch("reddit_scraper.GoogleSearch")
+    @patch("app.scrapers.reddit_scraper.GoogleSearch")
     def test_search_reddit_urls_exception(self, mock_google_search):
         """Test search_reddit_urls with exception."""
         mock_google_search.side_effect = Exception("API error")
@@ -216,7 +224,7 @@ class TestRedditScraper(unittest.TestCase):
         results = self.scraper.search_reddit_urls()
         assert results == []
 
-    @patch("reddit_scraper.requests.get")
+    @patch("app.scrapers.reddit_scraper.requests.get")
     def test_scrape_reddit_post_exception(self, mock_get):
         """Test scraping a Reddit post with exception."""
         mock_get.side_effect = Exception("Network error")
@@ -225,7 +233,7 @@ class TestRedditScraper(unittest.TestCase):
         assert result["title"] == "Error"
         assert result["comments"] == []
 
-    @patch("reddit_scraper.OpenAI")
+    @patch("app.scrapers.reddit_scraper.OpenAI")
     def test_summarize_pain_points_exception(self, mock_openai):
         """Test summarizing pain points with OpenAI exception."""
         mock_client = MagicMock()
@@ -247,11 +255,13 @@ class TestRedditScraper(unittest.TestCase):
         result = self.scraper.log_to_spreadsheet(post_data, "Test summary")
         assert result is False
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
-    @patch("reddit_scraper.RedditScraper._init_google_sheets")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch(
+        "app.scrapers.app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet"
+    )
+    @patch("app.scrapers.app.scrapers.reddit_scraper.OpenAI")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.RedditScraper._init_google_sheets")
     def test_log_to_spreadsheet_success(self, mock_init_sheets, mock_openai):
         """Test successful logging to spreadsheet."""
         scraper = RedditScraper("test search")
@@ -264,11 +274,13 @@ class TestRedditScraper(unittest.TestCase):
         assert result is True
         mock_worksheet.append_row.assert_called_once()
 
-    @patch("reddit_scraper.SERPAPI_KEY", "test_key")
-    @patch("reddit_scraper.OPENAI_API_KEY", "test_key")
-    @patch("reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet")
-    @patch("reddit_scraper.OpenAI")
-    @patch("reddit_scraper.RedditScraper._init_google_sheets")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.SERPAPI_KEY", "test_key")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.OPENAI_API_KEY", "test_key")
+    @patch(
+        "app.scrapers.app.scrapers.reddit_scraper.SPREADSHEET_NAME", "test_spreadsheet"
+    )
+    @patch("app.scrapers.app.scrapers.reddit_scraper.OpenAI")
+    @patch("app.scrapers.app.scrapers.reddit_scraper.RedditScraper._init_google_sheets")
     def test_log_to_spreadsheet_exception(self, mock_init_sheets, mock_openai):
         """Test logging to spreadsheet with exception."""
         scraper = RedditScraper("test search")
@@ -281,11 +293,11 @@ class TestRedditScraper(unittest.TestCase):
         result = scraper.log_to_spreadsheet(post_data, "Test summary")
         assert result is False
 
-    @patch("reddit_scraper.RedditScraper.search_reddit_urls")
-    @patch("reddit_scraper.RedditScraper.scrape_reddit_post")
-    @patch("reddit_scraper.RedditScraper.summarize_pain_points")
-    @patch("reddit_scraper.RedditScraper.log_to_spreadsheet")
-    @patch("reddit_scraper.time.sleep")
+    @patch("app.scrapers.reddit_scraper.RedditScraper.search_reddit_urls")
+    @patch("app.scrapers.reddit_scraper.RedditScraper.scrape_reddit_post")
+    @patch("app.scrapers.reddit_scraper.RedditScraper.summarize_pain_points")
+    @patch("app.scrapers.reddit_scraper.RedditScraper.log_to_spreadsheet")
+    @patch("app.scrapers.reddit_scraper.time.sleep")
     def test_run_method(
         self, mock_sleep, mock_log, mock_summarize, mock_scrape, mock_search
     ):
@@ -305,7 +317,7 @@ class TestRedditScraper(unittest.TestCase):
         mock_sleep.assert_called_once_with(2)
 
     @patch("argparse.ArgumentParser.parse_args")
-    @patch("reddit_scraper.RedditScraper")
+    @patch("app.scrapers.reddit_scraper.RedditScraper")
     def test_main_function_success(self, mock_scraper_class, mock_parse_args):
         """Test main function success."""
         mock_args = MagicMock()
@@ -323,7 +335,7 @@ class TestRedditScraper(unittest.TestCase):
         assert result == 0
 
     @patch("argparse.ArgumentParser.parse_args")
-    @patch("reddit_scraper.RedditScraper")
+    @patch("app.scrapers.reddit_scraper.RedditScraper")
     def test_main_function_exception(self, mock_scraper_class, mock_parse_args):
         """Test main function with exception."""
         mock_args = MagicMock()
