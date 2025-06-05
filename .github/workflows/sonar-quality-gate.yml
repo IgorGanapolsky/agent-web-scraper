@@ -1,6 +1,11 @@
 name: SonarQube Quality Gate & TDD Coverage
 
 on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
     inputs:
       debug_mode:
@@ -8,12 +13,6 @@ on:
         required: false
         default: 'true'
         type: boolean
-  # Temporarily disabled auto-triggers while fixing Dagger issues
-  # push:
-  #   branches: [ main, develop ]
-  # pull_request:
-  #   branches: [ main ]
-  #   types: [opened, synchronize, reopened]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
