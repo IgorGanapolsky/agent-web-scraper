@@ -27,6 +27,7 @@ def append_daily_metrics_row(
 ) -> bool:
     """
     Append a daily metrics row to the Google Sheets tracking spreadsheet.
+    Falls back to CSV logging if Google Sheets unavailable.
 
     Args:
         query: The search query used today
@@ -38,6 +39,7 @@ def append_daily_metrics_row(
     Returns:
         bool: True if successful, False otherwise
     """
+    # Try Google Sheets first
     try:
         # Load credentials
         creds_path = os.getenv(
@@ -46,6 +48,12 @@ def append_daily_metrics_row(
 
         with open(creds_path) as f:
             creds_json = json.load(f)
+
+        # Check if this is the template file
+        if creds_json.get("project_id") == "your-project-id":
+            raise ValueError(
+                "Using template credentials - need real Google Sheets setup"
+            )
 
         scopes = [
             "https://www.googleapis.com/auth/spreadsheets",
@@ -90,14 +98,90 @@ def append_daily_metrics_row(
         # Append the row to the spreadsheet
         worksheet.append_row(row)
 
-        logger.info(f"Daily metrics logged: {leads} leads, query: {query}")
+        logger.info(
+            f"Daily metrics logged to Google Sheets: {leads} leads, query: {query}"
+        )
         print("✅ Daily metrics row successfully appended to Google Sheet.")
-
         return True
 
     except Exception as e:
-        logger.error(f"Error appending daily metrics row: {e}")
-        print(f"❌ Failed to append daily metrics: {e}")
+        logger.warning(f"Google Sheets failed: {e}, falling back to CSV")
+        print(f"⚠️  Google Sheets unavailable: {e}")
+
+        # Fallback to CSV logging
+        return _append_daily_metrics_csv(query, leads, replies, revenue, top_3)
+
+
+def _append_daily_metrics_csv(
+    query: str, leads: int, replies: int, revenue: float, top_3: list[dict[str, str]]
+) -> bool:
+    """Fallback CSV logging when Google Sheets unavailable"""
+
+    try:
+        import csv
+        from pathlib import Path
+
+        # Create data directory
+        data_dir = Path("data/metrics")
+        data_dir.mkdir(parents=True, exist_ok=True)
+
+        csv_file = data_dir / "reddit_metrics_daily.csv"
+
+        # Check if file exists to determine if we need headers
+        write_headers = not csv_file.exists()
+
+        # Prepare row data
+        today = datetime.now().strftime("%m/%d/%Y")
+
+        row = [today, query, leads, replies, revenue]
+
+        # Add pain point data (3 pain points x 3 fields each)
+        for i in range(3):
+            if i < len(top_3):
+                pain_point = top_3[i]
+                row.extend(
+                    [
+                        pain_point.get("pain_point_label", ""),
+                        pain_point.get("explanation", ""),
+                        pain_point.get("gsheet_link", ""),
+                    ]
+                )
+            else:
+                row.extend(["", "", ""])  # Empty fields for missing pain points
+
+        # Write to CSV
+        with open(csv_file, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+
+            # Write headers if new file
+            if write_headers:
+                headers = [
+                    "Date",
+                    "Query",
+                    "Leads",
+                    "Replies",
+                    "Revenue",
+                    "Pain_Point_1_Label",
+                    "Pain_Point_1_Explanation",
+                    "Pain_Point_1_Link",
+                    "Pain_Point_2_Label",
+                    "Pain_Point_2_Explanation",
+                    "Pain_Point_2_Link",
+                    "Pain_Point_3_Label",
+                    "Pain_Point_3_Explanation",
+                    "Pain_Point_3_Link",
+                ]
+                writer.writerow(headers)
+
+            writer.writerow(row)
+
+        logger.info(f"Daily metrics logged to CSV: {leads} leads, query: {query}")
+        print(f"✅ Metrics logged to fallback CSV: {csv_file}")
+        return True
+
+    except Exception as csv_error:
+        logger.error(f"CSV fallback also failed: {csv_error}")
+        print(f"❌ Both Google Sheets and CSV logging failed: {csv_error}")
         return False
 
 
