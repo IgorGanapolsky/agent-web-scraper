@@ -73,10 +73,6 @@ TESTEOF
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        args: >
-          -Dsonar.projectKey=IgorGanapolsky_agent-web-scraper
-          -Dsonar.organization=igorganapolsky
 
     - name: 📤 Upload Test Reports
       if: always()
@@ -87,27 +83,33 @@ TESTEOF
           coverage.xml
           test-results.xml
 
-    - name: 📱 Slack Notification
+    - name: 📱 Slack Notification to #claude
       if: always()
       run: |
         STATUS="${{ job.status }}"
         
         if [ "$STATUS" = "success" ]; then
-          MESSAGE="🎯 **SonarCloud Quality Gate PASSED**
+          MESSAGE="🎯 **SonarCloud Quality Gate PASSED** - posted by Claude Code
 
 ✅ Code Quality: Enterprise Grade
 ✅ Security: No Issues  
 ✅ Coverage: Analyzed
 ✅ Maintainability: High
 
-🚀 Ready for production!"
+🚀 Ready for production deployment!
+Repository: agent-web-scraper
+Commit: ${{ github.sha }}
+#claude #sonarcloud #quality"
         else
-          MESSAGE="❌ **SonarCloud Quality Gate FAILED**
+          MESSAGE="❌ **SonarCloud Quality Gate FAILED** - posted by Claude Code
 
 ⚠️ Issues detected in code quality
 🔧 Review SonarCloud dashboard for details
+📊 Action required before merge
 
-📊 Action required before merge"
+Repository: agent-web-scraper  
+Commit: ${{ github.sha }}
+#claude #sonarcloud #failed"
         fi
 
         curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
