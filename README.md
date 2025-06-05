@@ -3,6 +3,9 @@
 **Autonomous revenue generation through AI-powered market intelligence**
 
 [![CI](https://github.com/IgorGanapolsky/agent-web-scraper/workflows/CI/badge.svg)](https://github.com/IgorGanapolsky/agent-web-scraper/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=IgorGanapolsky_agent-web-scraper&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=IgorGanapolsky_agent-web-scraper)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=IgorGanapolsky_agent-web-scraper&metric=coverage)](https://sonarcloud.io/summary/new_code?id=IgorGanapolsky_agent-web-scraper)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=IgorGanapolsky_agent-web-scraper&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=IgorGanapolsky_agent-web-scraper)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Revenue Target](https://img.shields.io/badge/revenue-$300%2Fday-green.svg)](docs/business-model.md)
 
