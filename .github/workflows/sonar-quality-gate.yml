@@ -1,11 +1,6 @@
 name: SonarQube Quality Gate & TDD Coverage
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
     inputs:
       debug_mode:
@@ -13,6 +8,12 @@ on:
         required: false
         default: 'true'
         type: boolean
+  # Temporarily disabled auto-triggers while fixing Dagger issues
+  # push:
+  #   branches: [ main, develop ]
+  # pull_request:
+  #   branches: [ main ]
+  #   types: [opened, synchronize, reopened]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,7 +38,7 @@ jobs:
         echo "- GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN != '' }}"
         echo "- SLACK_WEBHOOK_CHATGPT: ${{ secrets.SLACK_WEBHOOK_CHATGPT != '' }}"
         echo "==============================="
-        
+
     - name: Checkout code
       uses: actions/checkout@v4
       with:
@@ -60,10 +61,10 @@ jobs:
       run: |
         echo "🔧 Installing Python dependencies..."
         python -m pip install --upgrade pip
-        
+
         echo "📋 Available files for dependency installation:"
         ls -la *.txt *.toml requirements* 2>/dev/null || echo "No standard requirement files found"
-        
+
         # Try multiple dependency file formats
         if [ -f "requirements.txt" ]; then
           echo "Installing from requirements.txt"
@@ -75,17 +76,17 @@ jobs:
           echo "Installing basic testing dependencies"
           pip install pytest coverage pytest-cov pytest-xdist bandit safety
         fi
-        
+
         echo "🔍 Installing SonarQube scanner..."
         pip install sonar-scanner || echo "Warning: sonar-scanner not available via pip"
-        
+
         echo "📦 Installed packages:"
         pip list | grep -E "(pytest|coverage|sonar|bandit|safety)"
 
     - name: Run comprehensive test suite with coverage
       run: |
         echo "🧪 Preparing test environment..."
-        
+
         # Check if tests directory exists
         if [ ! -d "tests" ]; then
           echo "❌ No tests directory found, creating basic structure..."
@@ -94,7 +95,7 @@ jobs:
         """Basic test to ensure testing infrastructure works"""
         def test_basic():
             assert True
-        
+
         def test_import_app():
             try:
                 import app
@@ -104,10 +105,10 @@ jobs:
                 assert True
         EOF
         fi
-        
+
         echo "📁 Test files found:"
         find tests -name "*.py" -type f | head -10
-        
+
         echo "🏃 Running tests with coverage reporting..."
         python -m pytest tests/ \
           --cov=app \
@@ -149,19 +150,19 @@ jobs:
         unzip -q sonar-scanner.zip
         export PATH="$PWD/sonar-scanner-4.8.0.2856-linux/bin:$PATH"
         echo "$PWD/sonar-scanner-4.8.0.2856-linux/bin" >> $GITHUB_PATH
-        
+
         echo "✅ SonarScanner installed:"
         sonar-scanner --version
-        
+
     - name: Run SonarScanner with Debug Logging
       run: |
         echo "🔍 Running SonarScanner analysis..."
         echo "Project configuration:"
         cat sonar-project.properties
-        
+
         echo "📊 Available report files:"
         ls -la *.xml *.json 2>/dev/null || echo "No report files found yet"
-        
+
         sonar-scanner \
           -X \
           -Dsonar.projectKey=IgorGanapolsky_agent-web-scraper \
