@@ -100,8 +100,6 @@ EOF
       timeout-minutes: 5
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        scanMetadataReportFile: .sonarqube/report-task.txt
 
     - name: 📤 Upload Test Reports
       if: always()
@@ -111,7 +109,6 @@ EOF
         path: |
           coverage.xml
           test-results.xml
-          .sonarqube/
 
     - name: 📱 Slack Notification
       if: always()
