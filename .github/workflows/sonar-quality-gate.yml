@@ -73,6 +73,10 @@ TESTEOF
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=IgorGanapolsky_agent-web-scraper
+          -Dsonar.organization=AY_oj9ii6O2QZ2LQhXQv
 
     - name: 📤 Upload Test Reports
       if: always()
