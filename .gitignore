@@ -273,3 +273,16 @@ revenue_reports.json
 !app/data/templates/
 !tests/fixtures/
 !docs/examples/
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+secrets/
+.DS_Store
+.idea/
+venv/
+.mypy_cache/
+__pycache__/
+*.pyc
+.claude/settings.local.json
