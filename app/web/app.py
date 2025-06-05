@@ -8,9 +8,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
+from app.api.auth import router as auth_router
 from app.api.stripe_webhooks import router as stripe_router
 from app.core.cost_tracker import CostTracker, RevenueEvent
 from app.services.payment_service import PaymentService
+from app.web.customer_dashboard import router as dashboard_router
 from app.web.stripe_funnel import router as funnel_router
 
 app = FastAPI(
@@ -36,6 +38,8 @@ payment_service = PaymentService(test_mode=True)
 cost_tracker = CostTracker(test_mode=True)
 
 # Include routers
+app.include_router(auth_router, prefix="", tags=["authentication"])
+app.include_router(dashboard_router, prefix="", tags=["customer-dashboard"])
 app.include_router(funnel_router, prefix="", tags=["stripe-funnel"])
 app.include_router(stripe_router, prefix="", tags=["stripe-webhooks"])
 
