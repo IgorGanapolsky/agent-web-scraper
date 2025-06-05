@@ -54,7 +54,7 @@ jobs:
 
         # Create basic test if none exist
         if [ ! -f "tests/test_basic.py" ]; then
-          cat > tests/test_basic.py << 'EOF'
+          cat > tests/test_basic.py << EOF
 def test_basic():
     assert True
 
