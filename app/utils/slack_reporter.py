@@ -6,8 +6,7 @@ Sends daily progress reports to #chatgpt channel at 6PM EST
 import os
 from datetime import datetime
 
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
+import requests
 
 from app.config.logging import get_logger
 from app.core.cost_tracker import CostTracker
@@ -16,17 +15,36 @@ from app.utils.github_tracker import GitHubTracker
 logger = get_logger(__name__)
 
 
+def post_to_slack(message: str):
+    """Post message to Slack using webhook"""
+    webhook_url = os.getenv("SLACK_WEBHOOK_CHATGPT")
+    if webhook_url:
+        try:
+            response = requests.post(webhook_url, json={"text": message})
+            if response.status_code == 200:
+                logger.info(f"✅ Posted to Slack: {message[:50]}...")
+                return True
+            else:
+                logger.error(f"❌ Failed to post to Slack: {response.status_code}")
+                return False
+        except Exception as e:
+            logger.error(f"❌ Slack posting error: {e}")
+            return False
+    else:
+        logger.warning("⚠️ SLACK_WEBHOOK_CHATGPT not set, skipping Slack notification")
+        return False
+
+
 class SlackReporter:
     """Daily Slack reporting for MCP system"""
 
     def __init__(self):
-        self.slack_token = os.getenv("SLACK_BOT_TOKEN")
+        self.webhook_url = os.getenv("SLACK_WEBHOOK_CHATGPT")
         self.channel = "#chatgpt"
 
-        if not self.slack_token:
-            raise ValueError("SLACK_BOT_TOKEN environment variable required")
+        if not self.webhook_url:
+            raise ValueError("SLACK_WEBHOOK_CHATGPT environment variable required")
 
-        self.client = WebClient(token=self.slack_token)
         self.github_tracker = GitHubTracker()
         self.cost_tracker = CostTracker(test_mode=False)
 
@@ -195,6 +213,72 @@ class SlackReporter:
             "text": f"Daily MCP Report - {date}",  # Fallback text
         }
 
+    def format_text_message(self, metrics: dict) -> str:
+        """Format metrics into a simple text message for webhook"""
+
+        date = metrics.get("date", datetime.now().strftime("%Y-%m-%d"))
+        commits = metrics.get("commits", {})
+        revenue = metrics.get("revenue", {})
+        repo = metrics.get("repository", {})
+        issues = metrics.get("issues", {})
+
+        # Determine status emoji
+        status_emoji = "🟢" if revenue.get("target_met", False) else "🟡"
+        if commits.get("count", 0) == 0:
+            status_emoji = "🔴"
+
+        # Build message text
+        message = f"{status_emoji} **Daily MCP Report - {date}**\n\n"
+
+        # Development section
+        message += "📝 **Development**\n"
+        message += f"• {commits.get('count', 0)} commits today\n"
+        message += f"• {commits.get('total_files_changed', 0)} files changed\n"
+        message += f"• {repo.get('open_issues', 0)} open issues\n\n"
+
+        # Revenue section
+        revenue_emoji = "💰" if revenue.get("target_met", False) else "⚠️"
+        message += f"{revenue_emoji} **Revenue**\n"
+        message += f"• Daily: ${revenue.get('daily', 0):.2f} / ${revenue.get('target_amount', 300):.2f}\n"
+        message += f"• MRR: ${revenue.get('mrr', 0):.2f}\n"
+        message += f"• Customers: {revenue.get('customer_count', 0)}\n\n"
+
+        # Issues section
+        message += "🎯 **Issues**\n"
+        message += f"• Opened: {issues.get('opened_today', 0)}\n"
+        message += f"• Closed: {issues.get('closed_today', 0)}\n\n"
+
+        # Recent commits
+        if commits.get("details"):
+            message += "📋 **Recent Commits**\n"
+            for commit in commits["details"][:2]:  # Top 2
+                message += f"• `{commit.get('sha', '')[:8]}` {commit.get('message', '')[:50]}...\n"
+            message += "\n"
+
+        # Action items
+        actions = []
+        if commits.get("count", 0) == 0:
+            actions.append("❗ No commits today - check development pipeline")
+        if not revenue.get("target_met", False):
+            actions.append(
+                f"💵 Revenue target missed by ${revenue.get('target_amount', 300) - revenue.get('daily', 0):.2f}"
+            )
+        if repo.get("open_issues", 0) > 10:
+            actions.append(
+                f"📋 High issue count ({repo.get('open_issues', 0)}) - consider triage"
+            )
+
+        if actions:
+            message += "🚨 **Action Items**\n"
+            for action in actions[:3]:  # Max 3 actions
+                message += f"• {action}\n"
+            message += "\n"
+
+        # Footer
+        message += f"🤖 Generated at {datetime.now().strftime('%H:%M')} EST | <https://github.com/IgorGanapolsky/agent-web-scraper|View Repository>"
+
+        return message
+
     def send_daily_report(self) -> dict:
         """Send daily report to Slack"""
 
@@ -206,30 +290,22 @@ class SlackReporter:
                 logger.error("No metrics available for daily report")
                 return {"success": False, "error": "No metrics available"}
 
-            # Format message
-            message = self.format_slack_message(metrics)
+            # Format message as simple text for webhook
+            message_text = self.format_text_message(metrics)
 
-            # Send to Slack
-            response = self.client.chat_postMessage(**message)
+            # Send to Slack using webhook
+            success = post_to_slack(message_text)
 
-            if response["ok"]:
+            if success:
                 logger.info(f"Daily report sent to {self.channel}")
                 return {
                     "success": True,
-                    "timestamp": response["ts"],
-                    "channel": response["channel"],
                     "metrics": metrics,
                 }
             else:
-                logger.error(f"Failed to send Slack message: {response}")
-                return {"success": False, "error": "Slack API error"}
+                logger.error("Failed to send Slack message via webhook")
+                return {"success": False, "error": "Webhook posting failed"}
 
-        except SlackApiError as e:
-            logger.error(f"Slack API error: {e.response['error']}")
-            return {
-                "success": False,
-                "error": f"Slack API error: {e.response['error']}",
-            }
         except Exception as e:
             logger.error(f"Failed to send daily report: {e}")
             return {"success": False, "error": str(e)}
@@ -238,23 +314,11 @@ class SlackReporter:
         """Send test message to verify Slack integration"""
 
         try:
-            test_message = {
-                "channel": self.channel,
-                "text": "🧪 MCP Slack Integration Test",
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"🧪 *MCP Slack Integration Test*\n\nTest message sent at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} EST",
-                        },
-                    }
-                ],
-            }
+            test_message = f"🧪 **MCP Slack Integration Test**\n\nTest message sent at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} EST\n\n🤖 Webhook integration working correctly!"
 
-            response = self.client.chat_postMessage(**test_message)
+            success = post_to_slack(test_message)
 
-            if response["ok"]:
+            if success:
                 logger.info("Test message sent successfully")
                 return {"success": True, "message": "Test message sent"}
             else:
@@ -265,25 +329,25 @@ class SlackReporter:
             return {"success": False, "error": str(e)}
 
     def get_channel_info(self) -> dict:
-        """Get information about the target channel"""
+        """Get information about the webhook configuration"""
 
         try:
-            # Try to get channel info
-            response = self.client.conversations_info(channel=self.channel)
-
-            if response["ok"]:
-                channel_info = response["channel"]
+            if self.webhook_url:
                 return {
                     "success": True,
-                    "channel_id": channel_info["id"],
-                    "channel_name": channel_info["name"],
-                    "is_member": channel_info.get("is_member", False),
+                    "channel": self.channel,
+                    "webhook_configured": True,
+                    "webhook_url": (
+                        self.webhook_url[:50] + "..."
+                        if len(self.webhook_url) > 50
+                        else self.webhook_url
+                    ),
                 }
             else:
-                return {"success": False, "error": "Channel not found"}
+                return {"success": False, "error": "Webhook URL not configured"}
 
         except Exception as e:
-            logger.error(f"Failed to get channel info: {e}")
+            logger.error(f"Failed to get webhook info: {e}")
             return {"success": False, "error": str(e)}
 
 
