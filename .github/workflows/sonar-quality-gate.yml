@@ -1,4 +1,4 @@
-name: SonarQube Quality Gate & TDD Coverage
+name: 🎯 SonarQube 80% TDD Coverage & Security Analysis
 
 on:
   push:
