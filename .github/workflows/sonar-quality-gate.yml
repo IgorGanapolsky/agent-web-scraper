@@ -76,7 +76,7 @@ TESTEOF
       with:
         args: >
           -Dsonar.projectKey=IgorGanapolsky_agent-web-scraper
-          -Dsonar.organization=AY_oj9ii6O2QZ2LQhXQv
+          -Dsonar.organization=igorganapolsky
 
     - name: 📤 Upload Test Reports
       if: always()
