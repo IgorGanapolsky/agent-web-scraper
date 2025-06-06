@@ -20,7 +20,7 @@ def post_to_slack(message: str):
     webhook_url = os.getenv("SLACK_WEBHOOK_CHATGPT")
     if webhook_url:
         try:
-            response = requests.post(webhook_url, json={"text": message})
+            response = requests.post(webhook_url, json={"text": message}, timeout=10)
             if response.status_code == 200:
                 logger.info(f"✅ Posted to Slack: {message[:50]}...")
                 return True
