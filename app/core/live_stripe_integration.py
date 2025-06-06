@@ -92,7 +92,7 @@ class LiveStripeIntegration:
         email: str,
         name: str,
         payment_method_id: str,
-        metadata: dict[str, Any] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> LivePaymentResult:
         """
         Create live customer with 3-day trial requiring payment method upfront.
@@ -316,6 +316,23 @@ class LiveStripeIntegration:
         # Store email trigger event
         await self._store_email_trigger_persistent(email_payload)
 
+    async def _trigger_dashboard_update(self, customer_id: str, amount: float):
+        """Trigger real-time dashboard update for revenue"""
+
+        dashboard_payload = {
+            "event_type": "payment_received",
+            "customer_id": customer_id,
+            "amount": amount,
+            "timestamp": datetime.now().isoformat(),
+            "revenue_tracking": await self._get_daily_progress(),
+        }
+
+        # This would trigger your dashboard update endpoint
+        logger.info(f"📊 Dashboard update triggered for ${amount} from {customer_id}")
+
+        # Store dashboard update event
+        await self._store_persistent_local(dashboard_payload, "dashboard_updates")
+
     async def _update_daily_revenue_tracking(self, amount: float):
         """Update daily revenue tracking for $600/day target"""
 
@@ -447,7 +464,7 @@ class LiveStripeIntegration:
             try:
                 with open(category_file) as f:
                     existing_data = json.load(f)
-            except:
+            except (FileNotFoundError, json.JSONDecodeError):
                 existing_data = []
 
         # Add new data
