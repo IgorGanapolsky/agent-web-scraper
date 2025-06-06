@@ -12,6 +12,7 @@ from rich.table import Table
 
 from app.config.safe_logger import get_structured_logger
 from app.observability import health_check
+from security import safe_command
 
 app = typer.Typer(
     name="agent-scraper",
@@ -84,7 +85,7 @@ def setup(
     if setup_script.exists():
         import subprocess
 
-        result = subprocess.run([sys.executable, str(setup_script)], shell=False)
+        result = safe_command.run(subprocess.run, [sys.executable, str(setup_script)], shell=False)
         if result.returncode == 0:
             console.print("[green]✅ Setup completed successfully![/green]")
         else:
