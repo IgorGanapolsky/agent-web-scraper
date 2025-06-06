@@ -12,6 +12,7 @@ import stripe
 from pydantic import BaseModel
 
 from app.config.logging import get_logger
+from app.config.settings import settings
 from app.core.cost_tracker import CostTracker
 from app.models.customer import Customer, Subscription
 from app.services.api_key_service import APIKeyService
@@ -88,22 +89,29 @@ class PaymentService:
         ),
     }
 
-    # Trial configuration
-    TRIAL_DAYS = 14
+    # Trial configuration (3 days for aggressive conversion)
+    TRIAL_DAYS = 3
 
     def __init__(self, test_mode: bool = False):
-        """Initialize payment service"""
+        """Initialize payment service with live mode support"""
         self.test_mode = test_mode
+        self.live_mode = settings.stripe_live_mode and not test_mode
         self.cost_tracker = CostTracker()
         self.api_key_service = APIKeyService()
 
         if not test_mode:
-            stripe.api_key = os.getenv("STRIPE_API_KEY")
+            stripe.api_key = settings.stripe_api_key or os.getenv("STRIPE_API_KEY")
             if not stripe.api_key:
-                raise ValueError("STRIPE_API_KEY not configured")
+                raise ValueError("STRIPE_API_KEY not configured for live payments")
 
             # Set webhook endpoint secret
-            self.webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+            self.webhook_secret = settings.stripe_webhook_secret or os.getenv(
+                "STRIPE_WEBHOOK_SECRET"
+            )
+
+            # Log mode for monitoring
+            mode = "LIVE" if self.live_mode else "TEST"
+            logger.info(f"Stripe payment service initialized in {mode} mode")
 
     def create_checkout_session(
         self,
@@ -111,6 +119,7 @@ class PaymentService:
         interval: str = "month",
         customer_email: Optional[str] = None,
         trial: bool = True,
+        require_payment_method: bool = True,
     ) -> dict:
         """Create Stripe checkout session for subscription."""
         if tier not in self.TIERS:
@@ -142,12 +151,19 @@ class PaymentService:
             if customer_email:
                 session_params["customer_email"] = customer_email
 
-            # Add trial period
-            if trial and tier != "basic":  # No trial for basic tier
+            # Add trial period with required payment method
+            if trial:
                 session_params["subscription_data"] = {
                     "trial_period_days": self.TRIAL_DAYS,
                     "metadata": {"tier": tier, "trial": "true"},
                 }
+
+                # Require payment method for trial (setup_future_usage)
+                if require_payment_method:
+                    session_params["payment_method_collection"] = "always"
+                    session_params["subscription_data"]["trial_settings"] = {
+                        "end_behavior": {"missing_payment_method": "cancel"}
+                    }
 
             # Add customer portal for managing subscriptions
             session_params["billing_address_collection"] = "required"
@@ -163,8 +179,17 @@ class PaymentService:
 
             session = stripe.checkout.Session.create(**session_params)
 
-            logger.info(f"Created checkout session for {tier} {interval} plan")
-            return {"id": session.id, "url": session.url, "metadata": session.metadata}
+            # Log for revenue tracking
+            mode = "LIVE" if self.live_mode else "TEST"
+            logger.info(f"Created {mode} checkout session for {tier} {interval} plan")
+
+            return {
+                "id": session.id,
+                "url": session.url,
+                "metadata": session.metadata,
+                "mode": mode,
+                "trial_days": self.TRIAL_DAYS if trial else 0,
+            }
 
         except stripe.error.StripeError as e:
             logger.error(f"Stripe error creating checkout session: {e!s}")

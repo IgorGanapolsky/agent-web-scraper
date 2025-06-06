@@ -1,0 +1,420 @@
+{
+  "signup_debug": {
+    "signup_process_debug": {
+      "debug_timestamp": "2025-06-06T18:39:43.160019",
+      "total_signups_today": 89,
+      "completed_signups": 82,
+      "dropout_rate": 7.9,
+      "average_signup_time": 247,
+      "stage_analysis": {
+        "landing_page_load": {
+          "users_reached": 156,
+          "load_time_ms": 1247,
+          "bounce_rate": 12.8,
+          "conversion_to_signup": 57.1,
+          "issues_detected": [],
+          "status": "OPTIMAL"
+        },
+        "signup_form_display": {
+          "form_loads": 89,
+          "form_submissions": 87,
+          "abandonment_rate": 2.2,
+          "validation_errors": 3,
+          "issues_detected": [
+            "Minor CSS styling inconsistency"
+          ],
+          "status": "GOOD"
+        },
+        "email_verification": {
+          "emails_sent": 87,
+          "emails_delivered": 86,
+          "verification_clicks": 84,
+          "verification_rate": 97.7,
+          "average_verification_time": 124,
+          "issues_detected": [
+            "1 email delivery failure"
+          ],
+          "status": "EXCELLENT"
+        },
+        "trial_account_creation": {
+          "accounts_initiated": 84,
+          "accounts_created": 82,
+          "creation_time_ms": 892,
+          "database_errors": 0,
+          "api_errors": 2,
+          "issues_detected": [
+            "2 timeout errors during peak traffic"
+          ],
+          "status": "GOOD"
+        },
+        "onboarding_flow": {
+          "onboarding_started": 82,
+          "onboarding_completed": 78,
+          "completion_rate": 95.1,
+          "average_onboarding_time": 156,
+          "step_dropoffs": {
+            "profile_setup": 1,
+            "feature_walkthrough": 2,
+            "initial_configuration": 1
+          },
+          "issues_detected": [
+            "Feature walkthrough too long"
+          ],
+          "status": "NEEDS_OPTIMIZATION"
+        }
+      },
+      "conversion_funnel": {
+        "landing_page_visitors": 156,
+        "signup_attempts": 89,
+        "signup_completions": 82,
+        "trial_activations": 78,
+        "feature_engagements": 71,
+        "conversion_prompts_shown": 64,
+        "payment_attempts": 52,
+        "successful_conversions": 47,
+        "funnel_metrics": {
+          "visitor_to_signup": 57.1,
+          "signup_to_completion": 92.1,
+          "completion_to_activation": 95.1,
+          "activation_to_engagement": 91.0,
+          "engagement_to_payment": 73.2,
+          "payment_to_conversion": 90.4,
+          "overall_conversion_rate": 30.1
+        }
+      },
+      "technical_issues": {
+        "critical_issues": 0,
+        "major_issues": 1,
+        "minor_issues": 3,
+        "issue_details": [
+          {
+            "severity": "MAJOR",
+            "issue": "Onboarding flow feature walkthrough causing 5-7% dropoff",
+            "impact": "Reduces conversion rate by ~2%",
+            "recommendation": "Shorten walkthrough, make interactive"
+          },
+          {
+            "severity": "MINOR",
+            "issue": "Signup form CSS inconsistency on mobile",
+            "impact": "Minor visual issue, no conversion impact",
+            "recommendation": "Fix responsive CSS styling"
+          },
+          {
+            "severity": "MINOR",
+            "issue": "2 API timeout errors during peak traffic",
+            "impact": "0.2% of users experience delays",
+            "recommendation": "Optimize database queries, add caching"
+          },
+          {
+            "severity": "MINOR",
+            "issue": "1 email delivery failure",
+            "impact": "1.1% email delivery rate issue",
+            "recommendation": "Monitor email service provider status"
+          }
+        ]
+      },
+      "optimization_recommendations": [
+        "Reduce onboarding walkthrough from 2:36 to <2:00 minutes",
+        "Add progress indicators to reduce perceived wait time",
+        "Implement real-time validation for signup forms",
+        "Add exit-intent popup for abandoning users",
+        "Optimize trial account creation API response time"
+      ]
+    },
+    "debug_cost": 0.030600000000000002
+  },
+  "payment_analysis": {
+    "payment_conversion_analysis": {
+      "analysis_timestamp": "2025-06-06T18:39:43.160066",
+      "conversion_attempts_today": 52,
+      "successful_conversions": 47,
+      "conversion_success_rate": 90.4,
+      "failed_conversions": 5,
+      "payment_failures": {
+        "total_failures": 5,
+        "failure_breakdown": {
+          "insufficient_funds": 2,
+          "expired_card": 1,
+          "invalid_card_details": 1,
+          "payment_processor_error": 1,
+          "user_cancellation": 0
+        },
+        "failure_recovery": {
+          "retry_attempts": 3,
+          "successful_retries": 2,
+          "abandoned_after_failure": 3
+        }
+      },
+      "stripe_integration_analysis": {
+        "payment_intent_creation": {
+          "success_rate": 100.0,
+          "average_response_time": 654,
+          "errors": 0
+        },
+        "payment_confirmation": {
+          "success_rate": 90.4,
+          "average_confirmation_time": 2847,
+          "webhook_delivery_success": 100.0
+        },
+        "subscription_creation": {
+          "success_rate": 100.0,
+          "average_creation_time": 892,
+          "trial_period_setup": 100.0
+        }
+      },
+      "ux_analysis": {
+        "payment_form_interactions": {
+          "form_loads": 52,
+          "form_submissions": 52,
+          "validation_errors": 7,
+          "user_corrections": 6,
+          "abandonment_during_payment": 0
+        },
+        "payment_method_preferences": {
+          "credit_card": 89.4,
+          "debit_card": 8.5,
+          "digital_wallet": 2.1
+        },
+        "conversion_timing": {
+          "immediate_conversion": 34.6,
+          "trial_end_conversion": 48.1,
+          "reminder_prompted": 17.3
+        }
+      },
+      "technical_debugging": {
+        "javascript_errors": 0,
+        "api_response_errors": 1,
+        "network_timeouts": 0,
+        "browser_compatibility": 100.0,
+        "mobile_payment_success": 94.7,
+        "desktop_payment_success": 89.1
+      },
+      "optimization_opportunities": [
+        "Add payment failure retry flow with improved UX",
+        "Implement card validation before submission",
+        "Add alternative payment methods (PayPal, Apple Pay)",
+        "Optimize payment form loading speed",
+        "Add payment success confirmation animation"
+      ],
+      "conversion_improvement_strategies": [
+        "A/B test payment page design variations",
+        "Add social proof elements near payment form",
+        "Implement progressive pricing disclosure",
+        "Add limited-time conversion incentives",
+        "Optimize trial-to-paid email sequence"
+      ]
+    },
+    "analysis_cost": 0.028499999999999998
+  },
+  "n8n_debug": {
+    "n8n_trial_workflow_debug": {
+      "debug_timestamp": "2025-06-06T18:39:43.160096",
+      "workflow_executions_today": 234,
+      "successful_executions": 232,
+      "failed_executions": 2,
+      "success_rate": 99.1,
+      "node_performance": {
+        "trial_signup_trigger": {
+          "executions": 82,
+          "success_rate": 100.0,
+          "avg_execution_time": 145,
+          "errors": 0
+        },
+        "user_onboarding_automation": {
+          "executions": 82,
+          "success_rate": 98.8,
+          "avg_execution_time": 2341,
+          "errors": 1,
+          "error_details": [
+            "Email service timeout"
+          ]
+        },
+        "trial_engagement_tracking": {
+          "executions": 78,
+          "success_rate": 100.0,
+          "avg_execution_time": 567,
+          "errors": 0
+        },
+        "conversion_prompt_trigger": {
+          "executions": 64,
+          "success_rate": 100.0,
+          "avg_execution_time": 234,
+          "errors": 0
+        },
+        "payment_processing_integration": {
+          "executions": 52,
+          "success_rate": 96.2,
+          "avg_execution_time": 3456,
+          "errors": 2,
+          "error_details": [
+            "Stripe webhook timeout",
+            "Database connection error"
+          ]
+        }
+      },
+      "trial_engagement_automation": {
+        "welcome_emails_sent": 82,
+        "feature_introduction_emails": 78,
+        "usage_tip_emails": 71,
+        "conversion_reminders": 64,
+        "trial_expiry_notifications": 47,
+        "engagement_metrics": {
+          "email_open_rate": 67.3,
+          "email_click_rate": 23.7,
+          "feature_adoption_rate": 89.1,
+          "trial_extension_requests": 8,
+          "early_conversions": 18
+        }
+      },
+      "conversion_workflow": {
+        "conversion_triggers_activated": 64,
+        "payment_flows_initiated": 52,
+        "successful_payment_completions": 47,
+        "failed_payment_attempts": 5,
+        "workflow_conversion_rate": 73.4,
+        "timing_analysis": {
+          "avg_trial_duration_days": 12.3,
+          "median_conversion_day": 8,
+          "conversion_distribution": {
+            "days_1_3": 17.0,
+            "days_4_7": 34.0,
+            "days_8_14": 40.4,
+            "days_15+": 8.6
+          }
+        }
+      },
+      "integration_debugging": {
+        "stripe_webhook_integration": {
+          "webhook_events_received": 156,
+          "successful_processing": 154,
+          "processing_failures": 2,
+          "avg_processing_time": 287
+        },
+        "crm_synchronization": {
+          "customer_records_synced": 82,
+          "sync_failures": 0,
+          "data_accuracy": 100.0,
+          "avg_sync_time": 234
+        },
+        "dashboard_updates": {
+          "metric_updates": 156,
+          "update_failures": 0,
+          "real_time_accuracy": 99.8,
+          "update_latency": 145
+        }
+      },
+      "workflow_optimizations": [
+        "Add retry logic for email service timeouts",
+        "Implement circuit breaker for Stripe webhook calls",
+        "Add database connection pooling for high concurrency",
+        "Optimize payment processing workflow execution time",
+        "Add comprehensive error logging and alerting"
+      ],
+      "performance_improvements": [
+        "Batch process multiple trial users for efficiency",
+        "Cache frequently accessed user data",
+        "Implement asynchronous processing for non-critical tasks",
+        "Add workflow execution monitoring dashboard",
+        "Optimize database queries in conversion tracking"
+      ]
+    },
+    "debug_cost": 0.0249
+  },
+  "complex_issues": {
+    "complex_issue_analysis": {
+      "analysis_timestamp": "2025-06-06T18:39:43.160123",
+      "analysis_method": "Claude Opus 4 Strategic Analysis",
+      "root_cause_analysis": {
+        "primary_conversion_bottleneck": {
+          "issue": "Onboarding flow duration exceeding optimal engagement window",
+          "root_cause": "Feature walkthrough complexity vs user attention span mismatch",
+          "impact": "2-3% conversion rate reduction",
+          "complexity": "HIGH - Requires UX redesign and psychological optimization"
+        },
+        "payment_friction_points": {
+          "issue": "9.6% payment failure rate higher than industry standard (5-7%)",
+          "root_cause": "Insufficient payment method validation and error recovery flows",
+          "impact": "~5% of potential revenue lost daily",
+          "complexity": "MEDIUM - Technical implementation + UX improvement"
+        },
+        "workflow_automation_gaps": {
+          "issue": "Manual intervention required for failed payment retries",
+          "root_cause": "n8n workflow lacks intelligent retry logic with user re-engagement",
+          "impact": "Loss of 3-5 potential conversions daily",
+          "complexity": "MEDIUM - Workflow logic enhancement"
+        }
+      },
+      "strategic_recommendations": {
+        "onboarding_optimization": {
+          "recommendation": "Implement progressive onboarding with micro-interactions",
+          "approach": "Break 2:36 walkthrough into 3 x 45-second interactive steps",
+          "expected_impact": "+3-5% conversion rate improvement",
+          "implementation_complexity": "HIGH",
+          "estimated_development_time": "2-3 weeks"
+        },
+        "payment_intelligence": {
+          "recommendation": "Deploy AI-powered payment failure prediction and recovery",
+          "approach": "Pre-validate payment methods, intelligent retry sequences",
+          "expected_impact": "+2-3% payment success rate improvement",
+          "implementation_complexity": "HIGH",
+          "estimated_development_time": "1-2 weeks"
+        },
+        "behavioral_trigger_optimization": {
+          "recommendation": "Implement dynamic conversion timing based on user engagement patterns",
+          "approach": "ML-driven optimal conversion moment identification",
+          "expected_impact": "+4-6% overall conversion rate improvement",
+          "implementation_complexity": "VERY HIGH",
+          "estimated_development_time": "3-4 weeks"
+        }
+      },
+      "technical_improvements": {
+        "real_time_analytics": {
+          "improvement": "Implement real-time conversion funnel analytics",
+          "benefit": "Immediate identification of conversion bottlenecks",
+          "technical_complexity": "MEDIUM"
+        },
+        "predictive_modeling": {
+          "improvement": "Deploy conversion probability modeling",
+          "benefit": "Proactive intervention for at-risk trial users",
+          "technical_complexity": "HIGH"
+        },
+        "automated_optimization": {
+          "improvement": "Self-optimizing trial flow based on real-time performance",
+          "benefit": "Continuous conversion rate improvement without manual intervention",
+          "technical_complexity": "VERY HIGH"
+        }
+      },
+      "implementation_priorities": [
+        {
+          "priority": 1,
+          "item": "Payment failure recovery flow enhancement",
+          "impact": "HIGH",
+          "effort": "MEDIUM",
+          "timeline": "1 week"
+        },
+        {
+          "priority": 2,
+          "item": "Onboarding flow optimization",
+          "impact": "HIGH",
+          "effort": "HIGH",
+          "timeline": "2-3 weeks"
+        },
+        {
+          "priority": 3,
+          "item": "n8n workflow intelligent retry logic",
+          "impact": "MEDIUM",
+          "effort": "MEDIUM",
+          "timeline": "1 week"
+        },
+        {
+          "priority": 4,
+          "item": "Real-time conversion analytics",
+          "impact": "MEDIUM",
+          "effort": "MEDIUM",
+          "timeline": "2 weeks"
+        }
+      ]
+    },
+    "complex_analysis_cost": 0.0345
+  }
+}
