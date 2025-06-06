@@ -86,6 +86,10 @@ class CostTracker:
         self.cost_events.append(event)
         logger.info(f"Cost event tracked: ${cost} for {service}")
 
+        # Special handling for Claude token costs
+        if service == "claude_api" and metadata:
+            self._track_token_usage(metadata)
+
     def add_subscription(self, customer_id: str, tier: str, amount: float):
         """Add or update a subscription"""
         self.subscriptions[customer_id] = {
@@ -288,5 +292,30 @@ class CostTracker:
                 if daily_revenue > 0
                 else 0
             ),
+            "ai_costs": self._get_ai_cost_breakdown(),
             "last_updated": datetime.now().isoformat(),
         }
+
+    def _track_token_usage(self, metadata: dict):
+        """Track Claude token usage patterns"""
+        if hasattr(self, "token_usage"):
+            self.token_usage.append(metadata)
+        else:
+            self.token_usage = [metadata]
+
+    def _get_ai_cost_breakdown(self) -> dict:
+        """Get AI service cost breakdown"""
+        ai_costs = {"claude": 0.0, "openai": 0.0, "gemini": 0.0, "total": 0.0}
+
+        for event in self.cost_events:
+            if event.service in ["claude_api", "anthropic"]:
+                ai_costs["claude"] += event.cost
+            elif event.service in ["openai_api", "openai"]:
+                ai_costs["openai"] += event.cost
+            elif event.service in ["gemini_api", "google"]:
+                ai_costs["gemini"] += event.cost
+
+        ai_costs["total"] = sum(
+            [ai_costs["claude"], ai_costs["openai"], ai_costs["gemini"]]
+        )
+        return ai_costs
