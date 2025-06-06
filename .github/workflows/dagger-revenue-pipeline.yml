@@ -41,16 +41,16 @@ jobs:
   revenue-pipeline-optimization:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     strategy:
       matrix:
         pipeline_stage: [
           "ai_cost_optimization",
-          "customer_acquisition_modeling", 
+          "customer_acquisition_modeling",
           "revenue_forecasting",
           "roi_calculation"
         ]
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -70,7 +70,7 @@ jobs:
           dagger version
 
       - name: Cache Python dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -145,7 +145,7 @@ jobs:
           echo "Model distribution: 70% Sonnet, 30% Opus"
 
       - name: Upload Pipeline Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: revenue-pipeline-${{ matrix.pipeline_stage }}
           path: |
@@ -165,11 +165,11 @@ jobs:
     needs: revenue-pipeline-optimization
     runs-on: ubuntu-latest
     if: always()
-    
+
     steps:
       - name: Download All Artifacts
-        uses: actions/download-artifact@v3
-        
+        uses: actions/download-artifact@v4
+
       - name: Consolidate Pipeline Results
         run: |
           echo "=== REVENUE ACCELERATION PIPELINE SUMMARY ==="
