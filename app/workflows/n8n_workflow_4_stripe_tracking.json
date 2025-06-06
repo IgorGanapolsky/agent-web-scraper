@@ -1,0 +1,528 @@
+{
+  "name": "Workflow 4: Stripe Event Tracking & CRM Sync",
+  "version": "1.0",
+  "description": "Tracks Stripe events (trial-to-paid conversions) and syncs to CRM and dashboard with financial logging",
+  "workflow_metadata": {
+    "created_at": "2025-06-06",
+    "purpose": "Week 2 revenue tracking automation",
+    "integration_points": ["stripe", "crm", "dashboard", "cost_tracker"],
+    "revenue_target": "$600/day",
+    "expected_events": ["trial_started", "trial_converted", "payment_succeeded", "payment_failed", "subscription_created"]
+  },
+  "nodes": [
+    {
+      "id": "stripe_webhook_listener",
+      "name": "Stripe Webhook Listener",
+      "type": "webhook",
+      "position": [100, 100],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/webhooks/stripe",
+        "responseMode": "responseNode",
+        "authentication": "headerAuth",
+        "options": {
+          "allowedOrigins": "https://api.stripe.com"
+        }
+      },
+      "webhookId": "stripe-events-tracker"
+    },
+    {
+      "id": "event_validator",
+      "name": "Validate Stripe Event",
+      "type": "function",
+      "position": [300, 100],
+      "parameters": {
+        "functionCode": "// Validate Stripe webhook signature and event structure\nconst crypto = require('crypto');\n\nconst validateStripeSignature = (payload, signature, secret) => {\n  const expectedSignature = crypto\n    .createHmac('sha256', secret)\n    .update(payload, 'utf8')\n    .digest('hex');\n  return `sha256=${expectedSignature}` === signature;\n};\n\nconst event = $input.all()[0].json;\nconst signature = $input.all()[0].headers['stripe-signature'];\nconst webhookSecret = $env.STRIPE_WEBHOOK_SECRET;\n\n// Validate signature\nif (!validateStripeSignature(JSON.stringify(event), signature, webhookSecret)) {\n  throw new Error('Invalid Stripe signature');\n}\n\n// Extract event details\nconst eventData = {\n  id: event.id,\n  type: event.type,\n  created: event.created,\n  customer_id: event.data?.object?.customer,\n  amount: event.data?.object?.amount_total || event.data?.object?.amount,\n  currency: event.data?.object?.currency || 'usd',\n  subscription_id: event.data?.object?.subscription,\n  invoice_id: event.data?.object?.invoice,\n  metadata: event.data?.object?.metadata || {},\n  raw_event: event\n};\n\n// Financial tracking data\neventData.financial_impact = {\n  revenue_event: ['payment_intent.succeeded', 'invoice.payment_succeeded', 'subscription_schedule.created'].includes(event.type),\n  trial_event: ['customer.subscription.trial_will_end', 'subscription_schedule.created'].includes(event.type),\n  conversion_event: event.type === 'customer.subscription.created' && event.data.object.trial_end,\n  amount_usd: eventData.amount ? (eventData.amount / 100) : 0\n};\n\nreturn [eventData];"
+      }
+    },
+    {
+      "id": "event_router",
+      "name": "Route by Event Type",
+      "type": "switch",
+      "position": [500, 100],
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$json.type}}",
+        "rules": {
+          "rules": [
+            {
+              "operation": "equal",
+              "value2": "customer.subscription.trial_will_end",
+              "output": 0
+            },
+            {
+              "operation": "equal", 
+              "value2": "customer.subscription.created",
+              "output": 1
+            },
+            {
+              "operation": "equal",
+              "value2": "payment_intent.succeeded",
+              "output": 2
+            },
+            {
+              "operation": "equal",
+              "value2": "invoice.payment_succeeded",
+              "output": 3
+            },
+            {
+              "operation": "equal",
+              "value2": "payment_intent.payment_failed",
+              "output": 4
+            }
+          ]
+        },
+        "fallbackOutput": 5
+      }
+    },
+    {
+      "id": "trial_conversion_handler",
+      "name": "Handle Trial Conversion",
+      "type": "function",
+      "position": [700, 50],
+      "parameters": {
+        "functionCode": "// Process trial conversion events\nconst eventData = $input.all()[0].json;\n\n// Calculate conversion metrics\nconst conversionData = {\n  customer_id: eventData.customer_id,\n  subscription_id: eventData.subscription_id,\n  conversion_timestamp: new Date().toISOString(),\n  trial_end_date: eventData.raw_event.data.object.trial_end,\n  plan_id: eventData.raw_event.data.object.items.data[0].price.id,\n  monthly_value: eventData.amount_usd,\n  conversion_source: eventData.metadata.source || 'direct',\n  \n  // Financial impact\n  financial_impact: {\n    event_type: 'trial_conversion',\n    monthly_recurring_revenue: eventData.amount_usd,\n    annual_value: eventData.amount_usd * 12,\n    conversion_date: new Date().toISOString()\n  },\n  \n  // CRM update data\n  crm_update: {\n    status: 'converted_customer',\n    lifecycle_stage: 'customer',\n    conversion_date: new Date().toISOString(),\n    ltv_estimate: eventData.amount_usd * 24, // 2 year LTV estimate\n    tier: eventData.amount_usd >= 299 ? 'enterprise' : eventData.amount_usd >= 99 ? 'pro' : 'basic'\n  }\n};\n\nreturn [conversionData];"
+      }
+    },
+    {
+      "id": "payment_success_handler", 
+      "name": "Handle Successful Payment",
+      "type": "function",
+      "position": [700, 150],
+      "parameters": {
+        "functionCode": "// Process successful payment events\nconst eventData = $input.all()[0].json;\n\nconst paymentData = {\n  customer_id: eventData.customer_id,\n  payment_id: eventData.id,\n  amount_usd: eventData.amount_usd,\n  payment_timestamp: new Date().toISOString(),\n  payment_method: eventData.raw_event.data.object.payment_method_types?.[0] || 'card',\n  \n  // Revenue tracking\n  revenue_impact: {\n    event_type: 'payment_success',\n    daily_revenue_contribution: eventData.amount_usd,\n    payment_date: new Date().toISOString(),\n    recurring: eventData.subscription_id ? true : false\n  },\n  \n  // Dashboard metrics update\n  dashboard_update: {\n    daily_revenue: eventData.amount_usd,\n    customer_count: 1,\n    payment_success_rate: 'increment',\n    mrr_change: eventData.subscription_id ? eventData.amount_usd : 0\n  }\n};\n\nreturn [paymentData];"
+      }
+    },
+    {
+      "id": "payment_failure_handler",
+      "name": "Handle Payment Failure", 
+      "type": "function",
+      "position": [700, 250],
+      "parameters": {
+        "functionCode": "// Process payment failure events\nconst eventData = $input.all()[0].json;\n\nconst failureData = {\n  customer_id: eventData.customer_id,\n  payment_id: eventData.id,\n  failure_reason: eventData.raw_event.data.object.last_payment_error?.code || 'unknown',\n  failure_timestamp: new Date().toISOString(),\n  \n  // Risk assessment\n  risk_data: {\n    event_type: 'payment_failure',\n    failure_code: eventData.raw_event.data.object.last_payment_error?.code,\n    retry_required: true,\n    customer_at_risk: true\n  },\n  \n  // CRM follow-up\n  crm_action: {\n    trigger_dunning: true,\n    update_payment_status: 'failed',\n    schedule_retry: new Date(Date.now() + 24*60*60*1000).toISOString() // 24 hours\n  }\n};\n\nreturn [failureData];"
+      }
+    },
+    {
+      "id": "cost_tracker_update",
+      "name": "Update Cost Tracker",
+      "type": "http_request",
+      "position": [900, 100],
+      "parameters": {
+        "url": "http://localhost:8000/api/cost-tracker/revenue",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization", 
+              "value": "Bearer {{$env.API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "customer_id",
+              "value": "={{$json.customer_id}}"
+            },
+            {
+              "name": "amount",
+              "value": "={{$json.revenue_impact?.daily_revenue_contribution || $json.financial_impact?.monthly_recurring_revenue || 0}}"
+            },
+            {
+              "name": "tier",
+              "value": "={{$json.crm_update?.tier || 'pro'}}"
+            },
+            {
+              "name": "event_type", 
+              "value": "={{$json.financial_impact?.event_type || $json.revenue_impact?.event_type || 'payment'}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$json.conversion_timestamp || $json.payment_timestamp || $json.failure_timestamp}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "crm_sync",
+      "name": "Sync to CRM",
+      "type": "http_request", 
+      "position": [900, 200],
+      "parameters": {
+        "url": "{{$env.CRM_API_URL}}/contacts/{{$json.customer_id}}",
+        "method": "PATCH",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.CRM_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "lifecycle_stage",
+              "value": "={{$json.crm_update?.lifecycle_stage || $json.crm_action?.update_payment_status}}"
+            },
+            {
+              "name": "customer_value",
+              "value": "={{$json.crm_update?.ltv_estimate || $json.revenue_impact?.daily_revenue_contribution}}"
+            },
+            {
+              "name": "last_payment_date",
+              "value": "={{$json.conversion_timestamp || $json.payment_timestamp}}"
+            },
+            {
+              "name": "subscription_tier",
+              "value": "={{$json.crm_update?.tier}}"
+            },
+            {
+              "name": "payment_status",
+              "value": "={{$json.crm_action?.update_payment_status || 'active'}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dashboard_update",
+      "name": "Update Revenue Dashboard",
+      "type": "http_request",
+      "position": [900, 300],
+      "parameters": {
+        "url": "http://localhost:8000/api/dashboard/metrics",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type", 
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "daily_revenue",
+              "value": "={{$json.dashboard_update?.daily_revenue || $json.financial_impact?.monthly_recurring_revenue || 0}}"
+            },
+            {
+              "name": "customer_count_change", 
+              "value": "={{$json.dashboard_update?.customer_count || 0}}"
+            },
+            {
+              "name": "mrr_change",
+              "value": "={{$json.dashboard_update?.mrr_change || $json.financial_impact?.monthly_recurring_revenue || 0}}"
+            },
+            {
+              "name": "conversion_event",
+              "value": "={{$json.financial_impact?.event_type === 'trial_conversion'}}"
+            },
+            {
+              "name": "event_timestamp",
+              "value": "={{$json.conversion_timestamp || $json.payment_timestamp || $json.failure_timestamp}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "financial_logger",
+      "name": "Log Financial Event",
+      "type": "http_request",
+      "position": [1100, 150],
+      "parameters": {
+        "url": "http://localhost:8000/api/financial/log",
+        "method": "POST", 
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "event_id",
+              "value": "={{$json.id || $json.payment_id}}"
+            },
+            {
+              "name": "event_type",
+              "value": "={{$json.financial_impact?.event_type || $json.revenue_impact?.event_type || 'stripe_event'}}"
+            },
+            {
+              "name": "customer_id",
+              "value": "={{$json.customer_id}}"
+            },
+            {
+              "name": "amount",
+              "value": "={{$json.financial_impact?.monthly_recurring_revenue || $json.revenue_impact?.daily_revenue_contribution || 0}}"
+            },
+            {
+              "name": "currency",
+              "value": "usd"
+            },
+            {
+              "name": "metadata", 
+              "value": "={{JSON.stringify({\n  subscription_id: $json.subscription_id,\n  conversion_source: $json.conversion_source,\n  tier: $json.crm_update?.tier,\n  ltv_estimate: $json.crm_update?.ltv_estimate,\n  annual_value: $json.financial_impact?.annual_value\n})}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$json.conversion_timestamp || $json.payment_timestamp || $json.failure_timestamp}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "week2_progress_tracker",
+      "name": "Track Week 2 Progress",
+      "type": "function",
+      "position": [1100, 250],
+      "parameters": {
+        "functionCode": "// Track progress toward $600/day Week 2 target\nconst eventData = $input.all()[0].json;\nconst today = new Date().toISOString().split('T')[0];\n\n// Calculate daily revenue contribution\nconst dailyContribution = eventData.financial_impact?.monthly_recurring_revenue || \n                         eventData.revenue_impact?.daily_revenue_contribution || 0;\n\n// Week 2 progress tracking\nconst progressData = {\n  date: today,\n  revenue_contribution: dailyContribution,\n  week2_target: 600, // $600/day target\n  event_type: eventData.financial_impact?.event_type || eventData.revenue_impact?.event_type,\n  customer_id: eventData.customer_id,\n  \n  // Progress metrics\n  progress_metrics: {\n    daily_target: 600,\n    contribution: dailyContribution,\n    cumulative_tracking: true,\n    conversion_quality: eventData.crm_update?.tier || 'standard'\n  },\n  \n  // Success indicators\n  milestone_progress: {\n    stripe_integration_active: true,\n    payment_processing_live: eventData.revenue_impact?.event_type === 'payment_success',\n    trial_conversions_working: eventData.financial_impact?.event_type === 'trial_conversion',\n    revenue_tracking_operational: true\n  }\n};\n\n// Store in Week 2 tracking system\nreturn [progressData];"
+      }
+    },
+    {
+      "id": "notification_center",
+      "name": "Send Success Notifications",
+      "type": "function",
+      "position": [1300, 200],
+      "parameters": {
+        "functionCode": "// Send notifications for important events\nconst progressData = $input.all()[0].json;\nconst eventAmount = progressData.revenue_contribution;\n\nconst notifications = [];\n\n// Revenue milestone notifications\nif (eventAmount >= 100) {\n  notifications.push({\n    type: 'revenue_milestone',\n    message: `🎉 Significant revenue event: $${eventAmount} from ${progressData.customer_id}`,\n    urgency: 'high',\n    channel: 'slack'\n  });\n}\n\n// Daily target progress\nif (progressData.milestone_progress.payment_processing_live) {\n  notifications.push({\n    type: 'system_operational',\n    message: `✅ Payment processing operational - Week 2 progress on track`,\n    urgency: 'medium',\n    channel: 'email'\n  });\n}\n\n// Trial conversion success\nif (progressData.milestone_progress.trial_conversions_working) {\n  notifications.push({\n    type: 'conversion_success',\n    message: `🎯 Trial conversion successful - $${eventAmount}/month added to MRR`,\n    urgency: 'high', \n    channel: 'slack'\n  });\n}\n\nreturn notifications.map(notif => ({ json: notif }));"
+      }
+    },
+    {
+      "id": "webhook_response",
+      "name": "Webhook Response",
+      "type": "respond_to_webhook",
+      "position": [1500, 200],
+      "parameters": {
+        "options": {
+          "responseBody": "{{ JSON.stringify({\n  status: 'success',\n  event_processed: true,\n  timestamp: new Date().toISOString(),\n  week2_tracking: 'active'\n}) }}",
+          "responseCode": 200,
+          "responseHeaders": {
+            "Content-Type": "application/json"
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "stripe_webhook_listener": {
+      "main": [[{
+        "node": "event_validator",
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "event_validator": {
+      "main": [[{
+        "node": "event_router", 
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "event_router": {
+      "main": [
+        [{
+          "node": "trial_conversion_handler",
+          "type": "main", 
+          "index": 0
+        }],
+        [{
+          "node": "trial_conversion_handler",
+          "type": "main",
+          "index": 0  
+        }],
+        [{
+          "node": "payment_success_handler",
+          "type": "main",
+          "index": 0
+        }],
+        [{
+          "node": "payment_success_handler", 
+          "type": "main",
+          "index": 0
+        }],
+        [{
+          "node": "payment_failure_handler",
+          "type": "main",
+          "index": 0
+        }]
+      ]
+    },
+    "trial_conversion_handler": {
+      "main": [[
+        {
+          "node": "cost_tracker_update",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "crm_sync",
+          "type": "main", 
+          "index": 0
+        },
+        {
+          "node": "dashboard_update",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "payment_success_handler": {
+      "main": [[
+        {
+          "node": "cost_tracker_update",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "crm_sync",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "dashboard_update", 
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "payment_failure_handler": {
+      "main": [[
+        {
+          "node": "crm_sync",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "cost_tracker_update": {
+      "main": [[{
+        "node": "financial_logger",
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "crm_sync": {
+      "main": [[{
+        "node": "financial_logger", 
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "dashboard_update": {
+      "main": [[{
+        "node": "week2_progress_tracker",
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "financial_logger": {
+      "main": [[{
+        "node": "week2_progress_tracker",
+        "type": "main", 
+        "index": 0
+      }]]
+    },
+    "week2_progress_tracker": {
+      "main": [[{
+        "node": "notification_center",
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "notification_center": {
+      "main": [[{
+        "node": "webhook_response",
+        "type": "main",
+        "index": 0
+      }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "error_handler_workflow"
+  },
+  "staticData": {},
+  "tags": [
+    {
+      "id": "stripe_integration",
+      "name": "Stripe Integration"
+    },
+    {
+      "id": "week2_revenue",
+      "name": "Week 2 Revenue Tracking"
+    },
+    {
+      "id": "financial_automation",
+      "name": "Financial Automation" 
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-06T18:10:00.000Z",
+  "versionId": "week2_stripe_tracking_v1",
+  "environment_variables": {
+    "required": [
+      "STRIPE_WEBHOOK_SECRET",
+      "API_KEY", 
+      "CRM_API_URL",
+      "CRM_API_KEY"
+    ],
+    "optional": [
+      "SLACK_WEBHOOK_URL",
+      "EMAIL_SMTP_CONFIG"
+    ]
+  },
+  "deployment_notes": {
+    "webhook_url": "https://your-n8n-instance.com/webhook/stripe-events-tracker",
+    "stripe_configuration": {
+      "events_to_subscribe": [
+        "customer.subscription.trial_will_end",
+        "customer.subscription.created", 
+        "payment_intent.succeeded",
+        "invoice.payment_succeeded",
+        "payment_intent.payment_failed"
+      ],
+      "webhook_endpoint": "https://your-n8n-instance.com/webhook/stripe-events-tracker"
+    },
+    "monitoring": {
+      "success_rate_target": "99.5%",
+      "response_time_target": "<500ms",
+      "daily_event_volume": "50-200 events"
+    }
+  }
+}
