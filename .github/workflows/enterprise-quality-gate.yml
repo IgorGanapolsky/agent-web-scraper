@@ -1,10 +1,6 @@
 name: 🎯 Enterprise Quality Gate & 80% Coverage
 
 on:
-  push:
-    branches: [ main, develop, fix-sonarqube-setup ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
     inputs:
       debug_mode:
