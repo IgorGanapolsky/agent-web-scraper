@@ -129,7 +129,13 @@ class LiveStripeIntegration:
 
             subscription = stripe.Subscription.create(
                 customer=customer.id,
-                items=[{"price": os.getenv("STRIPE_LIVE_PRICE_ID")}],  # Live price ID
+                items=[
+                    {
+                        "price": os.getenv(
+                            "STRIPE_LIVE_PRICE_ID", "price_1RX9qpGGBpd52QQYPohyddx3"
+                        )
+                    }
+                ],  # Live price ID
                 trial_end=trial_end_timestamp,
                 default_payment_method=payment_method_id,
                 expand=["latest_invoice.payment_intent"],
@@ -147,7 +153,7 @@ class LiveStripeIntegration:
                     "customer_id": customer.id,
                     "subscription_id": subscription.id,
                     "trial_end": trial_end_timestamp,
-                    "expected_revenue": 29.99,  # Expected monthly subscription
+                    "expected_revenue": 79.00,  # Expected monthly subscription
                     "campaign_source": "meta_ads",
                 }
             )
@@ -156,7 +162,7 @@ class LiveStripeIntegration:
                 success=True,
                 customer_id=customer.id,
                 subscription_id=subscription.id,
-                amount=29.99,  # Monthly subscription amount
+                amount=79.00,  # Monthly subscription amount
                 trial_end=datetime.fromtimestamp(trial_end_timestamp),
                 payment_method_id=payment_method_id,
             )
