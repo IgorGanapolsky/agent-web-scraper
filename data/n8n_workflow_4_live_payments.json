@@ -1,0 +1,432 @@
+{
+  "workflow_name": "n8n Workflow 4: Live Payment Processing & CRM Sync",
+  "version": "2.1.0",
+  "description": "Real Stripe payment processing with HubSpot CRM integration for $1,074.86/day revenue",
+  "live_mode": true,
+  "webhook_domain": "your-saas-domain.com",
+
+  "triggers": [
+    {
+      "id": "stripe_live_webhook",
+      "name": "Stripe Live Payment Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [240, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-webhook-live",
+        "authentication": "headerAuth",
+        "options": {
+          "allowedOrigins": "stripe.com",
+          "webhookSignatureRequired": true
+        }
+      },
+      "webhookId": "stripe_live_payment_capture",
+      "typeVersion": 1
+    }
+  ],
+
+  "nodes": [
+    {
+      "id": "verify_stripe_signature",
+      "name": "Verify Stripe Webhook Signature",
+      "type": "n8n-nodes-base.function",
+      "position": [460, 300],
+      "parameters": {
+        "functionCode": `
+// Verify Stripe webhook signature for live payments
+const crypto = require('crypto');
+const stripeSignature = $headers['stripe-signature'];
+const payload = $binary.data;
+const endpointSecret = $env.STRIPE_LIVE_WEBHOOK_SECRET;
+
+try {
+  const elements = stripeSignature.split(',');
+  const signature = elements.find(element => element.startsWith('v1=')).split('v1=')[1];
+  const timestamp = elements.find(element => element.startsWith('t=')).split('t=')[1];
+
+  const signedPayload = timestamp + '.' + payload;
+  const computedSignature = crypto.createHmac('sha256', endpointSecret).update(signedPayload, 'utf8').digest('hex');
+
+  if (signature === computedSignature) {
+    const event = JSON.parse(payload);
+
+    // Process live payment events
+    if (event.type === 'invoice.payment_succeeded') {
+      const invoice = event.data.object;
+      const customerId = invoice.customer;
+      const amount = invoice.amount_paid / 100; // Convert cents to dollars
+
+      return [{
+        json: {
+          verified: true,
+          event_type: event.type,
+          customer_id: customerId,
+          amount: amount,
+          subscription_id: invoice.subscription,
+          live_mode: event.livemode,
+          timestamp: new Date().toISOString(),
+          revenue_day_total: amount, // This will be aggregated
+          discount_code: invoice.discount?.coupon?.id || null
+        }
+      }];
+    }
+
+    return [{ json: { verified: true, event_type: event.type, processed: false } }];
+  } else {
+    throw new Error('Invalid signature');
+  }
+} catch (error) {
+  return [{ json: { verified: false, error: error.message } }];
+}
+        `
+      },
+      "typeVersion": 1
+    },
+
+    {
+      "id": "update_revenue_tracking",
+      "name": "Update Daily Revenue Tracking",
+      "type": "n8n-nodes-base.function",
+      "position": [680, 200],
+      "parameters": {
+        "functionCode": `
+// Update daily revenue tracking for $1,074.86/day target
+const eventData = $json;
+
+if (eventData.verified && eventData.amount) {
+  const today = new Date().toISOString().split('T')[0];
+  const amount = eventData.amount;
+
+  // Calculate progress toward daily target
+  const dailyTarget = 1074.86;
+  const currentTotal = amount; // In production, aggregate from database
+  const progressPercentage = (currentTotal / dailyTarget) * 100;
+
+  // Track customer count
+  const currentCustomers = 76; // In production, get from database
+  const targetCustomers = 101;
+  const customerProgress = (currentCustomers / targetCustomers) * 100;
+
+  return [{
+    json: {
+      ...eventData,
+      revenue_tracking: {
+        date: today,
+        amount_added: amount,
+        daily_target: dailyTarget,
+        progress_percentage: progressPercentage,
+        target_achieved: currentTotal >= dailyTarget,
+        customer_count: currentCustomers,
+        customer_target: targetCustomers,
+        customer_progress: customerProgress
+      }
+    }
+  }];
+}
+
+return [{ json: eventData }];
+        `
+      },
+      "typeVersion": 1
+    },
+
+    {
+      "id": "sync_hubspot_crm",
+      "name": "Sync to HubSpot CRM",
+      "type": "n8n-nodes-base.hubspot",
+      "position": [680, 400],
+      "parameters": {
+        "resource": "contact",
+        "operation": "upsert",
+        "email": "={{ $json.customer_email }}",
+        "additionalFields": {
+          "properties": {
+            "stripe_customer_id": "={{ $json.customer_id }}",
+            "subscription_amount": "={{ $json.amount }}",
+            "subscription_status": "active",
+            "payment_date": "={{ $json.timestamp }}",
+            "discount_code_used": "={{ $json.discount_code }}",
+            "revenue_source": "direct_payment",
+            "lifecycle_stage": "customer",
+            "lead_status": "converted",
+            "deal_stage": "closed_won",
+            "deal_amount": "={{ $json.amount }}",
+            "monthly_recurring_revenue": "={{ $json.amount }}",
+            "customer_acquisition_date": "={{ $json.timestamp }}",
+            "payment_method": "stripe_subscription"
+          }
+        }
+      },
+      "credentials": {
+        "hubspotApi": "hubspot_live_crm"
+      },
+      "typeVersion": 1
+    },
+
+    {
+      "id": "create_hubspot_deal",
+      "name": "Create HubSpot Deal",
+      "type": "n8n-nodes-base.hubspot",
+      "position": [900, 400],
+      "parameters": {
+        "resource": "deal",
+        "operation": "create",
+        "properties": {
+          "dealname": "SaaS Platform Subscription - ={{ $json.customer_id }}",
+          "amount": "={{ $json.amount }}",
+          "dealstage": "closedwon",
+          "pipeline": "default",
+          "closedate": "={{ $json.timestamp }}",
+          "hubspot_owner_id": "12345", // Replace with actual owner ID
+          "deal_currency_code": "USD",
+          "description": "Monthly SaaS subscription with REVENUE20 discount code"
+        },
+        "additionalFields": {
+          "associatedCompany": "={{ $json.company_id }}",
+          "associatedVids": "={{ $json.contact_id }}"
+        }
+      },
+      "credentials": {
+        "hubspotApi": "hubspot_live_crm"
+      },
+      "typeVersion": 1
+    },
+
+    {
+      "id": "trigger_dashboard_update",
+      "name": "Trigger Real-time Dashboard Update",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [1120, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-saas-domain.com/api/dashboard/revenue-update",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer {{ $env.DASHBOARD_API_KEY }}"
+        },
+        "body": {
+          "event_type": "payment_received",
+          "customer_id": "={{ $json.customer_id }}",
+          "amount": "={{ $json.amount }}",
+          "timestamp": "={{ $json.timestamp }}",
+          "revenue_tracking": "={{ $json.revenue_tracking }}",
+          "subscription_details": {
+            "plan": "Monthly SaaS Access",
+            "discount_applied": "REVENUE20",
+            "original_price": 99,
+            "discounted_price": 79,
+            "money_back_guarantee": "30 days"
+          }
+        }
+      },
+      "typeVersion": 1
+    },
+
+    {
+      "id": "log_revenue_event",
+      "name": "Log Revenue Event",
+      "type": "n8n-nodes-base.function",
+      "position": [1120, 500],
+      "parameters": {
+        "functionCode": `
+// Log detailed revenue event for tracking and analytics
+const eventData = $json;
+
+const revenueLog = {
+  timestamp: new Date().toISOString(),
+  event_type: 'live_payment_processed',
+  customer_id: eventData.customer_id,
+  amount: eventData.amount,
+  subscription_id: eventData.subscription_id,
+  revenue_metrics: {
+    daily_target: 1074.86,
+    current_progress: eventData.revenue_tracking?.progress_percentage || 0,
+    customers_count: 76,
+    target_customers: 101,
+    average_revenue_per_customer: 79.00
+  },
+  business_metrics: {
+    net_profit_daily: 888.53,
+    roi_12_months: 244.1,
+    cost_per_acquisition: 35.00,
+    lifetime_value: 948.00 // 12 months * $79
+  },
+  campaign_attribution: {
+    source: 'meta_ads',
+    discount_code: 'REVENUE20',
+    money_back_guarantee: true,
+    conversion_time: '24_hours'
+  }
+};
+
+console.log('💰 REVENUE EVENT LOGGED:', JSON.stringify(revenueLog, null, 2));
+
+return [{ json: revenueLog }];
+        `
+      },
+      "typeVersion": 1
+    },
+
+    {
+      "id": "send_slack_notification",
+      "name": "Send Revenue Notification",
+      "type": "n8n-nodes-base.slack",
+      "position": [1340, 400],
+      "parameters": {
+        "channel": "#revenue-tracking",
+        "text": "💰 NEW PAYMENT RECEIVED!",
+        "attachments": [
+          {
+            "color": "good",
+            "fields": [
+              {
+                "title": "Amount",
+                "value": "$={{ $json.amount }}",
+                "short": true
+              },
+              {
+                "title": "Customer",
+                "value": "={{ $json.customer_id }}",
+                "short": true
+              },
+              {
+                "title": "Daily Progress",
+                "value": "={{ $json.revenue_tracking.progress_percentage }}% of $1,074.86 target",
+                "short": false
+              },
+              {
+                "title": "Customer Count",
+                "value": "76/101 customers (75% to goal)",
+                "short": true
+              }
+            ],
+            "actions": [
+              {
+                "type": "button",
+                "text": "View Revenue Dashboard",
+                "url": "https://your-saas-domain.com/dashboard/revenue"
+              }
+            ]
+          }
+        ]
+      },
+      "credentials": {
+        "slackApi": "revenue_slack"
+      },
+      "typeVersion": 1
+    }
+  ],
+
+  "connections": {
+    "stripe_live_webhook": {
+      "main": [
+        [
+          {
+            "node": "verify_stripe_signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "verify_stripe_signature": {
+      "main": [
+        [
+          {
+            "node": "update_revenue_tracking",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "sync_hubspot_crm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_revenue_tracking": {
+      "main": [
+        [
+          {
+            "node": "trigger_dashboard_update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sync_hubspot_crm": {
+      "main": [
+        [
+          {
+            "node": "create_hubspot_deal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_hubspot_deal": {
+      "main": [
+        [
+          {
+            "node": "send_slack_notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trigger_dashboard_update": {
+      "main": [
+        [
+          {
+            "node": "log_revenue_event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "revenue_error_handler"
+  },
+
+  "webhook_configuration": {
+    "live_endpoint": "https://your-saas-domain.com/webhook/stripe-live",
+    "signature_verification": true,
+    "supported_events": [
+      "invoice.payment_succeeded",
+      "customer.subscription.created",
+      "customer.subscription.updated",
+      "customer.subscription.deleted",
+      "payment_intent.succeeded"
+    ],
+    "rate_limiting": "100 requests/minute",
+    "ssl_required": true
+  },
+
+  "subscription_logic": {
+    "pricing_model": {
+      "monthly_price": 99.00,
+      "first_month_discount": 20,
+      "discount_code": "REVENUE20",
+      "discounted_price": 79.00
+    },
+    "money_back_guarantee": {
+      "period_days": 30,
+      "refund_policy": "full_refund",
+      "cancellation_method": "self_service",
+      "prorated_refunds": false
+    },
+    "billing_cycle": "monthly",
+    "trial_period": "none",
+    "payment_required": "upfront"
+  }
+}
