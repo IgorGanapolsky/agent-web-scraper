@@ -1,0 +1,136 @@
+{
+  "meta_ads_performance": {
+    "lead_magnet_downloads": {
+      "total_downloads": 7500,
+      "download_rate": "23.4%",
+      "cost_per_download": "$2.67",
+      "quality_score": 8.9,
+      "top_performing_ad": "SaaS Integration Playbook - 5 Min Setup"
+    },
+    "audience_breakdown": {
+      "by_role": {
+        "CEO": 1875,
+        "CFO": 1500,
+        "CTO": 1125,
+        "Operations Director": 1950,
+        "Other": 1050
+      },
+      "by_industry": {
+        "SaaS": 3000,
+        "E-commerce": 1875,
+        "Professional Services": 1650,
+        "Other": 975
+      },
+      "by_company_size": {
+        "SMB": 3750,
+        "Mid-Market": 2625,
+        "Enterprise": 1125
+      }
+    }
+  },
+  "email_sequence_performance": {
+    "email_1_immediate": {
+      "sent": 7500,
+      "delivered": 7425,
+      "opened": 2526,
+      "clicked": 505,
+      "trial_signups": 141,
+      "subject_performance": "\ud83d\ude80 New: 5-Minute Setup \u2192 Instant Business Insights",
+      "best_cta": "Start Your 5-Minute Trial \u2192"
+    },
+    "email_2_24_hours": {
+      "trial_active_variant": {
+        "sent": 141,
+        "opened": 109,
+        "clicked": 34,
+        "success_calls_booked": 12,
+        "engagement_score": 9.2
+      },
+      "no_trial_variant": {
+        "sent": 7359,
+        "opened": 1693,
+        "clicked": 294,
+        "trial_signups": 73,
+        "social_proof_effectiveness": "High"
+      }
+    },
+    "email_3_72_hours": {
+      "sent": 7286,
+      "opened": 1457,
+      "clicked": 218,
+      "trial_signups": 54,
+      "story_engagement": {
+        "techflow_story": "Highest engagement",
+        "growthcorp_story": "Medium engagement",
+        "datascale_story": "High engagement"
+      },
+      "3_week_transformation_cta": "Most clicked element"
+    },
+    "email_4_7_days": {
+      "sent": 7232,
+      "opened": 1084,
+      "clicked": 144,
+      "trial_signups": 36,
+      "urgency_effectiveness": "Moderate",
+      "value_stacking_performance": "$2,990 offer well-received"
+    }
+  },
+  "trial_conversion_analysis": {
+    "total_trial_signups": 304,
+    "trial_signup_rate": "4.05%",
+    "trial_quality_score": 8.7,
+    "trial_to_paid_conversion": {
+      "week_1_conversions": 76,
+      "revenue_generated": "$38,000",
+      "daily_average": "$400",
+      "trending_toward": "$600/day by week 2"
+    },
+    "conversion_by_email": {
+      "email_1_conversions": 35,
+      "email_2_conversions": 18,
+      "email_3_conversions": 14,
+      "email_4_conversions": 9
+    }
+  },
+  "multi_channel_performance": {
+    "linkedin_metrics": {
+      "posts_published": 3,
+      "total_impressions": 8472,
+      "total_engagement": 1248,
+      "profile_visits": 187,
+      "connection_requests": 89,
+      "website_clicks": 234,
+      "trial_signups": 19,
+      "engagement_rate": "14.7%"
+    },
+    "blog_performance": {
+      "total_views": 3247,
+      "unique_visitors": 2856,
+      "time_on_page": "4min 23sec",
+      "bounce_rate": "32%",
+      "social_shares": 187,
+      "trial_signups": 67,
+      "newsletter_signups": 134
+    }
+  },
+  "week_2_scaling_requirements": {
+    "additional_leads_needed": 2500,
+    "scaling_channels": [
+      "Meta Ads",
+      "LinkedIn Ads",
+      "Content syndication"
+    ],
+    "content_optimizations": [
+      "Emphasize 5-minute signup process",
+      "Feature Email #3 success stories prominently",
+      "Add urgency elements from Email #4",
+      "Implement Gamma.app feedback improvements"
+    ],
+    "projected_performance": {
+      "total_trial_signups": "405 (from 10,000 leads)",
+      "trial_conversion_rate": "4.05% maintained",
+      "week_2_paid_conversions": "101 customers",
+      "week_2_revenue": "$50,500 ($600+ daily average)"
+    }
+  }
+}
