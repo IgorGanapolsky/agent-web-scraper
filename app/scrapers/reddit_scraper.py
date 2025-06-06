@@ -12,9 +12,6 @@ from typing import Any
 import requests
 import serpapi
 from bs4 import BeautifulSoup
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -22,6 +19,9 @@ from app.core.gemini_client import GeminiClient
 from app.core.llm_client import GPT4Client
 from app.utils.analytics import calculate_pain_point_metrics, format_enhanced_email_body
 from app.utils.query_rotation import get_daily_query
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
 # Load environment variables from .env file
 load_dotenv()
@@ -228,7 +228,7 @@ Reddit Comments:
             }
 
             try:
-                response = requests.get(url, headers=headers)
+                response = requests.get(url, headers=headers, timeout=30)
                 response.raise_for_status()
 
                 soup = BeautifulSoup(response.text, "html.parser")

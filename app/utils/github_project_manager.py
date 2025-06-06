@@ -67,6 +67,7 @@ class GitHubProjectManager:
                 self.graphql_url,
                 json={"query": query, "variables": variables},
                 headers=self.headers,
+                timeout=30,
             )
 
             if response.status_code == 200:
@@ -129,6 +130,7 @@ class GitHubProjectManager:
                 self.graphql_url,
                 json={"query": query, "variables": variables},
                 headers=self.headers,
+                timeout=30,
             )
 
             if response.status_code != 200:
@@ -189,6 +191,7 @@ class GitHubProjectManager:
                 self.graphql_url,
                 json={"query": mutation, "variables": mutation_variables},
                 headers=self.headers,
+                timeout=30,
             )
 
             if response.status_code == 200:
@@ -230,6 +233,7 @@ class GitHubProjectManager:
                 self.graphql_url,
                 json={"query": query, "variables": variables},
                 headers=self.headers,
+                timeout=30,
             )
 
             if response.status_code == 200:
@@ -360,6 +364,7 @@ class GitHubProjectManager:
                 self.graphql_url,
                 json={"query": mutation, "variables": variables},
                 headers=self.headers,
+                timeout=30,
             )
 
             if response.status_code == 200:
