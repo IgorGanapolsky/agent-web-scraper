@@ -17,9 +17,9 @@ class GeminiEnterpriseEngine:
 
     def __init__(self):
         self.project_id = "email-outreach-ai-460404"
-        self.api_key = os.getenv(
-            "GEMINI_API_KEY", "AIzaSyCyUzzPptDOkSZ3lQ5-11GdMWAJoiX68E8"
-        )
+        self.api_key = os.getenv("GEMINI_API_KEY")
+        if not self.api_key:
+            raise ValueError("GEMINI_API_KEY environment variable is required")
 
         # Initialize Gemini Ultra
         genai.configure(api_key=self.api_key)
