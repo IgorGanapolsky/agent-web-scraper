@@ -2,7 +2,7 @@ name: 🎯 SonarCloud Analysis & Quality Gate (2025)
 
 on:
   push:
-    branches: [ main, develop, fix-sonarqube-setup, fix-sonarqube-quality-gate-2025, fix-sonarqube-conflicts ]
+    branches: [ main, develop, fix-sonarqube-setup, fix-sonarqube-quality-gate-2025-comprehensive ]
   pull_request:
     branches: [ main ]
     types: [opened, synchronize, reopened]
