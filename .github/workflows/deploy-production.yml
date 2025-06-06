@@ -1,71 +1,38 @@
-name: 🚀 Deploy Live Stripe Revenue System
+name: Deploy to Railway Production
 
 on:
   push:
     branches: [main]
-    paths:
-      - 'app/core/live_stripe_integration.py'
-      - 'app/services/**'
-      - 'app/web/**'
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-          - production
-          - staging
-
-env:
-  PYTHON_VERSION: '3.11'
 
 jobs:
-  deploy-live-revenue-system:
+  deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    environment: production
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-
+          python-version: '3.11'
+          
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
-
+          
       - name: Run tests
-        env:
-          STRIPE_LIVE_SECRET_KEY: ${{ secrets.STRIPE_LIVE_SECRET_KEY }}
-          STRIPE_LIVE_WEBHOOK_SECRET: ${{ secrets.STRIPE_LIVE_WEBHOOK_SECRET }}
         run: |
-          python -m pytest tests/unit/test_live_stripe_basic.py -v
-
+          python -m pytest tests/ -v
+          
       - name: Deploy to Railway
-        env:
+        uses: railwayapp/railway-deploy@v1.1.6
+        with:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          npx @railway/cli deploy --service live-stripe-revenue
-
-      - name: Verify Deployment
-        run: |
-          echo "🚀 Live Stripe revenue system deployed successfully"
-          echo "💰 Ready for $1,074.86/day revenue generation"
-          echo "🎯 Target: 76 customers × $79/month = $6,004 MRR"
-
-      - name: Notify Success
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"🚀 LIVE STRIPE REVENUE SYSTEM DEPLOYED\n💰 Ready for $1,074.86/day revenue generation\n🎯 76 customers × $79/month target\n✅ All systems operational"}' \
-            $SLACK_WEBHOOK || echo "Slack notification skipped"
+          service: agent-web-scraper-production
+          
+      - name: Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          cname: scraper.yourdomain.com

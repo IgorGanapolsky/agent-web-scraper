@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Any, Optional
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
@@ -44,6 +45,19 @@ app.include_router(dashboard_router, prefix="", tags=["customer-dashboard"])
 app.include_router(funnel_router, prefix="", tags=["stripe-funnel"])
 app.include_router(stripe_router, prefix="", tags=["stripe-webhooks"])
 app.include_router(batch_router, prefix="", tags=["batch-optimization"])
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Railway deployment"""
+    return JSONResponse(
+        content={
+            "status": "healthy",
+            "timestamp": datetime.now().isoformat(),
+            "service": "agent-web-scraper",
+            "version": "2.0.0"
+        }
+    )
 
 
 # Models
