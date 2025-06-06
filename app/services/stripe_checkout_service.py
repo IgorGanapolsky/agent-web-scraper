@@ -37,23 +37,29 @@ class StripeCheckoutService:
 
     # Pricing configuration
     PRICES: ClassVar[dict] = {
+        "starter": {
+            "monthly": "price_starter_monthly",  # $19/month
+            "annual": "price_starter_annual",  # $182/year (20% off)
+            "monthly_amount": 19.00,
+            "annual_amount": 182.00,
+        },
         "basic": {
             "monthly": "price_basic_monthly",  # $29/month
-            "annual": "price_basic_annual",  # $290/year (2 months free)
+            "annual": "price_basic_annual",  # $278/year (20% off)
             "monthly_amount": 29.00,
-            "annual_amount": 290.00,
+            "annual_amount": 278.00,
         },
         "pro": {
             "monthly": "price_pro_monthly",  # $99/month
-            "annual": "price_pro_annual",  # $990/year (2 months free)
+            "annual": "price_pro_annual",  # $950/year (20% off)
             "monthly_amount": 99.00,
-            "annual_amount": 990.00,
+            "annual_amount": 950.00,
         },
         "enterprise": {
             "monthly": "price_enterprise_monthly",  # $299/month
-            "annual": "price_enterprise_annual",  # $2990/year (2 months free)
+            "annual": "price_enterprise_annual",  # $2870/year (20% off)
             "monthly_amount": 299.00,
-            "annual_amount": 2990.00,
+            "annual_amount": 2870.00,
         },
     }
 
