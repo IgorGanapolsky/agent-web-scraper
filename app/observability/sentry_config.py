@@ -14,6 +14,8 @@ from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
+# Import alerting utilities
+
 
 class SentryAIMonitoring:
     """Enhanced Sentry monitoring with AI-powered business insights"""
@@ -43,15 +45,20 @@ class SentryAIMonitoring:
             # Business context enhancement
             before_send=self.add_business_context,
             before_send_transaction=self.add_transaction_context,
-            # Custom AI monitoring options
+            # Custom AI monitoring options with Seer AI integration
             _experiments={
                 "ai_monitoring": {
                     "track_token_usage": True,
                     "monitor_api_costs": True,
                     "detect_anomalies": True,
                     "business_metrics": True,
+                    "seer_ai_insights": True,
+                    "real_time_alerts": True,
                 }
             },
+            # Enable Seer AI-powered suggestions
+            attach_stacktrace=True,
+            send_default_pii=False,
         )
 
     def add_business_context(
