@@ -1,0 +1,159 @@
+{
+  "github_epic_issue_structure": {
+    "project_name": "Revenue Acceleration Infrastructure",
+    "milestone": "M1 - Monetization Ready",
+    "milestone_date": "2025-06-20T00:00:00",
+    "total_epics": 5,
+    "total_issues": 20,
+    "labels": {
+      "billing": {"color": "0E8A16", "description": "Payment and billing related"},
+      "ux": {"color": "1D76DB", "description": "User experience and interface"},
+      "onboarding": {"color": "FBCA04", "description": "User onboarding and retention"},
+      "infra": {"color": "D93F0B", "description": "Infrastructure and backend"},
+      "automation": {"color": "5319E7", "description": "Workflow and email automation"},
+      "api": {"color": "B60205", "description": "API development and management"}
+    },
+    "agent_assignments": {
+      "claude": ["stripe_integration", "customer_dashboard", "api_access_management"],
+      "gemini": ["onboarding_retention_ux"],
+      "n8n_creator": ["email_automation", "workflow_automation"]
+    }
+  },
+  "epics": {
+    "stripe_integration": {
+      "title": "Epic: Stripe Integration - Payment Processing Foundation",
+      "assignee": "claude",
+      "estimated_hours": 40,
+      "priority": "critical",
+      "issues": [
+        "Stripe API Configuration & Security Setup (8h)",
+        "Stripe Webhook Handler Implementation (12h)",
+        "Subscription Management Endpoints (12h)",
+        "Payment Processing Flow Integration (8h)"
+      ]
+    },
+    "customer_dashboard": {
+      "title": "Epic: Customer Dashboard - Self-Service Portal",
+      "assignee": "claude", 
+      "estimated_hours": 80,
+      "priority": "high",
+      "issues": [
+        "Dashboard UI Components & Layout (24h)",
+        "Subscription Management Interface (20h)",
+        "Usage Analytics Dashboard (16h)",
+        "Customer Authentication & Authorization (20h)"
+      ]
+    },
+    "trial_flow": {
+      "title": "Epic: Trial Conversion Flow - Revenue Optimization",
+      "assignee": "claude",
+      "estimated_hours": 60,
+      "priority": "high",
+      "issues": [
+        "Trial Signup Flow & UI Design (16h)",
+        "Trial Tracking & Analytics System (16h)",
+        "Conversion Prompts & CTAs (12h)",
+        "Automated Trial Email Sequence (16h)"
+      ]
+    },
+    "api_access_management": {
+      "title": "Epic: API Access Management - Monetization Engine",
+      "assignee": "claude",
+      "estimated_hours": 50,
+      "priority": "high",
+      "issues": [
+        "API Key Generation & Management System (16h)",
+        "Rate Limiting by Subscription Tier (12h)",
+        "API Usage Tracking & Analytics (14h)",
+        "Developer Documentation Portal (8h)"
+      ]
+    },
+    "onboarding_retention": {
+      "title": "Epic: Onboarding & Retention - 90% Success Rate",
+      "assignee": "gemini",
+      "estimated_hours": 56,
+      "priority": "medium",
+      "issues": [
+        "Onboarding UX Flow Design (20h)",
+        "Progress Tracking & Gamification (16h)",
+        "Retention Risk Detection System (12h)",
+        "Automated Email Onboarding Sequence (8h)"
+      ]
+    }
+  },
+  "meta_ads_n8n_workflow": {
+    "workflow_name": "Meta Ads Lead Generation & CRM Integration",
+    "workflow_id": "meta_ads_saas_playbook_campaign",
+    "description": "Automated lead capture and nurturing for SaaS Integration Playbook downloads",
+    "campaign_setup": {
+      "ad_creative": "Repurposed TikTok short video",
+      "cta": "Download SaaS Integration Playbook",
+      "landing_page": "https://yourdomain.com/saas-playbook",
+      "target_audience": "SaaS founders, CTOs, growth marketers"
+    },
+    "automation_flow": [
+      "1. Meta Ads Lead Capture (webhook trigger)",
+      "2. Lead Data Processing & Validation",
+      "3. CRM Lead Tagging (HubSpot/Salesforce)",
+      "4. Send Welcome Email #1 with Playbook",
+      "5. Campaign Analytics Tracking",
+      "6. Team Slack Notification",
+      "7. Schedule Follow-up Email Sequence"
+    ],
+    "success_metrics": {
+      "lead_conversion_rate": "Target: 15%",
+      "email_open_rate": "Target: 35%",
+      "playbook_download_rate": "Target: 80%",
+      "follow_up_engagement": "Target: 25%"
+    },
+    "crm_integration": {
+      "tags": ["meta_ads_lead", "saas_playbook_interest", "week2_campaign", "revenue_acceleration"],
+      "lead_scoring": "Automated based on company size, role, engagement",
+      "follow_up_sequence": "3-email nurture sequence over 7 days"
+    }
+  },
+  "token_usage_report": {
+    "report_type": "GitHub Epic & Meta Ads Setup Token Usage",
+    "generated_at": "2025-06-06T18:12:45.123456",
+    "cost_breakdown": {
+      "github_setup": 1.16,
+      "n8n_workflow_design": 2.25,
+      "meta_ads_automation": 1.29,
+      "formatting": 0.10,
+      "total_cost": 4.85
+    },
+    "model_distribution": {
+      "sonnet_4_usage": "51.5%",
+      "opus_4_usage": "46.4%",
+      "haiku_4_usage": "2.1%"
+    },
+    "efficiency_metrics": {
+      "cost_per_epic": 0.97,
+      "total_issues_created": 20,
+      "cost_per_issue": 0.24,
+      "automation_value": "High ROI - streamlined development process"
+    },
+    "budget_impact": {
+      "weekly_budget_used": "19.4%",
+      "remaining_week2_budget": 20.15,
+      "projected_monthly_cost": 19.40
+    }
+  },
+  "implementation_roadmap": {
+    "week2_priorities": [
+      "Epic: Stripe Integration (claude) - 40 hours",
+      "Epic: Trial Conversion Flow (claude) - 60 hours", 
+      "Meta Ads Campaign Launch with n8n automation"
+    ],
+    "week3_priorities": [
+      "Epic: Customer Dashboard (claude) - 80 hours",
+      "Epic: API Access Management (claude) - 50 hours"
+    ],
+    "week4_priorities": [
+      "Epic: Onboarding & Retention (gemini) - 56 hours",
+      "Integration testing and optimization"
+    ]
+  },
+  "generated_at": "2025-06-06T18:12:45.123456",
+  "status": "github_epics_and_meta_ads_ready_for_deployment"
+}
