@@ -72,6 +72,33 @@ class AppSettings(BaseSettings):
         default=3, description="Number of retry attempts for failed requests"
     )
 
+    # Stripe Configuration
+    stripe_api_key: Optional[str] = Field(
+        default=None, description="Stripe API key for payments"
+    )
+    stripe_webhook_secret: Optional[str] = Field(
+        default=None, description="Stripe webhook secret for event verification"
+    )
+    stripe_live_mode: bool = Field(
+        default=False, description="Enable live Stripe payments (production mode)"
+    )
+
+    # Supabase Configuration
+    supabase_url: Optional[str] = Field(
+        default=None, description="Supabase project URL"
+    )
+    supabase_key: Optional[str] = Field(
+        default=None, description="Supabase service role key"
+    )
+
+    # Revenue Target Configuration
+    daily_revenue_target: float = Field(
+        default=600.0, description="Daily revenue target in USD"
+    )
+    trial_period_days: int = Field(
+        default=3, description="Trial period duration in days"
+    )
+
     # AI Configuration
     openai_model: str = Field(default="gpt-4", description="OpenAI model to use")
     max_tokens: int = Field(default=1500, description="Maximum tokens for AI responses")
@@ -110,3 +137,8 @@ def get_setting(key: str, default: Optional[str] = None) -> Optional[str]:
 SERPAPI_KEY = settings.serpapi_key
 OPENAI_API_KEY = settings.openai_api_key
 SPREADSHEET_NAME = settings.spreadsheet_name
+STRIPE_API_KEY = settings.stripe_api_key
+STRIPE_WEBHOOK_SECRET = settings.stripe_webhook_secret
+STRIPE_LIVE_MODE = settings.stripe_live_mode
+SUPABASE_URL = settings.supabase_url
+SUPABASE_KEY = settings.supabase_key
