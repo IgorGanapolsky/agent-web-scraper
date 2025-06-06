@@ -3,6 +3,7 @@ Modern CLI interface for Agent Web Scraper using Typer.
 """
 
 import os
+import sys
 from pathlib import Path
 
 import typer
@@ -83,7 +84,7 @@ def setup(
     if setup_script.exists():
         import subprocess
 
-        result = subprocess.run([f"{setup_script}"], shell=True)
+        result = subprocess.run([sys.executable, str(setup_script)], shell=False)
         if result.returncode == 0:
             console.print("[green]✅ Setup completed successfully![/green]")
         else:
