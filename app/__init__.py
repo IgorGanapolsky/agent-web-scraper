@@ -1,14 +1,10 @@
-"""Agent Web Scraper - AI-powered market research automation."""
+"""
+Agent Web Scraper application.
+"""
 
-__version__ = "0.2.0"
-__author__ = "Igor Ganapolsky"
-__email__ = "your.email@example.com"
+from app.core.quality import ensure_quality
 
-from app.config.logging import get_logger, setup_logging
+__version__ = "2.0.0"
 
-# Set up default logging
-setup_logging()
-logger = get_logger(__name__)
-logger.info(f"Agent Web Scraper v{__version__} initialized")
-
-__all__ = ["__version__", "__author__", "__email__", "get_logger", "setup_logging"]
+# Ensure quality on import
+ensure_quality()
