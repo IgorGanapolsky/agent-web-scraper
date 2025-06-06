@@ -1,0 +1,82 @@
+{
+  "estimation_metadata": {
+    "timestamp": "2025-06-06T17:55:52.802133",
+    "session_id": "dev_estimation_20250606_175552",
+    "components_analyzed": 4
+  },
+  "component_estimates": [
+    {
+      "name": "Stripe Integration",
+      "description": "Payment processing, webhooks, subscription management",
+      "complexity": "medium",
+      "development_hours": 40,
+      "ai_assistance_hours": 8,
+      "development_cost": 6000.0,
+      "ai_assistance_cost": 0.471,
+      "total_cost": 6000.471,
+      "cost_breakdown": {
+        "developer_time": 6000.0,
+        "ai_assistance": 0.471,
+        "savings_from_ai": 1800.0
+      }
+    },
+    {
+      "name": "Customer Dashboard",
+      "description": "User portal, analytics, subscription management",
+      "complexity": "high",
+      "development_hours": 80,
+      "ai_assistance_hours": 16,
+      "development_cost": 12000.0,
+      "ai_assistance_cost": 1.5072,
+      "total_cost": 12001.5072,
+      "cost_breakdown": {
+        "developer_time": 12000.0,
+        "ai_assistance": 1.5072,
+        "savings_from_ai": 3600.0
+      }
+    },
+    {
+      "name": "Trial & Conversion Flow",
+      "description": "Onboarding, trial tracking, conversion optimization",
+      "complexity": "medium",
+      "development_hours": 60,
+      "ai_assistance_hours": 12,
+      "development_cost": 9000.0,
+      "ai_assistance_cost": 0.7065,
+      "total_cost": 9000.7065,
+      "cost_breakdown": {
+        "developer_time": 9000.0,
+        "ai_assistance": 0.7065,
+        "savings_from_ai": 2700.0
+      }
+    },
+    {
+      "name": "API Access Management",
+      "description": "API key generation, rate limiting, usage tracking",
+      "complexity": "medium",
+      "development_hours": 50,
+      "ai_assistance_hours": 10,
+      "development_cost": 7500.0,
+      "ai_assistance_cost": 0.58875,
+      "total_cost": 7500.58875,
+      "cost_breakdown": {
+        "developer_time": 7500.0,
+        "ai_assistance": 0.58875,
+        "savings_from_ai": 2250.0
+      }
+    }
+  ],
+  "total_estimates": {
+    "total_development_cost": 34500.0,
+    "total_ai_cost": 3.2734500000000004,
+    "total_project_cost": 34503.27345,
+    "total_development_hours": 230,
+    "average_hourly_rate": 150.0,
+    "ai_cost_percentage": 0.00948736068403388
+  },
+  "ai_optimization_savings": {
+    "time_savings_hours": 69.0,
+    "cost_savings": 10350.0,
+    "efficiency_gain": "30% faster development with AI assistance"
+  }
+}

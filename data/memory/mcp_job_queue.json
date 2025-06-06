@@ -1,0 +1,86 @@
+[
+  {
+    "id": "claude_gap_resolution_planning_20250606_175956_175393",
+    "agent_type": "AgentType.CLAUDE",
+    "job_type": "gap_resolution_planning",
+    "title": "Create Critical Gap Resolution Plan",
+    "description": "Create detailed plan to resolve Stripe Integration, Customer Dashboard, Trial Flow, and API Access gaps",
+    "payload": {
+      "gaps": {
+        "stripe_integration": {
+          "status": "missing",
+          "priority": "critical",
+          "impact_on_revenue": "blocks_all_payments",
+          "estimated_dev_time": "2-3 days",
+          "dependencies": [],
+          "owner": "CTO"
+        },
+        "customer_dashboard": {
+          "status": "missing",
+          "priority": "critical",
+          "impact_on_revenue": "no_customer_self_service",
+          "estimated_dev_time": "3-4 days",
+          "dependencies": [
+            "stripe_integration"
+          ],
+          "owner": "CTO"
+        },
+        "trial_conversion_flow": {
+          "status": "missing",
+          "priority": "critical",
+          "impact_on_revenue": "no_trial_to_paid_conversion",
+          "estimated_dev_time": "2-3 days",
+          "dependencies": [
+            "stripe_integration"
+          ],
+          "owner": "CMO"
+        },
+        "api_access_management": {
+          "status": "missing",
+          "priority": "critical",
+          "impact_on_revenue": "no_api_monetization",
+          "estimated_dev_time": "3-4 days",
+          "dependencies": [
+            "stripe_integration",
+            "customer_dashboard"
+          ],
+          "owner": "CTO"
+        },
+        "onboarding_retention": {
+          "status": "optional",
+          "priority": "medium",
+          "impact_on_revenue": "reduces_churn_improves_ltv",
+          "estimated_dev_time": "4-5 days",
+          "dependencies": [
+            "customer_dashboard",
+            "trial_conversion_flow"
+          ],
+          "owner": "CMO"
+        }
+      },
+      "week1_target": 400,
+      "deadline": "2025-06-06T20:49:56.175342",
+      "priorities": [
+        "stripe_integration",
+        "trial_conversion_flow",
+        "customer_dashboard",
+        "api_access_management"
+      ]
+    },
+    "priority": "JobPriority.CRITICAL",
+    "status": "JobStatus.COMPLETED",
+    "assigned_agent": null,
+    "created_at": "2025-06-06 17:59:56.175397",
+    "started_at": "2025-06-06 17:59:56.178496",
+    "completed_at": "2025-06-06 17:59:56.235988",
+    "result": {
+      "status": "retrying",
+      "attempt": 1
+    },
+    "error": null,
+    "retry_count": 1,
+    "max_retries": 3,
+    "dependencies": [],
+    "tags": []
+  }
+]
