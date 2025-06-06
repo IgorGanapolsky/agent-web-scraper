@@ -28,64 +28,58 @@ async def pricing_page(request: Request):
     """Display pricing page with Stripe checkout options"""
 
     pricing_data = {
-        "starter": {
-            "name": "Starter",
-            "price": "$19",
-            "monthly_price": 1900,  # cents
-            "features": [
-                "1,000 API calls per month",
-                "Daily market reports",
-                "Email delivery",
-                "Basic analytics",
-                "Community support",
-            ],
-            "trial_days": 14,
-        },
-        "basic": {
-            "name": "Basic",
-            "price": "$29",
-            "monthly_price": 2900,  # cents
-            "features": [
-                "5,000 API calls per month",
-                "Daily SaaS market intelligence",
-                "AI-powered pain point insights",
-                "Email + dashboard access",
-                "Market trend analysis",
-                "Priority email support",
-            ],
-            "trial_days": 14,
-            "popular": True,
-        },
-        "pro": {
-            "name": "Pro",
-            "price": "$99",
-            "monthly_price": 9900,  # cents
-            "features": [
-                "50,000 API calls per month",
-                "Everything in Basic",
-                "API access for integrations",
-                "Advanced analytics",
-                "Custom report scheduling",
-                "Priority support + calls",
-                "Advanced filtering",
-            ],
-            "trial_days": 14,
-        },
-        "enterprise": {
-            "name": "Enterprise",
+        "professional": {
+            "name": "Professional",
             "price": "$299",
             "monthly_price": 29900,  # cents
             "features": [
-                "300,000+ API calls per month",
-                "Everything in Pro",
-                "Dedicated customer success",
-                "Custom market research",
-                "White-label options",
-                "Custom integrations",
-                "SLA guarantees",
+                "AI-powered market intelligence",
+                "Daily opportunity discovery reports",
+                "Pain point extraction from 100K+ conversations",
+                "Competitive gap analysis",
+                "Revenue impact scoring",
+                "Email delivery + API access",
+                "Standard support",
+            ],
+            "trial_days": 14,
+            "target_market": "Growing SaaS companies ($1M+ ARR)",
+        },
+        "enterprise": {
+            "name": "Enterprise",
+            "price": "$999",
+            "monthly_price": 99900,  # cents
+            "features": [
+                "Everything in Professional",
+                "Custom market research projects",
+                "Weekly strategy calls with AI insights team",
+                "Multi-industry analysis",
+                "Lead generation campaign integration",
+                "Dedicated customer success manager",
+                "Custom RAG knowledge base",
+                "Priority support + Slack channel",
             ],
             "trial_days": 30,
-            "badge": "Best Value",
+            "popular": True,
+            "target_market": "Series A/B SaaS companies ($5M+ ARR)",
+        },
+        "strategic": {
+            "name": "Strategic Intelligence",
+            "price": "$2,999",
+            "monthly_price": 299900,  # cents
+            "features": [
+                "Everything in Enterprise",
+                "Executive market intelligence briefings",
+                "Investment opportunity analysis",
+                "M&A target identification",
+                "Board-ready market reports",
+                "Custom AI agent development",
+                "White-label platform licensing",
+                "24/7 priority support",
+                "Quarterly strategy sessions",
+            ],
+            "trial_days": 30,
+            "badge": "Maximum ROI",
+            "target_market": "VCs, PE firms, Enterprise ($50M+ valuation)",
         },
     }
 
@@ -109,16 +103,15 @@ async def create_checkout(
 
     try:
         # Validate tier
-        valid_tiers = ["starter", "basic", "pro", "enterprise"]
+        valid_tiers = ["professional", "enterprise", "strategic"]
         if tier not in valid_tiers:
             raise HTTPException(status_code=400, detail="Invalid pricing tier")
 
         # Set trial days based on tier
         tier_trial_days = {
-            "starter": 14,
-            "basic": 14,
-            "pro": 14,
+            "professional": 14,
             "enterprise": 30,
+            "strategic": 30,
         }
         trial_days = tier_trial_days.get(tier, 14)
 
