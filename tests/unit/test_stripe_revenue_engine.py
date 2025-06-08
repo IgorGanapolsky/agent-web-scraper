@@ -393,7 +393,7 @@ class TestStripeRevenueEngineScenarios:
         daily_total_cents = int(1074.86 * 100)  # 107486 cents
         charges_per_customer = daily_total_cents // 76  # ~1414 cents per customer
         mock_charges = []
-        for i in range(76):
+        for _ in range(76):
             charge = MagicMock()
             charge.amount = charges_per_customer
             charge.paid = True

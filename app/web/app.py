@@ -100,10 +100,6 @@ async def root():
     return {"message": "SaaS Market Intelligence Platform API", "version": "2.0.0"}
 
 
-@app.get("/health")
-async def health_check():
-    """Health check endpoint."""
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
 
 
 @app.post("/api/subscriptions", response_model=dict[str, Any])

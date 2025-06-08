@@ -355,9 +355,9 @@ def parse_roadmap_file(file_path: str) -> list[Issue]:
                     label_text = current_line.replace("**Labels:**", "").strip()
                     # Parse labels, removing backticks and quotes
                     labels = [
-                        l.strip().strip("`").strip('"').strip("'")
-                        for l in label_text.split(",")
-                        if l.strip()
+                        label.strip().strip("`").strip('"').strip("'")
+                        for label in label_text.split(",")
+                        if label.strip()
                     ]
                 elif current_line.startswith("**Status:**"):
                     status = current_line.replace("**Status:**", "").strip()

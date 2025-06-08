@@ -621,7 +621,7 @@ async def execute_batch_tasks_with_callback(
                             "timestamp": datetime.now().isoformat(),
                         },
                     )
-            except:
+            except Exception:
                 pass  # Don't fail on callback errors
 
 

@@ -190,7 +190,7 @@ class StripeSupabaseService:
             prices = stripe.Price.list(lookup_keys=[f"{plan_id}_monthly"], limit=1)
             if prices.data:
                 return prices.data[0].id
-        except:
+        except Exception:
             pass
 
         # Create product first
