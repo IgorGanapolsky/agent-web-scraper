@@ -1,0 +1,22 @@
+{
+  "pipeline_monitoring": {
+    "current_run_cost": 0.072,
+    "daily_runs": 6,
+    "daily_cost": 0.43199999999999994,
+    "monthly_projection": 12.959999999999997,
+    "target_monthly_savings": 210.0
+  },
+  "budget_status": {
+    "daily_budget": 10.0,
+    "daily_spend": 0,
+    "utilization_pct": 0.0,
+    "remaining_budget": 10.0
+  },
+  "optimization_metrics": {
+    "cost_per_run": 0.072,
+    "efficiency_rating": "Optimal",
+    "monthly_savings_target": 210.0,
+    "actual_monthly_projection": 12.959999999999997
+  },
+  "recommendations": []
+}

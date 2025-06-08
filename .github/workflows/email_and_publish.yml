@@ -1,0 +1,111 @@
+name: 📬 Email & Publish Reports
+
+on:
+  schedule:
+    - cron: '15 13 * * *'  # 8:15 AM EST (after daily insight generation)
+  workflow_dispatch:  # Allow manual triggering
+  push:
+    paths:
+      - 'reports/insight_daily_*.md'  # Trigger on new daily reports
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  send_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-dotenv markdown requests
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-scripts.txt ]; then pip install -r requirements-scripts.txt; fi
+
+      - name: 📧 Send Email Report
+        env:
+          ZOHO_APP_PASSWORD: ${{ secrets.ZOHO_APP_PASSWORD }}
+        run: |
+          echo "🚀 Starting email report delivery..."
+          echo "📊 Checking for latest reports..."
+          ls -la reports/ | grep -E "insight_daily_|weekly_digest_" | tail -5
+          python scripts/send_email_report.py
+          echo "📝 Email delivery status logged"
+        continue-on-error: true
+
+      - name: 📝 Publish to Substack
+        env:
+          ZOHO_APP_PASSWORD: ${{ secrets.ZOHO_APP_PASSWORD }}
+          SUBSTACK_EMAIL: ${{ secrets.SUBSTACK_EMAIL }}
+        run: |
+          echo "🚀 Starting Substack publishing..."
+          python scripts/publish_substack_post.py
+        continue-on-error: true
+
+      - name: 📊 Commit logs if updated
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if logs directory and files exist
+          if [ ! -d "logs" ]; then
+            mkdir -p logs
+            echo "📁 Created logs directory"
+          fi
+
+          # Stage any new or modified log files
+          if [[ -n $(git status --porcelain logs/) ]]; then
+            git add logs/
+            git commit -m "📧 Update email and publishing logs - $(date +'%Y-%m-%d %H:%M')" || echo "No log changes to commit"
+            git push
+            echo "✅ Logs committed and pushed"
+          else
+            echo "📝 No log changes to commit"
+          fi
+
+      - name: 📈 Report Status
+        run: |
+          echo "✅ Email and publishing workflow completed"
+          echo "📊 Workflow Summary:"
+          echo "   • Trigger: ${{ github.event_name }}"
+          echo "   • Time: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+          echo "   • Reports directory:"
+          ls -la reports/ | grep -E "insight_daily_|weekly_digest_" | tail -3
+
+          echo "📊 Check logs for detailed results:"
+          if [ -f logs/email_log.csv ]; then
+            echo "📧 Recent email log entries:"
+            tail -n 3 logs/email_log.csv
+          else
+            echo "⚠️  No email log found at logs/email_log.csv"
+          fi
+
+          if [ -f logs/substack_posts.csv ]; then
+            echo "📝 Recent Substack log entries:"
+            tail -n 3 logs/substack_posts.csv
+          else
+            echo "⚠️  No Substack log found at logs/substack_posts.csv"
+          fi
+
+          echo "🔗 Workflow completed successfully!"

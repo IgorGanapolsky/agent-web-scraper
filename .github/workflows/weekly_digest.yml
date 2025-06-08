@@ -1,0 +1,194 @@
+name: 📊 Weekly Digest Generator
+
+on:
+  schedule:
+    - cron: '0 18 * * 0'  # Every Sunday at 6:00 PM UTC (1:00 PM EST)
+  workflow_dispatch:
+    inputs:
+      week_ending:
+        description: 'Week ending date (YYYY-MM-DD) - defaults to most recent Sunday'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  generate_weekly_digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-dotenv reportlab
+          if [ -f requirements-scripts.txt ]; then pip install -r requirements-scripts.txt; fi
+
+      - name: 📁 Create weekly buffer directory
+        run: |
+          mkdir -p weekly_buffer
+          echo "📁 Weekly buffer directory created"
+
+      - name: 📄 Copy daily reports to weekly buffer
+        run: |
+          echo "📋 Copying this week's daily insight reports to buffer..."
+
+          # Calculate week dates
+          if [ -n "${{ inputs.week_ending }}" ]; then
+            WEEK_ENDING="${{ inputs.week_ending }}"
+          else
+            # Get most recent Sunday
+            WEEK_ENDING=$(date -d "last sunday" +%Y-%m-%d)
+            # If today is Sunday, use today
+            if [ $(date +%u) -eq 7 ]; then
+              WEEK_ENDING=$(date +%Y-%m-%d)
+            fi
+          fi
+
+          echo "Week ending: $WEEK_ENDING"
+
+          # Calculate week start (6 days before week ending)
+          WEEK_START=$(date -d "$WEEK_ENDING - 6 days" +%Y-%m-%d)
+          echo "Week start: $WEEK_START"
+
+          # Copy daily reports for this week
+          COPIED_COUNT=0
+          CURRENT_DATE="$WEEK_START"
+
+          while [ "$CURRENT_DATE" != "$(date -d "$WEEK_ENDING + 1 day" +%Y-%m-%d)" ]; do
+            SOURCE_FILE="reports/insight_daily_${CURRENT_DATE}.md"
+            TARGET_FILE="weekly_buffer/insight_daily_${CURRENT_DATE}.md"
+
+            if [ -f "$SOURCE_FILE" ]; then
+              cp "$SOURCE_FILE" "$TARGET_FILE"
+              echo "📄 Copied: $SOURCE_FILE → $TARGET_FILE"
+              COPIED_COUNT=$((COPIED_COUNT + 1))
+            else
+              echo "⚠️  Missing: $SOURCE_FILE"
+            fi
+
+            CURRENT_DATE=$(date -d "$CURRENT_DATE + 1 day" +%Y-%m-%d)
+          done
+
+          echo "✅ Copied $COPIED_COUNT daily reports to weekly buffer"
+
+          # List files in buffer for verification
+          echo "📋 Files in weekly buffer:"
+          ls -la weekly_buffer/
+
+      - name: 📊 Generate weekly digest PDF
+        env:
+          ZOHO_APP_PASSWORD: ${{ secrets.ZOHO_APP_PASSWORD }}
+        run: |
+          echo "🚀 Generating weekly digest PDF..."
+
+          if [ -n "${{ inputs.week_ending }}" ]; then
+            python scripts/summarize_weekly_reports.py --week-ending "${{ inputs.week_ending }}"
+          else
+            python scripts/summarize_weekly_reports.py
+          fi
+
+      - name: 📈 Generate digest summary
+        run: |
+          echo "📊 Weekly Digest Generation Report" > digest_summary.md
+          echo "Generated: $(date)" >> digest_summary.md
+          echo "" >> digest_summary.md
+
+          # Check if PDF was created
+          PDF_COUNT=$(ls reports/weekly_digest_*.pdf 2>/dev/null | wc -l)
+          echo "## Generation Status" >> digest_summary.md
+          echo "- PDFs Created: $PDF_COUNT" >> digest_summary.md
+
+          if [ $PDF_COUNT -gt 0 ]; then
+            LATEST_PDF=$(ls -t reports/weekly_digest_*.pdf | head -n 1)
+            PDF_SIZE=$(du -h "$LATEST_PDF" | cut -f1)
+            echo "- Latest PDF: $(basename $LATEST_PDF)" >> digest_summary.md
+            echo "- PDF Size: $PDF_SIZE" >> digest_summary.md
+          fi
+
+          # Count buffer files
+          BUFFER_COUNT=$(ls weekly_buffer/*.md 2>/dev/null | wc -l)
+          echo "- Daily Reports Processed: $BUFFER_COUNT" >> digest_summary.md
+
+          echo "" >> digest_summary.md
+          echo "## Weekly Buffer Contents" >> digest_summary.md
+          if [ $BUFFER_COUNT -gt 0 ]; then
+            for file in weekly_buffer/*.md; do
+              if [ -f "$file" ]; then
+                FILENAME=$(basename "$file")
+                FILE_SIZE=$(du -h "$file" | cut -f1)
+                echo "- $FILENAME ($FILE_SIZE)" >> digest_summary.md
+              fi
+            done
+          else
+            echo "- No files in weekly buffer" >> digest_summary.md
+          fi
+
+          # Check logs
+          echo "" >> digest_summary.md
+          echo "## Processing Logs" >> digest_summary.md
+          if [ -f logs/weekly_digests.csv ]; then
+            echo "### Latest Weekly Digest Log:" >> digest_summary.md
+            tail -n 1 logs/weekly_digests.csv >> digest_summary.md
+          fi
+
+          echo "" >> digest_summary.md
+          echo "---" >> digest_summary.md
+          echo "🤖 Generated by Weekly Digest Automation" >> digest_summary.md
+
+          cat digest_summary.md
+
+      - name: 📄 Upload digest artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: weekly-digest-artifacts
+          path: |
+            reports/weekly_digest_*.pdf
+            weekly_buffer/*.md
+            digest_summary.md
+            logs/weekly_digests.csv
+
+      - name: 📊 Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Add generated files
+          if [[ -n $(git status --porcelain reports/weekly_digest_*.pdf) ]] || [[ -n $(git status --porcelain logs/weekly_digests.csv) ]]; then
+            git add reports/weekly_digest_*.pdf logs/weekly_digests.csv
+            git commit -m "📊 Add weekly digest PDF and update logs" || echo "No digest files to commit"
+            git push
+          else
+            echo "📝 No new digest files to commit"
+          fi
+
+      - name: 🧹 Cleanup weekly buffer
+        run: |
+          echo "🧹 Cleaning up weekly buffer directory..."
+          rm -rf weekly_buffer/*.md
+          echo "✅ Weekly buffer cleaned"
+
+      - name: 🎉 Weekly digest summary
+        run: |
+          echo "📊 Weekly Digest Generation Complete!"
+          echo ""
+          echo "📈 Generated artifacts:"
+          echo "• Weekly digest PDF with comprehensive market analysis"
+          echo "• Email sent to support@saasgrowthdispatch.com"
+          echo "• Processing logs updated"
+          echo "• Artifacts uploaded for download"
+          echo ""
+          echo "📊 Check artifacts for detailed generation report"
+          echo "📧 Check email for weekly digest delivery"

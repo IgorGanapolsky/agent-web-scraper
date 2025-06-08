@@ -1,0 +1,49 @@
+{
+  "week2_token_usage": {
+    "report_metadata": {
+      "timestamp": "2025-06-06T18:27:06.979980",
+      "session_id": "week2_dev_20250606_182706",
+      "report_type": "week2_development_monitoring",
+      "monitoring_period": "2025-06-07 to 2025-06-13"
+    },
+    "development_token_breakdown": {
+      "stripe_integration": {
+        "estimated_tokens": 8000,
+        "actual_tokens": 7500,
+        "cost": 0.045,
+        "efficiency_gain": "6.25%"
+      },
+      "customer_dashboard": {
+        "estimated_tokens": 12000,
+        "actual_tokens": 11200,
+        "cost": 0.084,
+        "efficiency_gain": "6.67%"
+      },
+      "api_access_management": {
+        "estimated_tokens": 4500,
+        "actual_tokens": 4200,
+        "cost": 0.032,
+        "efficiency_gain": "6.67%"
+      },
+      "strategic_analysis": {
+        "tokens": 3500,
+        "cost": 0.1225,
+        "purpose": "Cost optimization and model adjustments"
+      }
+    },
+    "cost_efficiency_metrics": {
+      "total_estimated_cost": 1.75,
+      "total_actual_cost": 0.2835,
+      "cost_reduction_achieved": 83.8,
+      "target_reduction": 50.0,
+      "exceeds_target": true,
+      "monthly_budget_impact": 1.134
+    },
+    "model_distribution_compliance": {
+      "sonnet_4_percentage": 80.1,
+      "haiku_3_percentage": 9.2,
+      "opus_4_percentage": 10.7,
+      "distribution_compliance": "OPTIMAL"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+name: Daily AI Insight Report Generator
+
+on:
+  schedule:
+    # Runs daily at 8:00 AM EST (13:00 UTC)
+    - cron: '0 13 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+permissions: write-all
+
+jobs:
+  generate-insight-report:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas openai google-generativeai python-dotenv PyGithub
+
+    - name: Generate insight report
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+      run: |
+        python scripts/generate_insight.py
+
+    - name: Configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Commit and push changes
+      run: |
+        git add reports/insight_daily_*.md
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🤖 Daily AI Insight Report - $(date '+%Y-%m-%d')
+
+          Automated generation of daily insights from metrics data including:
+          - Pain point clustering and analysis
+          - Underserved SaaS niche identification
+          - Lead magnet recommendations
+
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push
+        fi
+
+    - name: Create GitHub Issue
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python scripts/create_insight_issue.py

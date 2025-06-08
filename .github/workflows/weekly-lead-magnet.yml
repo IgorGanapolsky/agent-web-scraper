@@ -1,0 +1,75 @@
+name: Weekly Lead Magnet Generator
+
+on:
+  schedule:
+    # Run every Sunday at 10:00 AM UTC (weekly lead magnet generation)
+    - cron: '0 10 * * 0'
+  workflow_dispatch: # Allow manual triggers
+    inputs:
+      weeks_back:
+        description: 'Number of weeks to analyze'
+        required: false
+        default: '1'
+      email_report:
+        description: 'Email the generated report'
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  generate-lead-magnet:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Hatch
+      run: pip install hatch
+
+    - name: Install dependencies
+      run: hatch env create
+
+    - name: Generate Weekly Lead Magnet
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        GSPREAD_CREDENTIALS_PATH: secrets/gsheet_service_account.json
+        ZOHO_APP_PASSWORD: ${{ secrets.ZOHO_APP_PASSWORD }}
+      run: |
+        # Create secrets directory and credentials file
+        mkdir -p secrets
+        echo '${{ secrets.GSPREAD_CREDENTIALS_JSON }}' > secrets/gsheet_service_account.json
+
+        # Set up weeks parameter
+        WEEKS_PARAM="${{ github.event.inputs.weeks_back || '1' }}"
+        EMAIL_FLAG="${{ github.event.inputs.email_report == 'true' && '--email-report' || '' }}"
+
+        # Generate lead magnet with analytics
+        hatch run python generate_lead_magnet.py \
+          --weeks $WEEKS_PARAM \
+          --save-json \
+          $EMAIL_FLAG
+
+    - name: Upload Generated Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: weekly-lead-magnet-reports
+        path: reports/
+        retention-days: 30
+
+    - name: Notify on Success
+      if: success()
+      run: |
+        echo "✅ Weekly lead magnet generated successfully!"
+        echo "📊 Reports uploaded as artifacts"
+        echo "💰 Ready for monetization!"
+
+    - name: Notify on Failure
+      if: failure()
+      run: |
+        echo "❌ Lead magnet generation failed"
+        echo "🔍 Check logs for debugging"
