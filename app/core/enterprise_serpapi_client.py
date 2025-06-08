@@ -142,7 +142,10 @@ class ConcurrentSerpAPIClient:
         }
 
         try:
-            async with aiohttp.ClientSession() as session, session.get(self.base_url, params=params) as response:
+            async with (
+                aiohttp.ClientSession() as session,
+                session.get(self.base_url, params=params) as response,
+            ):
                 if response.status == 200:
                     return await response.json()
                 else:

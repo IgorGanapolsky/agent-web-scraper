@@ -56,35 +56,15 @@ jobs:
             ;;
           "push")
             COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-            MESSAGE="🚀 **Code Deployed** - Production Update
-
-Commit: $COMMIT_MESSAGE
-Repository: $REPO
-Branch: main
-Quality Status: $QUALITY_STATUS
-
-#claude #deployment #main"
+            MESSAGE="🚀 **Code Deployed** - Production Update - Commit: $COMMIT_MESSAGE - Repository: $REPO - Branch: main - Quality Status: $QUALITY_STATUS - #claude #deployment #main"
             ;;
           "workflow_run")
             WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
             CONCLUSION="${{ github.event.workflow_run.conclusion }}"
-            MESSAGE="⚙️ **Workflow Complete** - $WORKFLOW_NAME
-
-Status: $CONCLUSION
-Repository: $REPO
-Quality Metrics Updated
-
-#claude #workflow #quality"
+            MESSAGE="⚙️ **Workflow Complete** - $WORKFLOW_NAME - Status: $CONCLUSION - Repository: $REPO - Quality Metrics Updated - #claude #workflow #quality"
             ;;
           *)
-            MESSAGE="📊 **Executive Dashboard Update**
-
-Repository: $REPO
-Open Issues: $OPEN_ISSUES
-Open PRs: $OPEN_PRS
-Quality Gate: $QUALITY_STATUS
-
-#claude #dashboard #metrics"
+            MESSAGE="📊 **Executive Dashboard Update** - Repository: $REPO - Open Issues: $OPEN_ISSUES - Open PRs: $OPEN_PRS - Quality Gate: $QUALITY_STATUS - #claude #dashboard #metrics"
             ;;
         esac
 
@@ -111,24 +91,7 @@ Quality Gate: $QUALITY_STATUS
         DAILY_TARGET=300
         WEEKLY_TARGET=$((DAILY_TARGET * 7))
 
-        MESSAGE="📈 **WEEKLY CEO REPORT** - Agent Web Scraper Performance
-
-🎯 **Business Metrics**
-Revenue Target: \$${WEEKLY_TARGET}/week (\$300/day)
-Development Velocity: ${WEEKLY_COMMITS} commits this week
-Issues Resolved: ${WEEKLY_ISSUES} this week
-
-🔧 **Technical Health**
-SonarCloud: Quality gate monitoring active
-CI/CD: Automated deployment pipeline
-Testing: Coverage reports generated
-
-🚀 **Strategic Initiatives**
-- Multi-modal RAG (ColPali) research in progress
-- Rally AI integration analysis
-- Enterprise quality gates enforced
-
-#claude #ceo-report #weekly #executive"
+        MESSAGE="📈 **WEEKLY CEO REPORT** - Agent Web Scraper Performance - 🎯 **Business Metrics** - Revenue Target: \$${WEEKLY_TARGET}/week (\$300/day) - Development Velocity: ${WEEKLY_COMMITS} commits this week - Issues Resolved: ${WEEKLY_ISSUES} this week - 🔧 **Technical Health** - SonarCloud: Quality gate monitoring active - CI/CD: Automated deployment pipeline - Testing: Coverage reports generated - 🚀 **Strategic Initiatives** - Multi-modal RAG (ColPali) research in progress - Rally AI integration analysis - Enterprise quality gates enforced - #claude #ceo-report #weekly #executive"
 
         curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
           -H 'Content-type: application/json' \
@@ -136,7 +99,4 @@ Testing: Coverage reports generated
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-# Schedule weekly CEO reports (Sundays at 9 AM EST)
-on:
-  schedule:
-    - cron: '0 14 * * 0'
+# Weekly CEO reports are triggered via workflow_dispatch or manually
