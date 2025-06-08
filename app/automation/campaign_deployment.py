@@ -9,7 +9,7 @@ import json
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 from app.config.logging import get_logger
 
@@ -1569,7 +1569,7 @@ class MockMemoryManager:
         self,
         user_id: str,
         project_name: str,
-        initial_context: dict[str, Any] | None = None,
+        initial_context: Optional[Dict[str, Any]] = None,
     ) -> str:
         session_id = f"deployment_session_{int(time.time())}"
         self.session_contexts[session_id] = {
