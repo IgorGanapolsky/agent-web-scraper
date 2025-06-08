@@ -9,7 +9,7 @@ import json
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from app.config.logging import get_logger
 
@@ -1542,8 +1542,8 @@ class MockTokenMonitor:
         model: str,
         input_tokens: int,
         output_tokens: int,
-        task_type: str | None = None,
-        session_id: str | None = None,
+        task_type: Optional[str] = None,
+        session_id: Optional[str] = None,
     ) -> float:
         pricing = {
             "claude-3.5-sonnet": {"input": 3.0, "output": 15.0},
