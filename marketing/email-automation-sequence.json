@@ -1,0 +1,110 @@
+{
+  "email_sequence": {
+    "name": "3-Day Trial Conversion Sequence",
+    "trigger": "trial_signup",
+    "goal": "Convert trial users to $79/month subscription",
+    "sequence": [
+      {
+        "email_id": "welcome",
+        "delay_hours": 0,
+        "subject": "Welcome! Your AI business intelligence trial starts now",
+        "content_type": "html",
+        "template": "welcome_trial.html",
+        "personalization": ["first_name", "company_name"],
+        "cta": "Access Your Dashboard",
+        "tracking": {
+          "open_rate_target": 0.7,
+          "click_rate_target": 0.4
+        }
+      },
+      {
+        "email_id": "value_demonstration", 
+        "delay_hours": 24,
+        "subject": "Your first market intelligence report is ready",
+        "content_type": "html",
+        "template": "day1_value.html",
+        "attachments": ["sample_competitor_report.pdf"],
+        "cta": "View Full Report",
+        "tracking": {
+          "open_rate_target": 0.6,
+          "click_rate_target": 0.35
+        }
+      },
+      {
+        "email_id": "conversion_urgency",
+        "delay_hours": 48,
+        "subject": "⏰ Only 24 hours left in your trial",
+        "content_type": "html", 
+        "template": "day2_urgency.html",
+        "personalization": ["insights_generated", "competitors_tracked"],
+        "cta": "Upgrade to Continue",
+        "tracking": {
+          "open_rate_target": 0.65,
+          "click_rate_target": 0.45,
+          "conversion_rate_target": 0.25
+        }
+      },
+      {
+        "email_id": "final_conversion",
+        "delay_hours": 66,
+        "subject": "Last chance: Your trial expires in 6 hours",
+        "content_type": "html",
+        "template": "final_conversion.html",
+        "urgency_level": "high",
+        "discount_offer": {
+          "type": "percentage",
+          "value": 20,
+          "code": "REVENUE20",
+          "expires_hours": 6
+        },
+        "cta": "Claim 20% Off Now",
+        "tracking": {
+          "open_rate_target": 0.8,
+          "click_rate_target": 0.5,
+          "conversion_rate_target": 0.4
+        }
+      }
+    ]
+  },
+  "automation_settings": {
+    "provider": "n8n",
+    "webhook_triggers": [
+      "trial_signup",
+      "trial_activation", 
+      "payment_method_added",
+      "subscription_created"
+    ],
+    "segmentation": {
+      "by_company_size": ["startup", "small_business", "enterprise"],
+      "by_industry": ["saas", "ecommerce", "consulting", "other"],
+      "by_engagement": ["high", "medium", "low"]
+    },
+    "personalization_data": [
+      "first_name",
+      "company_name",
+      "industry",
+      "trial_usage_metrics",
+      "insights_generated",
+      "competitors_tracked"
+    ]
+  },
+  "conversion_optimization": {
+    "a_b_tests": [
+      {
+        "test_name": "subject_line_urgency",
+        "variants": ["standard", "high_urgency"],
+        "metric": "open_rate"
+      },
+      {
+        "test_name": "cta_button_color",
+        "variants": ["green", "blue", "red"], 
+        "metric": "click_rate"
+      }
+    ],
+    "send_time_optimization": {
+      "timezone_aware": true,
+      "optimal_hours": [9, 14, 17],
+      "avoid_weekends": false
+    }
+  }
+}

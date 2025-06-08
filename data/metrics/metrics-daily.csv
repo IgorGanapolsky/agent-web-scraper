@@ -1,0 +1,9 @@
+Date,Category,Topic,Volume,PainPoint,TrendScore,Notes
+2025-05-27,Support,Ticket Overload,430,High wait times,7.8,Spike after product launch
+2025-05-28,Integration,API Rate Limits,340,Workflow disruptions,8.2,Multiple customer complaints
+2025-05-29,Security,Data Exposure,280,Privacy concerns,6.9,GDPR compliance gaps
+2025-05-30,Support,Onboarding Friction,520,User confusion,7.4,Complex setup processes
+2025-05-31,Cost,Budget Optimization,390,SaaS sprawl,8.1,40% of operational budget
+2025-06-01,Support,Response Delays,460,Customer frustration,7.6,48+ hour response times
+2025-06-02,Integration,Data Sync Issues,350,Manual workflows,7.9,Hours of daily copying
+2025-06-03,Performance,Loading Speed,300,User complaints,6.8,30+ second load times

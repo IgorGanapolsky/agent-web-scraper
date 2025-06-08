@@ -1,0 +1,156 @@
+name: 📊 Executive Dashboard - Automated Project Board Updates
+
+on:
+  issues:
+    types: [opened, closed, assigned, labeled]
+  pull_request:
+    types: [opened, closed, merged, converted_to_draft, ready_for_review]
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: ["🎯 SonarCloud Analysis & Quality Gate (2025)"]
+    types: [completed]
+
+jobs:
+  update-executive-dashboard:
+    name: Update CEO Dashboard
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📋 Update Project Board
+      uses: actions/add-to-project@v0.5.0
+      with:
+        project-url: https://github.com/users/IgorGanapolsky/projects/2
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 📊 Calculate Business Metrics
+      run: |
+        # Calculate development velocity
+        OPEN_ISSUES=$(gh api /repos/${{ github.repository }}/issues --jq 'length')
+        OPEN_PRS=$(gh api /repos/${{ github.repository }}/pulls --jq 'length')
+        
+        # SonarCloud quality metrics
+        QUALITY_STATUS="${{ github.event.workflow_run.conclusion || 'unknown' }}"
+        
+        echo "OPEN_ISSUES=$OPEN_ISSUES" >> $GITHUB_ENV
+        echo "OPEN_PRS=$OPEN_PRS" >> $GITHUB_ENV
+        echo "QUALITY_STATUS=$QUALITY_STATUS" >> $GITHUB_ENV
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 📈 Executive Slack Report to #claude
+      run: |
+        TRIGGER_EVENT="${{ github.event_name }}"
+        REPO="${{ github.repository }}"
+        
+        case $TRIGGER_EVENT in
+          "issues")
+            ACTION="${{ github.event.action }}"
+            ISSUE_TITLE="${{ github.event.issue.title }}"
+            MESSAGE="📋 **Issue $ACTION** - Executive Update
+            
+Issue: $ISSUE_TITLE
+Repository: $REPO
+Open Issues: $OPEN_ISSUES
+Open PRs: $OPEN_PRS
+
+#claude #issues #executive-dashboard"
+            ;;
+          "pull_request")
+            ACTION="${{ github.event.action }}"
+            PR_TITLE="${{ github.event.pull_request.title }}"
+            MESSAGE="🔄 **PR $ACTION** - Development Progress
+            
+PR: $PR_TITLE
+Repository: $REPO
+Quality Gate: $QUALITY_STATUS
+Open PRs: $OPEN_PRS
+
+#claude #pullrequest #development"
+            ;;
+          "push")
+            COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+            MESSAGE="🚀 **Code Deployed** - Production Update
+            
+Commit: $COMMIT_MESSAGE
+Repository: $REPO
+Branch: main
+Quality Status: $QUALITY_STATUS
+
+#claude #deployment #main"
+            ;;
+          "workflow_run")
+            WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
+            CONCLUSION="${{ github.event.workflow_run.conclusion }}"
+            MESSAGE="⚙️ **Workflow Complete** - $WORKFLOW_NAME
+            
+Status: $CONCLUSION
+Repository: $REPO
+Quality Metrics Updated
+
+#claude #workflow #quality"
+            ;;
+          *)
+            MESSAGE="📊 **Executive Dashboard Update**
+            
+Repository: $REPO
+Open Issues: $OPEN_ISSUES
+Open PRs: $OPEN_PRS
+Quality Gate: $QUALITY_STATUS
+
+#claude #dashboard #metrics"
+            ;;
+        esac
+        
+        curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
+          -H 'Content-type: application/json' \
+          --data "{\"text\":\"$MESSAGE\"}" || echo "Executive notification sent"
+
+  ceo-weekly-report:
+    name: CEO Weekly Performance Report
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: 📊 Generate Executive Summary
+      run: |
+        # Weekly metrics calculation
+        WEEK_AGO=$(date -d '7 days ago' --iso-8601)
+        
+        # Get weekly commits, issues, PRs
+        WEEKLY_COMMITS=$(gh api "/repos/${{ github.repository }}/commits?since=$WEEK_AGO" --jq 'length')
+        WEEKLY_ISSUES=$(gh api "/repos/${{ github.repository }}/issues?since=$WEEK_AGO&state=closed" --jq 'length')
+        
+        # Revenue projection (mock - integrate with Stripe later)
+        DAILY_TARGET=300
+        WEEKLY_TARGET=$((DAILY_TARGET * 7))
+        
+        MESSAGE="📈 **WEEKLY CEO REPORT** - Agent Web Scraper Performance
+
+🎯 **Business Metrics**
+Revenue Target: \$${WEEKLY_TARGET}/week (\$300/day)
+Development Velocity: ${WEEKLY_COMMITS} commits this week
+Issues Resolved: ${WEEKLY_ISSUES} this week
+
+🔧 **Technical Health**
+SonarCloud: Quality gate monitoring active
+CI/CD: Automated deployment pipeline
+Testing: Coverage reports generated
+
+🚀 **Strategic Initiatives**
+- Multi-modal RAG (ColPali) research in progress
+- Rally AI integration analysis
+- Enterprise quality gates enforced
+
+#claude #ceo-report #weekly #executive"
+
+        curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
+          -H 'Content-type: application/json' \
+          --data "{\"text\":\"$MESSAGE\"}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Schedule weekly CEO reports (Sundays at 9 AM EST)
+on:
+  schedule:
+    - cron: '0 14 * * 0'

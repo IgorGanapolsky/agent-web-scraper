@@ -1,0 +1,40 @@
+{
+  "report_type": "Week 1 Token Usage Analysis",
+  "tracking_period": {
+    "start": "2025-06-06T00:00:00",
+    "end": "2025-06-06T17:52:18.415188",
+    "days_tracked": 1
+  },
+  "token_summary": {
+    "total_tokens_used": 57100,
+    "input_tokens": 37400,
+    "output_tokens": 19700,
+    "average_tokens_per_day": 57100.0
+  },
+  "model_performance": {
+    "sonnet_4": {
+      "usage_percentage": "43.7%",
+      "target_percentage": "80%",
+      "compliance": "\u26a0\ufe0f",
+      "cost_efficiency": 0.15210815639387068
+    },
+    "opus_4": {
+      "usage_percentage": "55.4%",
+      "target_percentage": "10%",
+      "compliance": "\u26a0\ufe0f",
+      "cost_efficiency": 0.032407407407407406
+    },
+    "haiku_4": {
+      "usage_percentage": "0.9%",
+      "target_percentage": "10%",
+      "compliance": "\u26a0\ufe0f",
+      "cost_efficiency": 0.40277777777777773
+    }
+  },
+  "cost_optimization_status": {
+    "target_savings": "60-80%",
+    "achieved_savings": "71.4%",
+    "monthly_projection": "$71.44",
+    "on_track_for_target": true
+  }
+}

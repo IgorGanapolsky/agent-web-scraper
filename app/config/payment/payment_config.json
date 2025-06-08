@@ -1,0 +1,52 @@
+{
+  "basic": {
+    "product": {
+      "name": "SaaS Growth Dispatch - Basic",
+      "price": 29,
+      "description": "Daily AI-powered SaaS market insights and niche opportunities",
+      "features": [
+        "Daily market intelligence reports",
+        "Niche opportunity scoring",
+        "Pain point trend analysis",
+        "Email delivery",
+        "Basic support"
+      ]
+    },
+    "checkout_url": "https://buy.stripe.com/your-basic-link",
+    "price_id": "price_saas_growth_basic"
+  },
+  "premium": {
+    "product": {
+      "name": "SaaS Growth Dispatch - Premium",
+      "price": 99,
+      "description": "Advanced SaaS intelligence with API access and custom analysis",
+      "features": [
+        "Everything in Basic",
+        "API access to insights",
+        "Custom niche analysis",
+        "Weekly strategy calls",
+        "Priority support",
+        "Custom lead magnets"
+      ]
+    },
+    "checkout_url": "https://buy.stripe.com/your-premium-link",
+    "price_id": "price_saas_growth_premium"
+  },
+  "enterprise": {
+    "product": {
+      "name": "SaaS Growth Dispatch - Enterprise",
+      "price": 299,
+      "description": "Full-service SaaS intelligence and consulting",
+      "features": [
+        "Everything in Premium",
+        "Weekly 1:1 strategy calls",
+        "Custom market research",
+        "Competitive analysis",
+        "Go-to-market planning",
+        "Dedicated account manager"
+      ]
+    },
+    "checkout_url": "https://buy.stripe.com/your-enterprise-link",
+    "price_id": "price_saas_growth_enterprise"
+  }
+}
