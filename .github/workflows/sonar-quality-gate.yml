@@ -153,28 +153,9 @@ jobs:
         STATUS="${{ job.status }}"
 
         if [ "$STATUS" = "success" ]; then
-          MESSAGE="🎯 **SonarCloud Quality Gate PASSED** - posted by OpenHands
-
-✅ Code Quality: Enterprise Grade
-✅ Security: No Issues
-✅ Coverage: ${COVERAGE_PCT}%
-✅ Maintainability: High
-
-🚀 Ready for production deployment!
-Repository: agent-web-scraper
-Commit: ${{ github.sha }}
-#sonarcloud #quality"
+          MESSAGE="🎯 **SonarCloud Quality Gate PASSED** - Code Quality: Enterprise Grade - Security: No Issues - Ready for production deployment! #sonarcloud #quality"
         else
-          MESSAGE="❌ **SonarCloud Quality Gate FAILED** - posted by OpenHands
-
-⚠️ Issues detected in code quality
-🔧 Review SonarCloud dashboard for details
-📊 Coverage: ${COVERAGE_PCT}%
-🔍 Action required before merge
-
-Repository: agent-web-scraper
-Commit: ${{ github.sha }}
-#sonarcloud #failed"
+          MESSAGE="❌ **SonarCloud Quality Gate FAILED** - Issues detected in code quality - Review SonarCloud dashboard for details - Action required before merge #sonarcloud #failed"
         fi
 
         curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
