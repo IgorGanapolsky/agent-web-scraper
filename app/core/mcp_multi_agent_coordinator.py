@@ -328,9 +328,10 @@ class MCPCoordinator:
 
         url = f"{self.agents[AgentType.GEMINI]['api_url']}?key={self.agents[AgentType.GEMINI]['api_key']}"
 
-        async with aiohttp.ClientSession() as session, session.post(
-            url, json=payload, headers=headers, timeout=300
-        ) as response:
+        async with (
+            aiohttp.ClientSession() as session,
+            session.post(url, json=payload, headers=headers, timeout=300) as response,
+        ):
             if response.status == 200:
                 result = await response.json()
                 candidates = result.get("candidates", [])
@@ -370,18 +371,19 @@ class MCPCoordinator:
             "temperature": 0.7,
         }
 
-        async with aiohttp.ClientSession() as session, session.post(
-            self.agents[AgentType.CHATGPT]["api_url"],
-            json=payload,
-            headers=headers,
-            timeout=300,
-        ) as response:
+        async with (
+            aiohttp.ClientSession() as session,
+            session.post(
+                self.agents[AgentType.CHATGPT]["api_url"],
+                json=payload,
+                headers=headers,
+                timeout=300,
+            ) as response,
+        ):
             if response.status == 200:
                 result = await response.json()
                 content = (
-                    result.get("choices", [{}])[0]
-                    .get("message", {})
-                    .get("content", "")
+                    result.get("choices", [{}])[0].get("message", {}).get("content", "")
                 )
                 return {
                     "agent": "chatgpt",
@@ -391,9 +393,7 @@ class MCPCoordinator:
                 }
             else:
                 error_text = await response.text()
-                raise Exception(
-                    f"ChatGPT API error {response.status}: {error_text}"
-                )
+                raise Exception(f"ChatGPT API error {response.status}: {error_text}")
 
     def _build_claude_prompt(self, job: AgentJob) -> str:
         """Build Claude-specific prompt"""

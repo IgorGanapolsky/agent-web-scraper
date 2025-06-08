@@ -109,7 +109,7 @@ class EnterpriseRAGSystem:
                     name=self.collection_name
                 )
                 logger.info(f"Loaded existing collection: {self.collection_name}")
-            except:
+            except Exception:
                 self.collection = self.chroma_client.create_collection(
                     name=self.collection_name,
                     metadata={
@@ -217,7 +217,7 @@ class EnterpriseRAGSystem:
                     relevance += 0.2
                 elif days_old < 90:
                     relevance += 0.1
-            except:
+            except Exception:
                 pass
 
         return min(relevance, 1.0)

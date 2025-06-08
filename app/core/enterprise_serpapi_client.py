@@ -142,13 +142,12 @@ class ConcurrentSerpAPIClient:
         }
 
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(self.base_url, params=params) as response:
-                    if response.status == 200:
-                        return await response.json()
-                    else:
-                        logger.error(f"SerpAPI error: {response.status}")
-                        return {"error": f"HTTP {response.status}"}
+            async with aiohttp.ClientSession() as session, session.get(self.base_url, params=params) as response:
+                if response.status == 200:
+                    return await response.json()
+                else:
+                    logger.error(f"SerpAPI error: {response.status}")
+                    return {"error": f"HTTP {response.status}"}
 
         except Exception as e:
             logger.error(f"SerpAPI request failed: {e}")

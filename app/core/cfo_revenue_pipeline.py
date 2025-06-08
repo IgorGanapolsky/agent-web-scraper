@@ -323,7 +323,7 @@ class CFORevenuePipeline:
                 else "∞"
             ),
             "roi_multiple": (
-                round(projected_monthly_revenue / (self.current_daily_cost * 30), 1)
+                round(projected_revenue_monthly / (self.current_daily_cost * 30), 1)
                 if self.current_daily_cost > 0
                 else "∞"
             ),

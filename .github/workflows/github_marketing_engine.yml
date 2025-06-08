@@ -49,22 +49,11 @@ jobs:
 
           # Count GitHub prospects discovered
           if [ -f github_prospects_database.json ]; then
-            GITHUB_PROSPECTS=$(python -c "
-import json
-with open('github_prospects_database.json', 'r') as f:
-    prospects = json.load(f)
-    print(len(prospects))
-")
+            GITHUB_PROSPECTS=$(python -c "import json; prospects = json.load(open('github_prospects_database.json')); print(len(prospects))")
             echo "🎯 GitHub Prospects Discovered: $GITHUB_PROSPECTS"
 
             # Count high-score prospects
-            HIGH_SCORE=$(python -c "
-import json
-with open('github_prospects_database.json', 'r') as f:
-    prospects = json.load(f)
-    high_score = [p for p in prospects if p.get('prospect_score', 0) >= 70]
-    print(len(high_score))
-")
+            HIGH_SCORE=$(python -c "import json; prospects = json.load(open('github_prospects_database.json')); high_score = [p for p in prospects if p.get('prospect_score', 0) >= 70]; print(len(high_score))")
             echo "⭐ High-Score Prospects: $HIGH_SCORE"
           else
             echo "📝 No GitHub prospects database found yet"

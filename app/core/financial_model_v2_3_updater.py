@@ -36,8 +36,8 @@ class FinancialModelV23Updater:
         # Week 2 revenue targets and progress
         self.week2_revenue_data = {
             "daily_target": 600.0,  # $600/day target
-            "weekly_target": 4200.0,  # $600 × 7 days
-            "monthly_target": 18000.0,  # $600 × 30 days
+            "weekly_target": 4200.0,  # $600 x 7 days
+            "monthly_target": 18000.0,  # $600 x 30 days
             "week1_baseline": 400.0,  # Week 1 baseline
             "growth_rate": 0.5,  # 50% growth from Week 1 to Week 2
         }

@@ -8,7 +8,7 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, ClassVar, Optional
 
 from app.config.logging import get_logger
 
@@ -49,7 +49,7 @@ class TokenMonitor:
     """
 
     # Claude 4 pricing (per million tokens)
-    CLAUDE_4_PRICING = {
+    CLAUDE_4_PRICING: ClassVar[dict] = {
         "claude-4": {
             "input": 15.0,  # $15 per million input tokens
             "output": 75.0,  # $75 per million output tokens

@@ -6,7 +6,7 @@ Tracks and optimizes Claude 4 API costs for budget management
 import json
 import os
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import ClassVar, Optional
 
 from pydantic import BaseModel
 
@@ -33,7 +33,7 @@ class ClaudeTokenMonitor:
     """Monitor and optimize Claude token usage"""
 
     # Claude 4 pricing (per million tokens)
-    PRICING = {
+    PRICING: ClassVar[dict] = {
         "claude-4-opus": {"input": 15.0, "output": 75.0},
         "claude-4-sonnet": {"input": 3.0, "output": 15.0},
     }

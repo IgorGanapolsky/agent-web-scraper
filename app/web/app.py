@@ -100,8 +100,6 @@ async def root():
     return {"message": "SaaS Market Intelligence Platform API", "version": "2.0.0"}
 
 
-
-
 @app.post("/api/subscriptions", response_model=dict[str, Any])
 async def create_subscription(
     request: SubscriptionRequest, current_user: dict = Depends(get_current_user)

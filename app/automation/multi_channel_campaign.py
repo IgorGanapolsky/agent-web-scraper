@@ -605,14 +605,14 @@ Manual reporting cycles create **week-long delays** between data availability an
 
 1. **Weekly Manual Hours:** _____ hours
 2. **Average Hourly Cost:** $_____ (salary + benefits + overhead)
-3. **Weekly Cost:** Hours × Hourly Cost = $_____
-4. **Annual Cost:** Weekly Cost × 52 = $_____
-5. **Automation Savings (85%):** Annual Cost × 0.85 = $_____
+3. **Weekly Cost:** Hours x Hourly Cost = $_____
+4. **Annual Cost:** Weekly Cost x 52 = $_____
+5. **Automation Savings (85%):** Annual Cost x 0.85 = $_____
 
 **Example Calculation:**
-- 25 hours weekly × $45/hour = $1,125 weekly
-- $1,125 × 52 weeks = $58,500 annually
-- $58,500 × 85% = **$49,725 annual savings**
+- 25 hours weekly x $45/hour = $1,125 weekly
+- $1,125 x 52 weeks = $58,500 annually
+- $58,500 x 85% = **$49,725 annual savings**
 
 ## Implementation Roadmap: Your First 30 Days
 
@@ -808,9 +808,9 @@ return qualifiedLeads;
                         "contentType": "html",
                         "emailContent": "{{ $node['Load_Email_Template'].json.html_content }}",
                         "trackingSettings": {
-                            "clickTracking": true,
-                            "openTracking": true,
-                            "subscriptionTracking": true,
+                            "clickTracking": True,
+                            "openTracking": True,
+                            "subscriptionTracking": True,
                         },
                     },
                 },
@@ -859,7 +859,7 @@ return qualifiedLeads;
             ],
             "settings": {
                 "executionOrder": "v1",
-                "saveManualExecutions": true,
+                "saveManualExecutions": True,
                 "callerPolicy": "workflowsFromSameOwner",
                 "errorWorkflow": "error_handler_workflow",
             },

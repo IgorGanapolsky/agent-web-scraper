@@ -15,7 +15,7 @@
     },
     {
       "id": "verify_stripe_signature",
-      "name": "Verify Stripe Webhook Signature", 
+      "name": "Verify Stripe Webhook Signature",
       "type": "n8n-nodes-base.function",
       "position": [460, 300],
       "parameters": {
@@ -25,7 +25,7 @@
     {
       "id": "process_payment_event",
       "name": "Process Payment Event",
-      "type": "n8n-nodes-base.function", 
+      "type": "n8n-nodes-base.function",
       "position": [680, 300],
       "parameters": {
         "functionCode": "// Payment processing logic"
@@ -48,7 +48,7 @@
       "main": [
         [
           {
-            "node": "process_payment_event", 
+            "node": "process_payment_event",
             "type": "main",
             "index": 0
           }

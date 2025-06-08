@@ -6,7 +6,7 @@ Handles Stripe integration and subscription management for $300/day revenue targ
 import json
 import os
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import ClassVar, Optional
 
 import stripe
 from pydantic import BaseModel
@@ -37,7 +37,7 @@ class PaymentService:
     """Handles all payment and subscription operations"""
 
     # Pricing tiers with annual options
-    TIERS = {
+    TIERS: ClassVar[dict] = {
         "basic": SubscriptionTier(
             name="Basic",
             price_id_monthly="price_basic_monthly",

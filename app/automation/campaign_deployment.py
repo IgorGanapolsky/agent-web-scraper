@@ -1099,7 +1099,7 @@ return personalizedEmails;
                         "average_acv": 500,
                         "retention_rate": "85%",
                         "expansion_rate": "120%",
-                        "ltv_calculation": "ACV × Retention × Expansion",
+                        "ltv_calculation": "ACV x Retention x Expansion",
                     },
                 },
             },

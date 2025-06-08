@@ -60,24 +60,24 @@ jobs:
         # Create basic test if none exist
         if [ ! -f "tests/test_basic.py" ]; then
           cat > tests/test_basic.py << 'TESTEOF'
-def test_basic():
-    """Basic test to ensure testing infrastructure works"""
-    assert True
+        def test_basic():
+            """Basic test to ensure testing infrastructure works"""
+            assert True
 
-def test_app_structure():
-    """Verify core application directories exist"""
-    import os
-    assert os.path.exists('app')
-    assert os.path.exists('scripts')
+        def test_app_structure():
+            """Verify core application directories exist"""
+            import os
+            assert os.path.exists('app')
+            assert os.path.exists('scripts')
 
-def test_sonar_config():
-    """Verify SonarQube configuration is correct"""
-    import os
-    assert os.path.exists('sonar-project.properties')
-    with open('sonar-project.properties', 'r') as f:
-        content = f.read()
-        assert 'sonar.qualitygate.ignoreall=true' in content
-        assert 'sonar.coverage.force=true' in content
+        def test_sonar_config():
+            """Verify SonarQube configuration is correct"""
+            import os
+            assert os.path.exists('sonar-project.properties')
+            with open('sonar-project.properties', 'r') as f:
+                content = f.read()
+                assert 'sonar.qualitygate.ignoreall=true' in content
+                assert 'sonar.coverage.force=true' in content
 TESTEOF
         fi
 

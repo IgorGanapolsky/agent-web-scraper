@@ -80,31 +80,16 @@ jobs:
 
           # Calculate current metrics
           if [ -f customers_database.json ]; then
-            CUSTOMER_COUNT=$(python -c "
-import json
-with open('customers_database.json', 'r') as f:
-    customers = json.load(f)
-    print(len(customers))
-")
+            CUSTOMER_COUNT=$(python -c "import json; customers = json.load(open('customers_database.json')); print(len(customers))")
 
-            DAILY_REVENUE=$(python -c "
-import json
-with open('customers_database.json', 'r') as f:
-    customers = json.load(f)
-    mrr = sum(c.get('mrr', 29) for c in customers)
-    print(f'{mrr/30:.2f}')
-")
+            DAILY_REVENUE=$(python -c "import json; customers = json.load(open('customers_database.json')); mrr = sum(c.get('mrr', 29) for c in customers); print(f'{mrr/30:.2f}')")
 
             echo "👥 Total Customers: $CUSTOMER_COUNT"
             echo "💰 Daily Revenue: \$$DAILY_REVENUE"
             echo "🎯 Target: \$300/day"
 
             # Check if target achieved
-            TARGET_ACHIEVED=$(python -c "
-daily_revenue = $DAILY_REVENUE
-target = 300
-print('true' if daily_revenue >= target else 'false')
-")
+            TARGET_ACHIEVED=$(python -c "daily_revenue = $DAILY_REVENUE; target = 300; print('true' if daily_revenue >= target else 'false')")
 
             if [ "$TARGET_ACHIEVED" = "true" ]; then
               echo "🎉 TARGET ACHIEVED! \$300/day revenue reached!"

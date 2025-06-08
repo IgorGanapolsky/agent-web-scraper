@@ -157,7 +157,7 @@ class GapAnalysisResolver:
             # Parse the plan (assuming JSON response)
             try:
                 resolution_plan = json.loads(plan_content)
-            except:
+            except (json.JSONDecodeError, KeyError, ValueError):
                 # Fallback to structured plan
                 resolution_plan = self._create_fallback_plan()
         else:
@@ -424,7 +424,7 @@ class GapAnalysisResolver:
             strategy_content = strategy_results["completed"][0]["result"]["content"]
             try:
                 updated_strategy = json.loads(strategy_content)
-            except:
+            except (json.JSONDecodeError, KeyError, ValueError):
                 updated_strategy = self._create_fallback_updated_strategy(
                     execution_results
                 )

@@ -378,7 +378,7 @@ class ClaudeSquadOrchestrator:
                 # Try to parse as JSON, fall back to text
                 try:
                     parsed_result = json.loads(result_content)
-                except:
+                except (json.JSONDecodeError, ValueError):
                     parsed_result = result_content
 
                 return TaskResult(

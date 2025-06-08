@@ -47,26 +47,12 @@ jobs:
           "issues")
             ACTION="${{ github.event.action }}"
             ISSUE_TITLE="${{ github.event.issue.title }}"
-            MESSAGE="📋 **Issue $ACTION** - Executive Update
-
-Issue: $ISSUE_TITLE
-Repository: $REPO
-Open Issues: $OPEN_ISSUES
-Open PRs: $OPEN_PRS
-
-#claude #issues #executive-dashboard"
+            MESSAGE="📋 **Issue $ACTION** - Executive Update - Issue: $ISSUE_TITLE - Repository: $REPO - Open Issues: $OPEN_ISSUES - Open PRs: $OPEN_PRS - #claude #issues #executive-dashboard"
             ;;
           "pull_request")
             ACTION="${{ github.event.action }}"
             PR_TITLE="${{ github.event.pull_request.title }}"
-            MESSAGE="🔄 **PR $ACTION** - Development Progress
-
-PR: $PR_TITLE
-Repository: $REPO
-Quality Gate: $QUALITY_STATUS
-Open PRs: $OPEN_PRS
-
-#claude #pullrequest #development"
+            MESSAGE="🔄 **PR $ACTION** - Development Progress - PR: $PR_TITLE - Repository: $REPO - Quality Gate: $QUALITY_STATUS - Open PRs: $OPEN_PRS - #claude #pullrequest #development"
             ;;
           "push")
             COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
