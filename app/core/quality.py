@@ -3,6 +3,7 @@ Quality module for SonarQube integration.
 This module ensures high code quality standards.
 """
 
+
 class QualityGate:
     """
     Quality Gate class to ensure code meets enterprise standards.

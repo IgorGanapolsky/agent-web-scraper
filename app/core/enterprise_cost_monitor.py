@@ -29,15 +29,15 @@ class EnterpriseCostMonitor:
         # Model Usage Strategy (CEO's directive)
         self.target_model_distribution = {
             "sonnet_4": 0.80,  # 80% of operations
-            "opus_4": 0.10,    # 10% of operations
-            "haiku_4": 0.10    # 10% of operations
+            "opus_4": 0.10,  # 10% of operations
+            "haiku_4": 0.10,  # 10% of operations
         }
 
         # Model costs per million tokens
         self.model_costs = {
             "sonnet_4": {"input": 3.0, "output": 15.0},
             "opus_4": {"input": 15.0, "output": 75.0},
-            "haiku_4": {"input": 0.25, "output": 1.25}
+            "haiku_4": {"input": 0.25, "output": 1.25},
         }
 
         # Week 1 Revenue Targets
@@ -45,7 +45,9 @@ class EnterpriseCostMonitor:
         self.week1_cost_reduction_target = 0.30  # 30% cost reduction
 
         # Initialize tracking
-        self.week1_start_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        self.week1_start_date = datetime.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
         self.week1_end_date = self.week1_start_date + timedelta(days=7)
 
         logger.info("Enterprise Cost Monitor activated with CEO strategy")
@@ -62,19 +64,19 @@ class EnterpriseCostMonitor:
                 "target_monthly_spend": self.target_monthly_spend,
                 "baseline_monthly_spend": self.current_baseline_spend,
                 "target_cost_reduction": f"{self.target_cost_reduction*100}%",
-                "model_distribution_strategy": self.target_model_distribution
+                "model_distribution_strategy": self.target_model_distribution,
             },
             "week1_targets": {
                 "revenue_target": f"${self.week1_revenue_target}/day",
                 "cost_reduction_target": f"{self.week1_cost_reduction_target*100}%",
                 "tracking_period": {
                     "start": self.week1_start_date.isoformat(),
-                    "end": self.week1_end_date.isoformat()
-                }
+                    "end": self.week1_end_date.isoformat(),
+                },
             },
             "daily_tracking": {},
             "alerts": [],
-            "optimization_recommendations": []
+            "optimization_recommendations": [],
         }
 
         # Store activation in persistent memory
@@ -82,7 +84,7 @@ class EnterpriseCostMonitor:
             category="enterprise_cost_monitoring",
             content=cost_tracking,
             tags=["ceo_strategy", "cost_optimization", "week1_activation"],
-            importance_score=1.0
+            importance_score=1.0,
         )
 
         # Create initial cost tracking file
@@ -90,18 +92,26 @@ class EnterpriseCostMonitor:
         with open(self.cost_data_file, "w") as f:
             json.dump(cost_tracking, f, indent=2)
 
-        logger.info("✅ Cost monitoring system activated and stored in persistent memory")
+        logger.info(
+            "✅ Cost monitoring system activated and stored in persistent memory"
+        )
 
         return {
             "status": "activated",
             "monitoring_active": True,
             "cost_tracking_file": self.cost_data_file,
             "week1_monitoring": "enabled",
-            "ceo_strategy_compliance": "active"
+            "ceo_strategy_compliance": "active",
         }
 
-    def track_token_usage(self, operation: str, model: str, input_tokens: int,
-                         output_tokens: int, cost: float) -> dict:
+    def track_token_usage(
+        self,
+        operation: str,
+        model: str,
+        input_tokens: int,
+        output_tokens: int,
+        cost: float,
+    ) -> dict:
         """Track individual token usage with enterprise monitoring"""
 
         usage_entry = {
@@ -111,10 +121,10 @@ class EnterpriseCostMonitor:
             "tokens": {
                 "input": input_tokens,
                 "output": output_tokens,
-                "total": input_tokens + output_tokens
+                "total": input_tokens + output_tokens,
             },
             "cost": cost,
-            "model_efficiency_score": self._calculate_model_efficiency(model, cost)
+            "model_efficiency_score": self._calculate_model_efficiency(model, cost),
         }
 
         # Load current tracking data
@@ -128,8 +138,8 @@ class EnterpriseCostMonitor:
                 "daily_totals": {
                     "total_cost": 0,
                     "total_tokens": 0,
-                    "model_breakdown": {"sonnet_4": 0, "opus_4": 0, "haiku_4": 0}
-                }
+                    "model_breakdown": {"sonnet_4": 0, "opus_4": 0, "haiku_4": 0},
+                },
             }
 
         # Add usage entry
@@ -170,26 +180,26 @@ class EnterpriseCostMonitor:
                 "cost_reduction_target": f"{self.week1_cost_reduction_target*100}%",
                 "ai_spend_target": f"${self.target_monthly_spend/4:.2f}/week",
                 "actual_ai_spend": f"${week1_metrics['total_week_cost']:.2f}",
-                "cost_reduction_achieved": f"{week1_metrics['cost_reduction_achieved']*100:.1f}%"
+                "cost_reduction_achieved": f"{week1_metrics['cost_reduction_achieved']*100:.1f}%",
             },
             "model_usage_analysis": {
                 "target_distribution": self.target_model_distribution,
                 "actual_distribution": week1_metrics["actual_model_distribution"],
-                "compliance_score": week1_metrics["distribution_compliance_score"]
+                "compliance_score": week1_metrics["distribution_compliance_score"],
             },
             "cost_breakdown": {
                 "total_spend": week1_metrics["total_week_cost"],
                 "daily_average": week1_metrics["daily_average_cost"],
                 "model_breakdown": week1_metrics["model_cost_breakdown"],
-                "savings_achieved": week1_metrics["savings_vs_baseline"]
+                "savings_achieved": week1_metrics["savings_vs_baseline"],
             },
             "efficiency_metrics": {
                 "cost_per_operation": week1_metrics["cost_per_operation"],
                 "tokens_per_dollar": week1_metrics["tokens_per_dollar"],
-                "model_efficiency_scores": week1_metrics["model_efficiency_scores"]
+                "model_efficiency_scores": week1_metrics["model_efficiency_scores"],
             },
             "alerts_and_recommendations": tracking_data.get("alerts", []),
-            "week1_grade": self._calculate_week1_grade(week1_metrics)
+            "week1_grade": self._calculate_week1_grade(week1_metrics),
         }
 
         # Generate token usage report
@@ -198,40 +208,60 @@ class EnterpriseCostMonitor:
             "tracking_period": {
                 "start": self.week1_start_date.isoformat(),
                 "end": datetime.now().isoformat(),
-                "days_tracked": len(week1_metrics["daily_data"])
+                "days_tracked": len(week1_metrics["daily_data"]),
             },
             "token_summary": {
                 "total_tokens_used": week1_metrics["total_tokens"],
                 "input_tokens": week1_metrics["total_input_tokens"],
                 "output_tokens": week1_metrics["total_output_tokens"],
-                "average_tokens_per_day": week1_metrics["average_tokens_per_day"]
+                "average_tokens_per_day": week1_metrics["average_tokens_per_day"],
             },
             "model_performance": {
                 "sonnet_4": {
                     "usage_percentage": f"{week1_metrics['actual_model_distribution']['sonnet_4']*100:.1f}%",
                     "target_percentage": "80%",
-                    "compliance": "✅" if week1_metrics["actual_model_distribution"]["sonnet_4"] >= 0.75 else "⚠️",
-                    "cost_efficiency": week1_metrics["model_efficiency_scores"].get("sonnet_4", 0)
+                    "compliance": (
+                        "✅"
+                        if week1_metrics["actual_model_distribution"]["sonnet_4"]
+                        >= 0.75
+                        else "⚠️"
+                    ),
+                    "cost_efficiency": week1_metrics["model_efficiency_scores"].get(
+                        "sonnet_4", 0
+                    ),
                 },
                 "opus_4": {
                     "usage_percentage": f"{week1_metrics['actual_model_distribution']['opus_4']*100:.1f}%",
                     "target_percentage": "10%",
-                    "compliance": "✅" if week1_metrics["actual_model_distribution"]["opus_4"] <= 0.15 else "⚠️",
-                    "cost_efficiency": week1_metrics["model_efficiency_scores"].get("opus_4", 0)
+                    "compliance": (
+                        "✅"
+                        if week1_metrics["actual_model_distribution"]["opus_4"] <= 0.15
+                        else "⚠️"
+                    ),
+                    "cost_efficiency": week1_metrics["model_efficiency_scores"].get(
+                        "opus_4", 0
+                    ),
                 },
                 "haiku_4": {
                     "usage_percentage": f"{week1_metrics['actual_model_distribution']['haiku_4']*100:.1f}%",
                     "target_percentage": "10%",
-                    "compliance": "✅" if week1_metrics["actual_model_distribution"]["haiku_4"] >= 0.05 else "⚠️",
-                    "cost_efficiency": week1_metrics["model_efficiency_scores"].get("haiku_4", 0)
-                }
+                    "compliance": (
+                        "✅"
+                        if week1_metrics["actual_model_distribution"]["haiku_4"] >= 0.05
+                        else "⚠️"
+                    ),
+                    "cost_efficiency": week1_metrics["model_efficiency_scores"].get(
+                        "haiku_4", 0
+                    ),
+                },
             },
             "cost_optimization_status": {
                 "target_savings": "60-80%",
                 "achieved_savings": f"{week1_metrics['cost_reduction_achieved']*100:.1f}%",
                 "monthly_projection": f"${week1_metrics['total_week_cost']*4:.2f}",
-                "on_track_for_target": week1_metrics["total_week_cost"]*4 <= self.target_monthly_spend
-            }
+                "on_track_for_target": week1_metrics["total_week_cost"] * 4
+                <= self.target_monthly_spend,
+            },
         }
 
         # Store reports in persistent memory
@@ -239,10 +269,10 @@ class EnterpriseCostMonitor:
             category="week1_cost_report",
             content={
                 "cost_report": cost_report,
-                "token_usage_report": token_usage_report
+                "token_usage_report": token_usage_report,
             },
             tags=["week1_progress", "cost_analysis", "ceo_strategy"],
-            importance_score=1.0
+            importance_score=1.0,
         )
 
         # Save to files
@@ -261,7 +291,7 @@ class EnterpriseCostMonitor:
             "cost_report": cost_report,
             "token_usage_report": token_usage_report,
             "reports_stored": True,
-            "memory_persistence": True
+            "memory_persistence": True,
         }
 
     def _calculate_week1_metrics(self, tracking_data: dict) -> dict:
@@ -299,13 +329,15 @@ class EnterpriseCostMonitor:
         for model, target_pct in self.target_model_distribution.items():
             actual_pct = actual_distribution.get(model, 0)
             deviation = abs(target_pct - actual_pct)
-            compliance_score -= (deviation * 0.5)  # Penalty for deviation
+            compliance_score -= deviation * 0.5  # Penalty for deviation
 
         compliance_score = max(0, compliance_score)
 
         # Calculate savings
         baseline_week_cost = self.current_baseline_spend / 4  # Weekly baseline
-        cost_reduction_achieved = max(0, (baseline_week_cost - total_cost) / baseline_week_cost)
+        cost_reduction_achieved = max(
+            0, (baseline_week_cost - total_cost) / baseline_week_cost
+        )
         savings_vs_baseline = baseline_week_cost - total_cost
 
         return {
@@ -322,8 +354,10 @@ class EnterpriseCostMonitor:
             "savings_vs_baseline": savings_vs_baseline,
             "cost_per_operation": total_cost / max(1, total_operations),
             "tokens_per_dollar": total_tokens / max(0.01, total_cost),
-            "model_efficiency_scores": self._calculate_all_model_efficiency_scores(daily_data),
-            "daily_data": daily_data
+            "model_efficiency_scores": self._calculate_all_model_efficiency_scores(
+                daily_data
+            ),
+            "daily_data": daily_data,
         }
 
     def _calculate_model_efficiency(self, model: str, cost: float) -> float:
@@ -362,10 +396,22 @@ class EnterpriseCostMonitor:
         """Calculate overall Week 1 performance grade"""
 
         grade_components = {
-            "cost_reduction": min(100, metrics["cost_reduction_achieved"] * 100 / self.week1_cost_reduction_target),
+            "cost_reduction": min(
+                100,
+                metrics["cost_reduction_achieved"]
+                * 100
+                / self.week1_cost_reduction_target,
+            ),
             "model_compliance": metrics["distribution_compliance_score"] * 100,
-            "efficiency": min(100, metrics["tokens_per_dollar"] / 1000 * 100),  # Normalize
-            "budget_adherence": min(100, (self.target_monthly_spend/4) / max(0.01, metrics["total_week_cost"]) * 100)
+            "efficiency": min(
+                100, metrics["tokens_per_dollar"] / 1000 * 100
+            ),  # Normalize
+            "budget_adherence": min(
+                100,
+                (self.target_monthly_spend / 4)
+                / max(0.01, metrics["total_week_cost"])
+                * 100,
+            ),
         }
 
         overall_score = sum(grade_components.values()) / len(grade_components)
@@ -387,7 +433,7 @@ class EnterpriseCostMonitor:
             "overall_score": round(overall_score, 1),
             "letter_grade": letter_grade,
             "assessment": assessment,
-            "component_scores": grade_components
+            "component_scores": grade_components,
         }
 
     def _check_cost_alerts(self, tracking_data: dict, daily_cost: float):
@@ -403,7 +449,7 @@ class EnterpriseCostMonitor:
                 "type": "DAILY_COST_EXCEEDED",
                 "severity": "HIGH",
                 "message": f"Daily cost ${daily_cost:.2f} exceeds target ${daily_threshold:.2f}",
-                "recommendation": "Switch to more cost-effective models (Sonnet 4 or Haiku 4)"
+                "recommendation": "Switch to more cost-effective models (Sonnet 4 or Haiku 4)",
             }
             alerts.append(alert)
 
@@ -440,37 +486,31 @@ def simulate_week1_operations():
         ("customer_segmentation", "sonnet_4", 1800, 900, 0.54),
         ("competitive_analysis", "sonnet_4", 2200, 1100, 0.66),
         ("content_strategy_planning", "sonnet_4", 1500, 800, 0.48),
-
         # Day 2 - Strategic synthesis (Opus 4 for complex tasks)
         ("strategic_plan_synthesis", "opus_4", 3000, 2000, 4.50),
         ("financial_model_analysis", "sonnet_4", 2000, 1000, 0.60),
         ("risk_assessment", "sonnet_4", 1200, 600, 0.36),
-
         # Day 3 - Implementation planning (Mixed usage)
         ("technical_architecture", "sonnet_4", 2800, 1400, 0.84),
         ("api_endpoint_generation", "sonnet_4", 1600, 800, 0.48),
         ("simple_data_processing", "haiku_4", 800, 400, 0.03),
         ("email_template_creation", "haiku_4", 600, 300, 0.02),
-
         # Day 4 - Content creation and optimization
         ("blog_content_generation", "sonnet_4", 2200, 1100, 0.66),
         ("social_media_content", "haiku_4", 1000, 500, 0.04),
         ("presentation_creation", "opus_4", 2500, 1500, 3.00),
-
         # Day 5 - Analysis and reporting
         ("performance_analytics", "sonnet_4", 1800, 900, 0.54),
         ("cost_optimization_analysis", "sonnet_4", 2000, 1000, 0.60),
         ("simple_report_formatting", "haiku_4", 500, 250, 0.02),
-
         # Day 6 - Customer outreach
         ("prospect_qualification", "sonnet_4", 1500, 750, 0.45),
         ("email_personalization", "sonnet_4", 1200, 600, 0.36),
         ("follow_up_sequences", "haiku_4", 800, 400, 0.03),
-
         # Day 7 - Week 1 completion and planning
         ("week1_strategy_review", "opus_4", 2000, 1200, 2.40),
         ("next_week_planning", "sonnet_4", 1500, 800, 0.48),
-        ("simple_task_automation", "haiku_4", 400, 200, 0.02)
+        ("simple_task_automation", "haiku_4", 400, 200, 0.02),
     ]
 
     print("📊 Tracking Week 1 Operations:")

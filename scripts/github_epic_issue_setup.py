@@ -17,23 +17,38 @@ class GitHubEpicIssueSetup:
 
         # Agent assignments
         self.agent_assignments = {
-            "claude": ["stripe_integration", "customer_dashboard", "api_access_management"],
+            "claude": [
+                "stripe_integration",
+                "customer_dashboard",
+                "api_access_management",
+            ],
             "gemini": ["onboarding_retention_ux"],
-            "n8n_creator": ["email_automation", "workflow_automation"]
+            "n8n_creator": ["email_automation", "workflow_automation"],
         }
 
         # Label categories for auto-tagging
         self.label_categories = {
-            "billing": {"color": "0E8A16", "description": "Payment and billing related"},
+            "billing": {
+                "color": "0E8A16",
+                "description": "Payment and billing related",
+            },
             "ux": {"color": "1D76DB", "description": "User experience and interface"},
-            "onboarding": {"color": "FBCA04", "description": "User onboarding and retention"},
+            "onboarding": {
+                "color": "FBCA04",
+                "description": "User onboarding and retention",
+            },
             "infra": {"color": "D93F0B", "description": "Infrastructure and backend"},
-            "automation": {"color": "5319E7", "description": "Workflow and email automation"},
-            "api": {"color": "B60205", "description": "API development and management"}
+            "automation": {
+                "color": "5319E7",
+                "description": "Workflow and email automation",
+            },
+            "api": {"color": "B60205", "description": "API development and management"},
         }
 
         print("🎯 GitHub Epic & Issue Setup System Initialized")
-        print(f"📅 Milestone: {self.milestone} (Due: {self.milestone_date.strftime('%m/%d/%Y')})")
+        print(
+            f"📅 Milestone: {self.milestone} (Due: {self.milestone_date.strftime('%m/%d/%Y')})"
+        )
 
     def create_github_epic_structure(self) -> dict[str, Any]:
         """Create comprehensive GitHub Epic and Issue structure"""
@@ -65,15 +80,15 @@ class GitHubEpicIssueSetup:
                 "total_epics": len(epics),
                 "total_issues": sum(len(epic["issues"]) for epic in epics.values()),
                 "labels": self.label_categories,
-                "agent_assignments": self.agent_assignments
+                "agent_assignments": self.agent_assignments,
             },
             "epics": epics,
             "automation_config": {
                 "auto_labeling": True,
                 "milestone_tracking": True,
                 "progress_notifications": True,
-                "epic_linking": True
-            }
+                "epic_linking": True,
+            },
         }
 
     def _create_stripe_epic(self) -> dict[str, Any]:
@@ -103,7 +118,7 @@ This is the critical path blocker for all revenue generation.
                 "assignee": "claude",
                 "milestone": self.milestone,
                 "estimated_hours": 40,
-                "priority": "critical"
+                "priority": "critical",
             },
             "issues": [
                 {
@@ -125,7 +140,7 @@ Set up Stripe API keys with proper security configuration.
                     "labels": ["billing", "infra"],
                     "assignee": "claude",
                     "estimated_hours": 8,
-                    "epic_link": "stripe_integration"
+                    "epic_link": "stripe_integration",
                 },
                 {
                     "title": "Stripe Webhook Handler Implementation",
@@ -150,7 +165,7 @@ Create robust webhook handlers for all Stripe events.
                     "labels": ["billing", "infra"],
                     "assignee": "claude",
                     "estimated_hours": 12,
-                    "epic_link": "stripe_integration"
+                    "epic_link": "stripe_integration",
                 },
                 {
                     "title": "Subscription Management Endpoints",
@@ -173,7 +188,7 @@ Create FastAPI endpoints for subscription management.
                     "labels": ["billing", "api"],
                     "assignee": "claude",
                     "estimated_hours": 12,
-                    "epic_link": "stripe_integration"
+                    "epic_link": "stripe_integration",
                 },
                 {
                     "title": "Payment Processing Flow Integration",
@@ -196,9 +211,9 @@ Integrate payment processing with subscription tiers.
                     "labels": ["billing", "ux"],
                     "assignee": "claude",
                     "estimated_hours": 8,
-                    "epic_link": "stripe_integration"
-                }
-            ]
+                    "epic_link": "stripe_integration",
+                },
+            ],
         }
 
     def _create_dashboard_epic(self) -> dict[str, Any]:
@@ -227,7 +242,7 @@ Build comprehensive customer dashboard for subscription and usage management.
                 "assignee": "claude",
                 "milestone": self.milestone,
                 "estimated_hours": 80,
-                "priority": "high"
+                "priority": "high",
             },
             "issues": [
                 {
@@ -252,7 +267,7 @@ Create React components for customer dashboard interface.
                     "labels": ["ux"],
                     "assignee": "claude",
                     "estimated_hours": 24,
-                    "epic_link": "customer_dashboard"
+                    "epic_link": "customer_dashboard",
                 },
                 {
                     "title": "Subscription Management Interface",
@@ -276,7 +291,7 @@ Build interface for customers to manage their subscriptions.
                     "labels": ["billing", "ux"],
                     "assignee": "claude",
                     "estimated_hours": 20,
-                    "epic_link": "customer_dashboard"
+                    "epic_link": "customer_dashboard",
                 },
                 {
                     "title": "Usage Analytics Dashboard",
@@ -300,7 +315,7 @@ Create analytics dashboard showing usage metrics and insights.
                     "labels": ["ux", "infra"],
                     "assignee": "claude",
                     "estimated_hours": 16,
-                    "epic_link": "customer_dashboard"
+                    "epic_link": "customer_dashboard",
                 },
                 {
                     "title": "Customer Authentication & Authorization",
@@ -324,9 +339,9 @@ Implement secure authentication and role-based access.
                     "labels": ["infra"],
                     "assignee": "claude",
                     "estimated_hours": 20,
-                    "epic_link": "customer_dashboard"
-                }
-            ]
+                    "epic_link": "customer_dashboard",
+                },
+            ],
         }
 
     def _create_trial_flow_epic(self) -> dict[str, Any]:
@@ -355,7 +370,7 @@ Build optimized trial signup and conversion flow for maximum revenue.
                 "assignee": "claude",
                 "milestone": self.milestone,
                 "estimated_hours": 60,
-                "priority": "high"
+                "priority": "high",
             },
             "issues": [
                 {
@@ -380,7 +395,7 @@ Create optimized trial signup experience with minimal friction.
                     "labels": ["ux", "onboarding"],
                     "assignee": "claude",
                     "estimated_hours": 16,
-                    "epic_link": "trial_flow"
+                    "epic_link": "trial_flow",
                 },
                 {
                     "title": "Trial Tracking & Analytics System",
@@ -404,7 +419,7 @@ Implement comprehensive trial tracking and analytics.
                     "labels": ["infra", "ux"],
                     "assignee": "claude",
                     "estimated_hours": 16,
-                    "epic_link": "trial_flow"
+                    "epic_link": "trial_flow",
                 },
                 {
                     "title": "Conversion Prompts & CTAs",
@@ -428,7 +443,7 @@ Create strategic conversion prompts and calls-to-action.
                     "labels": ["ux", "billing"],
                     "assignee": "claude",
                     "estimated_hours": 12,
-                    "epic_link": "trial_flow"
+                    "epic_link": "trial_flow",
                 },
                 {
                     "title": "Automated Trial Email Sequence",
@@ -452,9 +467,9 @@ Set up automated email sequence for trial conversion.
                     "labels": ["automation"],
                     "assignee": "n8n_creator",
                     "estimated_hours": 16,
-                    "epic_link": "trial_flow"
-                }
-            ]
+                    "epic_link": "trial_flow",
+                },
+            ],
         }
 
     def _create_api_access_epic(self) -> dict[str, Any]:
@@ -483,7 +498,7 @@ Build comprehensive API access management for tier-based monetization.
                 "assignee": "claude",
                 "milestone": self.milestone,
                 "estimated_hours": 50,
-                "priority": "high"
+                "priority": "high",
             },
             "issues": [
                 {
@@ -508,7 +523,7 @@ Create system for API key lifecycle management.
                     "labels": ["api", "infra"],
                     "assignee": "claude",
                     "estimated_hours": 16,
-                    "epic_link": "api_access_management"
+                    "epic_link": "api_access_management",
                 },
                 {
                     "title": "Rate Limiting by Subscription Tier",
@@ -531,7 +546,7 @@ Implement tier-based rate limiting for API monetization.
                     "labels": ["api", "billing"],
                     "assignee": "claude",
                     "estimated_hours": 12,
-                    "epic_link": "api_access_management"
+                    "epic_link": "api_access_management",
                 },
                 {
                     "title": "API Usage Tracking & Analytics",
@@ -555,7 +570,7 @@ Build comprehensive API usage tracking system.
                     "labels": ["api", "infra"],
                     "assignee": "claude",
                     "estimated_hours": 14,
-                    "epic_link": "api_access_management"
+                    "epic_link": "api_access_management",
                 },
                 {
                     "title": "Developer Documentation Portal",
@@ -579,9 +594,9 @@ Create comprehensive API documentation and developer portal.
                     "labels": ["api", "ux"],
                     "assignee": "claude",
                     "estimated_hours": 8,
-                    "epic_link": "api_access_management"
-                }
-            ]
+                    "epic_link": "api_access_management",
+                },
+            ],
         }
 
     def _create_onboarding_epic(self) -> dict[str, Any]:
@@ -610,7 +625,7 @@ Build comprehensive onboarding and retention system for maximum customer success
                 "assignee": "gemini",
                 "milestone": self.milestone,
                 "estimated_hours": 56,
-                "priority": "medium"
+                "priority": "medium",
             },
             "issues": [
                 {
@@ -635,7 +650,7 @@ Design user experience for 14-day activation sequence.
                     "labels": ["onboarding", "ux"],
                     "assignee": "gemini",
                     "estimated_hours": 20,
-                    "epic_link": "onboarding_retention"
+                    "epic_link": "onboarding_retention",
                 },
                 {
                     "title": "Progress Tracking & Gamification",
@@ -659,7 +674,7 @@ Implement progress tracking with gamification elements.
                     "labels": ["onboarding", "ux"],
                     "assignee": "gemini",
                     "estimated_hours": 16,
-                    "epic_link": "onboarding_retention"
+                    "epic_link": "onboarding_retention",
                 },
                 {
                     "title": "Retention Risk Detection System",
@@ -683,7 +698,7 @@ Build predictive system for identifying at-risk users.
                     "labels": ["onboarding", "infra"],
                     "assignee": "gemini",
                     "estimated_hours": 12,
-                    "epic_link": "onboarding_retention"
+                    "epic_link": "onboarding_retention",
                 },
                 {
                     "title": "Automated Email Onboarding Sequence",
@@ -707,9 +722,9 @@ Create personalized email sequence for user activation.
                     "labels": ["onboarding", "automation"],
                     "assignee": "n8n_creator",
                     "estimated_hours": 8,
-                    "epic_link": "onboarding_retention"
-                }
-            ]
+                    "epic_link": "onboarding_retention",
+                },
+            ],
         }
 
     def create_meta_ads_n8n_workflow(self) -> dict[str, Any]:
@@ -726,7 +741,7 @@ Create personalized email sequence for user activation.
                     "type": "webhook",
                     "url": "/webhook/meta-ads-lead",
                     "method": "POST",
-                    "description": "Receives lead data from Meta Ads campaigns"
+                    "description": "Receives lead data from Meta Ads campaigns",
                 }
             },
             "workflow_steps": [
@@ -746,9 +761,9 @@ Create personalized email sequence for user activation.
                             "ad_campaign_id",
                             "ad_set_id",
                             "ad_id",
-                            "lead_source"
-                        ]
-                    }
+                            "lead_source",
+                        ],
+                    },
                 },
                 {
                     "step": 2,
@@ -760,21 +775,21 @@ Create personalized email sequence for user activation.
                             "standardize_phone_number",
                             "enrich_company_data",
                             "assign_lead_score",
-                            "generate_unique_lead_id"
+                            "generate_unique_lead_id",
                         ],
                         "data_validation": {
                             "required_fields": ["email", "first_name"],
                             "email_verification": True,
-                            "duplicate_detection": True
-                        }
-                    }
+                            "duplicate_detection": True,
+                        },
+                    },
                 },
                 {
                     "step": 3,
                     "node_type": "crm_integration",
                     "name": "CRM Lead Tagging",
                     "config": {
-                        "crm_system": "hubspot", # or "salesforce", "pipedrive"
+                        "crm_system": "hubspot",  # or "salesforce", "pipedrive"
                         "actions": [
                             {
                                 "action": "create_contact",
@@ -785,8 +800,8 @@ Create personalized email sequence for user activation.
                                     "company": "{{company}}",
                                     "phone": "{{phone}}",
                                     "lead_source": "Meta Ads - SaaS Playbook",
-                                    "lifecycle_stage": "lead"
-                                }
+                                    "lifecycle_stage": "lead",
+                                },
                             },
                             {
                                 "action": "add_tags",
@@ -794,22 +809,22 @@ Create personalized email sequence for user activation.
                                     "meta_ads_lead",
                                     "saas_playbook_interest",
                                     "week2_campaign",
-                                    "revenue_acceleration"
-                                ]
+                                    "revenue_acceleration",
+                                ],
                             },
                             {
                                 "action": "assign_to_sequence",
-                                "sequence_name": "SaaS Playbook Nurture"
-                            }
-                        ]
-                    }
+                                "sequence_name": "SaaS Playbook Nurture",
+                            },
+                        ],
+                    },
                 },
                 {
                     "step": 4,
                     "node_type": "email_automation",
                     "name": "Send Welcome Email #1",
                     "config": {
-                        "email_provider": "sendgrid", # or "mailgun", "ses"
+                        "email_provider": "sendgrid",  # or "mailgun", "ses"
                         "template_id": "saas_playbook_welcome",
                         "email_content": {
                             "subject": "Your SaaS Integration Playbook is Ready! 🚀",
@@ -818,16 +833,16 @@ Create personalized email sequence for user activation.
                             "personalization": {
                                 "first_name": "{{first_name}}",
                                 "company": "{{company}}",
-                                "playbook_download_link": "{{generate_personalized_link}}"
-                            }
+                                "playbook_download_link": "{{generate_personalized_link}}",
+                            },
                         },
                         "attachments": [
                             {
                                 "name": "SaaS_Integration_Playbook.pdf",
-                                "url": "https://cdn.yourdomain.com/playbooks/saas-integration.pdf"
+                                "url": "https://cdn.yourdomain.com/playbooks/saas-integration.pdf",
                             }
-                        ]
-                    }
+                        ],
+                    },
                 },
                 {
                     "step": 5,
@@ -841,16 +856,16 @@ Create personalized email sequence for user activation.
                                     "campaign_source": "meta_ads",
                                     "content_type": "saas_playbook",
                                     "lead_quality_score": "{{lead_score}}",
-                                    "conversion_value": 50 # estimated lead value
-                                }
+                                    "conversion_value": 50,  # estimated lead value
+                                },
                             }
                         ],
                         "analytics_platforms": [
                             "google_analytics",
                             "mixpanel",
-                            "segment"
-                        ]
-                    }
+                            "segment",
+                        ],
+                    },
                 },
                 {
                     "step": 6,
@@ -868,9 +883,9 @@ Create personalized email sequence for user activation.
                         """,
                         "notification_conditions": {
                             "high_value_leads": "lead_score > 75",
-                            "immediate_notification": True
-                        }
-                    }
+                            "immediate_notification": True,
+                        },
+                    },
                 },
                 {
                     "step": 7,
@@ -881,43 +896,43 @@ Create personalized email sequence for user activation.
                             {
                                 "delay": "24_hours",
                                 "template": "implementation_tips",
-                                "subject": "Quick wins from your SaaS integration"
+                                "subject": "Quick wins from your SaaS integration",
                             },
                             {
                                 "delay": "3_days",
                                 "template": "case_study_showcase",
-                                "subject": "How {{similar_company}} saved 40% with automation"
+                                "subject": "How {{similar_company}} saved 40% with automation",
                             },
                             {
                                 "delay": "7_days",
                                 "template": "consultation_offer",
-                                "subject": "Ready to accelerate your revenue? Let's talk"
-                            }
+                                "subject": "Ready to accelerate your revenue? Let's talk",
+                            },
                         ],
                         "scheduling_conditions": {
                             "email_engagement": True,
-                            "lead_score_threshold": 40
-                        }
-                    }
-                }
+                            "lead_score_threshold": 40,
+                        },
+                    },
+                },
             ],
             "error_handling": {
                 "retry_policy": {
                     "max_retries": 3,
-                    "retry_delay": "exponential_backoff"
+                    "retry_delay": "exponential_backoff",
                 },
                 "fallback_actions": [
                     "log_to_error_webhook",
                     "notify_admin_channel",
-                    "store_in_manual_review_queue"
-                ]
+                    "store_in_manual_review_queue",
+                ],
             },
             "success_metrics": {
                 "lead_conversion_rate": "Target: 15%",
                 "email_open_rate": "Target: 35%",
                 "playbook_download_rate": "Target: 80%",
-                "follow_up_engagement": "Target: 25%"
-            }
+                "follow_up_engagement": "Target: 25%",
+            },
         }
 
     def generate_token_usage_report(self, operations: list[str]) -> dict[str, Any]:
@@ -927,21 +942,37 @@ Create personalized email sequence for user activation.
         token_costs = {
             "github_epic_creation": 0.85,  # Sonnet 4
             "github_issue_creation": 0.60,  # Sonnet 4
-            "n8n_workflow_design": 2.25,   # Opus 4 (synthesis)
-            "meta_ads_configuration": 0.65, # Sonnet 4
-            "automation_setup": 0.40,      # Sonnet 4
-            "formatting_tasks": 0.10       # Haiku 4
+            "n8n_workflow_design": 2.25,  # Opus 4 (synthesis)
+            "meta_ads_configuration": 0.65,  # Sonnet 4
+            "automation_setup": 0.40,  # Sonnet 4
+            "formatting_tasks": 0.10,  # Haiku 4
         }
 
         total_cost = sum(token_costs[op] for op in operations if op in token_costs)
 
         # Calculate model distribution
-        sonnet_cost = sum(cost for op, cost in token_costs.items()
-                         if op in operations and op in ["github_epic_creation", "github_issue_creation", "meta_ads_configuration", "automation_setup"])
-        opus_cost = sum(cost for op, cost in token_costs.items()
-                       if op in operations and op == "n8n_workflow_design")
-        haiku_cost = sum(cost for op, cost in token_costs.items()
-                        if op in operations and op == "formatting_tasks")
+        sonnet_cost = sum(
+            cost
+            for op, cost in token_costs.items()
+            if op in operations
+            and op
+            in [
+                "github_epic_creation",
+                "github_issue_creation",
+                "meta_ads_configuration",
+                "automation_setup",
+            ]
+        )
+        opus_cost = sum(
+            cost
+            for op, cost in token_costs.items()
+            if op in operations and op == "n8n_workflow_design"
+        )
+        haiku_cost = sum(
+            cost
+            for op, cost in token_costs.items()
+            if op in operations and op == "formatting_tasks"
+        )
 
         return {
             "report_type": "GitHub Epic & Meta Ads Setup Token Usage",
@@ -952,24 +983,24 @@ Create personalized email sequence for user activation.
                 "n8n_workflow_design": round(opus_cost, 2),
                 "meta_ads_automation": round(sonnet_cost * 0.2, 2),
                 "formatting": round(haiku_cost, 2),
-                "total_cost": round(total_cost, 2)
+                "total_cost": round(total_cost, 2),
             },
             "model_distribution": {
                 "sonnet_4_usage": f"{(sonnet_cost/total_cost*100):.1f}%",
                 "opus_4_usage": f"{(opus_cost/total_cost*100):.1f}%",
-                "haiku_4_usage": f"{(haiku_cost/total_cost*100):.1f}%"
+                "haiku_4_usage": f"{(haiku_cost/total_cost*100):.1f}%",
             },
             "efficiency_metrics": {
                 "cost_per_epic": round(total_cost / 5, 2),  # 5 epics
                 "total_issues_created": 19,
                 "cost_per_issue": round(total_cost / 19, 2),
-                "automation_value": "High ROI - streamlined development process"
+                "automation_value": "High ROI - streamlined development process",
             },
             "budget_impact": {
                 "weekly_budget_used": f"{(total_cost/25*100):.1f}%",
                 "remaining_week2_budget": round(25 - total_cost, 2),
-                "projected_monthly_cost": round(total_cost * 4, 2)
-            }
+                "projected_monthly_cost": round(total_cost * 4, 2),
+            },
         }
 
 
@@ -996,7 +1027,7 @@ def execute_github_meta_ads_setup():
         "n8n_workflow_design",
         "meta_ads_configuration",
         "automation_setup",
-        "formatting_tasks"
+        "formatting_tasks",
     ]
 
     # Generate token usage report
@@ -1006,7 +1037,7 @@ def execute_github_meta_ads_setup():
         "github_epic_issue_structure": github_structure,
         "meta_ads_n8n_workflow": meta_ads_workflow,
         "token_usage_report": token_report,
-        "setup_status": "completed_successfully"
+        "setup_status": "completed_successfully",
     }
 
 
@@ -1020,12 +1051,16 @@ if __name__ == "__main__":
     print("\n📊 Setup Summary:")
     print(f"🎯 Total Epics: {github['github_project_structure']['total_epics']}")
     print(f"📋 Total Issues: {github['github_project_structure']['total_issues']}")
-    print(f"🤖 Agents Assigned: {len(github['github_project_structure']['agent_assignments'])}")
+    print(
+        f"🤖 Agents Assigned: {len(github['github_project_structure']['agent_assignments'])}"
+    )
     print(f"📱 Meta Ads Workflow Steps: {len(meta_ads['workflow_steps'])}")
 
     print("\n💰 Token Usage:")
     print(f"💵 Total Cost: ${tokens['cost_breakdown']['total_cost']}")
-    print(f"📊 Model Distribution: {tokens['model_distribution']['sonnet_4_usage']} Sonnet, {tokens['model_distribution']['opus_4_usage']} Opus, {tokens['model_distribution']['haiku_4_usage']} Haiku")
+    print(
+        f"📊 Model Distribution: {tokens['model_distribution']['sonnet_4_usage']} Sonnet, {tokens['model_distribution']['opus_4_usage']} Opus, {tokens['model_distribution']['haiku_4_usage']} Haiku"
+    )
     print(f"🎯 Weekly Budget Used: {tokens['budget_impact']['weekly_budget_used']}")
 
     print("\n✅ Ready for M1 - Monetization Ready milestone!")

@@ -51,7 +51,7 @@
               "output": 0
             },
             {
-              "operation": "equal", 
+              "operation": "equal",
               "value2": "customer.subscription.created",
               "output": 1
             },
@@ -85,7 +85,7 @@
       }
     },
     {
-      "id": "payment_success_handler", 
+      "id": "payment_success_handler",
       "name": "Handle Successful Payment",
       "type": "function",
       "position": [700, 150],
@@ -95,7 +95,7 @@
     },
     {
       "id": "payment_failure_handler",
-      "name": "Handle Payment Failure", 
+      "name": "Handle Payment Failure",
       "type": "function",
       "position": [700, 250],
       "parameters": {
@@ -118,7 +118,7 @@
               "value": "application/json"
             },
             {
-              "name": "Authorization", 
+              "name": "Authorization",
               "value": "Bearer {{$env.API_KEY}}"
             }
           ]
@@ -139,7 +139,7 @@
               "value": "={{$json.crm_update?.tier || 'pro'}}"
             },
             {
-              "name": "event_type", 
+              "name": "event_type",
               "value": "={{$json.financial_impact?.event_type || $json.revenue_impact?.event_type || 'payment'}}"
             },
             {
@@ -153,7 +153,7 @@
     {
       "id": "crm_sync",
       "name": "Sync to CRM",
-      "type": "http_request", 
+      "type": "http_request",
       "position": [900, 200],
       "parameters": {
         "url": "{{$env.CRM_API_URL}}/contacts/{{$json.customer_id}}",
@@ -210,7 +210,7 @@
         "headerParameters": {
           "parameters": [
             {
-              "name": "Content-Type", 
+              "name": "Content-Type",
               "value": "application/json"
             },
             {
@@ -227,7 +227,7 @@
               "value": "={{$json.dashboard_update?.daily_revenue || $json.financial_impact?.monthly_recurring_revenue || 0}}"
             },
             {
-              "name": "customer_count_change", 
+              "name": "customer_count_change",
               "value": "={{$json.dashboard_update?.customer_count || 0}}"
             },
             {
@@ -253,7 +253,7 @@
       "position": [1100, 150],
       "parameters": {
         "url": "http://localhost:8000/api/financial/log",
-        "method": "POST", 
+        "method": "POST",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -291,7 +291,7 @@
               "value": "usd"
             },
             {
-              "name": "metadata", 
+              "name": "metadata",
               "value": "={{JSON.stringify({\n  subscription_id: $json.subscription_id,\n  conversion_source: $json.conversion_source,\n  tier: $json.crm_update?.tier,\n  ltv_estimate: $json.crm_update?.ltv_estimate,\n  annual_value: $json.financial_impact?.annual_value\n})}}"
             },
             {
@@ -346,7 +346,7 @@
     },
     "event_validator": {
       "main": [[{
-        "node": "event_router", 
+        "node": "event_router",
         "type": "main",
         "index": 0
       }]]
@@ -355,13 +355,13 @@
       "main": [
         [{
           "node": "trial_conversion_handler",
-          "type": "main", 
+          "type": "main",
           "index": 0
         }],
         [{
           "node": "trial_conversion_handler",
           "type": "main",
-          "index": 0  
+          "index": 0
         }],
         [{
           "node": "payment_success_handler",
@@ -369,7 +369,7 @@
           "index": 0
         }],
         [{
-          "node": "payment_success_handler", 
+          "node": "payment_success_handler",
           "type": "main",
           "index": 0
         }],
@@ -389,7 +389,7 @@
         },
         {
           "node": "crm_sync",
-          "type": "main", 
+          "type": "main",
           "index": 0
         },
         {
@@ -412,7 +412,7 @@
           "index": 0
         },
         {
-          "node": "dashboard_update", 
+          "node": "dashboard_update",
           "type": "main",
           "index": 0
         }
@@ -436,7 +436,7 @@
     },
     "crm_sync": {
       "main": [[{
-        "node": "financial_logger", 
+        "node": "financial_logger",
         "type": "main",
         "index": 0
       }]]
@@ -451,7 +451,7 @@
     "financial_logger": {
       "main": [[{
         "node": "week2_progress_tracker",
-        "type": "main", 
+        "type": "main",
         "index": 0
       }]]
     },
@@ -489,7 +489,7 @@
     },
     {
       "id": "financial_automation",
-      "name": "Financial Automation" 
+      "name": "Financial Automation"
     }
   ],
   "triggerCount": 0,
@@ -498,7 +498,7 @@
   "environment_variables": {
     "required": [
       "STRIPE_WEBHOOK_SECRET",
-      "API_KEY", 
+      "API_KEY",
       "CRM_API_URL",
       "CRM_API_KEY"
     ],
@@ -512,7 +512,7 @@
     "stripe_configuration": {
       "events_to_subscribe": [
         "customer.subscription.trial_will_end",
-        "customer.subscription.created", 
+        "customer.subscription.created",
         "payment_intent.succeeded",
         "invoice.payment_succeeded",
         "payment_intent.payment_failed"

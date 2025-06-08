@@ -2,6 +2,7 @@
 Basic tests to ensure SonarQube quality gate passes.
 These tests are designed to provide basic coverage for core functionality.
 """
+
 import os
 import sys
 
@@ -24,6 +25,7 @@ def test_app_modules():
     """Verify core application modules are importable."""
     try:
         import app
+
         assert True
     except ImportError:
         pytest.skip("App module not importable")

@@ -38,7 +38,9 @@ class FinancialModelUpdater:
         baseline_monthly_costs = self.revenue_model.operational_costs.total_monthly
 
         # Apply Week 1 optimizations to ongoing operations
-        cost_reduction = week1_projections["week1_projections"]["cost_reduction_achieved"] / 100
+        cost_reduction = (
+            week1_projections["week1_projections"]["cost_reduction_achieved"] / 100
+        )
         optimized_monthly_costs = baseline_monthly_costs * (1 - cost_reduction)
 
         # Add development costs (amortized over 12 months)
@@ -46,7 +48,9 @@ class FinancialModelUpdater:
         monthly_dev_amortization = total_dev_cost / 12
 
         # Update operational costs
-        self.revenue_model.operational_costs.total_monthly = optimized_monthly_costs + monthly_dev_amortization
+        self.revenue_model.operational_costs.total_monthly = (
+            optimized_monthly_costs + monthly_dev_amortization
+        )
         self.revenue_model.operational_costs.ai_services = 100  # Optimized AI target
 
         # Adjust revenue target to $400/day based on cost optimizations
@@ -63,15 +67,16 @@ class FinancialModelUpdater:
                 "baseline_monthly_costs": baseline_monthly_costs,
                 "optimized_monthly_costs": optimized_monthly_costs,
                 "development_amortization": monthly_dev_amortization,
-                "total_adjusted_costs": optimized_monthly_costs + monthly_dev_amortization,
+                "total_adjusted_costs": optimized_monthly_costs
+                + monthly_dev_amortization,
                 "cost_reduction_achieved": cost_reduction * 100,
-                "ai_cost_target": 100
+                "ai_cost_target": 100,
             },
             "revenue_alignment": {
                 "updated_daily_target": 400.0,
                 "original_target": 300.0,
-                "target_increase_rationale": "Account for development costs and operational scaling"
-            }
+                "target_increase_rationale": "Account for development costs and operational scaling",
+            },
         }
 
         # Recalculate key metrics with new costs
@@ -85,12 +90,21 @@ class FinancialModelUpdater:
 
         # Extract key values
         additional_monthly_revenue = model["customer_acquisition"]["revenue_gap"]
-        adjusted_monthly_costs = model["development_integration"]["operational_adjustments"]["total_adjusted_costs"]
-        total_cac_investment = model["customer_acquisition"]["optimized_cac"] * model["customer_acquisition"]["additional_customers_needed"]
+        adjusted_monthly_costs = model["development_integration"][
+            "operational_adjustments"
+        ]["total_adjusted_costs"]
+        total_cac_investment = (
+            model["customer_acquisition"]["optimized_cac"]
+            * model["customer_acquisition"]["additional_customers_needed"]
+        )
 
         # Recalculate metrics
         monthly_profit = additional_monthly_revenue - adjusted_monthly_costs
-        break_even_months = total_cac_investment / monthly_profit if monthly_profit > 0 else float("inf")
+        break_even_months = (
+            total_cac_investment / monthly_profit
+            if monthly_profit > 0
+            else float("inf")
+        )
 
         # 12-month ROI with development costs
         revenue_12m = additional_monthly_revenue * 12
@@ -102,15 +116,23 @@ class FinancialModelUpdater:
             "recalculated_break_even_months": round(break_even_months, 1),
             "adjusted_monthly_profit": round(monthly_profit, 0),
             "development_cost_impact": {
-                "roi_change_vs_baseline": round(roi_12m - model["roi_metrics"]["roi_12_months_pct"], 1),
-                "break_even_change_vs_baseline": round(break_even_months - model["roi_metrics"]["break_even_months"], 1),
-                "profit_impact_monthly": round(monthly_profit - model["roi_metrics"]["monthly_profit"], 0)
+                "roi_change_vs_baseline": round(
+                    roi_12m - model["roi_metrics"]["roi_12_months_pct"], 1
+                ),
+                "break_even_change_vs_baseline": round(
+                    break_even_months - model["roi_metrics"]["break_even_months"], 1
+                ),
+                "profit_impact_monthly": round(
+                    monthly_profit - model["roi_metrics"]["monthly_profit"], 0
+                ),
             },
             "cost_optimization_benefits": {
                 "operational_savings_monthly": round(3600 - adjusted_monthly_costs, 0),
                 "ai_cost_savings_monthly": round(300 - 100, 0),
-                "total_monthly_savings": round((3600 - adjusted_monthly_costs) + (300 - 100), 0)
-            }
+                "total_monthly_savings": round(
+                    (3600 - adjusted_monthly_costs) + (300 - 100), 0
+                ),
+            },
         }
 
     def generate_comprehensive_report(self) -> dict:
@@ -122,7 +144,7 @@ class FinancialModelUpdater:
             input_tokens=2500,
             output_tokens=1500,
             session_id=self.session_id,
-            task_type="financial_model_calculations"
+            task_type="financial_model_calculations",
         )
 
         # Get updated model
@@ -138,7 +160,7 @@ class FinancialModelUpdater:
                 "session_id": self.session_id,
                 "model_version": "2.2",
                 "update_type": "development_costs_integration",
-                "calculation_cost": calculation_cost
+                "calculation_cost": calculation_cost,
             },
             "updated_financial_model": updated_model,
             "development_token_usage": token_report,
@@ -149,7 +171,7 @@ class FinancialModelUpdater:
                 "total_week1_investment": 9237,
                 "daily_cost_target": 1319.5,  # Weekly ÷ 7
                 "revenue_target_daily": 400,
-                "profit_margin_week1": ((400 * 7) - 9237) / (400 * 7) * 100
+                "profit_margin_week1": ((400 * 7) - 9237) / (400 * 7) * 100,
             },
             "ai_cost_monitoring": {
                 "monthly_target": 100,
@@ -158,23 +180,29 @@ class FinancialModelUpdater:
                 "token_distribution": {
                     "sonnet_4_pct": 80,
                     "haiku_3_pct": 10,
-                    "opus_4_pct": 10
+                    "opus_4_pct": 10,
                 },
-                "cost_per_development_hour": token_report["token_usage_summary"]["total_estimated_cost"] / 46  # Total AI hours
+                "cost_per_development_hour": token_report["token_usage_summary"][
+                    "total_estimated_cost"
+                ]
+                / 46,  # Total AI hours
             },
             "implementation_timeline": {
                 "week_1_priorities": ["Stripe Integration", "Trial & Conversion Flow"],
                 "week_2_priorities": ["Customer Dashboard"],
                 "week_3_priorities": ["API Access Management"],
-                "week_4_priorities": ["Integration testing", "Performance optimization"],
-                "go_live_target": "End of Month 1"
+                "week_4_priorities": [
+                    "Integration testing",
+                    "Performance optimization",
+                ],
+                "go_live_target": "End of Month 1",
             },
             "risk_mitigation": {
                 "cost_overrun_protection": "30% contingency built into estimates",
                 "timeline_buffers": "1 week buffer per major component",
                 "ai_cost_controls": "Daily budget monitoring with 80% alerts",
-                "revenue_protection": "Conservative customer acquisition estimates"
-            }
+                "revenue_protection": "Conservative customer acquisition estimates",
+            },
         }
 
         return comprehensive_report
@@ -191,16 +219,20 @@ class FinancialModelUpdater:
             "ai_cost_strategy": {
                 "monthly_budget": 100,
                 "token_distribution": "80% Sonnet, 10% Haiku, 10% Opus",
-                "development_ai_cost": report["development_token_usage"]["token_usage_summary"]["total_estimated_cost"],
-                "ongoing_monitoring": "Enabled with automated alerts"
+                "development_ai_cost": report["development_token_usage"][
+                    "token_usage_summary"
+                ]["total_estimated_cost"],
+                "ongoing_monitoring": "Enabled with automated alerts",
             },
             "implementation_roadmap": report["implementation_timeline"],
             "success_metrics": {
                 "target_daily_revenue": 400,
                 "target_monthly_ai_cost": 100,
                 "target_cost_reduction": 30,
-                "target_roi_12m": report["updated_financial_model"]["adjusted_metrics"]["recalculated_roi_12_months_pct"]
-            }
+                "target_roi_12m": report["updated_financial_model"]["adjusted_metrics"][
+                    "recalculated_roi_12_months_pct"
+                ],
+            },
         }
 
         # Save to persistent context
@@ -250,9 +282,15 @@ def main():
 
     dev_integration = model["development_integration"]
     print("\n💰 DEVELOPMENT COST INTEGRATION:")
-    print(f"Total Development Cost: ${dev_integration['development_costs']['total_estimates']['total_project_cost']:,.0f}")
-    print(f"Monthly Amortization: ${dev_integration['operational_adjustments']['development_amortization']:,.0f}")
-    print(f"Cost Reduction Achieved: {dev_integration['operational_adjustments']['cost_reduction_achieved']:.1f}%")
+    print(
+        f"Total Development Cost: ${dev_integration['development_costs']['total_estimates']['total_project_cost']:,.0f}"
+    )
+    print(
+        f"Monthly Amortization: ${dev_integration['operational_adjustments']['development_amortization']:,.0f}"
+    )
+    print(
+        f"Cost Reduction Achieved: {dev_integration['operational_adjustments']['cost_reduction_achieved']:.1f}%"
+    )
 
     week1 = report["week1_cost_report"]
     print("\n📅 WEEK 1 COST REPORT:")
@@ -264,7 +302,9 @@ def main():
     print("\n🤖 AI COST MONITORING:")
     print(f"Monthly AI Target: ${ai_monitoring['monthly_target']}")
     print(f"Current Trajectory: ${ai_monitoring['current_trajectory']}")
-    print(f"Token Distribution: {ai_monitoring['token_distribution']['sonnet_4_pct']}% Sonnet, {ai_monitoring['token_distribution']['opus_4_pct']}% Opus")
+    print(
+        f"Token Distribution: {ai_monitoring['token_distribution']['sonnet_4_pct']}% Sonnet, {ai_monitoring['token_distribution']['opus_4_pct']}% Opus"
+    )
 
     print("\n📄 Reports saved:")
     print("  - data/updated_financial_model_v2_2.json")

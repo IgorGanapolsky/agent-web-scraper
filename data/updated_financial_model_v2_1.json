@@ -58,7 +58,7 @@
     "ltv_cac_ratio": 78.7,
     "customer_mix_target": {
       "basic": "20% at $39/month",
-      "pro": "60% at $119/month", 
+      "pro": "60% at $119/month",
       "enterprise": "20% at $349/month"
     }
   },

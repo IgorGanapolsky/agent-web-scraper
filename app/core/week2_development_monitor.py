@@ -30,22 +30,22 @@ class Week2DevelopmentMonitor:
                 "hours": 40,
                 "priority": 1,
                 "start_date": "2025-06-07",
-                "completion_target": "2025-06-10"
+                "completion_target": "2025-06-10",
             },
             "customer_dashboard": {
                 "estimated_ai_cost": 0.92,
                 "hours": 60,
                 "priority": 2,
                 "start_date": "2025-06-08",
-                "completion_target": "2025-06-12"
+                "completion_target": "2025-06-12",
             },
             "api_access_management": {
                 "estimated_ai_cost": 0.36,
                 "hours": 25,
                 "priority": 3,
                 "start_date": "2025-06-09",
-                "completion_target": "2025-06-13"
-            }
+                "completion_target": "2025-06-13",
+            },
         }
 
         # Total estimated AI cost
@@ -55,11 +55,17 @@ class Week2DevelopmentMonitor:
 
         # Cost reduction targets
         self.current_reduction = 71.4  # 71.4% current reduction
-        self.target_reduction = 50.0   # 50% target reduction
+        self.target_reduction = 50.0  # 50% target reduction
         self.monthly_ai_budget = 100.0  # $100/month target
 
-    def track_development_task(self, component: str, task_type: str, model: str,
-                             input_tokens: int, output_tokens: int) -> dict:
+    def track_development_task(
+        self,
+        component: str,
+        task_type: str,
+        model: str,
+        input_tokens: int,
+        output_tokens: int,
+    ) -> dict:
         """Track development task costs with optimal model distribution"""
 
         # Use Sonnet 4 for main development tasks (80%)
@@ -69,7 +75,7 @@ class Week2DevelopmentMonitor:
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
                 session_id=self.session_id,
-                task_type=f"{component}_{task_type}"
+                task_type=f"{component}_{task_type}",
             )
 
         # Use Haiku 3 for simple updates (10%)
@@ -79,7 +85,7 @@ class Week2DevelopmentMonitor:
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
                 session_id=self.session_id,
-                task_type=f"{component}_{task_type}_update"
+                task_type=f"{component}_{task_type}_update",
             )
 
         # Use Opus 4 for model adjustments (10%)
@@ -89,10 +95,12 @@ class Week2DevelopmentMonitor:
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
                 session_id=self.session_id,
-                task_type=f"{component}_{task_type}_strategic"
+                task_type=f"{component}_{task_type}_strategic",
             )
 
-        logger.info(f"Development task tracked: {component} - {task_type} - ${cost:.4f}")
+        logger.info(
+            f"Development task tracked: {component} - {task_type} - ${cost:.4f}"
+        )
         return cost
 
     def monitor_stripe_integration(self) -> dict:
@@ -104,7 +112,7 @@ class Week2DevelopmentMonitor:
             task_type="api_setup",
             model="claude-4-sonnet",
             input_tokens=1800,
-            output_tokens=1200
+            output_tokens=1200,
         )
 
         # Track webhook configuration (Sonnet 4 - 80%)
@@ -113,7 +121,7 @@ class Week2DevelopmentMonitor:
             task_type="webhook_config",
             model="claude-4-sonnet",
             input_tokens=2200,
-            output_tokens=1500
+            output_tokens=1500,
         )
 
         # Track payment flow implementation (Sonnet 4 - 80%)
@@ -122,19 +130,30 @@ class Week2DevelopmentMonitor:
             task_type="payment_flow",
             model="claude-4-sonnet",
             input_tokens=2500,
-            output_tokens=1800
+            output_tokens=1800,
         )
 
         total_stripe_cost = api_setup_cost + webhook_cost + payment_flow_cost
 
         return {
             "component": "stripe_integration",
-            "estimated_cost": self.development_costs["stripe_integration"]["estimated_ai_cost"],
+            "estimated_cost": self.development_costs["stripe_integration"][
+                "estimated_ai_cost"
+            ],
             "actual_cost": total_stripe_cost,
-            "cost_variance": total_stripe_cost - self.development_costs["stripe_integration"]["estimated_ai_cost"],
-            "cost_efficiency": (self.development_costs["stripe_integration"]["estimated_ai_cost"] / total_stripe_cost) * 100 if total_stripe_cost > 0 else 100,
+            "cost_variance": total_stripe_cost
+            - self.development_costs["stripe_integration"]["estimated_ai_cost"],
+            "cost_efficiency": (
+                (
+                    self.development_costs["stripe_integration"]["estimated_ai_cost"]
+                    / total_stripe_cost
+                )
+                * 100
+                if total_stripe_cost > 0
+                else 100
+            ),
             "tasks_tracked": ["api_setup", "webhook_config", "payment_flow"],
-            "model_distribution": "80% Sonnet 4, 20% optimization buffer"
+            "model_distribution": "80% Sonnet 4, 20% optimization buffer",
         }
 
     def monitor_customer_dashboard(self) -> dict:
@@ -146,7 +165,7 @@ class Week2DevelopmentMonitor:
             task_type="ui_development",
             model="claude-4-sonnet",
             input_tokens=3000,
-            output_tokens=2200
+            output_tokens=2200,
         )
 
         # Track analytics integration (Sonnet 4 - 80%)
@@ -155,7 +174,7 @@ class Week2DevelopmentMonitor:
             task_type="analytics_integration",
             model="claude-4-sonnet",
             input_tokens=2800,
-            output_tokens=2000
+            output_tokens=2000,
         )
 
         # Track data visualization (Haiku 3 - 10%)
@@ -164,19 +183,34 @@ class Week2DevelopmentMonitor:
             task_type="data_visualization",
             model="claude-3-haiku",
             input_tokens=1500,
-            output_tokens=1000
+            output_tokens=1000,
         )
 
         total_dashboard_cost = ui_cost + analytics_cost + viz_cost
 
         return {
             "component": "customer_dashboard",
-            "estimated_cost": self.development_costs["customer_dashboard"]["estimated_ai_cost"],
+            "estimated_cost": self.development_costs["customer_dashboard"][
+                "estimated_ai_cost"
+            ],
             "actual_cost": total_dashboard_cost,
-            "cost_variance": total_dashboard_cost - self.development_costs["customer_dashboard"]["estimated_ai_cost"],
-            "cost_efficiency": (self.development_costs["customer_dashboard"]["estimated_ai_cost"] / total_dashboard_cost) * 100 if total_dashboard_cost > 0 else 100,
-            "tasks_tracked": ["ui_development", "analytics_integration", "data_visualization"],
-            "model_distribution": "80% Sonnet 4, 10% Haiku 3, 10% buffer"
+            "cost_variance": total_dashboard_cost
+            - self.development_costs["customer_dashboard"]["estimated_ai_cost"],
+            "cost_efficiency": (
+                (
+                    self.development_costs["customer_dashboard"]["estimated_ai_cost"]
+                    / total_dashboard_cost
+                )
+                * 100
+                if total_dashboard_cost > 0
+                else 100
+            ),
+            "tasks_tracked": [
+                "ui_development",
+                "analytics_integration",
+                "data_visualization",
+            ],
+            "model_distribution": "80% Sonnet 4, 10% Haiku 3, 10% buffer",
         }
 
     def monitor_api_access_management(self) -> dict:
@@ -188,7 +222,7 @@ class Week2DevelopmentMonitor:
             task_type="authentication",
             model="claude-4-sonnet",
             input_tokens=1600,
-            output_tokens=1200
+            output_tokens=1200,
         )
 
         # Track rate limiting (Haiku 3 - 10%)
@@ -197,19 +231,30 @@ class Week2DevelopmentMonitor:
             task_type="rate_limiting",
             model="claude-3-haiku",
             input_tokens=1200,
-            output_tokens=800
+            output_tokens=800,
         )
 
         total_api_cost = auth_cost + rate_limit_cost
 
         return {
             "component": "api_access_management",
-            "estimated_cost": self.development_costs["api_access_management"]["estimated_ai_cost"],
+            "estimated_cost": self.development_costs["api_access_management"][
+                "estimated_ai_cost"
+            ],
             "actual_cost": total_api_cost,
-            "cost_variance": total_api_cost - self.development_costs["api_access_management"]["estimated_ai_cost"],
-            "cost_efficiency": (self.development_costs["api_access_management"]["estimated_ai_cost"] / total_api_cost) * 100 if total_api_cost > 0 else 100,
+            "cost_variance": total_api_cost
+            - self.development_costs["api_access_management"]["estimated_ai_cost"],
+            "cost_efficiency": (
+                (
+                    self.development_costs["api_access_management"]["estimated_ai_cost"]
+                    / total_api_cost
+                )
+                * 100
+                if total_api_cost > 0
+                else 100
+            ),
             "tasks_tracked": ["authentication", "rate_limiting"],
-            "model_distribution": "80% Sonnet 4, 10% Haiku 3, 10% buffer"
+            "model_distribution": "80% Sonnet 4, 10% Haiku 3, 10% buffer",
         }
 
     def calculate_cost_reduction_metrics(self, actual_costs: list[dict]) -> dict:
@@ -218,7 +263,11 @@ class Week2DevelopmentMonitor:
         total_actual_cost = sum(cost["actual_cost"] for cost in actual_costs)
         total_estimated_cost = self.total_estimated_ai_cost
 
-        cost_reduction_achieved = ((total_estimated_cost - total_actual_cost) / total_estimated_cost) * 100 if total_estimated_cost > 0 else 0
+        cost_reduction_achieved = (
+            ((total_estimated_cost - total_actual_cost) / total_estimated_cost) * 100
+            if total_estimated_cost > 0
+            else 0
+        )
 
         return {
             "cost_reduction_analysis": {
@@ -226,21 +275,26 @@ class Week2DevelopmentMonitor:
                 "achieved_reduction_pct": cost_reduction_achieved,
                 "current_baseline_reduction": self.current_reduction,
                 "meets_target": cost_reduction_achieved >= self.target_reduction,
-                "exceeded_current_baseline": cost_reduction_achieved >= self.current_reduction
+                "exceeded_current_baseline": cost_reduction_achieved
+                >= self.current_reduction,
             },
             "cost_breakdown": {
                 "total_estimated_ai_cost": total_estimated_cost,
                 "total_actual_ai_cost": total_actual_cost,
                 "cost_savings": total_estimated_cost - total_actual_cost,
-                "savings_percentage": cost_reduction_achieved
+                "savings_percentage": cost_reduction_achieved,
             },
             "monthly_budget_tracking": {
                 "monthly_ai_budget": self.monthly_ai_budget,
                 "week2_allocation": self.monthly_ai_budget / 4,  # Weekly allocation
                 "week2_spend": total_actual_cost,
-                "budget_utilization_pct": (total_actual_cost / (self.monthly_ai_budget / 4)) * 100,
-                "on_track_for_monthly_target": total_actual_cost <= (self.monthly_ai_budget / 4)
-            }
+                "budget_utilization_pct": (
+                    total_actual_cost / (self.monthly_ai_budget / 4)
+                )
+                * 100,
+                "on_track_for_monthly_target": total_actual_cost
+                <= (self.monthly_ai_budget / 4),
+            },
         }
 
     def generate_week2_cost_report(self) -> dict:
@@ -262,7 +316,7 @@ class Week2DevelopmentMonitor:
             task_type="cost_optimization",
             model="claude-4-opus",
             input_tokens=2000,
-            output_tokens=1500
+            output_tokens=1500,
         )
 
         return {
@@ -271,7 +325,7 @@ class Week2DevelopmentMonitor:
                     "generated_at": datetime.now().isoformat(),
                     "session_id": self.session_id,
                     "report_period": "Week 2 Development Monitoring",
-                    "total_components": 3
+                    "total_components": 3,
                 },
                 "component_costs": all_costs,
                 "cost_reduction_performance": reduction_metrics,
@@ -279,22 +333,25 @@ class Week2DevelopmentMonitor:
                     "target_distribution": {
                         "sonnet_4": "80% - Main development tasks",
                         "haiku_3": "10% - Simple updates",
-                        "opus_4": "10% - Strategic analysis"
+                        "opus_4": "10% - Strategic analysis",
                     },
                     "actual_usage": {
                         "sonnet_4_tasks": 6,
                         "haiku_3_tasks": 2,
                         "opus_4_tasks": 1,
-                        "total_tasks": 9
+                        "total_tasks": 9,
                     },
-                    "cost_optimization_achieved": True
+                    "cost_optimization_achieved": True,
                 },
                 "revenue_alignment": {
                     "week2_revenue_target": 600.0,  # $600/day target
-                    "development_investment_ratio": (sum(cost["actual_cost"] for cost in all_costs) / 600.0) * 100,
-                    "roi_projected": "Strong positive ROI with payment processing active"
+                    "development_investment_ratio": (
+                        sum(cost["actual_cost"] for cost in all_costs) / 600.0
+                    )
+                    * 100,
+                    "roi_projected": "Strong positive ROI with payment processing active",
                 },
-                "strategic_analysis_cost": model_analysis_cost
+                "strategic_analysis_cost": model_analysis_cost,
             }
         }
 
@@ -310,32 +367,32 @@ class Week2DevelopmentMonitor:
                     "timestamp": datetime.now().isoformat(),
                     "session_id": self.session_id,
                     "report_type": "week2_development_monitoring",
-                    "monitoring_period": "2025-06-07 to 2025-06-13"
+                    "monitoring_period": "2025-06-07 to 2025-06-13",
                 },
                 "development_token_breakdown": {
                     "stripe_integration": {
                         "estimated_tokens": 8000,
                         "actual_tokens": 7500,  # Optimized
                         "cost": 0.045,
-                        "efficiency_gain": "6.25%"
+                        "efficiency_gain": "6.25%",
                     },
                     "customer_dashboard": {
                         "estimated_tokens": 12000,
                         "actual_tokens": 11200,  # Optimized
                         "cost": 0.084,
-                        "efficiency_gain": "6.67%"
+                        "efficiency_gain": "6.67%",
                     },
                     "api_access_management": {
                         "estimated_tokens": 4500,
                         "actual_tokens": 4200,  # Optimized
                         "cost": 0.032,
-                        "efficiency_gain": "6.67%"
+                        "efficiency_gain": "6.67%",
                     },
                     "strategic_analysis": {
                         "tokens": 3500,
                         "cost": 0.1225,
-                        "purpose": "Cost optimization and model adjustments"
-                    }
+                        "purpose": "Cost optimization and model adjustments",
+                    },
                 },
                 "cost_efficiency_metrics": {
                     "total_estimated_cost": self.total_estimated_ai_cost,
@@ -343,14 +400,14 @@ class Week2DevelopmentMonitor:
                     "cost_reduction_achieved": 83.8,  # % reduction
                     "target_reduction": self.target_reduction,
                     "exceeds_target": True,
-                    "monthly_budget_impact": 1.134  # % of $100 monthly budget
+                    "monthly_budget_impact": 1.134,  # % of $100 monthly budget
                 },
                 "model_distribution_compliance": {
                     "sonnet_4_percentage": 80.1,
                     "haiku_3_percentage": 9.2,
                     "opus_4_percentage": 10.7,
-                    "distribution_compliance": "OPTIMAL"
-                }
+                    "distribution_compliance": "OPTIMAL",
+                },
             }
         }
 
@@ -379,12 +436,18 @@ def main():
         json.dump(token_report, f, indent=2)
 
     # Display key metrics
-    reduction_metrics = cost_report["week2_development_report"]["cost_reduction_performance"]
+    reduction_metrics = cost_report["week2_development_report"][
+        "cost_reduction_performance"
+    ]
     cost_breakdown = reduction_metrics["cost_breakdown"]
 
     print("\n📈 WEEK 2 COST PERFORMANCE:")
-    print(f"✅ Cost Reduction: {reduction_metrics['cost_reduction_analysis']['achieved_reduction_pct']:.1f}%")
-    print(f"✅ Target Met: {reduction_metrics['cost_reduction_analysis']['meets_target']}")
+    print(
+        f"✅ Cost Reduction: {reduction_metrics['cost_reduction_analysis']['achieved_reduction_pct']:.1f}%"
+    )
+    print(
+        f"✅ Target Met: {reduction_metrics['cost_reduction_analysis']['meets_target']}"
+    )
     print(f"💰 Total AI Cost: ${cost_breakdown['total_actual_ai_cost']:.4f}")
     print(f"💰 Cost Savings: ${cost_breakdown['cost_savings']:.4f}")
 

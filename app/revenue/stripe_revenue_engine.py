@@ -20,6 +20,7 @@ logger = get_logger(__name__)
 @dataclass
 class RevenueMetrics:
     """Revenue metrics data class."""
+
     total_revenue: float
     monthly_recurring_revenue: float
     active_subscriptions: int
@@ -30,6 +31,7 @@ class RevenueMetrics:
 @dataclass
 class SubscriptionTier:
     """Subscription tier configuration."""
+
     name: str
     price: int
     features: str

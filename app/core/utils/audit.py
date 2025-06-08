@@ -10,6 +10,7 @@ def safe_requests():
     """Return requests module for safe HTTP operations."""
     return requests
 
+
 # Create a separate logger for audit logs
 audit_logger = logging.getLogger("audit")
 

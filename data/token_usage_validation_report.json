@@ -7,7 +7,7 @@
       "total_execution_time_seconds": 0.5,
       "parallel_operations": [
         "concurrent_serpapi_searches",
-        "claude_pricing_analysis", 
+        "claude_pricing_analysis",
         "financial_model_recalculation",
         "cost_optimization_monitoring"
       ]
@@ -24,7 +24,7 @@
       "optimization_rationale": "Sonnet used for competitive pricing comparison - routine analytical task"
     },
     "financial_model_validation": {
-      "model": "claude-4-sonnet", 
+      "model": "claude-4-sonnet",
       "input_tokens": 1200,
       "output_tokens": 600,
       "total_tokens": 1800,

@@ -10,7 +10,7 @@ jobs:
   manage-issues:
     name: Automated Issue Management
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: 📊 Process Issue Activity
       run: |
@@ -20,9 +20,9 @@ jobs:
         ISSUE_STATE="${{ github.event.issue.state }}"
         ISSUE_URL="${{ github.event.issue.html_url }}"
         ACTOR="${{ github.actor }}"
-        
+
         echo "Processing issue $ISSUE_NUMBER: $ACTION"
-        
+
         # Determine issue category from title
         CATEGORY="general"
         if [[ "$ISSUE_TITLE" == *"BMAD"* ]]; then
@@ -34,7 +34,7 @@ jobs:
         elif [[ "$ISSUE_TITLE" == *"Trial"* ]]; then
           CATEGORY="revenue"
         fi
-        
+
         echo "CATEGORY=$CATEGORY" >> $GITHUB_ENV
         echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
         echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_ENV
@@ -42,18 +42,18 @@ jobs:
         echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_ENV
         echo "ACTION=$ACTION" >> $GITHUB_ENV
         echo "ACTOR=$ACTOR" >> $GITHUB_ENV
-    
+
     - name: 🏷️ Auto-Label Issues
       if: github.event.action == 'opened'
       run: |
         # Add labels based on content
         LABELS=""
-        
+
         case "$CATEGORY" in
           "bmad-framework")
             LABELS="enhancement,bmad,high-priority"
             ;;
-          "api-development") 
+          "api-development")
             LABELS="enhancement,api,development"
             ;;
           "automation")
@@ -66,7 +66,7 @@ jobs:
             LABELS="enhancement"
             ;;
         esac
-        
+
         # Apply labels using GitHub CLI
         IFS=',' read -ra LABEL_ARRAY <<< "$LABELS"
         for label in "${LABEL_ARRAY[@]}"; do
@@ -74,7 +74,7 @@ jobs:
         done
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
     - name: 📈 Update Issue Status Based on Action
       run: |
         case "$ACTION" in
@@ -103,16 +103,16 @@ jobs:
             PRIORITY="ℹ️ Modified"
             ;;
         esac
-        
+
         echo "STATUS=$STATUS" >> $GITHUB_ENV
         echo "PRIORITY=$PRIORITY" >> $GITHUB_ENV
-    
+
     - name: 📱 Send Slack Notification
       run: |
         # Determine emoji and urgency
         EMOJI="📋"
         URGENCY="NORMAL"
-        
+
         case "$CATEGORY" in
           "bmad-framework")
             EMOJI="🚀"
@@ -127,37 +127,37 @@ jobs:
             URGENCY="HIGH"
             ;;
         esac
-        
-        # Create minimal Slack message  
+
+        # Create minimal Slack message
         MESSAGE="$EMOJI Issue #$ISSUE_NUMBER $ACTION: $ISSUE_TITLE. Status: $STATUS. Category: $CATEGORY 📊"
 
         # Send minimal payload to Slack
         curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
           -H 'Content-type: application/json' \
           --data "{\"text\":\"$MESSAGE\"}" || echo "Slack notification sent"
-        
+
         echo "✅ Slack notification sent for issue #$ISSUE_NUMBER"
-    
+
     - name: 📊 Update Business Metrics
       run: |
         # Calculate current business metrics
         TOTAL_ISSUES=$(gh issue list --json number | jq 'length')
         OPEN_ISSUES=$(gh issue list --state open --json number | jq 'length')
         CLOSED_ISSUES=$(gh issue list --state closed --json number | jq 'length')
-        
+
         # Calculate completion rate
         if [ $TOTAL_ISSUES -gt 0 ]; then
           COMPLETION_RATE=$(echo "scale=1; $CLOSED_ISSUES * 100 / $TOTAL_ISSUES" | bc)
         else
           COMPLETION_RATE=0
         fi
-        
+
         echo "📊 BUSINESS METRICS UPDATE:"
         echo "Total Issues: $TOTAL_ISSUES"
-        echo "Open Issues: $OPEN_ISSUES" 
+        echo "Open Issues: $OPEN_ISSUES"
         echo "Closed Issues: $CLOSED_ISSUES"
         echo "Completion Rate: $COMPLETION_RATE%"
-        
+
         # Send metrics update if significant milestone
         if [[ "$ACTION" == "closed" ]] && [[ $(($CLOSED_ISSUES % 5)) -eq 0 ]]; then
           MILESTONE_MESSAGE="🎯 Milestone: $CLOSED_ISSUES issues completed. Completion rate: $COMPLETION_RATE%. Open: $OPEN_ISSUES remaining 📈"
@@ -173,19 +173,19 @@ jobs:
     name: Weekly Issue Summary
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule'
-    
+
     steps:
     - name: 📈 Generate Weekly Issue Report
       run: |
         # Get weekly statistics
         WEEK_AGO=$(date -d '7 days ago' --iso-8601)
-        
+
         WEEKLY_OPENED=$(gh issue list --json createdAt --jq "[.[] | select(.createdAt >= \"$WEEK_AGO\")] | length")
         WEEKLY_CLOSED=$(gh issue list --state closed --json closedAt --jq "[.[] | select(.closedAt >= \"$WEEK_AGO\")] | length")
-        
+
         # Get current totals
         TOTAL_OPEN=$(gh issue list --state open --json number | jq 'length')
-        
+
         WEEKLY_REPORT="📊 Weekly Summary: $WEEKLY_OPENED new issues, $WEEKLY_CLOSED completed, $TOTAL_OPEN open. Development velocity: $(($WEEKLY_CLOSED > 0 ? 'Strong' : 'Needs attention')) 🚀"
 
         curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \

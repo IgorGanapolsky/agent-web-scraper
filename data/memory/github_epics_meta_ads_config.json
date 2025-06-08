@@ -34,7 +34,7 @@
     },
     "customer_dashboard": {
       "title": "Epic: Customer Dashboard - Self-Service Portal",
-      "assignee": "claude", 
+      "assignee": "claude",
       "estimated_hours": 80,
       "priority": "high",
       "issues": [
@@ -142,7 +142,7 @@
   "implementation_roadmap": {
     "week2_priorities": [
       "Epic: Stripe Integration (claude) - 40 hours",
-      "Epic: Trial Conversion Flow (claude) - 60 hours", 
+      "Epic: Trial Conversion Flow (claude) - 60 hours",
       "Meta Ads Campaign Launch with n8n automation"
     ],
     "week3_priorities": [

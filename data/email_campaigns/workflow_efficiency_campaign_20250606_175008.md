@@ -42,7 +42,7 @@ Recent industry data shows that **78% of businesses** are struggling with:
 ### 🎯 **40% Reduction in Operational Costs**
 Automate repetitive tasks that currently require 2+ FTE resources
 
-### ⚡ **3x Faster Decision Making** 
+### ⚡ **3x Faster Decision Making**
 Real-time insights replace week-long manual reporting cycles
 
 ### 📈 **250% Improvement in Data Accuracy**

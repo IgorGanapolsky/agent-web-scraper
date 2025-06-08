@@ -495,11 +495,14 @@ Provide JSON with: {"financial_model": {}, "unit_economics": {}, "pricing": {}, 
             "messages": [{"role": "user", "content": prompt}],
         }
 
-        async with aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(total=timeout_seconds)
-        ) as session, session.post(
-            self.anthropic_api_url, json=payload, headers=headers
-        ) as response:
+        async with (
+            aiohttp.ClientSession(
+                timeout=aiohttp.ClientTimeout(total=timeout_seconds)
+            ) as session,
+            session.post(
+                self.anthropic_api_url, json=payload, headers=headers
+            ) as response,
+        ):
             if response.status == 200:
                 return await response.json()
             else:

@@ -19,22 +19,27 @@ from app.core.token_monitor import get_token_monitor, track_api_call
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class PipelineResult:
     """Result from pipeline execution"""
+
     execution_time: float
     cost_usd: float
     optimization_ratio: float
     parallel_efficiency: float
     revenue_impact: dict[str, Any]
 
+
 @dataclass
 class CFOBudgetConfig:
     """CFO budget configuration"""
+
     daily_budget: float = 10.0
     sonnet_4_threshold: float = 8.0  # Switch to Sonnet when daily cost hits $8
-    opus_4_reserved: float = 2.0     # Reserve $2 for complex strategic tasks
+    opus_4_reserved: float = 2.0  # Reserve $2 for complex strategic tasks
     cost_per_task_limit: float = 0.50  # Max $0.50 per individual task
+
 
 class CFORevenuePipeline:
     """
@@ -51,7 +56,9 @@ class CFORevenuePipeline:
     def __init__(self, budget_config: Optional[CFOBudgetConfig] = None):
         self.budget_config = budget_config or CFOBudgetConfig()
         self.token_monitor = get_token_monitor()
-        self.bmad_orchestrator = get_bmad_orchestrator(cost_budget=self.budget_config.daily_budget)
+        self.bmad_orchestrator = get_bmad_orchestrator(
+            cost_budget=self.budget_config.daily_budget
+        )
         self.parallel_orchestrator = get_parallel_orchestrator()
 
         # Pipeline state
@@ -62,7 +69,9 @@ class CFORevenuePipeline:
         # Load previous state
         self._load_pipeline_memory()
 
-    async def execute_optimized_revenue_pipeline(self, context: dict[str, Any] | None = None) -> PipelineResult:
+    async def execute_optimized_revenue_pipeline(
+        self, context: dict[str, Any] | None = None
+    ) -> PipelineResult:
         """
         Execute complete revenue pipeline with CFO cost optimization.
 
@@ -86,7 +95,9 @@ class CFORevenuePipeline:
 
         # Calculate performance metrics
         execution_time = time.time() - start_time
-        total_cost = sum(result.get("cost", 0) for result in results["results"].values())
+        total_cost = sum(
+            result.get("cost", 0) for result in results["results"].values()
+        )
 
         # Update budget tracking
         self.current_daily_cost += total_cost
@@ -101,10 +112,12 @@ class CFORevenuePipeline:
             cost_usd=total_cost,
             optimization_ratio=2.0 / execution_time,  # Target was 2 seconds
             parallel_efficiency=results["performance"]["parallel_efficiency"],
-            revenue_impact=revenue_impact
+            revenue_impact=revenue_impact,
         )
 
-        logger.info(f"✅ CFO Pipeline completed: {execution_time:.3f}s, ${total_cost:.4f}")
+        logger.info(
+            f"✅ CFO Pipeline completed: {execution_time:.3f}s, ${total_cost:.4f}"
+        )
 
         return pipeline_result
 
@@ -114,11 +127,15 @@ class CFORevenuePipeline:
 
         # Check budget for deployment operation
         deployment_cost_estimate = 0.25  # Estimated $0.25 for deployment tasks
-        if self.current_daily_cost + deployment_cost_estimate > self.budget_config.daily_budget:
+        if (
+            self.current_daily_cost + deployment_cost_estimate
+            > self.budget_config.daily_budget
+        ):
             return {
                 "success": False,
                 "error": "Insufficient budget for deployment",
-                "budget_remaining": self.budget_config.daily_budget - self.current_daily_cost
+                "budget_remaining": self.budget_config.daily_budget
+                - self.current_daily_cost,
             }
 
         # Deploy with parallel optimization
@@ -132,10 +149,13 @@ class CFORevenuePipeline:
             "success": deployment_result.get("success", False),
             "deployment_details": deployment_result,
             "cost_incurred": actual_cost,
-            "budget_remaining": self.budget_config.daily_budget - self.current_daily_cost
+            "budget_remaining": self.budget_config.daily_budget
+            - self.current_daily_cost,
         }
 
-    async def _create_optimized_tasks(self, context: dict[str, Any]) -> list[ParallelTask]:
+    async def _create_optimized_tasks(
+        self, context: dict[str, Any]
+    ) -> list[ParallelTask]:
         """Create parallel tasks with intelligent model routing for cost optimization"""
 
         tasks = [
@@ -146,27 +166,24 @@ class CFORevenuePipeline:
                 function=self._generate_api_endpoints,
                 args=("revenue tracking endpoints",),
                 kwargs={"model": ModelType.SONNET_4, "context": context},
-                priority=1
+                priority=1,
             ),
-
             ParallelTask(
                 task_id="component_batch_generation",
                 task_type="code_generation",
                 function=self._batch_generate_components,
                 args=(["dashboard", "analytics", "billing"],),
                 kwargs={"model": ModelType.SONNET_4, "context": context},
-                priority=1
+                priority=1,
             ),
-
             ParallelTask(
                 task_id="market_research_automation",
                 task_type="data_analysis",
                 function=self._automated_market_research,
                 args=(["SaaS growth", "enterprise automation"],),
                 kwargs={"model": ModelType.SONNET_4, "context": context},
-                priority=2
+                priority=2,
             ),
-
             # Strategic/complex tasks → Opus 4 ($15/$75 per million tokens) - limited use
             ParallelTask(
                 task_id="revenue_strategy_optimization",
@@ -175,9 +192,8 @@ class CFORevenuePipeline:
                 args=(context.get("current_revenue", 0), 300),  # $300 daily target
                 kwargs={"model": ModelType.OPUS_4, "context": context},
                 priority=1,
-                dependencies=["market_research_automation"]
+                dependencies=["market_research_automation"],
             ),
-
             # Parallel data processing → Sonnet 4
             ParallelTask(
                 task_id="customer_pipeline_analysis",
@@ -185,13 +201,15 @@ class CFORevenuePipeline:
                 function=self._analyze_customer_pipeline,
                 args=(context.get("prospects", []),),
                 kwargs={"model": ModelType.SONNET_4, "context": context},
-                priority=2
-            )
+                priority=2,
+            ),
         ]
 
         return tasks
 
-    async def _execute_with_cost_monitoring(self, tasks: list[ParallelTask]) -> dict[str, Any]:
+    async def _execute_with_cost_monitoring(
+        self, tasks: list[ParallelTask]
+    ) -> dict[str, Any]:
         """Execute tasks with real-time cost monitoring and dynamic model switching"""
 
         # Pre-execution cost check
@@ -212,17 +230,23 @@ class CFORevenuePipeline:
         return {
             "can_proceed": remaining_budget > 0.10,  # Need at least $0.10 to proceed
             "remaining_budget": remaining_budget,
-            "utilization_percentage": (self.current_daily_cost / self.budget_config.daily_budget) * 100,
-            "recommended_model": ModelType.SONNET_4 if remaining_budget < 2.0 else ModelType.OPUS_4,
-            "cost_optimization_required": remaining_budget < self.budget_config.opus_4_reserved
+            "utilization_percentage": (
+                self.current_daily_cost / self.budget_config.daily_budget
+            )
+            * 100,
+            "recommended_model": (
+                ModelType.SONNET_4 if remaining_budget < 2.0 else ModelType.OPUS_4
+            ),
+            "cost_optimization_required": remaining_budget
+            < self.budget_config.opus_4_reserved,
         }
 
     def _estimate_task_costs(self, tasks: list[ParallelTask]) -> float:
         """Estimate total cost for planned tasks"""
         cost_estimates = {
-            "code_generation": 0.05,      # $0.05 per code generation task
-            "data_analysis": 0.03,        # $0.03 per data analysis task
-            "strategic_analysis": 0.15    # $0.15 per strategic analysis task
+            "code_generation": 0.05,  # $0.05 per code generation task
+            "data_analysis": 0.03,  # $0.03 per data analysis task
+            "strategic_analysis": 0.15,  # $0.15 per strategic analysis task
         }
 
         total_estimated_cost = 0.0
@@ -237,27 +261,35 @@ class CFORevenuePipeline:
 
         return total_estimated_cost
 
-    def _optimize_tasks_for_budget(self, tasks: list[ParallelTask], estimated_cost: float) -> list[ParallelTask]:
+    def _optimize_tasks_for_budget(
+        self, tasks: list[ParallelTask], estimated_cost: float
+    ) -> list[ParallelTask]:
         """Optimize tasks to fit within budget constraints"""
         budget_remaining = self.budget_config.daily_budget - self.current_daily_cost
 
         if estimated_cost <= budget_remaining:
             return tasks
 
-        logger.warning(f"Budget optimization required: ${estimated_cost:.3f} estimated vs ${budget_remaining:.3f} remaining")
+        logger.warning(
+            f"Budget optimization required: ${estimated_cost:.3f} estimated vs ${budget_remaining:.3f} remaining"
+        )
 
         optimized_tasks = []
         for task in tasks:
             # Switch expensive Opus 4 tasks to Sonnet 4 if budget constrained
             if task.kwargs.get("model") == ModelType.OPUS_4 and budget_remaining < 1.0:
                 task.kwargs["model"] = ModelType.SONNET_4
-                logger.info(f"Switched task {task.task_id} from Opus 4 to Sonnet 4 for budget optimization")
+                logger.info(
+                    f"Switched task {task.task_id} from Opus 4 to Sonnet 4 for budget optimization"
+                )
 
             optimized_tasks.append(task)
 
         return optimized_tasks
 
-    def _calculate_revenue_impact(self, results: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+    def _calculate_revenue_impact(
+        self, results: dict[str, Any], context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Calculate projected revenue impact from pipeline execution"""
 
         successful_tasks = len([r for r in results["results"].values() if r.success])
@@ -275,7 +307,9 @@ class CFORevenuePipeline:
 
         # Calculate revenue projections
         projected_conversions = prospects_reached * base_conversion_rate
-        projected_revenue_monthly = projected_conversions * (base_ltv / 12)  # Monthly LTV
+        projected_revenue_monthly = projected_conversions * (
+            base_ltv / 12
+        )  # Monthly LTV
         projected_revenue_daily = projected_revenue_monthly / 30
 
         return {
@@ -283,11 +317,21 @@ class CFORevenuePipeline:
             "projected_conversions": round(projected_conversions, 1),
             "projected_monthly_revenue": round(projected_revenue_monthly, 2),
             "projected_daily_revenue": round(projected_revenue_daily, 2),
-            "days_to_300_target": round(300 / max(projected_revenue_daily, 1), 1) if projected_revenue_daily > 0 else "∞",
-            "roi_multiple": round(projected_monthly_revenue / (self.current_daily_cost * 30), 1) if self.current_daily_cost > 0 else "∞"
+            "days_to_300_target": (
+                round(300 / max(projected_revenue_daily, 1), 1)
+                if projected_revenue_daily > 0
+                else "∞"
+            ),
+            "roi_multiple": (
+                round(projected_monthly_revenue / (self.current_daily_cost * 30), 1)
+                if self.current_daily_cost > 0
+                else "∞"
+            ),
         }
 
-    def _create_budget_exceeded_result(self, budget_status: dict[str, Any]) -> PipelineResult:
+    def _create_budget_exceeded_result(
+        self, budget_status: dict[str, Any]
+    ) -> PipelineResult:
         """Create result when budget is exceeded"""
         return PipelineResult(
             execution_time=0.0,
@@ -297,8 +341,8 @@ class CFORevenuePipeline:
             revenue_impact={
                 "error": "Budget exceeded",
                 "remaining_budget": budget_status["remaining_budget"],
-                "utilization": budget_status["utilization_percentage"]
-            }
+                "utilization": budget_status["utilization_percentage"],
+            },
         )
 
     def get_pipeline_analytics(self) -> dict[str, Any]:
@@ -307,9 +351,19 @@ class CFORevenuePipeline:
         budget_status = self._check_budget_status()
 
         # Calculate daily averages
-        daily_executions = len([e for e in self.execution_history if e["date"] == datetime.now().date().isoformat()])
-        avg_execution_time = sum(e["execution_time"] for e in self.execution_history[-10:]) / min(len(self.execution_history), 10)
-        avg_cost_per_execution = sum(e["cost"] for e in self.execution_history[-10:]) / min(len(self.execution_history), 10)
+        daily_executions = len(
+            [
+                e
+                for e in self.execution_history
+                if e["date"] == datetime.now().date().isoformat()
+            ]
+        )
+        avg_execution_time = sum(
+            e["execution_time"] for e in self.execution_history[-10:]
+        ) / min(len(self.execution_history), 10)
+        avg_cost_per_execution = sum(
+            e["cost"] for e in self.execution_history[-10:]
+        ) / min(len(self.execution_history), 10)
 
         return {
             "budget_management": {
@@ -317,21 +371,28 @@ class CFORevenuePipeline:
                 "current_utilization": budget_status["utilization_percentage"],
                 "remaining_budget": budget_status["remaining_budget"],
                 "cost_per_execution_avg": round(avg_cost_per_execution, 4),
-                "executions_remaining_today": int(budget_status["remaining_budget"] / max(avg_cost_per_execution, 0.01))
+                "executions_remaining_today": int(
+                    budget_status["remaining_budget"]
+                    / max(avg_cost_per_execution, 0.01)
+                ),
             },
             "performance_optimization": {
                 "target_execution_time": 1.0,  # Target: <1 second
                 "current_avg_execution_time": round(avg_execution_time, 3),
-                "speed_improvement": round(2.0 / max(avg_execution_time, 0.001), 1),  # vs 2 second baseline
+                "speed_improvement": round(
+                    2.0 / max(avg_execution_time, 0.001), 1
+                ),  # vs 2 second baseline
                 "daily_executions": daily_executions,
-                "cost_efficiency_score": round(10 / max(self.current_daily_cost, 0.01), 1)  # $10 budget efficiency
+                "cost_efficiency_score": round(
+                    10 / max(self.current_daily_cost, 0.01), 1
+                ),  # $10 budget efficiency
             },
             "model_optimization": {
                 "sonnet_4_usage_percentage": 80,  # Target 80% Sonnet 4 for cost efficiency
                 "opus_4_reserved_budget": self.budget_config.opus_4_reserved,
                 "dynamic_routing_enabled": True,
-                "cost_optimization_active": budget_status["cost_optimization_required"]
-            }
+                "cost_optimization_active": budget_status["cost_optimization_required"],
+            },
         }
 
     def _load_pipeline_memory(self) -> None:
@@ -348,7 +409,9 @@ class CFORevenuePipeline:
                     if last_execution_date != datetime.now().date().isoformat():
                         self.current_daily_cost = 0.0
 
-                logger.info(f"Loaded pipeline memory: {len(self.execution_history)} executions, ${self.current_daily_cost:.4f} daily cost")
+                logger.info(
+                    f"Loaded pipeline memory: {len(self.execution_history)} executions, ${self.current_daily_cost:.4f} daily cost"
+                )
             except Exception as e:
                 logger.error(f"Failed to load pipeline memory: {e}")
 
@@ -361,7 +424,7 @@ class CFORevenuePipeline:
                 "current_daily_cost": self.current_daily_cost,
                 "last_execution_date": datetime.now().date().isoformat(),
                 "budget_config": asdict(self.budget_config),
-                "updated_at": datetime.now().isoformat()
+                "updated_at": datetime.now().isoformat(),
             }
 
             with open(self.memory_file, "w") as f:
@@ -371,44 +434,100 @@ class CFORevenuePipeline:
             logger.error(f"Failed to persist pipeline memory: {e}")
 
     # Mock task implementations (replace with actual implementations)
-    async def _generate_api_endpoints(self, endpoint_type: str, model: ModelType = None, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def _generate_api_endpoints(
+        self,
+        endpoint_type: str,
+        model: ModelType = None,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Generate API endpoints with specified model"""
         await asyncio.sleep(0.1)  # Simulate processing
-        cost = track_api_call(model.value if model else "claude-4-sonnet", 800, 400, "code_generation")
-        return {"endpoints_generated": 3, "cost": cost, "model_used": model.value if model else "claude-4-sonnet"}
+        cost = track_api_call(
+            model.value if model else "claude-4-sonnet", 800, 400, "code_generation"
+        )
+        return {
+            "endpoints_generated": 3,
+            "cost": cost,
+            "model_used": model.value if model else "claude-4-sonnet",
+        }
 
-    async def _batch_generate_components(self, components: list[str], model: ModelType = None, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def _batch_generate_components(
+        self,
+        components: list[str],
+        model: ModelType = None,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Batch generate UI components"""
         await asyncio.sleep(0.15)  # Simulate processing
-        cost = track_api_call(model.value if model else "claude-4-sonnet", 1200, 600, "code_generation")
-        return {"components_generated": len(components), "cost": cost, "model_used": model.value if model else "claude-4-sonnet"}
+        cost = track_api_call(
+            model.value if model else "claude-4-sonnet", 1200, 600, "code_generation"
+        )
+        return {
+            "components_generated": len(components),
+            "cost": cost,
+            "model_used": model.value if model else "claude-4-sonnet",
+        }
 
-    async def _automated_market_research(self, keywords: list[str], model: ModelType = None, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def _automated_market_research(
+        self,
+        keywords: list[str],
+        model: ModelType = None,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Automated market research"""
         await asyncio.sleep(0.2)  # Simulate processing
-        cost = track_api_call(model.value if model else "claude-4-sonnet", 1500, 800, "data_analysis")
-        return {"keywords_analyzed": len(keywords), "insights_generated": 5, "cost": cost, "model_used": model.value if model else "claude-4-sonnet"}
+        cost = track_api_call(
+            model.value if model else "claude-4-sonnet", 1500, 800, "data_analysis"
+        )
+        return {
+            "keywords_analyzed": len(keywords),
+            "insights_generated": 5,
+            "cost": cost,
+            "model_used": model.value if model else "claude-4-sonnet",
+        }
 
-    async def _optimize_revenue_strategy(self, current_revenue: float, target_revenue: float, model: ModelType = None, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def _optimize_revenue_strategy(
+        self,
+        current_revenue: float,
+        target_revenue: float,
+        model: ModelType = None,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Optimize revenue strategy (complex task for Opus 4)"""
         await asyncio.sleep(0.3)  # Simulate processing
-        cost = track_api_call(model.value if model else "claude-4", 2000, 1200, "strategic_analysis")
+        cost = track_api_call(
+            model.value if model else "claude-4", 2000, 1200, "strategic_analysis"
+        )
         return {
             "strategy_optimized": True,
             "revenue_gap": target_revenue - current_revenue,
             "recommendations": 3,
             "cost": cost,
-            "model_used": model.value if model else "claude-4"
+            "model_used": model.value if model else "claude-4",
         }
 
-    async def _analyze_customer_pipeline(self, prospects: list[dict[str, Any]], model: ModelType = None, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def _analyze_customer_pipeline(
+        self,
+        prospects: list[dict[str, Any]],
+        model: ModelType = None,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Analyze customer pipeline"""
         await asyncio.sleep(0.1)  # Simulate processing
-        cost = track_api_call(model.value if model else "claude-4-sonnet", 1000, 500, "data_analysis")
-        return {"prospects_analyzed": len(prospects), "qualified_leads": len(prospects) // 2, "cost": cost, "model_used": model.value if model else "claude-4-sonnet"}
+        cost = track_api_call(
+            model.value if model else "claude-4-sonnet", 1000, 500, "data_analysis"
+        )
+        return {
+            "prospects_analyzed": len(prospects),
+            "qualified_leads": len(prospects) // 2,
+            "cost": cost,
+            "model_used": model.value if model else "claude-4-sonnet",
+        }
+
 
 # Global pipeline instance
 _cfo_pipeline = None
+
 
 def get_cfo_revenue_pipeline() -> CFORevenuePipeline:
     """Get the global CFO revenue pipeline instance"""
@@ -417,8 +536,11 @@ def get_cfo_revenue_pipeline() -> CFORevenuePipeline:
         _cfo_pipeline = CFORevenuePipeline()
     return _cfo_pipeline
 
+
 # Convenience function for immediate execution
-async def execute_cfo_optimized_pipeline(context: dict[str, Any] | None = None) -> PipelineResult:
+async def execute_cfo_optimized_pipeline(
+    context: dict[str, Any] | None = None,
+) -> PipelineResult:
     """Execute CFO-optimized revenue pipeline with budget monitoring"""
     pipeline = get_cfo_revenue_pipeline()
     return await pipeline.execute_optimized_revenue_pipeline(context)

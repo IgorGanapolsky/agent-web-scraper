@@ -1,6 +1,7 @@
 """
 Tests for the quality module.
 """
+
 from app.core.quality import QualityGate, ensure_quality
 
 

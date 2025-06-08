@@ -22,13 +22,13 @@ stages:
           - psql -c "CREATE DATABASE cfo_revenue_pipeline;"
           - psql -c "CREATE USER cfo_user WITH PASSWORD '$DB_PASSWORD';"
           - psql -c "GRANT ALL PRIVILEGES ON DATABASE cfo_revenue_pipeline TO cfo_user;"
-        
+
       - name: setup-redis
         container: redis:7-alpine
         commands:
           - redis-server --daemonize yes
           - redis-cli config set save "60 1000"
-          
+
       - name: setup-monitoring
         container: prom/prometheus:latest
         commands:
@@ -48,7 +48,7 @@ stages:
         artifacts:
           - path: app/
             name: api-service
-            
+
       - name: build-batch-processor
         container: python:3.11-slim
         commands:
@@ -58,7 +58,7 @@ stages:
         artifacts:
           - path: app/core/batch_api_optimizer.py
             name: batch-processor
-            
+
       - name: build-token-monitor
         container: python:3.11-slim
         commands:
@@ -67,7 +67,7 @@ stages:
         artifacts:
           - path: app/core/token_monitor.py
             name: token-monitor
-            
+
       - name: build-cfo-pipeline
         container: python:3.11-slim
         commands:
@@ -90,42 +90,42 @@ stages:
             import asyncio
             import time
             from app.core.cfo_revenue_pipeline import execute_cfo_optimized_pipeline
-            
+
             async def test_performance():
                 start = time.time()
                 result = await execute_cfo_optimized_pipeline({'test': True})
                 execution_time = time.time() - start
-                
+
                 assert execution_time < 1.0, f'Execution time {execution_time:.3f}s exceeds 1s target'
                 print(f'✅ Performance test passed: {execution_time:.3f}s < 1.0s target')
                 print(f'✅ Cost: ${result.cost_usd:.4f} of $10.00 budget')
                 print(f'✅ Optimization ratio: {result.optimization_ratio:.1f}x')
-                
+
             asyncio.run(test_performance())
             "
-            
+
       - name: test-budget-compliance
         container: python:3.11-slim
         commands:
           - pip install -r requirements.txt
           - python -c "
             from app.core.cfo_revenue_pipeline import CFORevenuePipeline, CFOBudgetConfig
-            
+
             config = CFOBudgetConfig(daily_budget=10.0)
             pipeline = CFORevenuePipeline(config)
-            
+
             # Simulate 20 executions
             total_cost = 0.0
             for i in range(20):
                 # Mock execution cost
                 execution_cost = 0.15  # $0.15 per execution
                 total_cost += execution_cost
-                
+
             assert total_cost < 10.0, f'Total cost ${total_cost:.2f} exceeds $10 budget'
             print(f'✅ Budget test passed: ${total_cost:.2f} < $10.00 budget')
             print(f'✅ Executions possible: {int(10.0 / 0.15)} per day')
             "
-            
+
       - name: test-parallel-efficiency
         container: python:3.11-slim
         commands:
@@ -133,14 +133,14 @@ stages:
           - python -c "
             import asyncio
             from app.core.parallel_orchestrator import get_parallel_orchestrator
-            
+
             async def test_parallel():
                 orchestrator = get_parallel_orchestrator()
                 # Test would verify parallel task execution
                 print('✅ Parallel orchestration validated')
                 print('✅ Concurrency: 10 simultaneous tasks')
                 print('✅ Efficiency: 94.3% parallel utilization')
-                
+
             asyncio.run(test_parallel())
             "
 
@@ -154,13 +154,13 @@ stages:
         commands:
           - docker build -t $REGISTRY_URL/cfo-api:latest -f docker/Dockerfile.api .
           - docker push $REGISTRY_URL/cfo-api:latest
-          
+
       - name: build-processor-container
         container: docker:dind
         commands:
           - docker build -t $REGISTRY_URL/batch-processor:latest -f docker/Dockerfile.processor .
           - docker push $REGISTRY_URL/batch-processor:latest
-          
+
       - name: build-monitor-container
         container: docker:dind
         commands:
@@ -179,11 +179,11 @@ stages:
           - kubectl rollout status deployment/cfo-api
           - kubectl rollout status deployment/batch-processor
           - kubectl rollout status deployment/token-monitor
-          
+
           # Verify deployment health
           - kubectl get pods -l app=cfo-revenue-pipeline
           - kubectl logs -l app=cfo-api --tail=10
-          
+
           # Run production smoke tests
           - |
             API_URL=$(kubectl get service cfo-api -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
@@ -198,17 +198,17 @@ monitoring:
       threshold: 1.0
       unit: seconds
       alert: "Pipeline execution exceeds 1 second target"
-      
+
     - name: daily_budget_usage
       threshold: 10.0
       unit: dollars
       alert: "Daily budget of $10 exceeded"
-      
+
     - name: cost_per_execution
       threshold: 0.50
       unit: dollars
       alert: "Cost per execution exceeds $0.50 limit"
-      
+
     - name: parallel_efficiency
       threshold: 85.0
       unit: percent
@@ -232,7 +232,7 @@ targets:
     resources:
       cpu: "1000m"
       memory: "2Gi"
-      
+
   staging:
     url: https://staging-api.example.com
     environment: staging
@@ -258,21 +258,21 @@ notifications:
       - "#engineering-alerts"
     on_success: |
       🚀 CFO Revenue Pipeline deployed successfully!
-      
+
       ✅ Execution time: {{execution_time}}s (target: <1s)
       ✅ Budget usage: ${{budget_used}} of $10.00
       ✅ Cost savings: {{cost_savings}}% vs baseline
       ✅ Parallel efficiency: {{parallel_efficiency}}%
-      
+
       Ready for enterprise revenue acceleration! 📈
-      
+
     on_failure: |
       ❌ CFO Revenue Pipeline deployment failed
-      
+
       Issue: {{error_message}}
       Stage: {{failed_stage}}
       Budget impact: Minimal (deployment stopped)
-      
+
       Action required: Review logs and redeploy
 
 # Pipeline Metadata

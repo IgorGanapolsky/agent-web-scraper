@@ -16,7 +16,9 @@ import dagger
 class RevenueAccelerationPipeline:
     """Optimized revenue pipeline with Claude token monitoring"""
 
-    def __init__(self, target_revenue: float = 1000.0, optimization_mode: str = "balanced"):
+    def __init__(
+        self, target_revenue: float = 1000.0, optimization_mode: str = "balanced"
+    ):
         self.target_revenue = target_revenue
         self.optimization_mode = optimization_mode
         self.start_time = time.time()
@@ -24,7 +26,7 @@ class RevenueAccelerationPipeline:
         # Task distribution for cost optimization
         self.task_distribution = {
             "sonnet_tasks": [],  # Routine: API endpoints, data processing, reports
-            "opus_tasks": []     # Complex: Strategic analysis, optimization algorithms
+            "opus_tasks": [],  # Complex: Strategic analysis, optimization algorithms
         }
 
     async def run_pipeline(self, stage: str) -> dict:
@@ -34,7 +36,7 @@ class RevenueAccelerationPipeline:
             "ai_cost_optimization": self.optimize_ai_costs,
             "customer_acquisition_modeling": self.model_customer_acquisition,
             "revenue_forecasting": self.forecast_revenue,
-            "roi_calculation": self.calculate_roi_metrics
+            "roi_calculation": self.calculate_roi_metrics,
         }
 
         if stage not in pipeline_stages:
@@ -50,7 +52,7 @@ class RevenueAccelerationPipeline:
             "execution_time_seconds": round(execution_time, 2),
             "target_revenue": self.target_revenue,
             "optimization_mode": self.optimization_mode,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
         return results
@@ -60,9 +62,9 @@ class RevenueAccelerationPipeline:
 
         # Parallel task execution for efficiency
         tasks = [
-            self.analyze_token_patterns(),    # Sonnet - routine
+            self.analyze_token_patterns(),  # Sonnet - routine
             self.optimize_model_selection(),  # Sonnet - routine
-            self.generate_cost_forecasts()    # Opus - complex
+            self.generate_cost_forecasts(),  # Opus - complex
         ]
 
         results = await asyncio.gather(*tasks)
@@ -78,9 +80,9 @@ class RevenueAccelerationPipeline:
                 "sonnet_usage_pct": (len(sonnet_tasks) / len(results)) * 100,
                 "opus_usage_pct": (len(opus_tasks) / len(results)) * 100,
                 "cost_savings_pct": 65,  # From intelligent model selection
-                "recommended_distribution": "70% Sonnet, 30% Opus"
+                "recommended_distribution": "70% Sonnet, 30% Opus",
             },
-            "task_results": results
+            "task_results": results,
         }
 
     async def analyze_token_patterns(self) -> dict:
@@ -95,8 +97,8 @@ class RevenueAccelerationPipeline:
             "insights": [
                 "Daily token usage peaks at 2PM-4PM",
                 "Routine tasks average 800 tokens",
-                "Complex tasks average 3200 tokens"
-            ]
+                "Complex tasks average 3200 tokens",
+            ],
         }
 
     async def optimize_model_selection(self) -> dict:
@@ -111,8 +113,8 @@ class RevenueAccelerationPipeline:
             "recommendations": [
                 "Use Sonnet for API endpoint generation",
                 "Use Sonnet for data processing and reports",
-                "Reserve Opus for strategic analysis only"
-            ]
+                "Reserve Opus for strategic analysis only",
+            ],
         }
 
     async def generate_cost_forecasts(self) -> dict:
@@ -127,8 +129,8 @@ class RevenueAccelerationPipeline:
             "forecasts": {
                 "30_day_projection": 285.50,
                 "quarterly_projection": 856.50,
-                "optimization_savings": 189.75
-            }
+                "optimization_savings": 189.75,
+            },
         }
 
     async def model_customer_acquisition(self) -> dict:
@@ -139,9 +141,9 @@ class RevenueAccelerationPipeline:
             "revenue_gap": (self.target_revenue - 300) * 30,  # $21,000/month
             "avg_revenue_per_customer": 129.0,  # Weighted average
             "customers_needed": 163,  # 21000 / 129
-            "optimized_cac": 47.50,   # AI savings reduce CAC
+            "optimized_cac": 47.50,  # AI savings reduce CAC
             "ltv_cac_ratio": 6.5,
-            "payback_period_months": 2.8
+            "payback_period_months": 2.8,
         }
 
         return {
@@ -149,8 +151,8 @@ class RevenueAccelerationPipeline:
             "ai_cost_impact": {
                 "monthly_ai_savings": 210.0,
                 "reinvested_in_marketing": 210.0,
-                "cac_reduction_pct": 5.0
-            }
+                "cac_reduction_pct": 5.0,
+            },
         }
 
     async def forecast_revenue(self) -> dict:
@@ -165,20 +167,22 @@ class RevenueAccelerationPipeline:
             week_revenue = week_customers * 129
             cumulative_revenue += week_revenue
 
-            timeline.append({
-                "week": week,
-                "new_customers": week_customers,
-                "weekly_revenue_added": week_revenue,
-                "cumulative_monthly_revenue": cumulative_revenue,
-                "daily_revenue": round(cumulative_revenue / 30, 2)
-            })
+            timeline.append(
+                {
+                    "week": week,
+                    "new_customers": week_customers,
+                    "weekly_revenue_added": week_revenue,
+                    "cumulative_monthly_revenue": cumulative_revenue,
+                    "daily_revenue": round(cumulative_revenue / 30, 2),
+                }
+            )
 
         return {
             "revenue_forecast": {
                 "scaling_timeline": timeline,
                 "final_daily_revenue": timeline[-1]["daily_revenue"],
                 "growth_rate_weekly": 0.15,
-                "confidence_interval": "85%"
+                "confidence_interval": "85%",
             }
         }
 
@@ -203,7 +207,7 @@ class RevenueAccelerationPipeline:
                 "monthly_profit": monthly_profit,
                 "break_even_months": round(break_even_months, 1),
                 "roi_12_months_pct": round(roi_12m, 1),
-                "ai_optimization_contribution": 210.0
+                "ai_optimization_contribution": 210.0,
             }
         }
 
@@ -215,10 +219,12 @@ class RevenueAccelerationPipeline:
             "optimization_mode": self.optimization_mode,
             "results": results,
             "performance_metrics": {
-                "execution_time_seconds": results.get("execution_metadata", {}).get("execution_time_seconds", 0),
+                "execution_time_seconds": results.get("execution_metadata", {}).get(
+                    "execution_time_seconds", 0
+                ),
                 "cost_optimization_achieved": True,
-                "sonnet_opus_ratio": "70:30"
-            }
+                "sonnet_opus_ratio": "70:30",
+            },
         }
 
         os.makedirs("data/memory", exist_ok=True)
@@ -232,33 +238,37 @@ class RevenueAccelerationPipeline:
             "pipeline_execution": {
                 "total_tokens_used": 8500,
                 "sonnet_tokens": 5950,  # 70%
-                "opus_tokens": 2550,    # 30%
+                "opus_tokens": 2550,  # 30%
                 "total_cost_usd": 0.072,
                 "execution_time_seconds": 1.2,
-                "cost_per_second": 0.06
+                "cost_per_second": 0.06,
             },
             "optimization_metrics": {
-                "time_reduction_pct": 40,   # From 2s to 1.2s
-                "cost_reduction_pct": 65,   # Through model optimization
-                "efficiency_improvement": "2.6x faster execution"
+                "time_reduction_pct": 40,  # From 2s to 1.2s
+                "cost_reduction_pct": 65,  # Through model optimization
+                "efficiency_improvement": "2.6x faster execution",
             },
             "model_usage_breakdown": {
                 "sonnet_4": {
-                    "tasks": ["token_analysis", "model_optimization", "data_processing"],
+                    "tasks": [
+                        "token_analysis",
+                        "model_optimization",
+                        "data_processing",
+                    ],
                     "avg_cost_per_task": 0.014,
-                    "usage_recommendation": "Continue for routine tasks"
+                    "usage_recommendation": "Continue for routine tasks",
                 },
                 "opus_4": {
                     "tasks": ["cost_forecasting", "strategic_analysis"],
                     "avg_cost_per_task": 0.045,
-                    "usage_recommendation": "Reserve for complex reasoning only"
-                }
+                    "usage_recommendation": "Reserve for complex reasoning only",
+                },
             },
             "recommendations": [
                 "Continue 70/30 Sonnet/Opus split for optimal cost-performance",
                 "Consider batching routine tasks for further cost reduction",
-                "Monitor daily budget utilization - currently at 85%"
-            ]
+                "Monitor daily budget utilization - currently at 85%",
+            ],
         }
 
 
@@ -280,12 +290,15 @@ async def build_and_deploy_microservice():
         )
 
         # Test the microservice
-        test_result = await python_container.with_exec([
-            "python", "-c",
-            "from app.core.revenue_acceleration_model import RevenueAccelerationModel; "
-            "model = RevenueAccelerationModel(); "
-            "print('✅ Revenue microservice health check: OK')"
-        ]).stdout()
+        test_result = await python_container.with_exec(
+            [
+                "python",
+                "-c",
+                "from app.core.revenue_acceleration_model import RevenueAccelerationModel; "
+                "model = RevenueAccelerationModel(); "
+                "print('✅ Revenue microservice health check: OK')",
+            ]
+        ).stdout()
 
         print(f"Microservice test result: {test_result}")
 
@@ -298,17 +311,21 @@ async def main():
 
     # Parse command line arguments
     import argparse
+
     parser = argparse.ArgumentParser(description="Revenue Acceleration Pipeline")
     parser.add_argument("--stage", required=True, help="Pipeline stage to run")
-    parser.add_argument("--target-revenue", type=float, default=1000.0, help="Target daily revenue")
-    parser.add_argument("--optimization-mode", default="balanced", help="Optimization mode")
+    parser.add_argument(
+        "--target-revenue", type=float, default=1000.0, help="Target daily revenue"
+    )
+    parser.add_argument(
+        "--optimization-mode", default="balanced", help="Optimization mode"
+    )
 
     args = parser.parse_args()
 
     # Initialize and run pipeline
     pipeline = RevenueAccelerationPipeline(
-        target_revenue=args.target_revenue,
-        optimization_mode=args.optimization_mode
+        target_revenue=args.target_revenue, optimization_mode=args.optimization_mode
     )
 
     print(f"🚀 Running revenue pipeline stage: {args.stage}")
@@ -326,7 +343,9 @@ async def main():
 
     # Output results
     print("\n📊 PIPELINE EXECUTION RESULTS:")
-    print(f"⏱️  Execution time: {results['execution_metadata']['execution_time_seconds']}s")
+    print(
+        f"⏱️  Execution time: {results['execution_metadata']['execution_time_seconds']}s"
+    )
     print(f"💰 Token cost: ${token_report['pipeline_execution']['total_cost_usd']:.3f}")
     print("🎯 Model distribution: 70% Sonnet, 30% Opus")
     print("⚡ Performance improvement: 40% faster execution")

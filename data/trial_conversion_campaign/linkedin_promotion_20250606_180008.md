@@ -35,11 +35,11 @@ We just changed that forever.
 
 🎯 **Our new trial experience:**
 ✅ Connect your tools in 2 clicks
-✅ See live insights in under 5 minutes  
+✅ See live insights in under 5 minutes
 ✅ Get personalized dashboard automatically
 ✅ Start with your actual data, not empty widgets
 
-**The result?** 
+**The result?**
 Our beta users are seeing value in an average of 3 minutes 47 seconds.
 
 🔥 **Real feedback from this week:**
@@ -90,10 +90,10 @@ Instead of giving you 50 generic widgets, it asks:
 Then it creates a dashboard specifically for YOU.
 
 **CFOs get:** Cash flow analysis, burn rate tracking, unit economics
-**Operations Directors get:** Process efficiency, team productivity, bottleneck identification  
+**Operations Directors get:** Process efficiency, team productivity, bottleneck identification
 **CEOs get:** Strategic metrics, growth indicators, executive summaries
 
-🎯 **The result?** 
+🎯 **The result?**
 80% of users call it "exactly what I needed" within their first session.
 
 **But here's the magic:**
@@ -107,7 +107,7 @@ No more:
 
 Instead:
 ✅ Relevant insights from day one
-✅ Clear action items based on your data  
+✅ Clear action items based on your data
 ✅ Progress tracking toward your actual goals
 ✅ Automated alerts for what matters to YOU
 
@@ -143,7 +143,7 @@ After: 2 hours/week (13 hours saved)
 Impact: $3,200/month in productivity gains
 "The automated insights caught a churn pattern we missed for months"
 
-Slide 3: GrowthCorp (Digital Agency)  
+Slide 3: GrowthCorp (Digital Agency)
 Before: Client reporting across 6 different tools
 After: Unified dashboard with automated client reports
 Impact: 40% faster client communication

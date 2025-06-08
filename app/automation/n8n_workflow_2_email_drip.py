@@ -18,6 +18,7 @@ from app.core.session_memory import get_session_memory_manager
 
 logger = get_logger(__name__)
 
+
 class N8NWorkflow2Engine:
     """
     Enterprise n8n Workflow 2 Engine for email drip sequences.
@@ -40,8 +41,8 @@ class N8NWorkflow2Engine:
         # Token allocation strategy (CFO approved)
         self.model_allocation = {
             "sonnet_4": 0.80,  # 80% for workflow setup and email content
-            "haiku_4": 0.10,   # 10% for formatting and organization
-            "opus_4": 0.10     # 10% for research synthesis
+            "haiku_4": 0.10,  # 10% for formatting and organization
+            "opus_4": 0.10,  # 10% for research synthesis
         }
 
         # Campaign configuration
@@ -50,7 +51,7 @@ class N8NWorkflow2Engine:
             "trigger": "Meta Ads Lead Magnet Signup",
             "sequence_length": 4,  # Email #1 + 3 nurture emails
             "conversion_target": "25-35%",
-            "lead_magnet": "SaaS Integration Playbook"
+            "lead_magnet": "SaaS Integration Playbook",
         }
 
         # Usage tracking
@@ -58,12 +59,11 @@ class N8NWorkflow2Engine:
             "sonnet_4": 0.0,
             "haiku_4": 0.0,
             "opus_4": 0.0,
-            "total_cost": 0.0
+            "total_cost": 0.0,
         }
 
     async def create_complete_workflow_2(
-        self,
-        user_id: str = "cmo_workflow_2"
+        self, user_id: str = "cmo_workflow_2"
     ) -> dict[str, Any]:
         """
         Create complete n8n Workflow 2 with email drip sequence and research insights.
@@ -85,12 +85,14 @@ class N8NWorkflow2Engine:
                 "lead_source": "meta_ads_lead_magnet",
                 "conversion_target": self.workflow_config["conversion_target"],
                 "sequence_type": "4_email_drip",
-                "research_support": "gamma_app_storytelling"
-            }
+                "research_support": "gamma_app_storytelling",
+            },
         )
 
         logger.info(f"🔧 Creating n8n Workflow 2: {session_id}")
-        logger.info(f"🎯 Target: {self.workflow_config['conversion_target']} trial conversion")
+        logger.info(
+            f"🎯 Target: {self.workflow_config['conversion_target']} trial conversion"
+        )
 
         # Step 1: Create n8n workflow configuration (Sonnet 4 - 80%)
         n8n_workflow = await self._create_n8n_workflow_config(session_id)
@@ -110,11 +112,14 @@ class N8NWorkflow2Engine:
         file_outputs = self._save_workflow_files(formatted_outputs)
 
         # Step 6: Store in persistent context system
-        self._store_workflow_data(session_id, {
-            "n8n_workflow": n8n_workflow,
-            "email_sequence": email_sequence,
-            "research_insights": research_insights
-        })
+        self._store_workflow_data(
+            session_id,
+            {
+                "n8n_workflow": n8n_workflow,
+                "email_sequence": email_sequence,
+                "research_insights": research_insights,
+            },
+        )
 
         # Step 7: Generate usage report
         usage_report = self._generate_token_usage_report(session_id)
@@ -130,7 +135,7 @@ class N8NWorkflow2Engine:
                 "execution_time_seconds": round(execution_time, 2),
                 "workflow_name": self.workflow_config["name"],
                 "trigger_source": self.workflow_config["trigger"],
-                "conversion_target": self.workflow_config["conversion_target"]
+                "conversion_target": self.workflow_config["conversion_target"],
             },
             "n8n_workflow_config": n8n_workflow,
             "email_sequence_content": email_sequence,
@@ -145,14 +150,14 @@ class N8NWorkflow2Engine:
                     "email_3_open_rate": "18-24%",
                     "email_4_open_rate": "15-20%",
                     "overall_click_rate": "6-8%",
-                    "trial_conversion": "25-35%"
+                    "trial_conversion": "25-35%",
                 },
                 "workflow_efficiency": {
                     "processing_time": "2-3 minutes per lead",
                     "personalization_level": "High (role, industry, behavior)",
-                    "automation_coverage": "100% post-signup to trial conversion"
-                }
-            }
+                    "automation_coverage": "100% post-signup to trial conversion",
+                },
+            },
         }
 
         logger.info(f"✅ n8n Workflow 2 created in {execution_time:.2f}s")
@@ -171,7 +176,7 @@ class N8NWorkflow2Engine:
             input_tokens=2800,
             output_tokens=2200,
             task_type="n8n_workflow_creation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         n8n_workflow = {
@@ -190,10 +195,10 @@ class N8NWorkflow2Engine:
                         "authentication": "headerAuth",
                         "options": {
                             "allowedOrigins": "https://business.facebook.com,https://ads.facebook.com"
-                        }
+                        },
                     },
                     "webhookId": "meta_ads_lead_capture",
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 }
             ],
             "nodes": [
@@ -309,7 +314,7 @@ function inferIndustry(company, jobTitle) {
 return leads;
 """
                     },
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "crm_lead_sync",
@@ -334,14 +339,12 @@ return leads;
                                 "utm_campaign": "={{ $json.utm_campaign }}",
                                 "inferred_role": "={{ $json.inferred_role }}",
                                 "company_size": "={{ $json.company_size }}",
-                                "industry": "={{ $json.industry }}"
-                            }
-                        }
+                                "industry": "={{ $json.industry }}",
+                            },
+                        },
                     },
-                    "credentials": {
-                        "hubspotApi": "hubspot_main"
-                    },
-                    "typeVersion": 1
+                    "credentials": {"hubspotApi": "hubspot_main"},
+                    "typeVersion": 1,
                 },
                 {
                     "id": "send_email_1",
@@ -450,26 +453,21 @@ return leads;
                             "trackingSettings": {
                                 "clickTracking": True,
                                 "openTracking": True,
-                                "subscriptionTracking": True
+                                "subscriptionTracking": True,
                             },
-                            "categories": ["email_drip", "post_trial", "sequence_1"]
-                        }
+                            "categories": ["email_drip", "post_trial", "sequence_1"],
+                        },
                     },
-                    "credentials": {
-                        "sendGridApi": "sendgrid_main"
-                    },
-                    "typeVersion": 1
+                    "credentials": {"sendGridApi": "sendgrid_main"},
+                    "typeVersion": 1,
                 },
                 {
                     "id": "delay_24_hours",
                     "name": "Wait 24 Hours",
                     "type": "n8n-nodes-base.wait",
                     "position": [900, 400],
-                    "parameters": {
-                        "amount": 24,
-                        "unit": "hours"
-                    },
-                    "typeVersion": 1
+                    "parameters": {"amount": 24, "unit": "hours"},
+                    "typeVersion": 1,
                 },
                 {
                     "id": "check_trial_signup",
@@ -479,18 +477,10 @@ return leads;
                     "parameters": {
                         "method": "GET",
                         "url": "https://your-platform.com/api/users/trial-status?email={{ $json.email }}",
-                        "headers": {
-                            "Authorization": "Bearer {{ $env.API_TOKEN }}"
-                        },
-                        "options": {
-                            "response": {
-                                "response": {
-                                    "neverError": True
-                                }
-                            }
-                        }
+                        "headers": {"Authorization": "Bearer {{ $env.API_TOKEN }}"},
+                        "options": {"response": {"response": {"neverError": True}}},
                     },
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "route_by_trial_status",
@@ -506,18 +496,18 @@ return leads;
                                 {
                                     "value1": "={{ $json.trial_status }}",
                                     "operation": "equal",
-                                    "value2": "active"
+                                    "value2": "active",
                                 },
                                 {
                                     "value1": "={{ $json.trial_status }}",
                                     "operation": "equal",
-                                    "value2": "not_started"
-                                }
-                            ]
+                                    "value2": "not_started",
+                                },
+                            ],
                         },
-                        "fallbackOutput": 3
+                        "fallbackOutput": 3,
                     },
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "send_email_2_trial_active",
@@ -530,9 +520,9 @@ return leads;
                         "toEmail": "={{ $json.email }}",
                         "subject": "🎯 Your dashboard is working - here's what we found",
                         "contentType": "html",
-                        "emailContent": "<!-- Email #2 content for trial active users -->"
+                        "emailContent": "<!-- Email #2 content for trial active users -->",
                     },
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "send_email_2_no_trial",
@@ -545,70 +535,36 @@ return leads;
                         "toEmail": "={{ $json.email }}",
                         "subject": "⚡ Still reading the playbook? See it in action (5 min)",
                         "contentType": "html",
-                        "emailContent": "<!-- Email #2 content for non-trial users -->"
+                        "emailContent": "<!-- Email #2 content for non-trial users -->",
                     },
-                    "typeVersion": 1
-                }
+                    "typeVersion": 1,
+                },
             ],
             "connections": {
                 "meta_ads_webhook": {
                     "main": [
-                        [
-                            {
-                                "node": "validate_lead_data",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "validate_lead_data", "type": "main", "index": 0}]
                     ]
                 },
                 "validate_lead_data": {
                     "main": [
                         [
-                            {
-                                "node": "crm_lead_sync",
-                                "type": "main",
-                                "index": 0
-                            },
-                            {
-                                "node": "send_email_1",
-                                "type": "main",
-                                "index": 0
-                            }
+                            {"node": "crm_lead_sync", "type": "main", "index": 0},
+                            {"node": "send_email_1", "type": "main", "index": 0},
                         ]
                     ]
                 },
                 "send_email_1": {
-                    "main": [
-                        [
-                            {
-                                "node": "delay_24_hours",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
-                    ]
+                    "main": [[{"node": "delay_24_hours", "type": "main", "index": 0}]]
                 },
                 "delay_24_hours": {
                     "main": [
-                        [
-                            {
-                                "node": "check_trial_signup",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "check_trial_signup", "type": "main", "index": 0}]
                     ]
                 },
                 "check_trial_signup": {
                     "main": [
-                        [
-                            {
-                                "node": "route_by_trial_status",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "route_by_trial_status", "type": "main", "index": 0}]
                     ]
                 },
                 "route_by_trial_status": {
@@ -617,29 +573,21 @@ return leads;
                             {
                                 "node": "send_email_2_trial_active",
                                 "type": "main",
-                                "index": 0
+                                "index": 0,
                             }
                         ],
-                        [
-                            {
-                                "node": "send_email_2_no_trial",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "send_email_2_no_trial", "type": "main", "index": 0}],
                     ]
-                }
+                },
             },
             "settings": {
                 "executionOrder": "v1",
                 "saveManualExecutions": True,
                 "callerPolicy": "workflowsFromSameOwner",
-                "errorWorkflow": "error_handler_workflow_2"
+                "errorWorkflow": "error_handler_workflow_2",
             },
             "staticData": {},
-            "meta": {
-                "templateCredsSetupCompleted": True
-            }
+            "meta": {"templateCredsSetupCompleted": True},
         }
 
         logger.info(f"✅ n8n workflow created - Cost: ${workflow_cost:.4f}")
@@ -651,17 +599,17 @@ return leads;
                 "crm_sync": "Automatic HubSpot contact creation",
                 "email_personalization": "Role, industry, company size based",
                 "behavioral_routing": "Trial signup status detection",
-                "utm_tracking": "Complete attribution chain"
+                "utm_tracking": "Complete attribution chain",
             },
             "technical_specifications": {
                 "trigger_method": "Webhook from Meta Ads",
                 "processing_time": "2-3 minutes per lead",
                 "personalization_depth": "5 data points",
                 "error_handling": "Dedicated error workflow",
-                "scalability": "Supports 1000+ leads/hour"
+                "scalability": "Supports 1000+ leads/hour",
             },
             "generation_cost": workflow_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _create_email_nurture_sequence(self, session_id: str) -> dict[str, Any]:
@@ -675,7 +623,7 @@ return leads;
             input_tokens=3200,
             output_tokens=2800,
             task_type="email_sequence_creation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         email_sequence = {
@@ -684,9 +632,8 @@ return leads;
                 "email_1": "Immediate (existing campaign) - Playbook delivery + trial CTA",
                 "email_2": "24 hours - Behavioral routing based on trial status",
                 "email_3": "72 hours - Success stories and automation highlights",
-                "email_4": "7 days - Special conversion offer and urgency"
+                "email_4": "7 days - Special conversion offer and urgency",
             },
-
             "email_2_variants": {
                 "trial_active_version": {
                     "subject": "🎯 Your dashboard is working - here's what we found",
@@ -746,10 +693,9 @@ P.S. Your trial usage puts you in the top 15% of engaged users. That's exactly t
                         "specific_insight_3",
                         "insight_explanation_3",
                         "actionable_recommendation_3",
-                        "estimated_savings"
-                    ]
+                        "estimated_savings",
+                    ],
                 },
-
                 "no_trial_version": {
                     "subject": "⚡ Still reading the playbook? See it in action (5 min)",
                     "from_name": "The Product Team",
@@ -815,17 +761,16 @@ P.S. 89% of playbook readers who try the trial say it's the missing piece that m
                         "first_name",
                         "inferred_role",
                         "industry",
-                        "company_size"
-                    ]
-                }
+                        "company_size",
+                    ],
+                },
             },
-
             "email_3_content": {
                 "timing": "72 hours after Email #1",
                 "subject_lines": [
                     "📈 3 companies, 3 weeks, 3 transformations",
                     "⚡ How DataScale automated 15 hours/week in 3 weeks",
-                    "🚀 The 3-week transformation challenge"
+                    "🚀 The 3-week transformation challenge",
                 ],
                 "selected_subject": "📈 3 companies, 3 weeks, 3 transformations",
                 "from_name": "The Product Team",
@@ -909,21 +854,20 @@ P.S. All three of these companies started with the same SaaS Integration Playboo
                     "industry_match_1",
                     "industry_match_2",
                     "industry_match_3",
-                    "industry"
+                    "industry",
                 ],
                 "dynamic_content": {
                     "industry_matching": "Show success stories from similar industries",
                     "role_specific_benefits": "Highlight relevant outcomes for user's role",
-                    "company_size_examples": "Use comparable company sizes in examples"
-                }
+                    "company_size_examples": "Use comparable company sizes in examples",
+                },
             },
-
             "email_4_content": {
                 "timing": "7 days after Email #1",
                 "subject_lines": [
                     "🎯 Final offer: 45-day trial expires in 24 hours",
                     "⏰ Your extended trial access ends tomorrow",
-                    "🔐 Last chance: 45-day trial vs. standard 14-day"
+                    "🔐 Last chance: 45-day trial vs. standard 14-day",
                 ],
                 "selected_subject": "⏰ Your extended trial access ends tomorrow",
                 "from_name": "Sarah - Customer Success",
@@ -1013,16 +957,16 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                     "improvement_2",
                     "metric_3",
                     "improvement_3",
-                    "average_roi"
+                    "average_roi",
                 ],
                 "conversion_tactics": [
                     "Deadline urgency (24 hours)",
                     "Value stacking ($2,990 total value)",
                     "Social proof (upgrade percentages)",
                     "Industry-specific ROI data",
-                    "Loss aversion (what they're giving up)"
-                ]
-            }
+                    "Loss aversion (what they're giving up)",
+                ],
+            },
         }
 
         logger.info(f"✅ Email nurture sequence created - Cost: ${email_cost:.4f}")
@@ -1035,15 +979,20 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                 "email_3_open_rate": "18-24%",
                 "email_4_open_rate": "15-20%",
                 "overall_click_rate": "6-8%",
-                "trial_conversion_rate": "25-35%"
+                "trial_conversion_rate": "25-35%",
             },
             "personalization_strategy": {
-                "data_sources": ["Meta Ads", "CRM", "Trial behavior", "Industry detection"],
+                "data_sources": [
+                    "Meta Ads",
+                    "CRM",
+                    "Trial behavior",
+                    "Industry detection",
+                ],
                 "personalization_depth": "Role, industry, company size, behavioral triggers",
-                "dynamic_content": "Success stories, ROI metrics, timing optimization"
+                "dynamic_content": "Success stories, ROI metrics, timing optimization",
             },
             "generation_cost": email_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _conduct_serpapi_research(self, session_id: str) -> dict[str, Any]:
@@ -1058,15 +1007,14 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
             "SaaS automation ROI examples real companies",
             "data dashboard success stories measurable results",
             "SaaS integration transformation case studies",
-            "business intelligence ROI statistics 2025"
+            "business intelligence ROI statistics 2025",
         ]
 
         # Use concurrent SerpAPI client (6 concurrent searches)
         if self.serpapi_client:
             try:
                 research_results = await self.serpapi_client.concurrent_market_research(
-                    search_queries=research_queries,
-                    location="United States"
+                    search_queries=research_queries, location="United States"
                 )
             except Exception as e:
                 logger.error(f"SerpAPI research failed: {e}")
@@ -1081,18 +1029,19 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
             input_tokens=3500,
             output_tokens=2400,
             task_type="research_synthesis",
-            session_id=session_id
+            session_id=session_id,
         )
 
         # Synthesize research into Gamma.app storytelling insights
         gamma_insights = {
             "research_summary": {
                 "queries_executed": len(research_queries),
-                "data_sources_analyzed": research_results.get("performance_metrics", {}).get("total_queries", 6),
+                "data_sources_analyzed": research_results.get(
+                    "performance_metrics", {}
+                ).get("total_queries", 6),
                 "insights_extracted": "15 high-impact storytelling elements",
-                "roi_statistics_found": "8 verified ROI case studies"
+                "roi_statistics_found": "8 verified ROI case studies",
             },
-
             "storytelling_carousels": {
                 "carousel_1_roi_stats": {
                     "title": "SaaS ROI by the Numbers: Real Results from Real Companies",
@@ -1103,7 +1052,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "subheading": "Average ROI for SaaS automation platforms",
                                 "data_point": "Based on 150+ customer implementations",
                                 "visual_element": "Bar chart showing ROI progression",
-                                "source": "SaaS Industry Report 2025"
+                                "source": "SaaS Industry Report 2025",
                             }
                         },
                         {
@@ -1112,7 +1061,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "subheading": "Time savings from automated reporting",
                                 "data_point": "Across finance, operations, and executive teams",
                                 "visual_element": "Clock infographic with time savings",
-                                "source": "Business Intelligence Usage Study"
+                                "source": "Business Intelligence Usage Study",
                             }
                         },
                         {
@@ -1121,7 +1070,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "subheading": "Real-time insights preventing costly mistakes",
                                 "data_point": "Average prevented loss per mid-market company",
                                 "visual_element": "Trend line showing risk mitigation",
-                                "source": "DataScale E-commerce Case Study"
+                                "source": "DataScale E-commerce Case Study",
                             }
                         },
                         {
@@ -1130,7 +1079,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "subheading": "From signup to first meaningful insight",
                                 "data_point": "Verified across 1,000+ trial users",
                                 "visual_element": "Stopwatch showing rapid deployment",
-                                "source": "Platform Usage Analytics"
+                                "source": "Platform Usage Analytics",
                             }
                         },
                         {
@@ -1139,12 +1088,11 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "subheading": "Industry-leading trial-to-paid conversion",
                                 "data_point": "vs. 15-20% industry average",
                                 "visual_element": "Comparison chart vs. competitors",
-                                "source": "SaaS Conversion Benchmarks 2025"
+                                "source": "SaaS Conversion Benchmarks 2025",
                             }
-                        }
-                    ]
+                        },
+                    ],
                 },
-
                 "carousel_2_success_stories": {
                     "title": "3 Weeks, 3 Companies, 3 Transformations",
                     "slides": [
@@ -1155,7 +1103,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "transformation": "Manual reporting → Automated dashboards",
                                 "result": "$3,200/month in productivity savings",
                                 "visual_element": "Before/after workflow comparison",
-                                "quote": "We went from drowning in spreadsheets to having insights before morning coffee"
+                                "quote": "We went from drowning in spreadsheets to having insights before morning coffee",
                             }
                         },
                         {
@@ -1165,7 +1113,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "transformation": "6 separate tools → Unified dashboards",
                                 "result": "40% faster client communication",
                                 "visual_element": "Tool consolidation infographic",
-                                "quote": "Clients get real-time updates instead of weekly reports"
+                                "quote": "Clients get real-time updates instead of weekly reports",
                             }
                         },
                         {
@@ -1175,7 +1123,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "transformation": "Week-old data → Real-time insights",
                                 "result": "25% reduction in stockouts, $50K prevented losses",
                                 "visual_element": "Inventory trend optimization graph",
-                                "quote": "We catch stockouts before they happen now"
+                                "quote": "We catch stockouts before they happen now",
                             }
                         },
                         {
@@ -1185,12 +1133,11 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "transformation": "All three followed the same success path",
                                 "result": "Predictable transformation in 21 days",
                                 "visual_element": "3-week timeline with milestones",
-                                "quote": "Starting is the biggest difference between success and struggling"
+                                "quote": "Starting is the biggest difference between success and struggling",
                             }
-                        }
-                    ]
+                        },
+                    ],
                 },
-
                 "carousel_3_industry_insights": {
                     "title": "SaaS Integration Trends: What's Working in 2025",
                     "slides": [
@@ -1201,7 +1148,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "insight": "Most trials fail during setup, not evaluation",
                                 "implication": "Time-to-value is the critical success factor",
                                 "visual_element": "Funnel showing abandonment points",
-                                "source": "SaaS Onboarding Research 2025"
+                                "source": "SaaS Onboarding Research 2025",
                             }
                         },
                         {
@@ -1211,7 +1158,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "insight": "Platforms showing value in 5 minutes see 67% higher conversion",
                                 "implication": "Instant gratification drives adoption",
                                 "visual_element": "Conversion rate by time-to-value",
-                                "source": "User Behavior Analytics Study"
+                                "source": "User Behavior Analytics Study",
                             }
                         },
                         {
@@ -1221,7 +1168,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "insight": "Personalized dashboards improve engagement by 89%",
                                 "implication": "One-size-fits-all is dead",
                                 "visual_element": "Engagement rates by personalization level",
-                                "source": "Personalization Impact Research"
+                                "source": "Personalization Impact Research",
                             }
                         },
                         {
@@ -1231,55 +1178,53 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                                 "insight": "Tools that integrate in 2 clicks see 3x adoption",
                                 "implication": "Friction in setup kills adoption",
                                 "visual_element": "Adoption rates by setup complexity",
-                                "source": "SaaS Adoption Friction Study"
+                                "source": "SaaS Adoption Friction Study",
                             }
-                        }
-                    ]
-                }
+                        },
+                    ],
+                },
             },
-
             "daily_content_calendar": {
                 "week_1": [
                     {
                         "day": "Monday",
                         "carousel": "ROI Stats",
                         "focus": "300% ROI and time savings statistics",
-                        "cta": "See your ROI in 5 minutes"
+                        "cta": "See your ROI in 5 minutes",
                     },
                     {
                         "day": "Tuesday",
                         "carousel": "Success Stories",
                         "focus": "TechFlow transformation story",
-                        "cta": "Start your transformation"
+                        "cta": "Start your transformation",
                     },
                     {
                         "day": "Wednesday",
                         "carousel": "Industry Insights",
                         "focus": "78% trial abandonment problem",
-                        "cta": "Experience the 5-minute difference"
+                        "cta": "Experience the 5-minute difference",
                     },
                     {
                         "day": "Thursday",
                         "carousel": "ROI Stats",
                         "focus": "15 hours saved per week",
-                        "cta": "Calculate your time savings"
+                        "cta": "Calculate your time savings",
                     },
                     {
                         "day": "Friday",
                         "carousel": "Success Stories",
                         "focus": "DataScale prevented losses story",
-                        "cta": "Protect your revenue"
-                    }
+                        "cta": "Protect your revenue",
+                    },
                 ]
             },
-
             "gamma_app_implementation": {
                 "content_format": "Storytelling carousel with data visualization",
                 "update_frequency": "Daily content rotation",
                 "personalization": "Industry and role-specific statistics",
                 "visual_elements": "Charts, infographics, before/after comparisons",
-                "engagement_strategy": "Question prompts and interactive elements"
-            }
+                "engagement_strategy": "Question prompts and interactive elements",
+            },
         }
 
         logger.info(f"✅ Research synthesis completed - Cost: ${research_cost:.4f}")
@@ -1287,18 +1232,20 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
         return {
             "gamma_insights": gamma_insights,
             "research_performance": {
-                "queries_successful": research_results.get("performance_metrics", {}).get("total_queries", 6),
+                "queries_successful": research_results.get(
+                    "performance_metrics", {}
+                ).get("total_queries", 6),
                 "data_quality": "High - verified ROI statistics and case studies",
                 "storytelling_elements": "15 unique carousel slides created",
-                "content_calendar": "7-day rotation with 3 carousel types"
+                "content_calendar": "7-day rotation with 3 carousel types",
             },
             "implementation_ready": {
                 "gamma_app_format": "JSON export for direct import",
                 "visual_guidelines": "Consistent brand styling with data focus",
-                "content_rotation": "Automated daily storytelling updates"
+                "content_rotation": "Automated daily storytelling updates",
             },
             "generation_cost": research_cost,
-            "model_used": "claude-3-opus"
+            "model_used": "claude-3-opus",
         }
 
     def _create_mock_research_results(self) -> dict[str, Any]:
@@ -1307,13 +1254,21 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
             "performance_metrics": {
                 "total_queries": 6,
                 "successful_queries": 6,
-                "data_quality": "high"
+                "data_quality": "high",
             },
             "market_intelligence": {
                 "total_organic_results": 45,
-                "trending_keywords": ["SaaS ROI", "automation savings", "dashboard success"],
-                "content_themes": ["ROI measurement", "time savings", "business transformation"]
-            }
+                "trending_keywords": [
+                    "SaaS ROI",
+                    "automation savings",
+                    "dashboard success",
+                ],
+                "content_themes": [
+                    "ROI measurement",
+                    "time savings",
+                    "business transformation",
+                ],
+            },
         }
 
     async def _format_workflow_outputs(
@@ -1321,7 +1276,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
         n8n_workflow: dict[str, Any],
         email_sequence: dict[str, Any],
         research_insights: dict[str, Any],
-        session_id: str
+        session_id: str,
     ) -> dict[str, Any]:
         """Format all workflow outputs (Haiku 4 - 10%)"""
 
@@ -1333,15 +1288,19 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
             input_tokens=1800,
             output_tokens=800,
             task_type="workflow_formatting",
-            session_id=session_id
+            session_id=session_id,
         )
 
         formatted_outputs = {
             "n8n_workflow_json": json.dumps(n8n_workflow["workflow_config"], indent=2),
-            "email_sequence_markdown": self._format_email_sequence_markdown(email_sequence),
-            "gamma_insights_markdown": self._format_gamma_insights_markdown(research_insights),
+            "email_sequence_markdown": self._format_email_sequence_markdown(
+                email_sequence
+            ),
+            "gamma_insights_markdown": self._format_gamma_insights_markdown(
+                research_insights
+            ),
             "deployment_checklist": self._format_deployment_checklist(),
-            "token_usage_summary": self._format_token_usage_summary()
+            "token_usage_summary": self._format_token_usage_summary(),
         }
 
         logger.info(f"✅ Workflow formatting completed - Cost: ${formatting_cost:.4f}")
@@ -1349,7 +1308,7 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
         return {
             "formatted_content": formatted_outputs,
             "formatting_cost": formatting_cost,
-            "model_used": "claude-3-haiku"
+            "model_used": "claude-3-haiku",
         }
 
     def _format_email_sequence_markdown(self, email_sequence: dict[str, Any]) -> str:
@@ -1580,10 +1539,12 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
             "email_sequence_docs": str(email_file),
             "gamma_insights": str(gamma_file),
             "deployment_checklist": str(checklist_file),
-            "token_usage_report": str(usage_file)
+            "token_usage_report": str(usage_file),
         }
 
-    def _store_workflow_data(self, session_id: str, workflow_data: dict[str, Any]) -> None:
+    def _store_workflow_data(
+        self, session_id: str, workflow_data: dict[str, Any]
+    ) -> None:
         """Store workflow data in persistent context system"""
 
         self.memory_manager.store_memory_node(
@@ -1596,10 +1557,10 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                 "conversion_target": self.workflow_config["conversion_target"],
                 "model_allocation": self.model_allocation,
                 "creation_timestamp": datetime.now().isoformat(),
-                **workflow_data
+                **workflow_data,
             },
             tags=["n8n", "email_drip", "meta_ads", "trial_conversion", "gamma_app"],
-            importance_score=9.5  # High priority for workflow automation
+            importance_score=9.5,  # High priority for workflow automation
         )
 
         logger.info("💾 Workflow 2 data stored in persistent context system")
@@ -1610,17 +1571,19 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
         input_tokens: int,
         output_tokens: int,
         task_type: str,
-        session_id: str
+        session_id: str,
     ) -> float:
         """Record token usage and calculate cost"""
         pricing = {
             "claude-3.5-sonnet": {"input": 3.0, "output": 15.0},
             "claude-3-haiku": {"input": 0.25, "output": 1.25},
-            "claude-3-opus": {"input": 15.0, "output": 75.0}
+            "claude-3-opus": {"input": 15.0, "output": 75.0},
         }
 
         model_pricing = pricing.get(model, pricing["claude-3.5-sonnet"])
-        cost = (input_tokens / 1_000_000) * model_pricing["input"] + (output_tokens / 1_000_000) * model_pricing["output"]
+        cost = (input_tokens / 1_000_000) * model_pricing["input"] + (
+            output_tokens / 1_000_000
+        ) * model_pricing["output"]
 
         # Track by model type
         if "sonnet" in model:
@@ -1642,35 +1605,35 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                 "session_id": session_id,
                 "workflow_scope": "n8n email drip sequence with Meta Ads integration",
                 "components_created": 5,  # workflow, emails, research, formatting, deployment
-                "model_allocation_strategy": self.model_allocation
+                "model_allocation_strategy": self.model_allocation,
             },
             "token_allocation_performance": {
                 "planned_strategy": self.model_allocation,
                 "actual_execution": {
                     "sonnet_4_usage": f"80% - ${self.token_usage['sonnet_4']:.4f}",
                     "haiku_4_usage": f"10% - ${self.token_usage['haiku_4']:.4f}",
-                    "opus_4_usage": f"10% - ${self.token_usage['opus_4']:.4f}"
+                    "opus_4_usage": f"10% - ${self.token_usage['opus_4']:.4f}",
                 },
                 "cost_breakdown": {
                     "n8n_workflow_creation": self.token_usage["sonnet_4"] * 0.5,
                     "email_sequence_content": self.token_usage["sonnet_4"] * 0.5,
                     "serpapi_research_synthesis": self.token_usage["opus_4"],
                     "content_formatting": self.token_usage["haiku_4"],
-                    "total_workflow_cost": self.token_usage["total_cost"]
-                }
+                    "total_workflow_cost": self.token_usage["total_cost"],
+                },
             },
             "workflow_efficiency": {
                 "total_creation_cost": self.token_usage["total_cost"],
                 "cost_per_email_template": self.token_usage["total_cost"] / 4,
                 "cost_per_workflow_component": self.token_usage["total_cost"] / 8,
-                "projected_roi": "1,247% based on 25-35% conversion target"
+                "projected_roi": "1,247% based on 25-35% conversion target",
             },
             "optimization_achievements": [
                 "Strategic model allocation optimized for task complexity",
                 "Concurrent SerpAPI research for Gamma.app content",
                 "Behavioral email routing based on trial status",
-                "Comprehensive Meta Ads integration with CRM sync"
-            ]
+                "Comprehensive Meta Ads integration with CRM sync",
+            ],
         }
 
     def _get_deployment_instructions(self) -> dict[str, list[str]]:
@@ -1682,29 +1645,30 @@ P.S. I checked our system - you downloaded the playbook 7 days ago. Most people 
                 "2. Configure Meta Ads webhook endpoint and credentials",
                 "3. Set up HubSpot CRM and SendGrid API connections",
                 "4. Test workflow with sample Meta Ads lead data",
-                "5. Activate Gamma.app content calendar"
+                "5. Activate Gamma.app content calendar",
             ],
             "integration_checklist": [
                 "✓ Meta Ads lead form connected to webhook",
                 "✓ CRM lead sync working correctly",
                 "✓ Email sequence sending and tracking active",
                 "✓ Behavioral routing functioning properly",
-                "✓ Gamma.app storytelling carousels scheduled"
+                "✓ Gamma.app storytelling carousels scheduled",
             ],
             "monitoring_setup": [
                 "Daily email performance tracking",
                 "Meta Ads lead quality monitoring",
                 "CRM sync verification",
                 "Trial conversion rate analysis",
-                "Gamma.app engagement metrics"
+                "Gamma.app engagement metrics",
             ],
             "success_criteria": [
                 "Email sequence: 25-35% trial conversion rate",
                 "Meta Ads integration: 95%+ lead capture success",
                 "CRM sync: 100% lead attribution accuracy",
-                "Gamma.app: 15-25% engagement rate improvement"
-            ]
+                "Gamma.app: 15-25% engagement rate improvement",
+            ],
         }
+
 
 # Main execution function
 async def create_n8n_workflow_2() -> dict[str, Any]:
@@ -1712,11 +1676,14 @@ async def create_n8n_workflow_2() -> dict[str, Any]:
     engine = N8NWorkflow2Engine()
     return await engine.create_complete_workflow_2()
 
+
 if __name__ == "__main__":
     result = asyncio.run(create_n8n_workflow_2())
     print("🔧 n8n Workflow 2 Created Successfully!")
     print(f"📧 Email Sequence: {result['file_outputs']['email_sequence_docs']}")
     print(f"⚙️ n8n Config: {result['file_outputs']['n8n_workflow_config']}")
     print(f"📊 Gamma Insights: {result['file_outputs']['gamma_insights']}")
-    print(f"💰 Total Cost: ${result['token_usage_report']['workflow_efficiency']['total_creation_cost']:.4f}")
+    print(
+        f"💰 Total Cost: ${result['token_usage_report']['workflow_efficiency']['total_creation_cost']:.4f}"
+    )
     print(f"🎯 Conversion Target: {result['workflow_metadata']['conversion_target']}")

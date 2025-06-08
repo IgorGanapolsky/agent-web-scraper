@@ -19,6 +19,7 @@ from app.core.token_monitor import get_token_monitor, track_api_call
 
 logger = get_logger(__name__)
 
+
 class EmailCampaignGenerator:
     """
     Enterprise email campaign generator using the complete optimization suite.
@@ -41,7 +42,7 @@ class EmailCampaignGenerator:
         self,
         user_id: str = "cmo_user",
         target_keywords: list[str] | None = None,
-        competitor_brands: list[str] | None = None
+        competitor_brands: list[str] | None = None,
     ) -> dict[str, Any]:
         """
         Generate complete email campaign using the optimization suite.
@@ -63,23 +64,26 @@ class EmailCampaignGenerator:
             initial_context={
                 "daily_budget": self.daily_budget,
                 "revenue_projection": self.revenue_projection,
-                "campaign_type": "workflow_efficiency_cost_savings"
-            }
+                "campaign_type": "workflow_efficiency_cost_savings",
+            },
         )
 
         logger.info(f"Starting email campaign generation for session: {session_id}")
 
         # Step 1: Concurrent market research with 20 searches
-        market_data = await self._fetch_market_intelligence(target_keywords or [
-            "SaaS customer pain points",
-            "workflow automation benefits",
-            "business efficiency tools",
-            "cost savings software",
-            "productivity platforms",
-            "digital transformation ROI",
-            "enterprise automation",
-            "business process optimization"
-        ])
+        market_data = await self._fetch_market_intelligence(
+            target_keywords
+            or [
+                "SaaS customer pain points",
+                "workflow automation benefits",
+                "business efficiency tools",
+                "cost savings software",
+                "productivity platforms",
+                "digital transformation ROI",
+                "enterprise automation",
+                "business process optimization",
+            ]
+        )
 
         # Step 2: Store market data in persistent memory
         self._store_market_data_in_memory(session_id, market_data)
@@ -109,32 +113,31 @@ class EmailCampaignGenerator:
                 "user_id": user_id,
                 "generation_time": datetime.now().isoformat(),
                 "execution_time_seconds": round(execution_time, 2),
-                "optimization_suite_used": True
+                "optimization_suite_used": True,
             },
             "market_intelligence": market_data,
             "ai_analysis": analysis_results,
             "email_campaign": campaign_content,
             "file_outputs": {
                 "email_markdown": email_file_path,
-                "usage_report": usage_report
+                "usage_report": usage_report,
             },
             "performance_metrics": {
-                "total_searches_executed": len(market_data.get("raw_search_results", [])),
+                "total_searches_executed": len(
+                    market_data.get("raw_search_results", [])
+                ),
                 "concurrent_processing_used": True,
                 "batch_optimization_applied": True,
                 "session_memory_stored": True,
-                "cost_monitoring_active": True
-            }
+                "cost_monitoring_active": True,
+            },
         }
 
         logger.info(f"Email campaign generation completed in {execution_time:.2f}s")
 
         return campaign_package
 
-    async def _fetch_market_intelligence(
-        self,
-        keywords: list[str]
-    ) -> dict[str, Any]:
+    async def _fetch_market_intelligence(self, keywords: list[str]) -> dict[str, Any]:
         """Fetch market data using concurrent SerpAPI searches"""
         logger.info(f"Executing {len(keywords)} concurrent SerpAPI searches")
 
@@ -143,14 +146,14 @@ class EmailCampaignGenerator:
             search_queries=keywords
         )
 
-        logger.info(f"Market research completed: {market_results['performance_metrics']}")
+        logger.info(
+            f"Market research completed: {market_results['performance_metrics']}"
+        )
 
         return market_results
 
     def _store_market_data_in_memory(
-        self,
-        session_id: str,
-        market_data: dict[str, Any]
+        self, session_id: str, market_data: dict[str, Any]
     ) -> None:
         """Store market data in persistent context system"""
 
@@ -161,18 +164,16 @@ class EmailCampaignGenerator:
                 "market_intelligence": market_data["market_intelligence"],
                 "search_performance": market_data["performance_metrics"],
                 "timestamp": datetime.now().isoformat(),
-                "campaign_context": "workflow_efficiency_cost_savings"
+                "campaign_context": "workflow_efficiency_cost_savings",
             },
             tags=["email_campaign", "market_research", "serpapi"],
-            importance_score=9.0
+            importance_score=9.0,
         )
 
         logger.info("Market data stored in persistent memory system")
 
     async def _batch_analyze_market_data(
-        self,
-        market_data: dict[str, Any],
-        session_id: str
+        self, market_data: dict[str, Any], session_id: str
     ) -> dict[str, Any]:
         """Process market data using batch AI analysis for cost efficiency"""
 
@@ -205,9 +206,8 @@ class EmailCampaignGenerator:
                 }}
                 """,
                 model="claude-3.5-sonnet",  # Cost-efficient Sonnet 4
-                max_tokens=1000
+                max_tokens=1000,
             ),
-
             BatchRequest(
                 id="efficiency_benefits",
                 prompt=f"""
@@ -234,9 +234,8 @@ class EmailCampaignGenerator:
                 }}
                 """,
                 model="claude-3.5-sonnet",
-                max_tokens=800
+                max_tokens=800,
             ),
-
             BatchRequest(
                 id="customer_personas",
                 prompt=f"""
@@ -259,15 +258,14 @@ class EmailCampaignGenerator:
                 }}
                 """,
                 model="claude-3.5-sonnet",
-                max_tokens=1200
-            )
+                max_tokens=1200,
+            ),
         ]
 
         # Execute batch processing for cost efficiency
         logger.info("Processing market data with batch AI analysis")
         batch_results = await self.batch_client.process_batch_prompts(
-            analysis_requests,
-            provider="anthropic"
+            analysis_requests, provider="anthropic"
         )
 
         # Track token usage for cost monitoring
@@ -286,7 +284,7 @@ class EmailCampaignGenerator:
             input_tokens=total_input_tokens,
             output_tokens=total_output_tokens,
             task_type="market_data_analysis",
-            session_id=session_id
+            session_id=session_id,
         )
 
         logger.info(f"Batch analysis completed. Cost: ${cost:.4f}")
@@ -296,14 +294,12 @@ class EmailCampaignGenerator:
             "cost_tracking": {
                 "total_tokens": total_input_tokens + total_output_tokens,
                 "cost_usd": cost,
-                "model_used": "claude-3.5-sonnet"
-            }
+                "model_used": "claude-3.5-sonnet",
+            },
         }
 
     async def _generate_email_content(
-        self,
-        analysis_results: dict[str, Any],
-        session_id: str
+        self, analysis_results: dict[str, Any], session_id: str
     ) -> dict[str, Any]:
         """Generate email campaign content using AI with cost optimization"""
 
@@ -431,10 +427,10 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
                 "3x faster decision making with real-time insights",
                 "85% less time spent on administrative tasks",
                 "250% improvement in data accuracy",
-                "Guaranteed ROI or money back"
+                "Guaranteed ROI or money back",
             ],
             "call_to_action": "Calculate Your Cost Savings Now",
-            "target_roi_claim": "40% cost reduction with 250% accuracy improvement"
+            "target_roi_claim": "40% cost reduction with 250% accuracy improvement",
         }
 
         # Track token usage for email generation
@@ -446,7 +442,7 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
             input_tokens=int(estimated_input_tokens),
             output_tokens=int(estimated_output_tokens),
             task_type="email_content_generation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         logger.info(f"Email content generated. Cost: ${email_cost:.4f}")
@@ -454,7 +450,7 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
         return {
             "campaign_content": email_content,
             "generation_cost": email_cost,
-            "optimization_notes": "Used Sonnet 4 for cost efficiency while maintaining quality"
+            "optimization_notes": "Used Sonnet 4 for cost efficiency while maintaining quality",
         }
 
     def _save_email_to_markdown(self, campaign_content: dict[str, Any]) -> str:
@@ -532,16 +528,21 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
         # Get usage summary for the current session
         usage_summary = self.token_monitor.get_usage_summary(
             period_days=1,  # Today's usage
-            task_type="email_campaign_generation"
+            task_type="email_campaign_generation",
         )
 
         # Calculate campaign-specific metrics
         campaign_report = {
             "cost_optimization_dashboard": {
                 "daily_budget_limit": self.daily_budget,
-                "current_daily_usage": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
-                "budget_remaining": self.daily_budget - budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
-                "budget_status": budget_status["budget_alerts"]["default_daily"]["status"]
+                "current_daily_usage": budget_status["budget_alerts"]["default_daily"][
+                    "current_usage_usd"
+                ],
+                "budget_remaining": self.daily_budget
+                - budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
+                "budget_status": budget_status["budget_alerts"]["default_daily"][
+                    "status"
+                ],
             },
             "session_performance": {
                 "session_id": session_id,
@@ -551,8 +552,8 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
                     "Concurrent SerpAPI searches (20 parallel)",
                     "Batch AI processing",
                     "Cost-optimized model selection",
-                    "Session memory for context reuse"
-                ]
+                    "Session memory for context reuse",
+                ],
             },
             "budget_alerts": budget_status,
             "usage_summary": usage_summary,
@@ -560,8 +561,8 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
                 "Continue using Sonnet 4 for cost efficiency",
                 "Leverage batch processing for multiple campaigns",
                 "Implement result caching for similar market research",
-                "Monitor daily usage to stay within $10 budget"
-            ]
+                "Monitor daily usage to stay within $10 budget",
+            ],
         }
 
         # Save usage report to file
@@ -578,11 +579,12 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
 
         return campaign_report
 
+
 # Convenience function for quick campaign generation
 async def generate_optimized_email_campaign(
     target_keywords: list[str] | None = None,
     competitor_brands: list[str] | None = None,
-    user_id: str = "cmo_executive"
+    user_id: str = "cmo_executive",
 ) -> dict[str, Any]:
     """
     Quick function to generate email campaign using full optimization suite.
@@ -600,8 +602,9 @@ async def generate_optimized_email_campaign(
     return await generator.generate_campaign(
         user_id=user_id,
         target_keywords=target_keywords,
-        competitor_brands=competitor_brands
+        competitor_brands=competitor_brands,
     )
+
 
 if __name__ == "__main__":
     # Example usage demonstrating the complete optimization suite
@@ -613,13 +616,17 @@ if __name__ == "__main__":
                 "business efficiency software",
                 "cost reduction tools",
                 "productivity platforms",
-                "digital transformation benefits"
+                "digital transformation benefits",
             ]
         )
 
         print("🚀 Email Campaign Generated Successfully!")
         print(f"📧 Email file: {campaign_result['file_outputs']['email_markdown']}")
-        print(f"💰 Total cost: ${campaign_result['file_outputs']['usage_report']['cost_optimization_dashboard']['current_daily_usage']:.4f}")
-        print(f"⏱️  Execution time: {campaign_result['campaign_metadata']['execution_time_seconds']}s")
+        print(
+            f"💰 Total cost: ${campaign_result['file_outputs']['usage_report']['cost_optimization_dashboard']['current_daily_usage']:.4f}"
+        )
+        print(
+            f"⏱️  Execution time: {campaign_result['campaign_metadata']['execution_time_seconds']}s"
+        )
 
     asyncio.run(main())

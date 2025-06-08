@@ -31,7 +31,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pytest pytest-cov black ruff
-        
+
         # Install project dependencies
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt
@@ -66,7 +66,7 @@ def test_app_structure():
     assert os.path.exists('scripts')
 EOF
         fi
-        
+
         # Run tests with relaxed settings
         pytest tests/ --cov=app --cov-report=xml --cov-report=term || echo "Tests completed with issues"
 

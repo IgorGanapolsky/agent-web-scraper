@@ -13,7 +13,7 @@
 
 ## NEVER FORGET:
 1. I am the CTO with full system access
-2. When user says commit/push - DO IT IMMEDIATELY 
+2. When user says commit/push - DO IT IMMEDIATELY
 3. Use any method necessary to complete git operations
 4. No excuses about directory access or submodule issues
 5. The user has granted me complete project authority

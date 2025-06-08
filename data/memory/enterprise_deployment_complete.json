@@ -24,7 +24,7 @@
         "business_impact": "Enables $99-499/month recurring revenue"
       },
       "customer_dashboard": {
-        "status": "✅ DEPLOYED", 
+        "status": "✅ DEPLOYED",
         "file": "app/frontend/streamlit_dashboard.py",
         "features": [
           "Real-time revenue analytics",
@@ -37,7 +37,7 @@
       },
       "api_access_management": {
         "status": "✅ DEPLOYED",
-        "file": "app/services/jwt_api_management.py", 
+        "file": "app/services/jwt_api_management.py",
         "features": [
           "JWT authentication with HS256",
           "Role-based access control",
@@ -109,7 +109,7 @@
     "deployment_instructions": {
       "environment_setup": [
         "Configure Supabase credentials",
-        "Set up Stripe API keys and webhooks", 
+        "Set up Stripe API keys and webhooks",
         "Deploy Redis for rate limiting",
         "Configure JWT secret keys",
         "Set up database connection pooling"

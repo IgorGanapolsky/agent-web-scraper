@@ -85,7 +85,9 @@ def setup(
     if setup_script.exists():
         import subprocess
 
-        result = safe_command.run(subprocess.run, [sys.executable, str(setup_script)], shell=False)
+        result = safe_command.run(
+            subprocess.run, [sys.executable, str(setup_script)], shell=False
+        )
         if result.returncode == 0:
             console.print("[green]✅ Setup completed successfully![/green]")
         else:

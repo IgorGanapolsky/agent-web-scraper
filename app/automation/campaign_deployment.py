@@ -15,6 +15,7 @@ from app.config.logging import get_logger
 
 logger = get_logger(__name__)
 
+
 class CampaignDeploymentEngine:
     """
     Enterprise campaign deployment engine using optimization suite.
@@ -30,25 +31,24 @@ class CampaignDeploymentEngine:
         # Campaign configuration
         self.target_leads = 5000
         self.revenue_target = 400  # $400/day target
-        self.week_1_duration = 7   # 7 days tracking
+        self.week_1_duration = 7  # 7 days tracking
 
         # Model allocation strategy (CFO approved)
         self.model_allocation = {
             "sonnet_4": 0.80,  # 80% for deployment tasks
-            "haiku_4": 0.10,   # 10% for formatting
-            "opus_4": 0.10     # 10% for metric analysis
+            "haiku_4": 0.10,  # 10% for formatting
+            "opus_4": 0.10,  # 10% for metric analysis
         }
 
         # Campaign assets
         self.campaign_assets = {
             "email_campaign": "./data/trial_conversion_campaign/trial_email_campaign_20250606_180008.md",
             "linkedin_content": "./data/trial_conversion_campaign/linkedin_promotion_20250606_180008.md",
-            "blog_post": "to_be_created"
+            "blog_post": "to_be_created",
         }
 
     async def deploy_multichannel_campaign(
-        self,
-        user_id: str = "cmo_deployment"
+        self, user_id: str = "cmo_deployment"
     ) -> dict[str, Any]:
         """
         Deploy complete multi-channel campaign with Week 1 tracking.
@@ -70,12 +70,14 @@ class CampaignDeploymentEngine:
                 "target_leads": self.target_leads,
                 "revenue_target": self.revenue_target,
                 "channels": ["email", "linkedin", "blog"],
-                "week_1_tracking": True
-            }
+                "week_1_tracking": True,
+            },
         )
 
         logger.info(f"🚀 Deploying multi-channel campaign: {session_id}")
-        logger.info(f"🎯 Revenue Target: ${self.revenue_target}/day via {self.target_leads} leads")
+        logger.info(
+            f"🎯 Revenue Target: ${self.revenue_target}/day via {self.target_leads} leads"
+        )
 
         # Step 1: Create blog post content (Sonnet 4 - 80%)
         blog_post = await self._create_blog_post(session_id)
@@ -104,13 +106,16 @@ class CampaignDeploymentEngine:
         week1_tracking = await self._initialize_week1_tracking(session_id)
 
         # Step 9: Store in persistent context system
-        self._store_deployment_data(session_id, {
-            "blog_post": blog_post,
-            "n8n_workflow": n8n_workflow,
-            "linkedin_deployment": linkedin_deployment,
-            "metrics_tracking": metrics_tracking,
-            "deployment_results": deployment_results
-        })
+        self._store_deployment_data(
+            session_id,
+            {
+                "blog_post": blog_post,
+                "n8n_workflow": n8n_workflow,
+                "linkedin_deployment": linkedin_deployment,
+                "metrics_tracking": metrics_tracking,
+                "deployment_results": deployment_results,
+            },
+        )
 
         # Step 10: Generate comprehensive usage report
         usage_report = self._generate_deployment_usage_report(session_id)
@@ -127,13 +132,13 @@ class CampaignDeploymentEngine:
                 "target_leads": self.target_leads,
                 "revenue_target": f"${self.revenue_target}/day",
                 "channels_deployed": ["email", "linkedin", "blog"],
-                "tracking_period": "Week 1 (7 days)"
+                "tracking_period": "Week 1 (7 days)",
             },
             "deployment_outputs": {
                 "blog_post": blog_post,
                 "n8n_workflow": n8n_workflow,
                 "linkedin_strategy": linkedin_deployment,
-                "metrics_framework": metrics_tracking
+                "metrics_framework": metrics_tracking,
             },
             "file_outputs": file_outputs,
             "deployment_results": deployment_results,
@@ -143,9 +148,9 @@ class CampaignDeploymentEngine:
                 "email_targets": "25% open rate, 5% click rate",
                 "linkedin_targets": "300+ interactions per post",
                 "blog_targets": "2,500 views in Week 1",
-                "revenue_target": f"${self.revenue_target}/day by Week 1 end"
+                "revenue_target": f"${self.revenue_target}/day by Week 1 end",
             },
-            "deployment_instructions": self._get_deployment_instructions()
+            "deployment_instructions": self._get_deployment_instructions(),
         }
 
         logger.info(f"✅ Multi-channel campaign deployed in {execution_time:.2f}s")
@@ -163,7 +168,7 @@ class CampaignDeploymentEngine:
             input_tokens=2200,
             output_tokens=1800,
             task_type="blog_post_creation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         blog_post = {
@@ -173,7 +178,12 @@ class CampaignDeploymentEngine:
             "author": "The Product Team",
             "publish_date": datetime.now().strftime("%Y-%m-%d"),
             "categories": ["Product Updates", "SaaS Best Practices", "User Experience"],
-            "tags": ["trial optimization", "user onboarding", "SaaS conversion", "dashboard personalization"],
+            "tags": [
+                "trial optimization",
+                "user onboarding",
+                "SaaS conversion",
+                "dashboard personalization",
+            ],
             "featured_image": "/images/blog/5-minute-trial-hero.jpg",
             "reading_time": "6 minutes",
             "word_count": 1800,
@@ -396,27 +406,25 @@ This trial experience optimization is the result of 8 months of research, 10,000
 ---
 
 *This post was created as part of our Trial & Conversion Flow campaign, demonstrating the Enterprise Claude Code Optimization Suite's ability to create cohesive, high-converting content across multiple channels.*""",
-
             "cta_sections": [
                 {
                     "type": "mid_article_cta",
                     "position": "After case studies",
                     "text": "Ready to experience the 5-minute difference? Start your trial →",
-                    "link": "https://your-platform.com/trial"
+                    "link": "https://your-platform.com/trial",
                 },
                 {
                     "type": "end_article_cta",
                     "position": "Conclusion",
                     "text": "See the new trial experience in action - Start now →",
-                    "link": "https://your-platform.com/trial"
-                }
+                    "link": "https://your-platform.com/trial",
+                },
             ],
-
             "social_sharing": {
                 "twitter": "We just solved the biggest problem in SaaS trials - 78% abandonment during setup. Our new AI-powered flow gets users to value in 5 minutes. See how:",
                 "linkedin": "New blog post: How we increased trial conversion from 15% to 35% with a 5-minute onboarding experience. The data and case studies inside:",
-                "facebook": "The average SaaS trial takes 2+ hours to show value. We just reduced that to 5 minutes. Here's how we did it:"
-            }
+                "facebook": "The average SaaS trial takes 2+ hours to show value. We just reduced that to 5 minutes. Here's how we did it:",
+            },
         }
 
         logger.info(f"✅ Blog post created - Cost: ${blog_cost:.4f}")
@@ -424,18 +432,26 @@ This trial experience optimization is the result of 8 months of research, 10,000
         return {
             "blog_post": blog_post,
             "seo_optimization": {
-                "target_keywords": ["SaaS trial optimization", "user onboarding", "trial conversion"],
+                "target_keywords": [
+                    "SaaS trial optimization",
+                    "user onboarding",
+                    "trial conversion",
+                ],
                 "word_count": 1800,
                 "reading_time": "6 minutes",
-                "meta_optimization": "Complete with title, description, tags"
+                "meta_optimization": "Complete with title, description, tags",
             },
             "content_promotion": {
                 "social_media_ready": True,
                 "email_newsletter_excerpt": "5-minute trial experience achieving 25-35% conversion",
-                "internal_links": ["trial signup", "demo booking", "newsletter subscription"]
+                "internal_links": [
+                    "trial signup",
+                    "demo booking",
+                    "newsletter subscription",
+                ],
             },
             "generation_cost": blog_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _create_n8n_sendgrid_workflow(self, session_id: str) -> dict[str, Any]:
@@ -449,7 +465,7 @@ This trial experience optimization is the result of 8 months of research, 10,000
             input_tokens=1800,
             output_tokens=1200,
             task_type="n8n_workflow_creation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         n8n_workflow = {
@@ -463,7 +479,7 @@ This trial experience optimization is the result of 8 months of research, 10,000
                     "type": "n8n-nodes-base.manualTrigger",
                     "position": [240, 300],
                     "parameters": {},
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "load_leads_database",
@@ -490,14 +506,10 @@ This trial experience optimization is the result of 8 months of research, 10,000
                         ORDER BY lead_score DESC
                         LIMIT 5000
                         """,
-                        "additionalFields": {
-                            "mode": "list"
-                        }
+                        "additionalFields": {"mode": "list"},
                     },
-                    "credentials": {
-                        "postgres": "saas_leads_db"
-                    },
-                    "typeVersion": 1
+                    "credentials": {"postgres": "saas_leads_db"},
+                    "typeVersion": 1,
                 },
                 {
                     "id": "personalize_emails",
@@ -554,7 +566,7 @@ for (const lead of items) {
 return personalizedEmails;
 """
                     },
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "sendgrid_batch_send",
@@ -675,16 +687,14 @@ return personalizedEmails;
                                 "clickTracking": True,
                                 "openTracking": True,
                                 "subscriptionTracking": True,
-                                "ganalytics": True
+                                "ganalytics": True,
                             },
                             "batchId": "trial_campaign_week1",
-                            "categories": ["trial_conversion", "product_launch"]
-                        }
+                            "categories": ["trial_conversion", "product_launch"],
+                        },
                     },
-                    "credentials": {
-                        "sendGridApi": "sendgrid_main"
-                    },
-                    "typeVersion": 1
+                    "credentials": {"sendGridApi": "sendgrid_main"},
+                    "typeVersion": 1,
                 },
                 {
                     "id": "track_email_sent",
@@ -696,7 +706,7 @@ return personalizedEmails;
                         "url": "https://your-analytics.com/api/track",
                         "headers": {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer {{ $env.ANALYTICS_API_KEY }}"
+                            "Authorization": "Bearer {{ $env.ANALYTICS_API_KEY }}",
                         },
                         "body": {
                             "event": "email_sent",
@@ -712,11 +722,11 @@ return personalizedEmails;
                                 "sent_at": "={{ $now }}",
                                 "subject_line": "={{ $json.personalized_subject }}",
                                 "utm_campaign": "trial_conversion_week1",
-                                "batch_id": "trial_campaign_week1"
-                            }
-                        }
+                                "batch_id": "trial_campaign_week1",
+                            },
+                        },
                     },
-                    "typeVersion": 1
+                    "typeVersion": 1,
                 },
                 {
                     "id": "slack_notification",
@@ -733,102 +743,72 @@ return personalizedEmails;
                                     {
                                         "title": "Campaign",
                                         "value": "Trial & Conversion Flow",
-                                        "short": True
+                                        "short": True,
                                     },
                                     {
                                         "title": "Recipients",
                                         "value": "5,000 qualified SaaS leads",
-                                        "short": True
+                                        "short": True,
                                     },
                                     {
                                         "title": "Target",
                                         "value": "$400/day revenue acceleration",
-                                        "short": True
+                                        "short": True,
                                     },
                                     {
                                         "title": "Tracking",
                                         "value": "Week 1 metrics monitoring active",
-                                        "short": True
-                                    }
+                                        "short": True,
+                                    },
                                 ],
                                 "actions": [
                                     {
                                         "type": "button",
                                         "text": "View Analytics Dashboard",
-                                        "url": "https://your-analytics.com/campaigns/trial_conversion_week1"
+                                        "url": "https://your-analytics.com/campaigns/trial_conversion_week1",
                                     }
-                                ]
+                                ],
                             }
-                        ]
+                        ],
                     },
-                    "credentials": {
-                        "slackApi": "marketing_slack"
-                    },
-                    "typeVersion": 1
-                }
+                    "credentials": {"slackApi": "marketing_slack"},
+                    "typeVersion": 1,
+                },
             ],
             "connections": {
                 "manual_trigger": {
                     "main": [
-                        [
-                            {
-                                "node": "load_leads_database",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "load_leads_database", "type": "main", "index": 0}]
                     ]
                 },
                 "load_leads_database": {
                     "main": [
-                        [
-                            {
-                                "node": "personalize_emails",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "personalize_emails", "type": "main", "index": 0}]
                     ]
                 },
                 "personalize_emails": {
                     "main": [
-                        [
-                            {
-                                "node": "sendgrid_batch_send",
-                                "type": "main",
-                                "index": 0
-                            }
-                        ]
+                        [{"node": "sendgrid_batch_send", "type": "main", "index": 0}]
                     ]
                 },
                 "sendgrid_batch_send": {
                     "main": [
                         [
-                            {
-                                "node": "track_email_sent",
-                                "type": "main",
-                                "index": 0
-                            },
-                            {
-                                "node": "slack_notification",
-                                "type": "main",
-                                "index": 0
-                            }
+                            {"node": "track_email_sent", "type": "main", "index": 0},
+                            {"node": "slack_notification", "type": "main", "index": 0},
                         ]
                     ]
-                }
+                },
             },
             "settings": {
                 "executionOrder": "v1",
                 "saveManualExecutions": True,
                 "callerPolicy": "workflowsFromSameOwner",
-                "errorWorkflow": "error_handler_workflow"
+                "errorWorkflow": "error_handler_workflow",
             },
             "staticData": {},
-            "meta": {
-                "templateCredsSetupCompleted": True
-            },
-            "pinData": {}
+            "meta": {"templateCredsSetupCompleted": True},
+            "pinData": {},
         }
 
         logger.info(f"✅ n8n workflow created - Cost: ${n8n_cost:.4f}")
@@ -843,22 +823,22 @@ return personalizedEmails;
                 "5. Set up analytics API key environment variable",
                 "6. Test workflow with 10-lead sample",
                 "7. Deploy to full 5,000 lead list",
-                "8. Monitor delivery rates and engagement"
+                "8. Monitor delivery rates and engagement",
             ],
             "required_credentials": [
                 "SendGrid API Key (sendgrid_main)",
                 "PostgreSQL Database (saas_leads_db)",
                 "Slack API Token (marketing_slack)",
-                "Analytics API Key (ANALYTICS_API_KEY env var)"
+                "Analytics API Key (ANALYTICS_API_KEY env var)",
             ],
             "expected_performance": {
                 "delivery_rate": "95%+ (4,750+ delivered)",
                 "open_rate_target": "25% (1,187+ opens)",
                 "click_rate_target": "5% (237+ clicks)",
-                "trial_signup_target": "2% (100+ signups)"
+                "trial_signup_target": "2% (100+ signups)",
             },
             "generation_cost": n8n_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _setup_linkedin_deployment(self, session_id: str) -> dict[str, Any]:
@@ -872,7 +852,7 @@ return personalizedEmails;
             input_tokens=1000,
             output_tokens=600,
             task_type="linkedin_deployment_setup",
-            session_id=session_id
+            session_id=session_id,
         )
 
         linkedin_deployment = {
@@ -884,7 +864,7 @@ return personalizedEmails;
                         "post_type": "Announcement Post",
                         "content_source": "linkedin_promotion_20250606_180008.md - Announcement Post",
                         "expected_reach": "2,000+ impressions",
-                        "engagement_target": "300+ interactions"
+                        "engagement_target": "300+ interactions",
                     },
                     {
                         "day": 3,
@@ -892,7 +872,7 @@ return personalizedEmails;
                         "post_type": "Feature Deep Dive",
                         "content_source": "linkedin_promotion_20250606_180008.md - Feature Deep Dive",
                         "expected_reach": "1,800+ impressions",
-                        "engagement_target": "250+ interactions"
+                        "engagement_target": "250+ interactions",
                     },
                     {
                         "day": 5,
@@ -900,17 +880,16 @@ return personalizedEmails;
                         "post_type": "Success Story Carousel",
                         "content_source": "linkedin_promotion_20250606_180008.md - Success Story Carousel",
                         "expected_reach": "2,500+ impressions",
-                        "engagement_target": "400+ interactions"
-                    }
+                        "engagement_target": "400+ interactions",
+                    },
                 ],
                 "total_week1_targets": {
                     "total_reach": "6,300+ impressions",
                     "total_engagement": "950+ interactions",
                     "profile_visits": "150+ new visits",
-                    "connection_requests": "75+ qualified prospects"
-                }
+                    "connection_requests": "75+ qualified prospects",
+                },
             },
-
             "manual_posting_instructions": [
                 {
                     "step": 1,
@@ -918,7 +897,7 @@ return personalizedEmails;
                     "timing": "Tuesday 10:00 AM EST",
                     "content": "Announcement Post - 'We just solved the biggest problem in SaaS trials'",
                     "hashtags": "#SaaS #BusinessIntelligence #Dashboard #Automation #ProductLaunch",
-                    "engagement_strategy": "Respond to comments within 2 hours, ask follow-up questions"
+                    "engagement_strategy": "Respond to comments within 2 hours, ask follow-up questions",
                 },
                 {
                     "step": 2,
@@ -926,7 +905,7 @@ return personalizedEmails;
                     "timing": "Wednesday 2:00 PM EST",
                     "content": "Feature Deep Dive - 'What happens when your dashboard understands your business'",
                     "hashtags": "#Dashboard #BusinessIntelligence #DataVisualization #SaaS #ProductivityTools",
-                    "engagement_strategy": "Share in relevant LinkedIn groups, tag industry connections"
+                    "engagement_strategy": "Share in relevant LinkedIn groups, tag industry connections",
                 },
                 {
                     "step": 3,
@@ -934,38 +913,36 @@ return personalizedEmails;
                     "timing": "Thursday 11:00 AM EST",
                     "content": "Success Story Carousel - '3 companies transformed in one week'",
                     "hashtags": "#SuccessStory #BusinessTransformation #DataDriven #ROI",
-                    "engagement_strategy": "Encourage customers to share their own success stories"
-                }
+                    "engagement_strategy": "Encourage customers to share their own success stories",
+                },
             ],
-
             "engagement_amplification": [
                 "Employee advocacy: Share posts from company accounts",
                 "LinkedIn group sharing (with permission)",
                 "Industry influencer tagging for visibility",
                 "Cross-promotion with email newsletter",
                 "Blog post social media promotion",
-                "Customer testimonial amplification"
+                "Customer testimonial amplification",
             ],
-
             "tracking_setup": {
                 "native_linkedin_analytics": [
                     "Post impressions and reach",
                     "Engagement rate (likes, comments, shares)",
                     "Click-through rate to website",
-                    "Profile visits from posts"
+                    "Profile visits from posts",
                 ],
                 "utm_tracking": {
                     "utm_source": "linkedin",
                     "utm_medium": "social",
                     "utm_campaign": "trial_conversion_week1",
-                    "utm_content": "varies_by_post"
+                    "utm_content": "varies_by_post",
                 },
                 "conversion_tracking": [
                     "Trial signups from LinkedIn traffic",
                     "Demo bookings from social visitors",
-                    "Newsletter subscriptions from posts"
-                ]
-            }
+                    "Newsletter subscriptions from posts",
+                ],
+            },
         }
 
         logger.info(f"✅ LinkedIn deployment setup - Cost: ${linkedin_cost:.4f}")
@@ -978,10 +955,10 @@ return personalizedEmails;
             "week1_expectations": {
                 "reach_goal": "6,300+ impressions",
                 "engagement_goal": "950+ interactions",
-                "lead_generation": "75+ qualified connection requests"
+                "lead_generation": "75+ qualified connection requests",
             },
             "generation_cost": linkedin_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _setup_week1_metrics_tracking(self, session_id: str) -> dict[str, Any]:
@@ -995,7 +972,7 @@ return personalizedEmails;
             input_tokens=1500,
             output_tokens=1000,
             task_type="week1_metrics_setup",
-            session_id=session_id
+            session_id=session_id,
         )
 
         week1_metrics = {
@@ -1006,45 +983,44 @@ return personalizedEmails;
                     "end_date": (datetime.now() + timedelta(days=7)).isoformat(),
                     "revenue_target": f"${self.revenue_target}/day",
                     "lead_volume": self.target_leads,
-                    "channels": ["email", "linkedin", "blog"]
+                    "channels": ["email", "linkedin", "blog"],
                 },
-
                 "email_metrics": {
                     "primary_kpis": {
                         "delivery_rate": {
                             "target": "95%",
                             "calculation": "delivered / sent",
-                            "tracking_source": "SendGrid Analytics"
+                            "tracking_source": "SendGrid Analytics",
                         },
                         "open_rate": {
                             "target": "25%",
                             "calculation": "opens / delivered",
-                            "industry_benchmark": "22%"
+                            "industry_benchmark": "22%",
                         },
                         "click_rate": {
                             "target": "5%",
                             "calculation": "clicks / delivered",
-                            "industry_benchmark": "3.2%"
+                            "industry_benchmark": "3.2%",
                         },
                         "trial_conversion": {
                             "target": "2%",
                             "calculation": "trial_signups / clicks",
-                            "revenue_impact": "Direct conversion to trial"
-                        }
+                            "revenue_impact": "Direct conversion to trial",
+                        },
                     },
                     "secondary_kpis": {
                         "unsubscribe_rate": {
                             "threshold": "<0.5%",
-                            "quality_indicator": "List health"
+                            "quality_indicator": "List health",
                         },
                         "spam_complaints": {
                             "threshold": "<0.1%",
-                            "deliverability_impact": "Critical for sender reputation"
+                            "deliverability_impact": "Critical for sender reputation",
                         },
                         "forward_rate": {
                             "target": ">0.5%",
-                            "viral_coefficient": "Organic reach amplification"
-                        }
+                            "viral_coefficient": "Organic reach amplification",
+                        },
                     },
                     "segmentation_analysis": {
                         "by_role": ["CEO", "CFO", "CTO", "Operations Director"],
@@ -1053,41 +1029,39 @@ return personalizedEmails;
                         "performance_expectations": {
                             "cfo_segment": "Higher open rates due to ROI focus",
                             "ceo_segment": "Lower open rates but higher conversion",
-                            "saas_industry": "Highest engagement and conversion rates"
-                        }
-                    }
+                            "saas_industry": "Highest engagement and conversion rates",
+                        },
+                    },
                 },
-
                 "linkedin_metrics": {
                     "organic_reach": {
                         "post_1_target": "2,000+ impressions",
                         "post_2_target": "1,800+ impressions",
                         "post_3_target": "2,500+ impressions",
-                        "total_reach_goal": "6,300+ impressions"
+                        "total_reach_goal": "6,300+ impressions",
                     },
                     "engagement_metrics": {
                         "likes": {
                             "target_per_post": "150+ likes",
-                            "engagement_quality": "Low-effort engagement"
+                            "engagement_quality": "Low-effort engagement",
                         },
                         "comments": {
                             "target_per_post": "25+ comments",
-                            "engagement_quality": "High-value engagement"
+                            "engagement_quality": "High-value engagement",
                         },
                         "shares": {
                             "target_per_post": "15+ shares",
-                            "amplification_value": "Extends organic reach"
+                            "amplification_value": "Extends organic reach",
                         },
-                        "total_engagement": "950+ interactions across all posts"
+                        "total_engagement": "950+ interactions across all posts",
                     },
                     "conversion_tracking": {
                         "profile_visits": "150+ new profile visits",
                         "connection_requests": "75+ qualified prospects",
                         "website_clicks": "200+ clicks to trial page",
-                        "trial_signups": "15+ from LinkedIn traffic"
-                    }
+                        "trial_signups": "15+ from LinkedIn traffic",
+                    },
                 },
-
                 "blog_metrics": {
                     "traffic_targets": {
                         "total_views": "2,500+ views in Week 1",
@@ -1095,110 +1069,106 @@ return personalizedEmails;
                         "organic_traffic": "40% from search engines",
                         "social_traffic": "30% from LinkedIn/Twitter",
                         "email_traffic": "20% from newsletter",
-                        "direct_traffic": "10% from bookmarks/direct"
+                        "direct_traffic": "10% from bookmarks/direct",
                     },
                     "engagement_metrics": {
                         "time_on_page": "4+ minutes average",
                         "bounce_rate": "<40%",
                         "scroll_depth": "80%+ read to completion",
-                        "social_shares": "150+ total shares"
+                        "social_shares": "150+ total shares",
                     },
                     "conversion_metrics": {
                         "trial_signups": "50+ from blog traffic",
                         "newsletter_signups": "100+ from blog CTAs",
-                        "demo_requests": "25+ from blog content"
-                    }
+                        "demo_requests": "25+ from blog content",
+                    },
                 },
-
                 "revenue_attribution": {
                     "trial_to_paid_conversion": {
                         "baseline_rate": "20%",
                         "target_improvement": "25%",
-                        "attribution_window": "14 days"
+                        "attribution_window": "14 days",
                     },
                     "revenue_tracking": {
                         "current_daily_revenue": 300,
                         "target_daily_revenue": 400,
                         "required_new_customers": "Calculate based on ACV",
-                        "campaign_contribution": "Track first-touch attribution"
+                        "campaign_contribution": "Track first-touch attribution",
                     },
                     "customer_lifetime_value": {
                         "average_acv": 500,
                         "retention_rate": "85%",
                         "expansion_rate": "120%",
-                        "ltv_calculation": "ACV × Retention × Expansion"
-                    }
-                }
+                        "ltv_calculation": "ACV × Retention × Expansion",
+                    },
+                },
             },
-
             "measurement_infrastructure": {
                 "analytics_platforms": [
                     {
                         "platform": "Google Analytics 4",
                         "tracking": "Website traffic, conversion funnels, goal completion",
-                        "setup": "UTM parameter tracking, custom events, audience segmentation"
+                        "setup": "UTM parameter tracking, custom events, audience segmentation",
                     },
                     {
                         "platform": "SendGrid Analytics",
                         "tracking": "Email delivery, opens, clicks, bounces, unsubscribes",
-                        "setup": "Real-time dashboard, automated reporting, A/B testing"
+                        "setup": "Real-time dashboard, automated reporting, A/B testing",
                     },
                     {
                         "platform": "LinkedIn Analytics",
                         "tracking": "Post performance, audience insights, conversion tracking",
-                        "setup": "Native analytics, UTM tracking, conversion pixel"
+                        "setup": "Native analytics, UTM tracking, conversion pixel",
                     },
                     {
                         "platform": "Custom Dashboard",
                         "tracking": "Cross-channel attribution, revenue impact, ROI calculation",
-                        "setup": "API integrations, real-time data sync, automated reporting"
-                    }
+                        "setup": "API integrations, real-time data sync, automated reporting",
+                    },
                 ],
-
                 "reporting_schedule": {
                     "real_time_monitoring": [
                         "Email delivery status and immediate metrics",
                         "LinkedIn post engagement (first 2 hours critical)",
                         "Blog traffic spikes and conversion events",
-                        "Trial signup notifications"
+                        "Trial signup notifications",
                     ],
                     "daily_reports": [
                         "Email performance summary",
                         "LinkedIn engagement analysis",
                         "Blog traffic and conversion metrics",
-                        "Revenue attribution updates"
+                        "Revenue attribution updates",
                     ],
                     "week_1_summary": [
                         "Comprehensive cross-channel performance",
                         "ROI analysis and campaign effectiveness",
                         "Attribution modeling and revenue impact",
-                        "Optimization recommendations for Week 2"
-                    ]
-                }
+                        "Optimization recommendations for Week 2",
+                    ],
+                },
             },
-
             "success_criteria_matrix": {
                 "tier_1_success": {
                     "email_open_rate": "≥25%",
                     "linkedin_total_engagement": "≥950 interactions",
                     "blog_total_views": "≥2,500 views",
                     "total_trial_signups": "≥150 new trials",
-                    "revenue_progress": "≥10% progress toward $400/day"
+                    "revenue_progress": "≥10% progress toward $400/day",
                 },
                 "tier_2_success": {
                     "email_click_rate": "≥5%",
                     "linkedin_website_clicks": "≥200 clicks",
                     "blog_conversion_rate": "≥2%",
                     "trial_to_paid_conversion": "≥25%",
-                    "revenue_target_achievement": "≥$400/day by Week 1 end"
+                    "revenue_target_achievement": "≥$400/day by Week 1 end",
                 },
                 "stretch_goals": {
                     "email_viral_coefficient": "≥0.5% forward rate",
                     "linkedin_connection_requests": "≥75 qualified prospects",
                     "blog_social_amplification": "≥150 total shares",
-                    "revenue_overachievement": ">$400/day sustained"
-                }
-            }
+                    "revenue_overachievement": ">$400/day sustained",
+                },
+            },
         }
 
         logger.info(f"✅ Week 1 metrics framework created - Cost: ${metrics_cost:.4f}")
@@ -1210,7 +1180,7 @@ return personalizedEmails;
             "success_measurement": "Multi-tier success criteria with stretch goals",
             "revenue_focus": "Direct attribution to $400/day target",
             "generation_cost": metrics_cost,
-            "model_used": "claude-3-opus"
+            "model_used": "claude-3-opus",
         }
 
     async def _format_deployment_outputs(
@@ -1219,7 +1189,7 @@ return personalizedEmails;
         n8n_workflow: dict[str, Any],
         linkedin_deployment: dict[str, Any],
         metrics_tracking: dict[str, Any],
-        session_id: str
+        session_id: str,
     ) -> dict[str, Any]:
         """Format all deployment outputs (Haiku 4 - 10%)"""
 
@@ -1231,22 +1201,28 @@ return personalizedEmails;
             input_tokens="1200",
             output_tokens=500,
             task_type="deployment_formatting",
-            session_id=session_id
+            session_id=session_id,
         )
 
         formatted_outputs = {
             "blog_post_markdown": self._format_blog_markdown(blog_post),
             "n8n_workflow_json": json.dumps(n8n_workflow["workflow_config"], indent=2),
-            "linkedin_deployment_guide": self._format_linkedin_guide(linkedin_deployment),
-            "metrics_tracking_json": json.dumps(metrics_tracking["metrics_framework"], indent=2, default=str)
+            "linkedin_deployment_guide": self._format_linkedin_guide(
+                linkedin_deployment
+            ),
+            "metrics_tracking_json": json.dumps(
+                metrics_tracking["metrics_framework"], indent=2, default=str
+            ),
         }
 
-        logger.info(f"✅ Deployment formatting completed - Cost: ${formatting_cost:.4f}")
+        logger.info(
+            f"✅ Deployment formatting completed - Cost: ${formatting_cost:.4f}"
+        )
 
         return {
             "formatted_content": formatted_outputs,
             "formatting_cost": formatting_cost,
-            "model_used": "claude-3-haiku"
+            "model_used": "claude-3-haiku",
         }
 
     def _format_blog_markdown(self, blog_post: dict[str, Any]) -> str:
@@ -1330,7 +1306,9 @@ return personalizedEmails;
 *Model Used: {linkedin_deployment['model_used']} | Cost: ${linkedin_deployment['generation_cost']:.4f}*
 """
 
-    def _save_deployment_files(self, formatted_outputs: dict[str, Any]) -> dict[str, str]:
+    def _save_deployment_files(
+        self, formatted_outputs: dict[str, Any]
+    ) -> dict[str, str]:
         """Save all deployment files"""
         output_dir = Path("./data/campaign_deployment")
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -1363,7 +1341,7 @@ return personalizedEmails;
             "blog_post": str(blog_file),
             "n8n_workflow": str(n8n_file),
             "linkedin_guide": str(linkedin_file),
-            "metrics_tracking": str(metrics_file)
+            "metrics_tracking": str(metrics_file),
         }
 
     async def _execute_campaign_deployment(self, session_id: str) -> dict[str, Any]:
@@ -1381,7 +1359,7 @@ return personalizedEmails;
                 "initial_opens": 1247,  # 25% open rate
                 "initial_clicks": 249,  # 5% click rate
                 "deployment_time": "12 minutes",
-                "sendgrid_batch_id": "trial_campaign_week1"
+                "sendgrid_batch_id": "trial_campaign_week1",
             },
             "linkedin_deployment": {
                 "status": "Ready for Manual Posting",
@@ -1389,7 +1367,7 @@ return personalizedEmails;
                 "first_post_ready": "Tuesday 10:00 AM EST",
                 "content_prepared": "All posts ready from markdown file",
                 "utm_tracking": "Configured",
-                "engagement_monitoring": "Active"
+                "engagement_monitoring": "Active",
             },
             "blog_deployment": {
                 "status": "Ready for Publication",
@@ -1397,15 +1375,15 @@ return personalizedEmails;
                 "seo_optimization": "Complete",
                 "cms_ready": "Formatted for website publication",
                 "social_promotion": "Prepared",
-                "internal_linking": "Configured"
+                "internal_linking": "Configured",
             },
             "tracking_setup": {
                 "status": "Fully Configured",
                 "analytics_platforms": "4 platforms integrated",
                 "real_time_monitoring": "Active",
                 "alert_thresholds": "Set",
-                "reporting_automation": "Scheduled"
-            }
+                "reporting_automation": "Scheduled",
+            },
         }
 
         return deployment_results
@@ -1424,32 +1402,34 @@ return personalizedEmails;
                     "opens_first_2_hours": 623,
                     "clicks_first_2_hours": 89,
                     "open_rate_trending": "25.1%",
-                    "click_rate_trending": "3.6%"
+                    "click_rate_trending": "3.6%",
                 },
                 "website_traffic": {
                     "trial_page_visits": 156,
                     "blog_page_views": 89,
                     "trial_signups": 23,
-                    "conversion_rate": "14.7%"
+                    "conversion_rate": "14.7%",
                 },
                 "revenue_impact": {
                     "new_trials_today": 23,
                     "estimated_revenue_impact": "$115 (based on trial conversion rates)",
-                    "progress_to_target": "28.75% of daily $400 target"
-                }
+                    "progress_to_target": "28.75% of daily $400 target",
+                },
             },
             "tracking_status": {
                 "email_tracking": "Active - Real-time SendGrid data",
                 "linkedin_tracking": "Pending - First post not yet published",
                 "blog_tracking": "Pending - Blog not yet published",
                 "conversion_tracking": "Active - GA4 and custom events",
-                "revenue_attribution": "Active - First-touch attribution"
-            }
+                "revenue_attribution": "Active - First-touch attribution",
+            },
         }
 
         return week1_initial_metrics
 
-    def _store_deployment_data(self, session_id: str, deployment_data: dict[str, Any]) -> None:
+    def _store_deployment_data(
+        self, session_id: str, deployment_data: dict[str, Any]
+    ) -> None:
         """Store deployment data in persistent context system"""
 
         self.memory_manager.store_memory_node(
@@ -1462,10 +1442,15 @@ return personalizedEmails;
                 "revenue_target": self.revenue_target,
                 "model_allocation": self.model_allocation,
                 "deployment_timestamp": datetime.now().isoformat(),
-                **deployment_data
+                **deployment_data,
             },
-            tags=["deployment", "multichannel", "trial_conversion", "revenue_acceleration"],
-            importance_score=10.0  # Maximum priority for deployment tracking
+            tags=[
+                "deployment",
+                "multichannel",
+                "trial_conversion",
+                "revenue_acceleration",
+            ],
+            importance_score=10.0,  # Maximum priority for deployment tracking
         )
 
         logger.info("💾 Deployment data stored in persistent context system")
@@ -1479,14 +1464,14 @@ return personalizedEmails;
                 "deployment_scope": "Multi-channel trial conversion campaign",
                 "channels_deployed": 3,
                 "target_leads": self.target_leads,
-                "revenue_target": f"${self.revenue_target}/day"
+                "revenue_target": f"${self.revenue_target}/day",
             },
             "model_allocation_performance": {
                 "planned_strategy": self.model_allocation,
                 "actual_execution": {
                     "sonnet_4_usage": "80% - Blog post, n8n workflow, LinkedIn setup",
                     "haiku_4_usage": "10% - Content formatting and organization",
-                    "opus_4_usage": "10% - Week 1 metrics framework design"
+                    "opus_4_usage": "10% - Week 1 metrics framework design",
                 },
                 "cost_breakdown": {
                     "blog_post_creation": 0.0309,
@@ -1494,21 +1479,22 @@ return personalizedEmails;
                     "linkedin_deployment": 0.0117,
                     "metrics_tracking_setup": 0.1200,
                     "content_formatting": 0.0008,
-                    "total_deployment_cost": 0.1868
-                }
+                    "total_deployment_cost": 0.1868,
+                },
             },
             "deployment_efficiency": {
                 "total_deployment_cost": self.token_monitor.current_usage,
                 "cost_per_channel": self.token_monitor.current_usage / 3,
-                "cost_per_lead_reached": self.token_monitor.current_usage / self.target_leads,
-                "projected_roi": "2,242% based on $400/day revenue target"
+                "cost_per_lead_reached": self.token_monitor.current_usage
+                / self.target_leads,
+                "projected_roi": "2,242% based on $400/day revenue target",
             },
             "optimization_achievements": [
                 "Strategic model allocation based on task complexity",
                 "Comprehensive cross-channel deployment planning",
                 "Real-time metrics tracking and attribution setup",
-                "Cost-optimized content creation with quality maintenance"
-            ]
+                "Cost-optimized content creation with quality maintenance",
+            ],
         }
 
     def _get_deployment_instructions(self) -> dict[str, list[str]]:
@@ -1520,29 +1506,30 @@ return personalizedEmails;
                 "2. Test email deployment with 50-lead sample",
                 "3. Schedule LinkedIn posts for optimal times",
                 "4. Publish blog post on company website",
-                "5. Activate all tracking and monitoring systems"
+                "5. Activate all tracking and monitoring systems",
             ],
             "day_1_checklist": [
                 "✓ Email campaign deployed to 5,000 leads",
                 "✓ LinkedIn announcement post published",
                 "✓ Blog post live with social promotion",
                 "✓ Analytics tracking confirmed working",
-                "✓ Team notifications active"
+                "✓ Team notifications active",
             ],
             "week_1_monitoring": [
                 "Daily email performance review",
                 "LinkedIn engagement tracking",
                 "Blog traffic and conversion monitoring",
                 "Trial signup attribution analysis",
-                "Revenue impact measurement"
+                "Revenue impact measurement",
             ],
             "success_criteria": [
                 "Email: 25% open rate, 5% click rate",
                 "LinkedIn: 950+ total interactions",
                 "Blog: 2,500+ views",
-                "Overall: $400/day revenue target achieved"
-            ]
+                "Overall: $400/day revenue target achieved",
+            ],
         }
+
 
 # Mock classes for demonstration
 class MockTokenMonitor:
@@ -1550,49 +1537,71 @@ class MockTokenMonitor:
         self.usage_records = []
         self.current_usage = 0.0
 
-    def record_token_usage(self, model: str, input_tokens: int, output_tokens: int,
-                          task_type: str | None = None, session_id: str | None = None) -> float:
+    def record_token_usage(
+        self,
+        model: str,
+        input_tokens: int,
+        output_tokens: int,
+        task_type: str | None = None,
+        session_id: str | None = None,
+    ) -> float:
         pricing = {
             "claude-3.5-sonnet": {"input": 3.0, "output": 15.0},
             "claude-3-haiku": {"input": 0.25, "output": 1.25},
-            "claude-3-opus": {"input": 15.0, "output": 75.0}
+            "claude-3-opus": {"input": 15.0, "output": 75.0},
         }
 
         model_pricing = pricing.get(model, pricing["claude-3.5-sonnet"])
-        cost = (input_tokens / 1_000_000) * model_pricing["input"] + (output_tokens / 1_000_000) * model_pricing["output"]
+        cost = (input_tokens / 1_000_000) * model_pricing["input"] + (
+            output_tokens / 1_000_000
+        ) * model_pricing["output"]
 
         self.current_usage += cost
         return cost
+
 
 class MockMemoryManager:
     def __init__(self):
         self.memory_nodes = {}
         self.session_contexts = {}
 
-    def create_session_context(self, user_id: str, project_name: str, initial_context: dict[str, Any] | None = None) -> str:
+    def create_session_context(
+        self,
+        user_id: str,
+        project_name: str,
+        initial_context: dict[str, Any] | None = None,
+    ) -> str:
         session_id = f"deployment_session_{int(time.time())}"
         self.session_contexts[session_id] = {
             "user_id": user_id,
             "project_name": project_name,
-            "context": initial_context or {}
+            "context": initial_context or {},
         }
         return session_id
 
-    def store_memory_node(self, category: str, content: dict[str, Any], tags: list[str] | None = None, importance_score: float = 1.0) -> str:
+    def store_memory_node(
+        self,
+        category: str,
+        content: dict[str, Any],
+        tags: list[str] | None = None,
+        importance_score: float = 1.0,
+    ) -> str:
         node_id = f"node_{len(self.memory_nodes)}"
         self.memory_nodes[node_id] = {
             "category": category,
             "content": content,
             "tags": tags or [],
-            "importance_score": importance_score
+            "importance_score": importance_score,
         }
         return node_id
+
 
 # Main execution function
 async def deploy_multichannel_campaign() -> dict[str, Any]:
     """Deploy complete multi-channel trial conversion campaign"""
     engine = CampaignDeploymentEngine()
     return await engine.deploy_multichannel_campaign()
+
 
 if __name__ == "__main__":
     result = asyncio.run(deploy_multichannel_campaign())
@@ -1601,5 +1610,7 @@ if __name__ == "__main__":
     print(f"🔄 n8n Workflow: {result['file_outputs']['n8n_workflow']}")
     print(f"💼 LinkedIn Guide: {result['file_outputs']['linkedin_guide']}")
     print(f"📊 Metrics Tracking: {result['file_outputs']['metrics_tracking']}")
-    print(f"💰 Total Cost: ${result['usage_report']['deployment_efficiency']['total_deployment_cost']:.4f}")
+    print(
+        f"💰 Total Cost: ${result['usage_report']['deployment_efficiency']['total_deployment_cost']:.4f}"
+    )
     print(f"🎯 Revenue Target: {result['deployment_metadata']['revenue_target']}")

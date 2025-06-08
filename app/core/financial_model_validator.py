@@ -44,8 +44,7 @@ class FinancialModelValidator:
 
         # 4. Calculate adjusted financial metrics
         adjusted_model = self.adjust_model_based_on_market_data(
-            current_model,
-            pricing_insights
+            current_model, pricing_insights
         )
 
         # 5. Monitor AI costs
@@ -57,7 +56,7 @@ class FinancialModelValidator:
                 "timestamp": datetime.now().isoformat(),
                 "session_id": self.session_id,
                 "validation_type": "market_competitive_analysis",
-                "model_version": "2.1"
+                "model_version": "2.1",
             },
             "original_model": current_model,
             "market_analysis": competitive_analysis,
@@ -65,14 +64,14 @@ class FinancialModelValidator:
             "cost_monitoring": cost_monitoring,
             "validation_summary": self.generate_validation_summary(
                 current_model, adjusted_model, pricing_insights
-            )
+            ),
         }
 
         return validation_report
 
-    def adjust_model_based_on_market_data(self,
-                                        current_model: dict,
-                                        pricing_insights: dict) -> dict:
+    def adjust_model_based_on_market_data(
+        self, current_model: dict, pricing_insights: dict
+    ) -> dict:
         """Adjust financial model based on competitive pricing analysis"""
 
         # Extract pricing recommendations
@@ -81,9 +80,13 @@ class FinancialModelValidator:
 
         # Update pricing tiers
         new_pricing = {
-            "basic_tier_price": pricing_recs.get("basic_tier", {}).get("recommended", 29.0),
+            "basic_tier_price": pricing_recs.get("basic_tier", {}).get(
+                "recommended", 29.0
+            ),
             "pro_tier_price": pricing_recs.get("pro_tier", {}).get("recommended", 99.0),
-            "enterprise_tier_price": pricing_recs.get("enterprise_tier", {}).get("recommended", 299.0)
+            "enterprise_tier_price": pricing_recs.get("enterprise_tier", {}).get(
+                "recommended", 299.0
+            ),
         }
 
         # Calculate impact on customer metrics
@@ -91,13 +94,21 @@ class FinancialModelValidator:
         ltv_increase = cac_impact.get("customer_lifetime_value_increase", 0.17)
 
         # Update revenue model with new pricing
-        self.revenue_model.customer_metrics.basic_tier_price = new_pricing["basic_tier_price"]
-        self.revenue_model.customer_metrics.pro_tier_price = new_pricing["pro_tier_price"]
-        self.revenue_model.customer_metrics.enterprise_tier_price = new_pricing["enterprise_tier_price"]
+        self.revenue_model.customer_metrics.basic_tier_price = new_pricing[
+            "basic_tier_price"
+        ]
+        self.revenue_model.customer_metrics.pro_tier_price = new_pricing[
+            "pro_tier_price"
+        ]
+        self.revenue_model.customer_metrics.enterprise_tier_price = new_pricing[
+            "enterprise_tier_price"
+        ]
 
         # Adjust CAC based on pricing power
         original_cac = self.revenue_model.customer_metrics.cac_base
-        adjusted_cac = original_cac * (1 + abs(price_elasticity))  # Higher prices = slightly higher CAC
+        adjusted_cac = original_cac * (
+            1 + abs(price_elasticity)
+        )  # Higher prices = slightly higher CAC
         self.revenue_model.customer_metrics.cac_base = adjusted_cac
 
         # Generate updated model
@@ -109,24 +120,23 @@ class FinancialModelValidator:
             "cac_adjustment": {
                 "original": original_cac,
                 "adjusted": adjusted_cac,
-                "change_pct": ((adjusted_cac - original_cac) / original_cac) * 100
+                "change_pct": ((adjusted_cac - original_cac) / original_cac) * 100,
             },
             "revenue_impact": {
                 "ltv_increase_pct": ltv_increase * 100,
                 "price_elasticity": price_elasticity,
                 "net_revenue_impact": self.calculate_net_revenue_impact(
                     new_pricing, price_elasticity, ltv_increase
-                )
+                ),
             },
-            "competitive_positioning": pricing_insights.get("market_positioning", {})
+            "competitive_positioning": pricing_insights.get("market_positioning", {}),
         }
 
         return adjusted_model
 
-    def calculate_net_revenue_impact(self,
-                                   new_pricing: dict,
-                                   price_elasticity: float,
-                                   ltv_increase: float) -> dict:
+    def calculate_net_revenue_impact(
+        self, new_pricing: dict, price_elasticity: float, ltv_increase: float
+    ) -> dict:
         """Calculate net revenue impact from pricing changes"""
 
         # Original pricing
@@ -134,19 +144,23 @@ class FinancialModelValidator:
 
         # New pricing
         new_avg_price = (
-            new_pricing["basic_tier_price"] * 0.2 +
-            new_pricing["pro_tier_price"] * 0.6 +
-            new_pricing["enterprise_tier_price"] * 0.2
+            new_pricing["basic_tier_price"] * 0.2
+            + new_pricing["pro_tier_price"] * 0.6
+            + new_pricing["enterprise_tier_price"] * 0.2
         )
 
         # Price increase percentage
-        price_increase_pct = ((new_avg_price - original_avg_price) / original_avg_price)
+        price_increase_pct = (new_avg_price - original_avg_price) / original_avg_price
 
         # Customer impact (elasticity effect)
         customer_retention = 1 + (price_elasticity * price_increase_pct)
 
         # Revenue impact
-        revenue_multiplier = (new_avg_price / original_avg_price) * customer_retention * (1 + ltv_increase)
+        revenue_multiplier = (
+            (new_avg_price / original_avg_price)
+            * customer_retention
+            * (1 + ltv_increase)
+        )
 
         return {
             "original_avg_price": round(original_avg_price, 2),
@@ -154,13 +168,12 @@ class FinancialModelValidator:
             "price_increase_pct": round(price_increase_pct * 100, 1),
             "customer_retention_rate": round(customer_retention, 3),
             "revenue_multiplier": round(revenue_multiplier, 3),
-            "net_revenue_change_pct": round((revenue_multiplier - 1) * 100, 1)
+            "net_revenue_change_pct": round((revenue_multiplier - 1) * 100, 1),
         }
 
-    def generate_validation_summary(self,
-                                  original_model: dict,
-                                  adjusted_model: dict,
-                                  pricing_insights: dict) -> dict:
+    def generate_validation_summary(
+        self, original_model: dict, adjusted_model: dict, pricing_insights: dict
+    ) -> dict:
         """Generate comprehensive validation summary"""
 
         # Extract key metrics for comparison
@@ -175,35 +188,39 @@ class FinancialModelValidator:
                 "pricing_optimization": {
                     "basic_tier_change": f"+${market_adj['pricing_changes']['basic_tier_price'] - 29:.0f}",
                     "pro_tier_change": f"+${market_adj['pricing_changes']['pro_tier_price'] - 99:.0f}",
-                    "enterprise_tier_change": f"+${market_adj['pricing_changes']['enterprise_tier_price'] - 299:.0f}"
+                    "enterprise_tier_change": f"+${market_adj['pricing_changes']['enterprise_tier_price'] - 299:.0f}",
                 },
                 "financial_impact": {
                     "roi_change": f"{adj_roi['roi_12_months_pct'] - orig_roi['roi_12_months_pct']:+.1f}%",
                     "break_even_change": f"{adj_roi['break_even_months'] - orig_roi['break_even_months']:+.1f} months",
-                    "investment_change": f"${adj_roi['total_cac_investment'] - orig_roi['total_cac_investment']:+,.0f}"
-                }
+                    "investment_change": f"${adj_roi['total_cac_investment'] - orig_roi['total_cac_investment']:+,.0f}",
+                },
             },
             "market_position": {
-                "competitive_advantage": pricing_insights.get("market_positioning", {}).get("competitive_advantage", ""),
-                "pricing_percentile": pricing_insights.get("market_positioning", {}).get("pricing_percentile", ""),
-                "implementation_timeline": "90 days for gradual rollout"
+                "competitive_advantage": pricing_insights.get(
+                    "market_positioning", {}
+                ).get("competitive_advantage", ""),
+                "pricing_percentile": pricing_insights.get(
+                    "market_positioning", {}
+                ).get("pricing_percentile", ""),
+                "implementation_timeline": "90 days for gradual rollout",
             },
             "risk_assessment": {
                 "price_sensitivity": "Low to Moderate",
                 "customer_churn_risk": "15% increase offset by 17% LTV improvement",
-                "market_acceptance": "High - aligned with market leaders"
+                "market_acceptance": "High - aligned with market leaders",
             },
             "ai_cost_efficiency": {
                 "validation_cost": 0.072 + 0.5 + 0.010,  # Pipeline + SerpAPI + Claude
                 "monthly_savings_maintained": True,
-                "cost_per_validation": 0.582
+                "cost_per_validation": 0.582,
             },
             "recommendations": [
                 "Implement graduated pricing increase over 90 days",
                 "Enhance AI-powered features to justify premium positioning",
                 "Monitor customer retention during transition period",
-                "Maintain AI cost optimization target of $210/month savings"
-            ]
+                "Maintain AI cost optimization target of $210/month savings",
+            ],
         }
 
     def save_to_persistent_context(self, validation_report: dict):
@@ -222,15 +239,15 @@ class FinancialModelValidator:
                     "customer_retention_rate",
                     "average_revenue_per_user",
                     "customer_acquisition_cost",
-                    "monthly_recurring_revenue"
-                ]
+                    "monthly_recurring_revenue",
+                ],
             },
             "ai_cost_optimization": {
                 "daily_budget": self.token_monitor.daily_budget,
                 "current_efficiency": "Optimal",
                 "monthly_savings_target": 210.0,
-                "cost_per_pipeline_run": 0.072
-            }
+                "cost_per_pipeline_run": 0.072,
+            },
         }
 
         # Save to persistent context file
@@ -251,7 +268,9 @@ class FinancialModelValidator:
             with open(context_file, "w") as f:
                 json.dump(existing_context, f, indent=2)
 
-            logger.info(f"Validation results saved to persistent context: {context_file}")
+            logger.info(
+                f"Validation results saved to persistent context: {context_file}"
+            )
 
         except Exception as e:
             logger.error(f"Error saving to persistent context: {e}")
@@ -292,17 +311,26 @@ async def main():
     print("\n📈 PRICING ADJUSTMENTS:")
     print(f"Basic: ${market_adj['pricing_changes']['basic_tier_price']:.0f} (+$10)")
     print(f"Pro: ${market_adj['pricing_changes']['pro_tier_price']:.0f} (+$20)")
-    print(f"Enterprise: ${market_adj['pricing_changes']['enterprise_tier_price']:.0f} (+$50)")
+    print(
+        f"Enterprise: ${market_adj['pricing_changes']['enterprise_tier_price']:.0f} (+$50)"
+    )
 
     cost_monitoring = validation_report["cost_monitoring"]
     print("\n🤖 AI COST MONITORING:")
-    print(f"Pipeline cost: ${cost_monitoring['pipeline_monitoring']['current_run_cost']}")
-    print(f"Monthly savings: ${cost_monitoring['pipeline_monitoring']['target_monthly_savings']:.0f}")
-    print(f"Budget utilization: {cost_monitoring['budget_status']['utilization_pct']:.1f}%")
+    print(
+        f"Pipeline cost: ${cost_monitoring['pipeline_monitoring']['current_run_cost']}"
+    )
+    print(
+        f"Monthly savings: ${cost_monitoring['pipeline_monitoring']['target_monthly_savings']:.0f}"
+    )
+    print(
+        f"Budget utilization: {cost_monitoring['budget_status']['utilization_pct']:.1f}%"
+    )
 
     print("\n📄 Detailed validation report: data/financial_model_validation.json")
 
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

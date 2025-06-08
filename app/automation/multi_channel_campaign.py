@@ -15,6 +15,7 @@ from app.config.logging import get_logger
 
 logger = get_logger(__name__)
 
+
 class MultiChannelCampaignGenerator:
     """
     Enterprise multi-channel campaign generator using optimization suite.
@@ -31,20 +32,20 @@ class MultiChannelCampaignGenerator:
         # Campaign configuration
         self.target_leads = 5000
         self.current_revenue = 300  # $300/day current
-        self.target_revenue = 400   # $400/day target
-        self.growth_target = (self.target_revenue - self.current_revenue) / self.current_revenue * 100  # 33.3%
+        self.target_revenue = 400  # $400/day target
+        self.growth_target = (
+            (self.target_revenue - self.current_revenue) / self.current_revenue * 100
+        )  # 33.3%
 
         # Model allocation strategy (CFO approved)
         self.model_allocation = {
             "sonnet_4": 0.80,  # 80% for content expansion
-            "haiku_4": 0.10,   # 10% for formatting
-            "opus_4": 0.10     # 10% for metric analysis
+            "haiku_4": 0.10,  # 10% for formatting
+            "opus_4": 0.10,  # 10% for metric analysis
         }
 
     async def launch_campaign(
-        self,
-        email_campaign_file: str,
-        user_id: str = "cmo_multichannel"
+        self, email_campaign_file: str, user_id: str = "cmo_multichannel"
     ) -> dict[str, Any]:
         """
         Launch comprehensive multi-channel acquisition campaign.
@@ -67,12 +68,14 @@ class MultiChannelCampaignGenerator:
                 "target_leads": self.target_leads,
                 "revenue_growth_target": f"{self.current_revenue} → {self.target_revenue}",
                 "growth_percentage": self.growth_target,
-                "week_1_focus": "workflow_efficiency_cost_savings"
-            }
+                "week_1_focus": "workflow_efficiency_cost_savings",
+            },
         )
 
         logger.info(f"🚀 Launching multi-channel campaign: {session_id}")
-        logger.info(f"📈 Revenue Target: ${self.current_revenue} → ${self.target_revenue}/day ({self.growth_target:.1f}% growth)")
+        logger.info(
+            f"📈 Revenue Target: ${self.current_revenue} → ${self.target_revenue}/day ({self.growth_target:.1f}% growth)"
+        )
 
         # Step 1: Load and analyze existing email campaign
         email_content = self._load_email_campaign(email_campaign_file)
@@ -102,13 +105,16 @@ class MultiChannelCampaignGenerator:
         )
 
         # Step 8: Store in persistent context system
-        self._store_campaign_in_memory(session_id, {
-            "email_content": email_content,
-            "linkedin_content": linkedin_content,
-            "blog_content": blog_content,
-            "engagement_trends": engagement_trends,
-            "campaign_metrics": campaign_metrics
-        })
+        self._store_campaign_in_memory(
+            session_id,
+            {
+                "email_content": email_content,
+                "linkedin_content": linkedin_content,
+                "blog_content": blog_content,
+                "engagement_trends": engagement_trends,
+                "campaign_metrics": campaign_metrics,
+            },
+        )
 
         # Step 9: Generate comprehensive usage report
         usage_report = self._generate_usage_report(session_id)
@@ -124,16 +130,16 @@ class MultiChannelCampaignGenerator:
                 "execution_time_seconds": round(execution_time, 2),
                 "revenue_target": f"${self.current_revenue} → ${self.target_revenue}/day",
                 "growth_percentage": f"{self.growth_target:.1f}%",
-                "target_leads": self.target_leads
+                "target_leads": self.target_leads,
             },
             "content_outputs": {
                 "linkedin_posts": linkedin_content,
                 "blog_post": blog_content,
-                "email_campaign": email_content
+                "email_campaign": email_content,
             },
             "automation_configs": {
                 "n8n_workflow": n8n_workflow,
-                "sendgrid_setup": self._get_sendgrid_config()
+                "sendgrid_setup": self._get_sendgrid_config(),
             },
             "campaign_tracking": campaign_metrics,
             "file_outputs": file_outputs,
@@ -144,8 +150,8 @@ class MultiChannelCampaignGenerator:
                 "click_through_rate_target": "4.5%",
                 "blog_views_target": "2,500 views/week",
                 "linkedin_engagement_target": "200+ interactions per post",
-                "revenue_conversion_target": f"${self.target_revenue}/day by Week 1 end"
-            }
+                "revenue_conversion_target": f"${self.target_revenue}/day by Week 1 end",
+            },
         }
 
         logger.info(f"✅ Multi-channel campaign launched in {execution_time:.2f}s")
@@ -166,21 +172,23 @@ class MultiChannelCampaignGenerator:
                     "3x faster decision making",
                     "85% less time on administrative tasks",
                     "250% improvement in data accuracy",
-                    "$47,000 annually lost to inefficient workflows"
+                    "$47,000 annually lost to inefficient workflows",
                 ],
                 "value_propositions": [
                     "AI-powered workflow automation",
                     "Real-time business intelligence",
                     "Cost reduction through process optimization",
-                    "Guaranteed ROI or money back"
+                    "Guaranteed ROI or money back",
                 ],
                 "target_personas": [
                     "Operations Directors",
                     "CFOs concerned about costs",
-                    "Business leaders seeking efficiency"
+                    "Business leaders seeking efficiency",
                 ],
                 "call_to_action": "Calculate Your Cost Savings Now",
-                "content_preview": content[:500] + "..." if len(content) > 500 else content
+                "content_preview": (
+                    content[:500] + "..." if len(content) > 500 else content
+                ),
             }
 
         except Exception as e:
@@ -196,10 +204,12 @@ class MultiChannelCampaignGenerator:
             "SaaS blog post engagement metrics",
             "LinkedIn B2B post performance",
             "SaaS email marketing benchmarks",
-            "B2B social media engagement rates"
+            "B2B social media engagement rates",
         ]
 
-        logger.info(f"🔍 Fetching engagement trends: {len(engagement_keywords)} concurrent searches")
+        logger.info(
+            f"🔍 Fetching engagement trends: {len(engagement_keywords)} concurrent searches"
+        )
 
         # Simulate concurrent SerpAPI searches
         await self.serpapi_client.concurrent_market_research(engagement_keywords)
@@ -208,29 +218,54 @@ class MultiChannelCampaignGenerator:
         engagement_insights = {
             "linkedin_trends": {
                 "best_posting_times": ["9-10 AM", "12-1 PM", "5-6 PM"],
-                "high_engagement_formats": ["Carousel posts", "Video content", "Poll posts"],
-                "trending_hashtags": ["#SaaS", "#WorkflowAutomation", "#BusinessEfficiency", "#CostReduction"],
+                "high_engagement_formats": [
+                    "Carousel posts",
+                    "Video content",
+                    "Poll posts",
+                ],
+                "trending_hashtags": [
+                    "#SaaS",
+                    "#WorkflowAutomation",
+                    "#BusinessEfficiency",
+                    "#CostReduction",
+                ],
                 "optimal_post_length": "150-300 characters",
-                "engagement_rate_benchmark": "2.5-4.0%"
+                "engagement_rate_benchmark": "2.5-4.0%",
             },
             "blog_trends": {
-                "trending_topics": ["AI automation", "Cost optimization", "Remote work efficiency"],
+                "trending_topics": [
+                    "AI automation",
+                    "Cost optimization",
+                    "Remote work efficiency",
+                ],
                 "optimal_length": "1,500-2,500 words",
-                "high_converting_formats": ["How-to guides", "Case studies", "ROI calculators"],
-                "seo_keywords": ["workflow automation", "business efficiency", "cost reduction software"]
+                "high_converting_formats": [
+                    "How-to guides",
+                    "Case studies",
+                    "ROI calculators",
+                ],
+                "seo_keywords": [
+                    "workflow automation",
+                    "business efficiency",
+                    "cost reduction software",
+                ],
             },
             "email_trends": {
-                "subject_line_best_practices": ["Numbers/percentages", "Urgency indicators", "Personalization"],
+                "subject_line_best_practices": [
+                    "Numbers/percentages",
+                    "Urgency indicators",
+                    "Personalization",
+                ],
                 "optimal_send_times": ["Tuesday 10 AM", "Thursday 2 PM"],
                 "open_rate_benchmark": "22-28%",
-                "click_rate_benchmark": "3-5%"
+                "click_rate_benchmark": "3-5%",
             },
             "content_themes": [
                 "ROI-focused messaging",
                 "Time-saving benefits",
                 "Cost reduction proof points",
-                "Automation success stories"
-            ]
+                "Automation success stories",
+            ],
         }
 
         logger.info("✅ Engagement trends analysis completed")
@@ -240,7 +275,7 @@ class MultiChannelCampaignGenerator:
         self,
         email_content: dict[str, Any],
         engagement_trends: dict[str, Any],
-        session_id: str
+        session_id: str,
     ) -> dict[str, Any]:
         """Generate LinkedIn posts using Sonnet 4 (80% allocation)"""
 
@@ -252,7 +287,7 @@ class MultiChannelCampaignGenerator:
             input_tokens=1500,
             output_tokens=800,
             task_type="linkedin_content_generation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         # Generate multiple LinkedIn post variations
@@ -288,9 +323,8 @@ Ready to stop the bleeding?
 #SaaS #WorkflowAutomation #BusinessEfficiency #CostReduction""",
                 "optimal_posting_time": "Tuesday 10:00 AM",
                 "expected_engagement": "200+ interactions",
-                "target_audience": "Operations Directors, CFOs"
+                "target_audience": "Operations Directors, CFOs",
             },
-
             "post_2_video": {
                 "type": "Video Post",
                 "hook": "Watch how one company saved $67,000 in 90 days",
@@ -322,9 +356,8 @@ Free calculator in comments 👇
 #AIAutomation #BusinessEfficiency #ROI #SaaS""",
                 "optimal_posting_time": "Thursday 2:00 PM",
                 "expected_engagement": "300+ interactions",
-                "target_audience": "CFOs, Finance Directors"
+                "target_audience": "CFOs, Finance Directors",
             },
-
             "post_3_poll": {
                 "type": "Poll Post",
                 "hook": "Quick poll: How much time does your team spend on manual reporting?",
@@ -355,8 +388,8 @@ Free automation assessment: [link in bio]
 #Productivity #BusinessAutomation #CostSavings #SaaS""",
                 "optimal_posting_time": "Wednesday 11:00 AM",
                 "expected_engagement": "150+ votes, 50+ comments",
-                "target_audience": "Business leaders, Operations teams"
-            }
+                "target_audience": "Business leaders, Operations teams",
+            },
         }
 
         logger.info(f"✅ LinkedIn posts generated - Cost: ${linkedin_cost:.4f}")
@@ -365,19 +398,23 @@ Free automation assessment: [link in bio]
             "posts": linkedin_posts,
             "posting_strategy": {
                 "frequency": "3 posts per week",
-                "optimal_times": engagement_trends["linkedin_trends"]["best_posting_times"],
-                "hashtag_strategy": engagement_trends["linkedin_trends"]["trending_hashtags"],
-                "engagement_target": "200+ interactions per post"
+                "optimal_times": engagement_trends["linkedin_trends"][
+                    "best_posting_times"
+                ],
+                "hashtag_strategy": engagement_trends["linkedin_trends"][
+                    "trending_hashtags"
+                ],
+                "engagement_target": "200+ interactions per post",
             },
             "generation_cost": linkedin_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _generate_blog_post(
         self,
         email_content: dict[str, Any],
         engagement_trends: dict[str, Any],
-        session_id: str
+        session_id: str,
     ) -> dict[str, Any]:
         """Generate comprehensive blog post using Sonnet 4 (80% allocation)"""
 
@@ -389,7 +426,7 @@ Free automation assessment: [link in bio]
             input_tokens=2000,
             output_tokens=1500,
             task_type="blog_content_generation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         blog_content = {
@@ -400,7 +437,7 @@ Free automation assessment: [link in bio]
                 "business efficiency",
                 "cost reduction software",
                 "AI automation ROI",
-                "operational cost savings"
+                "operational cost savings",
             ],
             "estimated_reading_time": "8 minutes",
             "target_word_count": "2,200 words",
@@ -674,24 +711,26 @@ This analysis is based on real data from 500+ business automation implementation
 - [Free ROI Calculator](https://your-platform.com/calculator)
 - [Automation Readiness Assessment](https://your-platform.com/assessment)
 - [Integration Compatibility Checker](https://your-platform.com/integrations)
-- [Customer Success Stories](https://your-platform.com/case-studies)""".format(current_date=datetime.now().strftime("%B %d, %Y")),
+- [Customer Success Stories](https://your-platform.com/case-studies)""".format(
+                current_date=datetime.now().strftime("%B %d, %Y")
+            ),
             "cta_sections": [
                 {
                     "type": "mid_article_cta",
                     "position": "After case studies",
-                    "content": "Want to see similar results? Get your free automation assessment →"
+                    "content": "Want to see similar results? Get your free automation assessment →",
                 },
                 {
                     "type": "end_article_cta",
                     "position": "Conclusion",
-                    "content": "Calculate Your Cost Savings Now - Free 2-minute assessment"
-                }
+                    "content": "Calculate Your Cost Savings Now - Free 2-minute assessment",
+                },
             ],
             "social_sharing": {
                 "twitter": "How we helped 500+ businesses save $47K annually with AI automation",
                 "linkedin": "Comprehensive guide: 40% cost reduction in 30 days with workflow automation",
-                "facebook": "Stop losing money to manual processes - see how AI automation delivers ROI"
-            }
+                "facebook": "Stop losing money to manual processes - see how AI automation delivers ROI",
+            },
         }
 
         logger.info(f"✅ Blog post generated - Cost: ${blog_cost:.4f}")
@@ -702,10 +741,10 @@ This analysis is based on real data from 500+ business automation implementation
                 "target_keywords": engagement_trends["blog_trends"]["seo_keywords"],
                 "optimal_length": "2,200 words (within 1,500-2,500 range)",
                 "reading_time": "8 minutes",
-                "meta_optimization": "Complete"
+                "meta_optimization": "Complete",
             },
             "generation_cost": blog_cost,
-            "model_used": "claude-3.5-sonnet"
+            "model_used": "claude-3.5-sonnet",
         }
 
     async def _generate_n8n_workflow(self, session_id: str) -> dict[str, Any]:
@@ -719,7 +758,7 @@ This analysis is based on real data from 500+ business automation implementation
             input_tokens=800,
             output_tokens=600,
             task_type="n8n_workflow_generation",
-            session_id=session_id
+            session_id=session_id,
         )
 
         n8n_workflow = {
@@ -730,7 +769,7 @@ This analysis is based on real data from 500+ business automation implementation
                     "id": "trigger_node",
                     "type": "Manual Trigger",
                     "name": "Campaign Launch Trigger",
-                    "position": [100, 100]
+                    "position": [100, 100],
                 },
                 {
                     "id": "lead_filter",
@@ -754,7 +793,7 @@ const qualifiedLeads = items.filter(item => {
 
 return qualifiedLeads;
 """
-                    }
+                    },
                 },
                 {
                     "id": "sendgrid_email",
@@ -771,9 +810,9 @@ return qualifiedLeads;
                         "trackingSettings": {
                             "clickTracking": true,
                             "openTracking": true,
-                            "subscriptionTracking": true
-                        }
-                    }
+                            "subscriptionTracking": true,
+                        },
+                    },
                 },
                 {
                     "id": "analytics_tracker",
@@ -785,7 +824,7 @@ return qualifiedLeads;
                         "url": "https://your-analytics-endpoint.com/track",
                         "headers": {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer {{ $env.ANALYTICS_API_KEY }}"
+                            "Authorization": "Bearer {{ $env.ANALYTICS_API_KEY }}",
                         },
                         "body": {
                             "event": "email_sent",
@@ -795,10 +834,10 @@ return qualifiedLeads;
                             "metadata": {
                                 "campaign_type": "revenue_acceleration",
                                 "target_revenue": "400_per_day",
-                                "channel": "email"
-                            }
-                        }
-                    }
+                                "channel": "email",
+                            },
+                        },
+                    },
                 },
                 {
                     "id": "slack_notification",
@@ -808,34 +847,22 @@ return qualifiedLeads;
                     "parameters": {
                         "webhook": "{{ $env.SLACK_WEBHOOK_URL }}",
                         "channel": "#marketing-campaigns",
-                        "message": "📧 Multi-channel campaign deployed! Emails sent to {{ $json.total_recipients }} qualified SaaS leads. Tracking: {{ $json.tracking_url }}"
-                    }
-                }
+                        "message": "📧 Multi-channel campaign deployed! Emails sent to {{ $json.total_recipients }} qualified SaaS leads. Tracking: {{ $json.tracking_url }}",
+                    },
+                },
             ],
             "connections": [
-                {
-                    "source": "trigger_node",
-                    "target": "lead_filter"
-                },
-                {
-                    "source": "lead_filter",
-                    "target": "sendgrid_email"
-                },
-                {
-                    "source": "sendgrid_email",
-                    "target": "analytics_tracker"
-                },
-                {
-                    "source": "sendgrid_email",
-                    "target": "slack_notification"
-                }
+                {"source": "trigger_node", "target": "lead_filter"},
+                {"source": "lead_filter", "target": "sendgrid_email"},
+                {"source": "sendgrid_email", "target": "analytics_tracker"},
+                {"source": "sendgrid_email", "target": "slack_notification"},
             ],
             "settings": {
                 "executionOrder": "v1",
                 "saveManualExecutions": true,
                 "callerPolicy": "workflowsFromSameOwner",
-                "errorWorkflow": "error_handler_workflow"
-            }
+                "errorWorkflow": "error_handler_workflow",
+            },
         }
 
         logger.info(f"✅ n8n workflow generated - Cost: ${n8n_cost:.4f}")
@@ -848,15 +875,15 @@ return qualifiedLeads;
                 "3. Upload lead database (5,000 SaaS leads)",
                 "4. Test workflow with small batch (10 leads)",
                 "5. Deploy full campaign",
-                "6. Monitor execution logs and metrics"
+                "6. Monitor execution logs and metrics",
             ],
             "required_credentials": [
                 "SendGrid API Key",
                 "Analytics Platform API Key",
-                "Slack Webhook URL"
+                "Slack Webhook URL",
             ],
             "generation_cost": n8n_cost,
-            "model_used": "claude-3-haiku"
+            "model_used": "claude-3-haiku",
         }
 
     async def _setup_campaign_metrics(self, session_id: str) -> dict[str, Any]:
@@ -870,7 +897,7 @@ return qualifiedLeads;
             input_tokens=1200,
             output_tokens=900,
             task_type="campaign_metrics_analysis",
-            session_id=session_id
+            session_id=session_id,
         )
 
         campaign_metrics = {
@@ -880,7 +907,7 @@ return qualifiedLeads;
                 "target_leads": self.target_leads,
                 "revenue_target": f"${self.current_revenue} → ${self.target_revenue}/day",
                 "duration": "7 days (Week 1)",
-                "channels": ["Email", "LinkedIn", "Blog"]
+                "channels": ["Email", "LinkedIn", "Blog"],
             },
             "email_metrics": {
                 "total_recipients": 5000,
@@ -894,8 +921,8 @@ return qualifiedLeads;
                     "utm_source": "email",
                     "utm_medium": "campaign",
                     "utm_campaign": "multi_channel_week1",
-                    "utm_content": "workflow_efficiency"
-                }
+                    "utm_content": "workflow_efficiency",
+                },
             },
             "linkedin_metrics": {
                 "posts_planned": 3,
@@ -903,12 +930,16 @@ return qualifiedLeads;
                 "target_engagement_rate": 0.035,  # 3.5%
                 "expected_total_reach": 6000,
                 "expected_interactions": 210,
-                "tracking_hashtags": ["#SaaS", "#WorkflowAutomation", "#BusinessEfficiency"],
+                "tracking_hashtags": [
+                    "#SaaS",
+                    "#WorkflowAutomation",
+                    "#BusinessEfficiency",
+                ],
                 "success_indicators": [
                     "200+ interactions per post",
                     "50+ profile visits from posts",
-                    "25+ connection requests from prospects"
-                ]
+                    "25+ connection requests from prospects",
+                ],
             },
             "blog_metrics": {
                 "target_views": 2500,
@@ -917,10 +948,14 @@ return qualifiedLeads;
                 "target_social_shares": 150,
                 "target_email_signups": 75,
                 "seo_targets": {
-                    "target_keywords": ["workflow automation", "business efficiency", "cost reduction"],
+                    "target_keywords": [
+                        "workflow automation",
+                        "business efficiency",
+                        "cost reduction",
+                    ],
                     "target_ranking": "Page 1 for primary keywords",
-                    "organic_traffic_goal": "40% of total blog traffic"
-                }
+                    "organic_traffic_goal": "40% of total blog traffic",
+                },
             },
             "revenue_tracking": {
                 "current_daily_revenue": self.current_revenue,
@@ -931,61 +966,61 @@ return qualifiedLeads;
                     "trial_to_paid_rate": 0.25,
                     "expected_new_customers": 25,
                     "average_monthly_value": 500,
-                    "projected_monthly_revenue_increase": 12500
+                    "projected_monthly_revenue_increase": 12500,
                 },
-                "attribution_model": "First-touch attribution with 7-day window"
+                "attribution_model": "First-touch attribution with 7-day window",
             },
             "week_1_milestones": [
                 {
                     "day": 1,
                     "target": "Email campaign deployed to 5,000 leads",
-                    "success_metric": "95%+ delivery rate"
+                    "success_metric": "95%+ delivery rate",
                 },
                 {
                     "day": 2,
                     "target": "First LinkedIn post published",
-                    "success_metric": "200+ interactions"
+                    "success_metric": "200+ interactions",
                 },
                 {
                     "day": 3,
                     "target": "Blog post published and promoted",
-                    "success_metric": "500+ views in first 24 hours"
+                    "success_metric": "500+ views in first 24 hours",
                 },
                 {
                     "day": 4,
                     "target": "Second LinkedIn post published",
-                    "success_metric": "Sustained engagement levels"
+                    "success_metric": "Sustained engagement levels",
                 },
                 {
                     "day": 5,
                     "target": "Email follow-up sequence initiated",
-                    "success_metric": "15%+ open rate improvement"
+                    "success_metric": "15%+ open rate improvement",
                 },
                 {
                     "day": 6,
                     "target": "Third LinkedIn post published",
-                    "success_metric": "Cross-channel traffic attribution"
+                    "success_metric": "Cross-channel traffic attribution",
                 },
                 {
                     "day": 7,
                     "target": "Week 1 analysis and optimization",
-                    "success_metric": "Revenue target achieved: $400/day"
-                }
+                    "success_metric": "Revenue target achieved: $400/day",
+                },
             ],
             "success_criteria": {
                 "primary_kpis": [
                     "Daily revenue increase: $300 → $400",
                     "Email open rate: ≥25%",
                     "Blog traffic: ≥2,500 views",
-                    "LinkedIn engagement: ≥200 interactions per post"
+                    "LinkedIn engagement: ≥200 interactions per post",
                 ],
                 "secondary_kpis": [
                     "Trial signup rate: ≥2%",
                     "Cost per acquisition: ≤$50",
                     "Channel attribution clarity: 90%+",
-                    "Cross-channel synergy evidence"
-                ]
-            }
+                    "Cross-channel synergy evidence",
+                ],
+            },
         }
 
         logger.info(f"✅ Campaign metrics configured - Cost: ${metrics_cost:.4f}")
@@ -997,15 +1032,15 @@ return qualifiedLeads;
                 "attribution_tool": "HubSpot + UTM parameters",
                 "email_tracking": "SendGrid Analytics",
                 "social_tracking": "LinkedIn Analytics + Hootsuite",
-                "revenue_tracking": "Stripe + custom dashboard"
+                "revenue_tracking": "Stripe + custom dashboard",
             },
             "reporting_schedule": {
                 "daily_reports": "Email metrics, LinkedIn engagement",
                 "weekly_reports": "Comprehensive channel performance",
-                "real_time_dashboard": "Revenue, conversions, traffic"
+                "real_time_dashboard": "Revenue, conversions, traffic",
             },
             "generation_cost": metrics_cost,
-            "model_used": "claude-3-opus"
+            "model_used": "claude-3-opus",
         }
 
     def _save_campaign_files(
@@ -1013,7 +1048,7 @@ return qualifiedLeads;
         linkedin_content: dict[str, Any],
         blog_content: dict[str, Any],
         n8n_workflow: dict[str, Any],
-        campaign_metrics: dict[str, Any]
+        campaign_metrics: dict[str, Any],
     ) -> dict[str, str]:
         """Save all campaign content to files"""
 
@@ -1049,7 +1084,7 @@ return qualifiedLeads;
             "linkedin_posts": str(linkedin_file),
             "blog_post": str(blog_file),
             "n8n_workflow": str(n8n_file),
-            "campaign_metrics": str(metrics_file)
+            "campaign_metrics": str(metrics_file),
         }
 
     def _create_linkedin_markdown(self, linkedin_content: dict[str, Any]) -> str:
@@ -1102,7 +1137,9 @@ return qualifiedLeads;
 
         return markdown
 
-    def _store_campaign_in_memory(self, session_id: str, campaign_data: dict[str, Any]) -> None:
+    def _store_campaign_in_memory(
+        self, session_id: str, campaign_data: dict[str, Any]
+    ) -> None:
         """Store complete campaign in persistent context system"""
 
         self.memory_manager.store_memory_node(
@@ -1115,10 +1152,10 @@ return qualifiedLeads;
                 "target_leads": self.target_leads,
                 "model_allocation": self.model_allocation,
                 "timestamp": datetime.now().isoformat(),
-                **campaign_data
+                **campaign_data,
             },
             tags=["multi_channel", "revenue_acceleration", "saas_campaign"],
-            importance_score=10.0  # Highest priority for revenue campaigns
+            importance_score=10.0,  # Highest priority for revenue campaigns
         )
 
         logger.info("💾 Campaign data stored in persistent context system")
@@ -1127,8 +1164,7 @@ return qualifiedLeads;
         """Generate comprehensive token usage report"""
 
         self.token_monitor.get_usage_summary(
-            period_days=1,
-            task_type="multi_channel_campaign"
+            period_days=1, task_type="multi_channel_campaign"
         )
 
         budget_status = self.token_monitor.get_budget_status()
@@ -1138,34 +1174,47 @@ return qualifiedLeads;
                 "planned_allocation": self.model_allocation,
                 "actual_usage": {
                     "sonnet_4_percentage": 80.0,  # Content generation
-                    "haiku_4_percentage": 10.0,   # Formatting
-                    "opus_4_percentage": 10.0     # Analytics
+                    "haiku_4_percentage": 10.0,  # Formatting
+                    "opus_4_percentage": 10.0,  # Analytics
                 },
                 "cost_breakdown": {
                     "sonnet_4_cost": 0.0172,  # LinkedIn + Blog
-                    "haiku_4_cost": 0.0034,   # n8n workflow
-                    "opus_4_cost": 0.0089,    # Metrics analysis
-                    "total_cost": 0.0295
-                }
+                    "haiku_4_cost": 0.0034,  # n8n workflow
+                    "opus_4_cost": 0.0089,  # Metrics analysis
+                    "total_cost": 0.0295,
+                },
             },
             "campaign_efficiency": {
-                "total_cost": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
-                "cost_per_lead": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"] / self.target_leads,
-                "cost_per_channel": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"] / 3,
-                "budget_utilization": f"{(budget_status['budget_alerts']['default_daily']['current_usage_usd'] / 10.0) * 100:.1f}%"
+                "total_cost": budget_status["budget_alerts"]["default_daily"][
+                    "current_usage_usd"
+                ],
+                "cost_per_lead": budget_status["budget_alerts"]["default_daily"][
+                    "current_usage_usd"
+                ]
+                / self.target_leads,
+                "cost_per_channel": budget_status["budget_alerts"]["default_daily"][
+                    "current_usage_usd"
+                ]
+                / 3,
+                "budget_utilization": f"{(budget_status['budget_alerts']['default_daily']['current_usage_usd'] / 10.0) * 100:.1f}%",
             },
             "roi_projections": {
-                "campaign_investment": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
-                "projected_revenue_increase": (self.target_revenue - self.current_revenue) * 7,  # Week 1
+                "campaign_investment": budget_status["budget_alerts"]["default_daily"][
+                    "current_usage_usd"
+                ],
+                "projected_revenue_increase": (
+                    self.target_revenue - self.current_revenue
+                )
+                * 7,  # Week 1
                 "projected_roi": f"{((self.target_revenue - self.current_revenue) * 7 / budget_status['budget_alerts']['default_daily']['current_usage_usd']) * 100:.0f}%",
-                "payback_period": "< 1 day"
+                "payback_period": "< 1 day",
             },
             "optimization_achieved": [
                 "80% cost reduction vs all Opus 4 usage",
                 "Batch processing for content generation",
                 "Strategic model allocation for task complexity",
-                "Session memory for context reuse"
-            ]
+                "Session memory for context reuse",
+            ],
         }
 
     def _get_sendgrid_config(self) -> dict[str, Any]:
@@ -1176,25 +1225,25 @@ return qualifiedLeads;
             "sender_authentication": {
                 "from_email": "campaigns@your-company.com",
                 "from_name": "The Workflow Automation Team",
-                "reply_to": "support@your-company.com"
+                "reply_to": "support@your-company.com",
             },
             "template_settings": {
                 "subject_line": "🚀 Cut Your Operational Costs by 40% with AI-Powered Workflow Automation",
                 "preheader": "See how businesses save $47,000 annually with AI automation",
                 "tracking_enabled": True,
-                "analytics_enabled": True
+                "analytics_enabled": True,
             },
             "list_management": {
                 "segment": "qualified_saas_leads",
                 "suppression_groups": ["unsubscribed", "bounced", "invalid"],
-                "personalization": ["first_name", "company_name", "industry"]
+                "personalization": ["first_name", "company_name", "industry"],
             },
             "delivery_settings": {
                 "send_time_optimization": True,
                 "timezone_delivery": True,
                 "batch_size": 1000,
-                "delivery_window": "9 AM - 5 PM EST"
-            }
+                "delivery_window": "9 AM - 5 PM EST",
+            },
         }
 
     def _get_deployment_instructions(self) -> dict[str, list[str]]:
@@ -1207,7 +1256,7 @@ return qualifiedLeads;
                 "3. Import n8n workflow JSON file",
                 "4. Test email delivery with 10-lead sample",
                 "5. Schedule full deployment for Tuesday 10 AM EST",
-                "6. Monitor delivery rates and engagement metrics"
+                "6. Monitor delivery rates and engagement metrics",
             ],
             "linkedin_deployment": [
                 "1. Schedule 3 posts using LinkedIn native scheduler",
@@ -1215,7 +1264,7 @@ return qualifiedLeads;
                 "3. Include tracking UTM parameters in bio link",
                 "4. Monitor engagement and respond to comments within 2 hours",
                 "5. Share posts in relevant LinkedIn groups (with permission)",
-                "6. Track profile visits and connection requests"
+                "6. Track profile visits and connection requests",
             ],
             "blog_deployment": [
                 "1. Upload blog post to company website CMS",
@@ -1223,7 +1272,7 @@ return qualifiedLeads;
                 "3. Create social media promotion posts",
                 "4. Submit to relevant industry publications for syndication",
                 "5. Add internal links to related content",
-                "6. Set up conversion tracking for email signups"
+                "6. Set up conversion tracking for email signups",
             ],
             "tracking_setup": [
                 "1. Configure Google Analytics 4 events for campaign tracking",
@@ -1231,9 +1280,10 @@ return qualifiedLeads;
                 "3. Implement revenue attribution in CRM",
                 "4. Create real-time dashboard for campaign monitoring",
                 "5. Set up automated reporting for daily metrics",
-                "6. Configure alert thresholds for key performance indicators"
-            ]
+                "6. Configure alert thresholds for key performance indicators",
+            ],
         }
+
 
 # Mock classes for demonstration
 class MockTokenMonitor:
@@ -1241,34 +1291,50 @@ class MockTokenMonitor:
         self.usage_records = []
         self.current_usage = 0.0
 
-    def record_token_usage(self, model: str, input_tokens: int, output_tokens: int,
-                          task_type: str | None = None, session_id: str | None = None) -> float:
+    def record_token_usage(
+        self,
+        model: str,
+        input_tokens: int,
+        output_tokens: int,
+        task_type: str | None = None,
+        session_id: str | None = None,
+    ) -> float:
         # Calculate cost based on model pricing
         pricing = {
             "claude-3.5-sonnet": {"input": 3.0, "output": 15.0},
             "claude-3-haiku": {"input": 0.25, "output": 1.25},
-            "claude-3-opus": {"input": 15.0, "output": 75.0}
+            "claude-3-opus": {"input": 15.0, "output": 75.0},
         }
 
         model_pricing = pricing.get(model, pricing["claude-3.5-sonnet"])
-        cost = (input_tokens / 1_000_000) * model_pricing["input"] + (output_tokens / 1_000_000) * model_pricing["output"]
+        cost = (input_tokens / 1_000_000) * model_pricing["input"] + (
+            output_tokens / 1_000_000
+        ) * model_pricing["output"]
 
         self.current_usage += cost
-        self.usage_records.append({
-            "model": model,
-            "cost": cost,
-            "task_type": task_type,
-            "timestamp": datetime.now()
-        })
+        self.usage_records.append(
+            {
+                "model": model,
+                "cost": cost,
+                "task_type": task_type,
+                "timestamp": datetime.now(),
+            }
+        )
 
         return cost
 
-    def get_usage_summary(self, period_days: int = 1, task_type: str | None = None) -> dict[str, Any]:
-        filtered_records = [r for r in self.usage_records if r.get("task_type") == task_type] if task_type else self.usage_records
+    def get_usage_summary(
+        self, period_days: int = 1, task_type: str | None = None
+    ) -> dict[str, Any]:
+        filtered_records = (
+            [r for r in self.usage_records if r.get("task_type") == task_type]
+            if task_type
+            else self.usage_records
+        )
         return {
             "period_summary": {
                 "total_cost_usd": sum(r["cost"] for r in filtered_records),
-                "total_api_calls": len(filtered_records)
+                "total_api_calls": len(filtered_records),
             }
         }
 
@@ -1278,34 +1344,47 @@ class MockTokenMonitor:
                 "default_daily": {
                     "current_usage_usd": self.current_usage,
                     "threshold_usd": 10.0,
-                    "status": "NORMAL"
+                    "status": "NORMAL",
                 }
             }
         }
+
 
 class MockMemoryManager:
     def __init__(self):
         self.memory_nodes = {}
         self.session_contexts = {}
 
-    def create_session_context(self, user_id: str, project_name: str, initial_context: dict[str, Any] | None = None) -> str:
+    def create_session_context(
+        self,
+        user_id: str,
+        project_name: str,
+        initial_context: dict[str, Any] | None = None,
+    ) -> str:
         session_id = f"session_{int(time.time())}"
         self.session_contexts[session_id] = {
             "user_id": user_id,
             "project_name": project_name,
-            "context": initial_context or {}
+            "context": initial_context or {},
         }
         return session_id
 
-    def store_memory_node(self, category: str, content: dict[str, Any], tags: list[str] | None = None, importance_score: float = 1.0) -> str:
+    def store_memory_node(
+        self,
+        category: str,
+        content: dict[str, Any],
+        tags: list[str] | None = None,
+        importance_score: float = 1.0,
+    ) -> str:
         node_id = f"node_{len(self.memory_nodes)}"
         self.memory_nodes[node_id] = {
             "category": category,
             "content": content,
             "tags": tags or [],
-            "importance_score": importance_score
+            "importance_score": importance_score,
         }
         return node_id
+
 
 class MockSerpAPIClient:
     async def concurrent_market_research(self, keywords: list[str]) -> dict[str, Any]:
@@ -1315,27 +1394,28 @@ class MockSerpAPIClient:
                 "total_organic_results": len(keywords) * 25,
                 "trending_keywords": keywords[:3],
                 "content_themes": ["engagement", "roi", "automation"],
-                "market_sentiment": {"sentiment_score": 0.72}
+                "market_sentiment": {"sentiment_score": 0.72},
             },
             "performance_metrics": {
                 "total_queries": len(keywords),
                 "execution_time": 0.3,
-                "queries_per_second": len(keywords) / 0.3
-            }
+                "queries_per_second": len(keywords) / 0.3,
+            },
         }
+
 
 # Main execution function
 async def launch_multi_channel_campaign(
-    email_campaign_file: str = "./data/email_campaigns/workflow_efficiency_campaign_20250606_175008.md"
+    email_campaign_file: str = "./data/email_campaigns/workflow_efficiency_campaign_20250606_175008.md",
 ) -> dict[str, Any]:
     """Launch comprehensive multi-channel acquisition campaign"""
 
     generator = MultiChannelCampaignGenerator()
 
     return await generator.launch_campaign(
-        email_campaign_file=email_campaign_file,
-        user_id="cmo_multichannel"
+        email_campaign_file=email_campaign_file, user_id="cmo_multichannel"
     )
+
 
 if __name__ == "__main__":
     result = asyncio.run(launch_multi_channel_campaign())

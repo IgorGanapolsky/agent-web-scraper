@@ -26,7 +26,7 @@ class CFORevenuePipeline:
         self,
         source: dagger.Directory,
         registry_url: str = "registry.digitalocean.com/igorganapolsky",
-        target_env: str = "production"
+        target_env: str = "production",
     ) -> str:
         """
         Build and deploy CFO revenue pipeline with parallel optimization.
@@ -41,7 +41,7 @@ class CFORevenuePipeline:
             self._build_frontend_service(source),
             self._build_batch_processor(source),
             self._build_token_monitor(source),
-            return_exceptions=True
+            return_exceptions=True,
         )
 
         # Deploy services in parallel
@@ -50,7 +50,7 @@ class CFORevenuePipeline:
             self._deploy_service(build_tasks[1], "cfo-frontend", registry_url),
             self._deploy_service(build_tasks[2], "batch-processor", registry_url),
             self._deploy_service(build_tasks[3], "token-monitor", registry_url),
-            return_exceptions=True
+            return_exceptions=True,
         )
 
         return f"CFO Revenue Pipeline deployed: {len([r for r in deployment_results if not isinstance(r, Exception)])} services active"
@@ -67,13 +67,18 @@ class CFORevenuePipeline:
             .with_exec(["pip", "install", "-r", "requirements.txt"])
             .with_exec(["pip", "install", "-e", "."])
             .with_exposed_port(8000)
-            .with_exec([
-                "uvicorn",
-                "app.web.app:app",
-                "--host", "0.0.0.0",
-                "--port", "8000",
-                "--workers", "4"
-            ])
+            .with_exec(
+                [
+                    "uvicorn",
+                    "app.web.app:app",
+                    "--host",
+                    "0.0.0.0",
+                    "--port",
+                    "8000",
+                    "--workers",
+                    "4",
+                ]
+            )
         )
 
     @function
@@ -103,13 +108,16 @@ class CFORevenuePipeline:
             .with_exec(["pip", "install", "-r", "requirements.txt"])
             .with_exec(["pip", "install", "redis", "celery"])
             .with_exposed_port(5555)
-            .with_exec([
-                "celery",
-                "-A", "app.core.batch_api_optimizer",
-                "worker",
-                "--loglevel=info",
-                "--concurrency=10"
-            ])
+            .with_exec(
+                [
+                    "celery",
+                    "-A",
+                    "app.core.batch_api_optimizer",
+                    "worker",
+                    "--loglevel=info",
+                    "--concurrency=10",
+                ]
+            )
         )
 
     @function
@@ -123,20 +131,22 @@ class CFORevenuePipeline:
             .with_workdir("/app")
             .with_exec(["pip", "install", "-r", "requirements.txt"])
             .with_exposed_port(9090)
-            .with_exec([
-                "python",
-                "-m", "app.core.token_monitor",
-                "--budget", "10.0",
-                "--port", "9090"
-            ])
+            .with_exec(
+                [
+                    "python",
+                    "-m",
+                    "app.core.token_monitor",
+                    "--budget",
+                    "10.0",
+                    "--port",
+                    "9090",
+                ]
+            )
         )
 
     @function
     async def _deploy_service(
-        self,
-        container: Container,
-        service_name: str,
-        registry_url: str
+        self, container: Container, service_name: str, registry_url: str
     ) -> str:
         """Deploy individual service to container registry"""
 
@@ -164,10 +174,34 @@ class CFORevenuePipeline:
 
         # Parallel performance tests
         test_results = await asyncio.gather(
-            test_container.with_exec(["python", "-m", "pytest", "tests/performance/test_api_latency.py", "-v"]).stdout(),
-            test_container.with_exec(["python", "-m", "pytest", "tests/performance/test_batch_optimization.py", "-v"]).stdout(),
-            test_container.with_exec(["python", "-m", "pytest", "tests/performance/test_token_efficiency.py", "-v"]).stdout(),
-            return_exceptions=True
+            test_container.with_exec(
+                [
+                    "python",
+                    "-m",
+                    "pytest",
+                    "tests/performance/test_api_latency.py",
+                    "-v",
+                ]
+            ).stdout(),
+            test_container.with_exec(
+                [
+                    "python",
+                    "-m",
+                    "pytest",
+                    "tests/performance/test_batch_optimization.py",
+                    "-v",
+                ]
+            ).stdout(),
+            test_container.with_exec(
+                [
+                    "python",
+                    "-m",
+                    "pytest",
+                    "tests/performance/test_token_efficiency.py",
+                    "-v",
+                ]
+            ).stdout(),
+            return_exceptions=True,
         )
 
         return f"Performance tests completed: {len([r for r in test_results if not isinstance(r, Exception)])} passed"
@@ -180,9 +214,11 @@ class CFORevenuePipeline:
             dag.container()
             .from_("python:3.11-slim")
             .with_exec(["pip", "install", "prometheus-client", "requests"])
-            .with_exec([
-                "python", "-c",
-                """
+            .with_exec(
+                [
+                    "python",
+                    "-c",
+                    """
 import time
 import requests
 from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
@@ -204,17 +240,16 @@ print('Current Usage: $3.47 (34.7%)')
 print('Execution Time: 0.847s (<1s target MET)')
 print('Efficiency Score: 92.5%')
 print('Status: OPTIMAL')
-                """
-            ])
+                """,
+                ]
+            )
         )
 
         return await monitor_container.stdout()
 
     @function
     async def deploy_enterprise_stack(
-        self,
-        source: dagger.Directory,
-        environment: str = "production"
+        self, source: dagger.Directory, environment: str = "production"
     ) -> list[str]:
         """
         Deploy complete enterprise stack with parallel orchestration.
@@ -238,14 +273,11 @@ print('Status: OPTIMAL')
 
         # Execute all deployments in parallel
         all_results = await asyncio.gather(
-            *infrastructure_tasks,
-            *application_tasks,
-            return_exceptions=True
+            *infrastructure_tasks, *application_tasks, return_exceptions=True
         )
 
         successful_deployments = [
-            result for result in all_results
-            if not isinstance(result, Exception)
+            result for result in all_results if not isinstance(result, Exception)
         ]
 
         return successful_deployments

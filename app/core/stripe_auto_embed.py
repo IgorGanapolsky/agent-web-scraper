@@ -26,45 +26,45 @@ class StripeAutoEmbed:
                 "body": "Get instant access to our AI-powered market intelligence platform. Join 500+ SaaS founders scaling to $1M+ ARR.",
                 "cta": "[Start Free Trial - No Credit Card Required](https://saasgrowthdispatch.com/trial)",
                 "pricing_hint": "Plans start at $29/month • 14-day free trial • Cancel anytime",
-                "placement": "top"
+                "placement": "top",
             },
             "substack_post": {
                 "header": "📈 **Exclusive for SaaS Growth Dispatch Readers**",
                 "body": "Transform insights into revenue with our AI market intelligence platform. Real SaaS founders, real results.",
                 "cta": "[Claim Your Free Trial](https://saasgrowthdispatch.com/trial?utm_source=substack&utm_medium=post)",
                 "pricing_hint": "💡 *Special: First 100 readers get 30% off first month*",
-                "placement": "top_and_bottom"
+                "placement": "top_and_bottom",
             },
             "outbound_email": {
                 "header": "P.S. Before you go...",
                 "body": "I built an AI system that finds profitable SaaS opportunities automatically. It's how I discovered the insights I just shared with you.",
                 "cta": "[See it in action (free trial)](https://saasgrowthdispatch.com/trial?utm_source=email&utm_medium=outreach)",
                 "pricing_hint": "No credit card • 5-minute setup • Cancel anytime",
-                "placement": "bottom"
+                "placement": "bottom",
             },
             "blog_post": {
                 "header": "🎯 **Want More Insights Like This?**",
                 "body": "Our AI platform delivers 10x more market intelligence daily. Join SaaS founders scaling from $0 to $1M+ ARR.",
                 "cta": "[Start Your Free Trial](https://saasgrowthdispatch.com/trial?utm_source=blog&utm_medium=content)",
                 "pricing_hint": "✨ *No credit card required • Full access for 14 days*",
-                "placement": "middle_and_bottom"
-            }
+                "placement": "middle_and_bottom",
+            },
         }
 
         # A/B test variations
         self.ab_variations = {
             "urgency": {
                 "header": "⏰ **Limited Time: Free Market Intelligence**",
-                "body": "Only 50 spots left for our premium SaaS intelligence platform. Don't miss the opportunities your competitors are finding."
+                "body": "Only 50 spots left for our premium SaaS intelligence platform. Don't miss the opportunities your competitors are finding.",
             },
             "social_proof": {
                 "header": "✅ **Trusted by 500+ SaaS Founders**",
-                "body": "Join founders like @username who scaled from $10K to $100K MRR using our market intelligence."
+                "body": "Join founders like @username who scaled from $10K to $100K MRR using our market intelligence.",
             },
             "value_focused": {
                 "header": "💰 **Turn Market Data Into Revenue**",
-                "body": "Our AI finds $10K+ opportunities daily. See what you're missing."
-            }
+                "body": "Our AI finds $10K+ opportunities daily. See what you're missing.",
+            },
         }
 
         logger.info("Stripe Auto-Embed system initialized")
@@ -76,8 +76,7 @@ class StripeAutoEmbed:
 
         # Create embedded pitch
         pitch_block = self._create_pitch_block(
-            template,
-            utm_params={"source": "lead_magnet", "medium": magnet_type}
+            template, utm_params={"source": "lead_magnet", "medium": magnet_type}
         )
 
         # Embed at top of content
@@ -99,13 +98,13 @@ class StripeAutoEmbed:
         top_pitch = self._create_pitch_block(
             template,
             utm_params={"source": "substack", "medium": "post_top"},
-            variation="social_proof"
+            variation="social_proof",
         )
 
         bottom_pitch = self._create_pitch_block(
             template,
             utm_params={"source": "substack", "medium": "post_bottom"},
-            variation="value_focused"
+            variation="value_focused",
         )
 
         # Embed at top and bottom
@@ -118,7 +117,9 @@ class StripeAutoEmbed:
 
         return embedded_post
 
-    def embed_in_outbound_email(self, email_content: str, recipient_type: str = "prospect") -> str:
+    def embed_in_outbound_email(
+        self, email_content: str, recipient_type: str = "prospect"
+    ) -> str:
         """Auto-embed Stripe pitch in outbound emails"""
 
         template = self.pitch_templates["outbound_email"]
@@ -126,8 +127,12 @@ class StripeAutoEmbed:
         # Create subtle bottom pitch
         pitch_block = self._create_pitch_block(
             template,
-            utm_params={"source": "email", "medium": "outreach", "content": recipient_type},
-            style="subtle"
+            utm_params={
+                "source": "email",
+                "medium": "outreach",
+                "content": recipient_type,
+            },
+            style="subtle",
         )
 
         # Embed at bottom of email
@@ -153,13 +158,13 @@ class StripeAutoEmbed:
         middle_pitch = self._create_pitch_block(
             template,
             utm_params={"source": "blog", "medium": "content_middle"},
-            style="inline"
+            style="inline",
         )
 
         bottom_pitch = self._create_pitch_block(
             template,
             utm_params={"source": "blog", "medium": "content_bottom"},
-            variation="urgency"
+            variation="urgency",
         )
 
         # Insert pitches
@@ -173,8 +178,13 @@ class StripeAutoEmbed:
 
         return embedded_content
 
-    def _create_pitch_block(self, template: dict, utm_params: dict,
-                           variation: str | None = None, style: str = "standard") -> str:
+    def _create_pitch_block(
+        self,
+        template: dict,
+        utm_params: dict,
+        variation: str | None = None,
+        style: str = "standard",
+    ) -> str:
         """Create formatted pitch block"""
 
         # Use variation if specified
@@ -207,7 +217,7 @@ class StripeAutoEmbed:
             "content_id": content_id,
             "content_length": content_length,
             "pitch_embedded": True,
-            "utm_tracking": True
+            "utm_tracking": True,
         }
 
         # Store in session memory
@@ -215,7 +225,7 @@ class StripeAutoEmbed:
             category="stripe_embeddings",
             content=embedding_data,
             tags=["auto_embed", content_type, "revenue_optimization"],
-            importance_score=0.8
+            importance_score=0.8,
         )
 
     def generate_embed_analytics(self) -> dict:
@@ -223,7 +233,8 @@ class StripeAutoEmbed:
 
         # Get all embedding data from memory
         embedding_nodes = [
-            node for node in self.memory.memory_nodes.values()
+            node
+            for node in self.memory.memory_nodes.values()
             if node.category == "stripe_embeddings"
         ]
 
@@ -232,7 +243,7 @@ class StripeAutoEmbed:
             "embeddings_by_type": {},
             "average_content_length": 0,
             "recent_embeddings": [],
-            "optimization_recommendations": []
+            "optimization_recommendations": [],
         }
 
         if embedding_nodes:
@@ -247,14 +258,18 @@ class StripeAutoEmbed:
                 type_counts[content_type] = type_counts.get(content_type, 0) + 1
                 total_length += content.get("content_length", 0)
 
-                analytics["recent_embeddings"].append({
-                    "type": content_type,
-                    "id": content.get("content_id", ""),
-                    "timestamp": content.get("timestamp", "")
-                })
+                analytics["recent_embeddings"].append(
+                    {
+                        "type": content_type,
+                        "id": content.get("content_id", ""),
+                        "timestamp": content.get("timestamp", ""),
+                    }
+                )
 
             analytics["embeddings_by_type"] = type_counts
-            analytics["average_content_length"] = total_length / len(embedding_nodes[-10:])
+            analytics["average_content_length"] = total_length / len(
+                embedding_nodes[-10:]
+            )
 
             # Generate recommendations
             if type_counts.get("outbound_email", 0) < 5:
@@ -278,7 +293,7 @@ class StripeAutoEmbed:
                     "subject_lines": [
                         "Quick question about {company}'s growth strategy",
                         "Market opportunity for {company} - 2 minutes?",
-                        "Found something interesting for {industry} companies"
+                        "Found something interesting for {industry} companies",
                     ],
                     "body_template": """Hi {name},
 
@@ -297,13 +312,13 @@ Worth a 5-minute conversation?
 
 Best,
 Igor""",
-                    "auto_embed": True
+                    "auto_embed": True,
                 },
                 "follow_up": {
                     "subject_lines": [
                         "Following up on {company}'s market opportunities",
                         "Those {industry} insights I mentioned",
-                        "Quick update on {topic}"
+                        "Quick update on {topic}",
                     ],
                     "body_template": """Hi {name},
 
@@ -319,37 +334,37 @@ Interested in seeing more?
 
 Best,
 Igor""",
-                    "auto_embed": True
-                }
+                    "auto_embed": True,
+                },
             },
             "substack_templates": {
                 "market_analysis": {
                     "title_format": "Market Analysis: {topic} - Week of {date}",
                     "intro_template": "This week's market analysis reveals {key_insight}. Here's what SaaS founders need to know:",
                     "auto_embed": True,
-                    "embed_frequency": "every_post"
+                    "embed_frequency": "every_post",
                 },
                 "opportunity_spotlight": {
                     "title_format": "Opportunity Spotlight: {niche} ({size} market)",
                     "intro_template": "Our AI discovered a high-potential opportunity in {niche}. Here's the complete analysis:",
                     "auto_embed": True,
-                    "embed_frequency": "every_post"
-                }
+                    "embed_frequency": "every_post",
+                },
             },
             "lead_magnet_templates": {
                 "market_report": {
                     "title_format": "The {industry} Market Report - {month} {year}",
                     "description": "Comprehensive analysis of {industry} market opportunities, pain points, and revenue potential.",
                     "auto_embed": True,
-                    "embed_style": "prominent"
+                    "embed_style": "prominent",
                 },
                 "opportunity_guide": {
                     "title_format": "10 Untapped Opportunities in {industry}",
                     "description": "AI-discovered market opportunities with validated demand and low competition.",
                     "auto_embed": True,
-                    "embed_style": "prominent"
-                }
-            }
+                    "embed_style": "prominent",
+                },
+            },
         }
 
         # Store templates in memory
@@ -357,7 +372,7 @@ Igor""",
             category="auto_embed_templates",
             content=templates,
             tags=["templates", "auto_embed", "revenue_optimization"],
-            importance_score=1.0
+            importance_score=1.0,
         )
 
         return templates
@@ -394,7 +409,9 @@ SaaS founders should focus on..."""
 
 The data shows that 73% of SaaS companies are focusing on the wrong market segments..."""
 
-    embedded_post = embed_system.embed_in_substack_post(sample_post, "Weekly SaaS Insights")
+    embedded_post = embed_system.embed_in_substack_post(
+        sample_post, "Weekly SaaS Insights"
+    )
     print("📝 Substack Post with Embedded Pitch:")
     print(embedded_post[:200] + "...")
     print()
@@ -411,7 +428,9 @@ Worth a quick conversation?
 Best,
 Igor"""
 
-    embedded_email = embed_system.embed_in_outbound_email(sample_email, "hr_tech_prospect")
+    embedded_email = embed_system.embed_in_outbound_email(
+        sample_email, "hr_tech_prospect"
+    )
     print("📧 Outbound Email with Embedded Pitch:")
     print(embedded_email)
     print()

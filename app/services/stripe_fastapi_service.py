@@ -33,6 +33,7 @@ router = APIRouter(prefix="/api/v1/stripe", tags=["stripe-enterprise"])
 
 class SubscriptionRequest(BaseModel):
     """Enterprise subscription creation request"""
+
     customer_email: str = Field(..., description="Customer email")
     customer_name: str = Field(..., description="Customer name")
     company_name: str = Field(..., description="Company name")
@@ -43,6 +44,7 @@ class SubscriptionRequest(BaseModel):
 
 class WebhookData(BaseModel):
     """Stripe webhook event data"""
+
     id: str
     type: str
     data: dict[str, Any]
@@ -55,9 +57,21 @@ class StripeSupabaseService:
     def __init__(self):
         self.db_pool = None
         self.subscription_plans = {
-            "starter": {"price_monthly": 9900, "price_yearly": 99900, "features": ["10K API calls", "Basic support"]},
-            "professional": {"price_monthly": 19900, "price_yearly": 199900, "features": ["100K API calls", "Priority support"]},
-            "enterprise": {"price_monthly": 49900, "price_yearly": 499900, "features": ["Unlimited API calls", "24/7 support"]}
+            "starter": {
+                "price_monthly": 9900,
+                "price_yearly": 99900,
+                "features": ["10K API calls", "Basic support"],
+            },
+            "professional": {
+                "price_monthly": 19900,
+                "price_yearly": 199900,
+                "features": ["100K API calls", "Priority support"],
+            },
+            "enterprise": {
+                "price_monthly": 49900,
+                "price_yearly": 499900,
+                "features": ["Unlimited API calls", "24/7 support"],
+            },
         }
 
     async def init_db_pool(self):
@@ -70,7 +84,7 @@ class StripeSupabaseService:
                 password=os.getenv("SUPABASE_DB_PASSWORD"),
                 port=5432,
                 min_size=5,
-                max_size=20
+                max_size=20,
             )
 
     async def create_subscription(self, request: SubscriptionRequest) -> dict[str, Any]:
@@ -86,14 +100,14 @@ class StripeSupabaseService:
                 email=request.customer_email,
                 name=request.customer_name,
                 company=request.company_name,
-                metadata=request.metadata or {}
+                metadata=request.metadata or {},
             )
 
             # Create subscription with trial
             subscription = await self._create_stripe_subscription(
                 customer_id=customer.id,
                 plan_id=request.plan_id,
-                trial_days=request.trial_days
+                trial_days=request.trial_days,
             )
 
             # Store in Supabase
@@ -101,7 +115,9 @@ class StripeSupabaseService:
 
             execution_time = time.time() - start_time
 
-            logger.info(f"Subscription created: {subscription.id} in {execution_time:.3f}s")
+            logger.info(
+                f"Subscription created: {subscription.id} in {execution_time:.3f}s"
+            )
 
             return {
                 "success": True,
@@ -109,14 +125,16 @@ class StripeSupabaseService:
                 "customer_id": customer.id,
                 "trial_end": subscription.trial_end,
                 "status": subscription.status,
-                "execution_time": execution_time
+                "execution_time": execution_time,
             }
 
         except Exception as e:
             logger.error(f"Subscription creation failed: {e}")
             raise HTTPException(status_code=500, detail=str(e))
 
-    async def _create_stripe_customer(self, email: str, name: str, company: str, metadata: dict) -> stripe.Customer:
+    async def _create_stripe_customer(
+        self, email: str, name: str, company: str, metadata: dict
+    ) -> stripe.Customer:
         """Create Stripe customer with enterprise metadata"""
 
         # Check for existing customer
@@ -132,11 +150,13 @@ class StripeSupabaseService:
                 "company": company,
                 "signup_source": "fastapi_enterprise",
                 "created_via": "automation_platform",
-                **metadata
-            }
+                **metadata,
+            },
         )
 
-    async def _create_stripe_subscription(self, customer_id: str, plan_id: str, trial_days: int) -> stripe.Subscription:
+    async def _create_stripe_subscription(
+        self, customer_id: str, plan_id: str, trial_days: int
+    ) -> stripe.Subscription:
         """Create Stripe subscription with trial"""
 
         plan = self.subscription_plans.get(plan_id)
@@ -154,9 +174,13 @@ class StripeSupabaseService:
             trial_end=trial_end,
             metadata={
                 "plan_id": plan_id,
-                "api_limit": "unlimited" if plan_id == "enterprise" else f"{10 if plan_id == 'starter' else 100}K",
-                "created_via": "fastapi_automation"
-            }
+                "api_limit": (
+                    "unlimited"
+                    if plan_id == "enterprise"
+                    else f"{10 if plan_id == 'starter' else 100}K"
+                ),
+                "created_via": "fastapi_automation",
+            },
         )
 
     async def _ensure_price_exists(self, plan_id: str, amount: int) -> str:
@@ -173,7 +197,7 @@ class StripeSupabaseService:
         product = stripe.Product.create(
             name=f"Enterprise {plan_id.title()} Plan",
             description=f"Enterprise automation platform - {plan_id} tier",
-            metadata={"plan_id": plan_id}
+            metadata={"plan_id": plan_id},
         )
 
         # Create price
@@ -182,18 +206,23 @@ class StripeSupabaseService:
             currency="usd",
             recurring={"interval": "month"},
             product=product.id,
-            lookup_key=f"{plan_id}_monthly"
+            lookup_key=f"{plan_id}_monthly",
         )
 
         return price.id
 
-    async def _store_subscription_data(self, customer: stripe.Customer, subscription: stripe.Subscription, request: SubscriptionRequest):
+    async def _store_subscription_data(
+        self,
+        customer: stripe.Customer,
+        subscription: stripe.Subscription,
+        request: SubscriptionRequest,
+    ):
         """Store subscription data in Supabase"""
 
         async with self.db_pool.acquire() as conn:
-
             # Store customer
-            await conn.execute("""
+            await conn.execute(
+                """
                 INSERT INTO customers (
                     stripe_customer_id, email, name, company_name,
                     created_at, metadata
@@ -202,11 +231,18 @@ class StripeSupabaseService:
                     email = EXCLUDED.email,
                     name = EXCLUDED.name,
                     updated_at = NOW()
-            """, customer.id, request.customer_email, request.customer_name,
-                request.company_name, datetime.now(), json.dumps(request.metadata or {}))
+            """,
+                customer.id,
+                request.customer_email,
+                request.customer_name,
+                request.company_name,
+                datetime.now(),
+                json.dumps(request.metadata or {}),
+            )
 
             # Store subscription
-            await conn.execute("""
+            await conn.execute(
+                """
                 INSERT INTO subscriptions (
                     stripe_subscription_id, stripe_customer_id, plan_id,
                     status, trial_end, current_period_end, created_at
@@ -214,11 +250,19 @@ class StripeSupabaseService:
                 ON CONFLICT (stripe_subscription_id) DO UPDATE SET
                     status = EXCLUDED.status,
                     updated_at = NOW()
-            """, subscription.id, customer.id, request.plan_id,
+            """,
+                subscription.id,
+                customer.id,
+                request.plan_id,
                 subscription.status,
-                datetime.fromtimestamp(subscription.trial_end) if subscription.trial_end else None,
+                (
+                    datetime.fromtimestamp(subscription.trial_end)
+                    if subscription.trial_end
+                    else None
+                ),
                 datetime.fromtimestamp(subscription.current_period_end),
-                datetime.now())
+                datetime.now(),
+            )
 
     async def process_webhook(self, webhook_data: WebhookData) -> dict[str, Any]:
         """Process Stripe webhook with Supabase storage"""
@@ -255,7 +299,7 @@ class StripeSupabaseService:
                 "success": True,
                 "event_type": event_type,
                 "execution_time": execution_time,
-                "result": result
+                "result": result,
             }
 
         except Exception as e:
@@ -266,16 +310,24 @@ class StripeSupabaseService:
         """Store webhook event in Supabase for audit trail"""
 
         async with self.db_pool.acquire() as conn:
-            await conn.execute("""
+            await conn.execute(
+                """
                 INSERT INTO webhook_events (
                     stripe_event_id, event_type, event_data,
                     processed_at, created_at
                 ) VALUES ($1, $2, $3, $4, $5)
                 ON CONFLICT (stripe_event_id) DO NOTHING
-            """, webhook_data.id, webhook_data.type, json.dumps(webhook_data.data),
-                datetime.now(), datetime.fromtimestamp(webhook_data.created))
+            """,
+                webhook_data.id,
+                webhook_data.type,
+                json.dumps(webhook_data.data),
+                datetime.now(),
+                datetime.fromtimestamp(webhook_data.created),
+            )
 
-    async def _handle_subscription_created(self, subscription_data: dict) -> dict[str, Any]:
+    async def _handle_subscription_created(
+        self, subscription_data: dict
+    ) -> dict[str, Any]:
         """Handle new subscription creation"""
 
         subscription_id = subscription_data["id"]
@@ -283,38 +335,44 @@ class StripeSupabaseService:
 
         # Update subscription status in database
         async with self.db_pool.acquire() as conn:
-            await conn.execute("""
+            await conn.execute(
+                """
                 UPDATE subscriptions
                 SET status = $1, updated_at = NOW()
                 WHERE stripe_subscription_id = $2
-            """, subscription_data["status"], subscription_id)
+            """,
+                subscription_data["status"],
+                subscription_id,
+            )
 
         return {
             "action": "subscription_created",
             "subscription_id": subscription_id,
-            "customer_id": customer_id
+            "customer_id": customer_id,
         }
 
-    async def _handle_subscription_updated(self, subscription_data: dict) -> dict[str, Any]:
+    async def _handle_subscription_updated(
+        self, subscription_data: dict
+    ) -> dict[str, Any]:
         """Handle subscription updates"""
 
         subscription_id = subscription_data["id"]
 
         async with self.db_pool.acquire() as conn:
-            await conn.execute("""
+            await conn.execute(
+                """
                 UPDATE subscriptions
                 SET status = $1,
                     current_period_end = $2,
                     updated_at = NOW()
                 WHERE stripe_subscription_id = $3
-            """, subscription_data["status"],
+            """,
+                subscription_data["status"],
                 datetime.fromtimestamp(subscription_data["current_period_end"]),
-                subscription_id)
+                subscription_id,
+            )
 
-        return {
-            "action": "subscription_updated",
-            "subscription_id": subscription_id
-        }
+        return {"action": "subscription_updated", "subscription_id": subscription_id}
 
     async def _handle_payment_succeeded(self, invoice_data: dict) -> dict[str, Any]:
         """Handle successful payment"""
@@ -324,18 +382,25 @@ class StripeSupabaseService:
 
         # Store transaction
         async with self.db_pool.acquire() as conn:
-            await conn.execute("""
+            await conn.execute(
+                """
                 INSERT INTO transactions (
                     stripe_invoice_id, stripe_subscription_id, amount_usd,
                     status, processed_at, created_at
                 ) VALUES ($1, $2, $3, $4, $5, $6)
-            """, invoice_data["id"], subscription_id, amount,
-                "succeeded", datetime.now(), datetime.now())
+            """,
+                invoice_data["id"],
+                subscription_id,
+                amount,
+                "succeeded",
+                datetime.now(),
+                datetime.now(),
+            )
 
         return {
             "action": "payment_succeeded",
             "subscription_id": subscription_id,
-            "amount": amount
+            "amount": amount,
         }
 
     async def _handle_payment_failed(self, invoice_data: dict) -> dict[str, Any]:
@@ -346,18 +411,25 @@ class StripeSupabaseService:
 
         # Store failed transaction
         async with self.db_pool.acquire() as conn:
-            await conn.execute("""
+            await conn.execute(
+                """
                 INSERT INTO transactions (
                     stripe_invoice_id, stripe_subscription_id, amount_usd,
                     status, processed_at, created_at
                 ) VALUES ($1, $2, $3, $4, $5, $6)
-            """, invoice_data["id"], subscription_id, amount,
-                "failed", datetime.now(), datetime.now())
+            """,
+                invoice_data["id"],
+                subscription_id,
+                amount,
+                "failed",
+                datetime.now(),
+                datetime.now(),
+            )
 
         return {
             "action": "payment_failed",
             "subscription_id": subscription_id,
-            "amount": amount
+            "amount": amount,
         }
 
     async def simulate_transactions(self, count: int = 1000) -> dict[str, Any]:
@@ -374,13 +446,20 @@ class StripeSupabaseService:
                     # Simulate transaction data
                     amount = 99.00 + (i % 3) * 100  # Vary amounts: $99, $199, $299
 
-                    await conn.execute("""
+                    await conn.execute(
+                        """
                         INSERT INTO transactions (
                             stripe_invoice_id, stripe_subscription_id, amount_usd,
                             status, processed_at, created_at
                         ) VALUES ($1, $2, $3, $4, $5, $6)
-                    """, f"test_inv_{i}", f"test_sub_{i % 100}", amount,
-                        "succeeded", datetime.now(), datetime.now())
+                    """,
+                        f"test_inv_{i}",
+                        f"test_sub_{i % 100}",
+                        amount,
+                        "succeeded",
+                        datetime.now(),
+                        datetime.now(),
+                    )
 
                     successful_transactions += 1
 
@@ -391,7 +470,9 @@ class StripeSupabaseService:
                 "transactions_created": successful_transactions,
                 "execution_time": execution_time,
                 "throughput": count / execution_time,
-                "average_time_per_transaction": execution_time / count * 1000  # milliseconds
+                "average_time_per_transaction": execution_time
+                / count
+                * 1000,  # milliseconds
             }
 
         except Exception as e:
@@ -399,7 +480,7 @@ class StripeSupabaseService:
             return {
                 "success": False,
                 "error": str(e),
-                "transactions_created": successful_transactions
+                "transactions_created": successful_transactions,
             }
 
 
@@ -420,7 +501,7 @@ def get_stripe_service() -> StripeSupabaseService:
 async def create_subscription_endpoint(
     request: SubscriptionRequest,
     background_tasks: BackgroundTasks,
-    service: StripeSupabaseService = Depends(get_stripe_service)
+    service: StripeSupabaseService = Depends(get_stripe_service),
 ) -> JSONResponse:
     """Create enterprise subscription with Supabase storage"""
 
@@ -430,8 +511,7 @@ async def create_subscription_endpoint(
 
 @router.post("/webhook")
 async def stripe_webhook_endpoint(
-    request: Request,
-    service: StripeSupabaseService = Depends(get_stripe_service)
+    request: Request, service: StripeSupabaseService = Depends(get_stripe_service)
 ) -> JSONResponse:
     """Handle Stripe webhooks with Supabase storage"""
 
@@ -447,10 +527,7 @@ async def stripe_webhook_endpoint(
         raise HTTPException(status_code=400, detail="Invalid signature")
 
     webhook_data = WebhookData(
-        id=event["id"],
-        type=event["type"],
-        data=event["data"],
-        created=event["created"]
+        id=event["id"], type=event["type"], data=event["data"], created=event["created"]
     )
 
     result = await service.process_webhook(webhook_data)
@@ -459,8 +536,7 @@ async def stripe_webhook_endpoint(
 
 @router.post("/simulate-transactions")
 async def simulate_transactions_endpoint(
-    count: int = 1000,
-    service: StripeSupabaseService = Depends(get_stripe_service)
+    count: int = 1000, service: StripeSupabaseService = Depends(get_stripe_service)
 ) -> JSONResponse:
     """Simulate transactions for testing"""
 
@@ -472,8 +548,10 @@ async def simulate_transactions_endpoint(
 async def health_check() -> JSONResponse:
     """Health check endpoint"""
 
-    return JSONResponse(content={
-        "status": "healthy",
-        "service": "stripe-fastapi-supabase",
-        "timestamp": datetime.now().isoformat()
-    })
+    return JSONResponse(
+        content={
+            "status": "healthy",
+            "service": "stripe-fastapi-supabase",
+            "timestamp": datetime.now().isoformat(),
+        }
+    )

@@ -24,7 +24,9 @@ from app.config.logging import get_logger
 logger = get_logger(__name__)
 
 # Initialize services
-supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_ANON_KEY"))
+supabase: Client = create_client(
+    os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_ANON_KEY")
+)
 security = HTTPBearer()
 
 router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
@@ -32,6 +34,7 @@ router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
 
 class APIKeyRequest(BaseModel):
     """API key creation request"""
+
     name: str = Field(..., description="API key name")
     permissions: list[str] = Field(..., description="Permission scopes")
     rate_limit: int = Field(default=1000, description="Requests per hour")
@@ -40,12 +43,14 @@ class APIKeyRequest(BaseModel):
 
 class TokenRequest(BaseModel):
     """JWT token request"""
+
     email: str = Field(..., description="User email")
     password: str = Field(..., description="User password")
 
 
 class RateLimitConfig(BaseModel):
     """Rate limiting configuration"""
+
     requests_per_minute: int = 100
     requests_per_hour: int = 1000
     requests_per_day: int = 10000
@@ -66,14 +71,28 @@ class JWTAPIManager:
             "viewer": ["read:basic"],
             "user": ["read:basic", "write:basic", "api:standard"],
             "admin": ["read:all", "write:all", "api:advanced", "manage:team"],
-            "owner": ["read:all", "write:all", "api:unlimited", "manage:all", "billing:full"]
+            "owner": [
+                "read:all",
+                "write:all",
+                "api:unlimited",
+                "manage:all",
+                "billing:full",
+            ],
         }
 
         # Rate limits by subscription tier
         self.tier_limits = {
-            "starter": RateLimitConfig(requests_per_minute=50, requests_per_hour=500, requests_per_day=5000),
-            "professional": RateLimitConfig(requests_per_minute=200, requests_per_hour=2000, requests_per_day=20000),
-            "enterprise": RateLimitConfig(requests_per_minute=1000, requests_per_hour=10000, requests_per_day=100000)
+            "starter": RateLimitConfig(
+                requests_per_minute=50, requests_per_hour=500, requests_per_day=5000
+            ),
+            "professional": RateLimitConfig(
+                requests_per_minute=200, requests_per_hour=2000, requests_per_day=20000
+            ),
+            "enterprise": RateLimitConfig(
+                requests_per_minute=1000,
+                requests_per_hour=10000,
+                requests_per_day=100000,
+            ),
         }
 
     async def init_services(self):
@@ -86,16 +105,17 @@ class JWTAPIManager:
                 password=os.getenv("SUPABASE_DB_PASSWORD"),
                 port=5432,
                 min_size=5,
-                max_size=20
+                max_size=20,
             )
 
         if not self.redis_client:
             self.redis_client = await aioredis.from_url(
-                os.getenv("REDIS_URL", "redis://localhost:6379"),
-                decode_responses=True
+                os.getenv("REDIS_URL", "redis://localhost:6379"), decode_responses=True
             )
 
-    async def create_api_key(self, user_id: str, request: APIKeyRequest) -> dict[str, Any]:
+    async def create_api_key(
+        self, user_id: str, request: APIKeyRequest
+    ) -> dict[str, Any]:
         """Create new API key with permissions and rate limits"""
 
         await self.init_services()
@@ -103,6 +123,7 @@ class JWTAPIManager:
         try:
             # Generate secure API key
             import secrets
+
             api_key = f"ak_{secrets.token_urlsafe(32)}"
             api_key_hash = bcrypt.hashpw(api_key.encode(), bcrypt.gensalt()).decode()
 
@@ -113,13 +134,22 @@ class JWTAPIManager:
 
             # Store in database
             async with self.db_pool.acquire() as conn:
-                await conn.execute("""
+                await conn.execute(
+                    """
                     INSERT INTO api_keys (
                         user_id, name, key_hash, permissions, rate_limit,
                         expires_at, created_at, is_active
                     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-                """, user_id, request.name, api_key_hash, json.dumps(request.permissions),
-                    request.rate_limit, expires_at, datetime.now(), True)
+                """,
+                    user_id,
+                    request.name,
+                    api_key_hash,
+                    json.dumps(request.permissions),
+                    request.rate_limit,
+                    expires_at,
+                    datetime.now(),
+                    True,
+                )
 
             return {
                 "success": True,
@@ -128,7 +158,7 @@ class JWTAPIManager:
                 "permissions": request.permissions,
                 "rate_limit": request.rate_limit,
                 "expires_at": expires_at.isoformat() if expires_at else None,
-                "created_at": datetime.now().isoformat()
+                "created_at": datetime.now().isoformat(),
             }
 
         except Exception as e:
@@ -139,7 +169,9 @@ class JWTAPIManager:
         """Authenticate and validate JWT token"""
 
         try:
-            payload = jwt.decode(token, self.jwt_secret, algorithms=[self.jwt_algorithm])
+            payload = jwt.decode(
+                token, self.jwt_secret, algorithms=[self.jwt_algorithm]
+            )
 
             # Check expiration
             if payload.get("exp", 0) < time.time():
@@ -153,12 +185,15 @@ class JWTAPIManager:
             await self.init_services()
 
             async with self.db_pool.acquire() as conn:
-                user_data = await conn.fetchrow("""
+                user_data = await conn.fetchrow(
+                    """
                     SELECT u.*, s.plan_id
                     FROM users u
                     LEFT JOIN subscriptions s ON u.stripe_customer_id = s.stripe_customer_id
                     WHERE u.id = $1 AND u.is_active = true
-                """, user_id)
+                """,
+                    user_id,
+                )
 
                 if not user_data:
                     raise HTTPException(status_code=401, detail="User not found")
@@ -168,7 +203,7 @@ class JWTAPIManager:
                 "email": user_data["email"],
                 "role": user_data["role"],
                 "plan_id": user_data["plan_id"],
-                "permissions": self.permission_levels.get(user_data["role"], [])
+                "permissions": self.permission_levels.get(user_data["role"], []),
             }
 
         except jwt.InvalidTokenError:
@@ -187,21 +222,26 @@ class JWTAPIManager:
 
         try:
             async with self.db_pool.acquire() as conn:
-                api_keys = await conn.fetch("""
+                api_keys = await conn.fetch(
+                    """
                     SELECT ak.*, u.email, u.role, s.plan_id
                     FROM api_keys ak
                     JOIN users u ON ak.user_id = u.id
                     LEFT JOIN subscriptions s ON u.stripe_customer_id = s.stripe_customer_id
                     WHERE ak.is_active = true
                     AND (ak.expires_at IS NULL OR ak.expires_at > NOW())
-                """)
+                """
+                )
 
                 for key_data in api_keys:
                     if bcrypt.checkpw(api_key.encode(), key_data["key_hash"].encode()):
                         # Update last used
-                        await conn.execute("""
+                        await conn.execute(
+                            """
                             UPDATE api_keys SET last_used_at = NOW() WHERE id = $1
-                        """, key_data["id"])
+                        """,
+                            key_data["id"],
+                        )
 
                         return {
                             "user_id": key_data["user_id"],
@@ -210,7 +250,7 @@ class JWTAPIManager:
                             "plan_id": key_data["plan_id"],
                             "api_key_id": key_data["id"],
                             "permissions": json.loads(key_data["permissions"]),
-                            "rate_limit": key_data["rate_limit"]
+                            "rate_limit": key_data["rate_limit"],
                         }
 
                 raise HTTPException(status_code=401, detail="Invalid API key")
@@ -273,7 +313,7 @@ class JWTAPIManager:
             "email": email,
             "role": role,
             "iat": int(time.time()),
-            "exp": int(time.time()) + (self.jwt_expiration_hours * 3600)
+            "exp": int(time.time()) + (self.jwt_expiration_hours * 3600),
         }
 
         return jwt.encode(payload, self.jwt_secret, algorithm=self.jwt_algorithm)
@@ -285,28 +325,34 @@ class JWTAPIManager:
 
         try:
             async with self.db_pool.acquire() as conn:
-                user_data = await conn.fetchrow("""
+                user_data = await conn.fetchrow(
+                    """
                     SELECT * FROM users WHERE email = $1 AND is_active = true
-                """, request.email)
+                """,
+                    request.email,
+                )
 
                 if not user_data:
                     raise HTTPException(status_code=401, detail="Invalid credentials")
 
                 # Verify password
-                if not bcrypt.checkpw(request.password.encode(), user_data["password_hash"].encode()):
+                if not bcrypt.checkpw(
+                    request.password.encode(), user_data["password_hash"].encode()
+                ):
                     raise HTTPException(status_code=401, detail="Invalid credentials")
 
                 # Generate JWT token
                 token = await self.generate_jwt_token(
-                    str(user_data["id"]),
-                    user_data["email"],
-                    user_data["role"]
+                    str(user_data["id"]), user_data["email"], user_data["role"]
                 )
 
                 # Update last login
-                await conn.execute("""
+                await conn.execute(
+                    """
                     UPDATE users SET last_login_at = NOW() WHERE id = $1
-                """, user_data["id"])
+                """,
+                    user_data["id"],
+                )
 
                 return {
                     "success": True,
@@ -316,8 +362,8 @@ class JWTAPIManager:
                     "user": {
                         "id": str(user_data["id"]),
                         "email": user_data["email"],
-                        "role": user_data["role"]
-                    }
+                        "role": user_data["role"],
+                    },
                 }
 
         except HTTPException:
@@ -342,7 +388,7 @@ def get_jwt_manager() -> JWTAPIManager:
 # Dependency for JWT authentication
 async def verify_jwt_token(
     credentials: HTTPAuthorizationCredentials = Security(security),
-    jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
+    jwt_manager: JWTAPIManager = Depends(get_jwt_manager),
 ) -> dict[str, Any]:
     """Verify JWT token and return user info"""
 
@@ -351,8 +397,7 @@ async def verify_jwt_token(
 
     # Check rate limit
     rate_limit_ok = await jwt_manager.check_rate_limit(
-        user_info["user_id"],
-        user_info.get("plan_id", "starter")
+        user_info["user_id"], user_info.get("plan_id", "starter")
     )
 
     if not rate_limit_ok:
@@ -363,8 +408,7 @@ async def verify_jwt_token(
 
 # Dependency for API key authentication
 async def verify_api_key(
-    request: Request,
-    jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
+    request: Request, jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
 ) -> dict[str, Any]:
     """Verify API key and return user info"""
 
@@ -376,8 +420,7 @@ async def verify_api_key(
 
     # Check rate limit
     rate_limit_ok = await jwt_manager.check_rate_limit(
-        user_info["user_id"],
-        user_info.get("plan_id", "starter")
+        user_info["user_id"], user_info.get("plan_id", "starter")
     )
 
     if not rate_limit_ok:
@@ -389,8 +432,7 @@ async def verify_api_key(
 # FastAPI endpoints
 @router.post("/login")
 async def login_endpoint(
-    request: TokenRequest,
-    jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
+    request: TokenRequest, jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
 ) -> JSONResponse:
     """User login with JWT token generation"""
 
@@ -402,7 +444,7 @@ async def login_endpoint(
 async def create_api_key_endpoint(
     request: APIKeyRequest,
     user_info: dict[str, Any] = Depends(verify_jwt_token),
-    jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
+    jwt_manager: JWTAPIManager = Depends(get_jwt_manager),
 ) -> JSONResponse:
     """Create new API key"""
 
@@ -412,34 +454,30 @@ async def create_api_key_endpoint(
 
 @router.get("/verify")
 async def verify_token_endpoint(
-    user_info: dict[str, Any] = Depends(verify_jwt_token)
+    user_info: dict[str, Any] = Depends(verify_jwt_token),
 ) -> JSONResponse:
     """Verify JWT token"""
 
-    return JSONResponse(content={
-        "success": True,
-        "user": user_info,
-        "message": "Token valid"
-    })
+    return JSONResponse(
+        content={"success": True, "user": user_info, "message": "Token valid"}
+    )
 
 
 @router.get("/verify-api-key")
 async def verify_api_key_endpoint(
-    user_info: dict[str, Any] = Depends(verify_api_key)
+    user_info: dict[str, Any] = Depends(verify_api_key),
 ) -> JSONResponse:
     """Verify API key"""
 
-    return JSONResponse(content={
-        "success": True,
-        "user": user_info,
-        "message": "API key valid"
-    })
+    return JSONResponse(
+        content={"success": True, "user": user_info, "message": "API key valid"}
+    )
 
 
 @router.get("/rate-limit-status")
 async def rate_limit_status_endpoint(
     user_info: dict[str, Any] = Depends(verify_jwt_token),
-    jwt_manager: JWTAPIManager = Depends(get_jwt_manager)
+    jwt_manager: JWTAPIManager = Depends(get_jwt_manager),
 ) -> JSONResponse:
     """Get current rate limit status"""
 
@@ -450,26 +488,43 @@ async def rate_limit_status_endpoint(
     await jwt_manager.init_services()
     current_time = int(time.time())
 
-    minute_count = await jwt_manager.redis_client.get(f"rate_limit:{user_info['user_id']}:minute:{current_time // 60}") or 0
-    hour_count = await jwt_manager.redis_client.get(f"rate_limit:{user_info['user_id']}:hour:{current_time // 3600}") or 0
-    day_count = await jwt_manager.redis_client.get(f"rate_limit:{user_info['user_id']}:day:{current_time // 86400}") or 0
+    minute_count = (
+        await jwt_manager.redis_client.get(
+            f"rate_limit:{user_info['user_id']}:minute:{current_time // 60}"
+        )
+        or 0
+    )
+    hour_count = (
+        await jwt_manager.redis_client.get(
+            f"rate_limit:{user_info['user_id']}:hour:{current_time // 3600}"
+        )
+        or 0
+    )
+    day_count = (
+        await jwt_manager.redis_client.get(
+            f"rate_limit:{user_info['user_id']}:day:{current_time // 86400}"
+        )
+        or 0
+    )
 
-    return JSONResponse(content={
-        "success": True,
-        "plan": plan_id,
-        "limits": {
-            "requests_per_minute": limits.requests_per_minute,
-            "requests_per_hour": limits.requests_per_hour,
-            "requests_per_day": limits.requests_per_day
-        },
-        "current_usage": {
-            "minute": int(minute_count),
-            "hour": int(hour_count),
-            "day": int(day_count)
-        },
-        "remaining": {
-            "minute": max(0, limits.requests_per_minute - int(minute_count)),
-            "hour": max(0, limits.requests_per_hour - int(hour_count)),
-            "day": max(0, limits.requests_per_day - int(day_count))
+    return JSONResponse(
+        content={
+            "success": True,
+            "plan": plan_id,
+            "limits": {
+                "requests_per_minute": limits.requests_per_minute,
+                "requests_per_hour": limits.requests_per_hour,
+                "requests_per_day": limits.requests_per_day,
+            },
+            "current_usage": {
+                "minute": int(minute_count),
+                "hour": int(hour_count),
+                "day": int(day_count),
+            },
+            "remaining": {
+                "minute": max(0, limits.requests_per_minute - int(minute_count)),
+                "hour": max(0, limits.requests_per_hour - int(hour_count)),
+                "day": max(0, limits.requests_per_day - int(day_count)),
+            },
         }
-    })
+    )

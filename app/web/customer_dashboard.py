@@ -4,7 +4,6 @@ Customer Dashboard for SaaS Growth Dispatch
 Complete customer experience with auth, usage, and billing
 """
 
-
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPBearer
@@ -35,8 +34,8 @@ async def dashboard_home(request: Request):
             "request": request,
             "customer": {"email": "demo@saasgrowthdispatch.com"},
             "usage": {"total_requests": 1250, "monthly_limit": 25000},
-            "subscription": {"tier": "pro", "status": "active"}
-        }
+            "subscription": {"tier": "pro", "status": "active"},
+        },
     )
 
 
@@ -46,5 +45,5 @@ async def test_auth():
 
     return {
         "message": "Dashboard ready for customer authentication",
-        "status": "success"
+        "status": "success",
     }

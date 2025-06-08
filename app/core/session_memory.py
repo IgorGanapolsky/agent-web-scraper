@@ -74,7 +74,10 @@ class SessionMemoryManager:
         self._load_persistent_memory()
 
     def create_session_context(
-        self, user_id: str, project_name: str, initial_context: dict[str, Any] | None = None
+        self,
+        user_id: str,
+        project_name: str,
+        initial_context: dict[str, Any] | None = None,
     ) -> str:
         """Create new session context with continuity from previous sessions."""
         session_id = self._generate_session_id(user_id, project_name)
@@ -243,20 +246,36 @@ class LegacyMemoryAdapter:
             "monthly_costs": 2000,
             "pricing_tiers": {"starter": 19, "basic": 29, "pro": 99, "enterprise": 299},
             "conversion_rates": {"trial_signup": 0.15, "trial_to_paid": 0.25},
-            "customer_acquisition_cost": 50
+            "customer_acquisition_cost": 50,
         }
 
-    def track_token_usage(self, operation: str, input_tokens: int, output_tokens: int, cost: float, model: str):
+    def track_token_usage(
+        self,
+        operation: str,
+        input_tokens: int,
+        output_tokens: int,
+        cost: float,
+        model: str,
+    ):
         """Track token usage"""
         # For now, just log it
-        logger.info(f"Token usage: {operation} - {input_tokens} in, {output_tokens} out, ${cost:.2f} ({model})")
+        logger.info(
+            f"Token usage: {operation} - {input_tokens} in, {output_tokens} out, ${cost:.2f} ({model})"
+        )
 
-    def store(self, key: str, value: Any, category: str = "general", priority: int = 1, expires_in_days: int | None = None):
+    def store(
+        self,
+        key: str,
+        value: Any,
+        category: str = "general",
+        priority: int = 1,
+        expires_in_days: int | None = None,
+    ):
         """Store data in memory"""
         self.memory_manager.store_memory_node(
             category=category,
             content={key: value},
-            importance_score=1.0 if priority == 1 else 0.5
+            importance_score=1.0 if priority == 1 else 0.5,
         )
 
 

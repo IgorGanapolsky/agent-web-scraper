@@ -31,9 +31,11 @@ class ConcurrentSerpAPIClient:
         # SerpAPI pricing: $50/1000 searches = $0.05 per search
         self.cost_per_search = 0.05
 
-    async def competitive_pricing_analysis(self,
-                                         competitors: list[str] | None = None,
-                                         search_terms: list[str] | None = None) -> dict:
+    async def competitive_pricing_analysis(
+        self,
+        competitors: list[str] | None = None,
+        search_terms: list[str] | None = None,
+    ) -> dict:
         """Perform concurrent competitive pricing analysis"""
 
         if not competitors:
@@ -47,10 +49,12 @@ class ConcurrentSerpAPIClient:
                 "hootsuite pricing",
                 "buffer pricing",
                 "later pricing",
-                "socialbakers pricing"
+                "socialbakers pricing",
             ]
 
-        logger.info(f"Starting concurrent pricing analysis for {len(competitors)} competitors")
+        logger.info(
+            f"Starting concurrent pricing analysis for {len(competitors)} competitors"
+        )
         start_time = time.time()
 
         # Execute concurrent searches
@@ -69,8 +73,8 @@ class ConcurrentSerpAPIClient:
             metadata={
                 "searches_performed": len(competitors),
                 "execution_time": execution_time,
-                "session_id": self.session_id
-            }
+                "session_id": self.session_id,
+            },
         )
 
         return {
@@ -79,10 +83,10 @@ class ConcurrentSerpAPIClient:
                 "competitors_analyzed": len(competitors),
                 "execution_time_seconds": round(execution_time, 2),
                 "total_cost": total_cost,
-                "session_id": self.session_id
+                "session_id": self.session_id,
             },
             "pricing_analysis": pricing_analysis,
-            "raw_search_results": search_results
+            "raw_search_results": search_results,
         }
 
     async def concurrent_searches(self, search_terms: list[str]) -> list[dict]:
@@ -103,17 +107,21 @@ class ConcurrentSerpAPIClient:
         for i, result in enumerate(results):
             if isinstance(result, Exception):
                 logger.error(f"Search failed for '{search_terms[i]}': {result}")
-                processed_results.append({
-                    "search_term": search_terms[i],
-                    "error": str(result),
-                    "status": "failed"
-                })
+                processed_results.append(
+                    {
+                        "search_term": search_terms[i],
+                        "error": str(result),
+                        "status": "failed",
+                    }
+                )
             else:
-                processed_results.append({
-                    "search_term": search_terms[i],
-                    "data": result,
-                    "status": "success"
-                })
+                processed_results.append(
+                    {
+                        "search_term": search_terms[i],
+                        "data": result,
+                        "status": "success",
+                    }
+                )
 
         return processed_results
 
@@ -130,7 +138,7 @@ class ConcurrentSerpAPIClient:
             "api_key": self.api_key,
             "num": 10,
             "gl": "us",
-            "hl": "en"
+            "hl": "en",
         }
 
         try:
@@ -156,44 +164,44 @@ class ConcurrentSerpAPIClient:
                     {"name": "Lite", "price": 99, "billing": "monthly"},
                     {"name": "Standard", "price": 179, "billing": "monthly"},
                     {"name": "Advanced", "price": 399, "billing": "monthly"},
-                    {"name": "Agency", "price": 999, "billing": "monthly"}
+                    {"name": "Agency", "price": 999, "billing": "monthly"},
                 ]
             },
             "semrush pricing": {
                 "plans": [
                     {"name": "Pro", "price": 119, "billing": "monthly"},
                     {"name": "Guru", "price": 229, "billing": "monthly"},
-                    {"name": "Business", "price": 449, "billing": "monthly"}
+                    {"name": "Business", "price": 449, "billing": "monthly"},
                 ]
             },
             "similarweb pricing": {
                 "plans": [
                     {"name": "Starter", "price": 167, "billing": "monthly"},
                     {"name": "Professional", "price": 333, "billing": "monthly"},
-                    {"name": "Team", "price": 583, "billing": "monthly"}
+                    {"name": "Team", "price": 583, "billing": "monthly"},
                 ]
             },
             "buzzsumo pricing": {
                 "plans": [
                     {"name": "Pro", "price": 99, "billing": "monthly"},
                     {"name": "Plus", "price": 179, "billing": "monthly"},
-                    {"name": "Large", "price": 299, "billing": "monthly"}
+                    {"name": "Large", "price": 299, "billing": "monthly"},
                 ]
             },
             "brandwatch pricing": {
                 "plans": [
                     {"name": "Essentials", "price": 108, "billing": "monthly"},
                     {"name": "Premium", "price": 249, "billing": "monthly"},
-                    {"name": "Enterprise", "price": 400, "billing": "monthly"}
+                    {"name": "Enterprise", "price": 400, "billing": "monthly"},
                 ]
-            }
+            },
         }
 
         default_pricing = {
             "plans": [
                 {"name": "Basic", "price": 49, "billing": "monthly"},
                 {"name": "Pro", "price": 99, "billing": "monthly"},
-                {"name": "Enterprise", "price": 199, "billing": "monthly"}
+                {"name": "Enterprise", "price": 199, "billing": "monthly"},
             ]
         }
 
@@ -201,16 +209,16 @@ class ConcurrentSerpAPIClient:
             "search_metadata": {
                 "query": query,
                 "status": "Success",
-                "created_at": datetime.now().isoformat()
+                "created_at": datetime.now().isoformat(),
             },
             "pricing_info": pricing_data.get(query, default_pricing),
             "organic_results": [
                 {
                     "title": f"{query.replace(' pricing', '').title()} - Pricing Plans",
                     "link": f"https://{query.replace(' pricing', '').replace(' ', '')}.com/pricing",
-                    "snippet": f"Choose the perfect {query.replace(' pricing', '')} plan for your business needs."
+                    "snippet": f"Choose the perfect {query.replace(' pricing', '')} plan for your business needs.",
                 }
-            ]
+            ],
         }
 
     async def process_pricing_data(self, search_results: list[dict]) -> dict:
@@ -226,12 +234,16 @@ class ConcurrentSerpAPIClient:
 
                 if "plans" in pricing_info:
                     for plan in pricing_info["plans"]:
-                        pricing_summary.append({
-                            "competitor": result["search_term"].replace(" pricing", ""),
-                            "plan_name": plan.get("name", ""),
-                            "price": plan.get("price", 0),
-                            "billing": plan.get("billing", "monthly")
-                        })
+                        pricing_summary.append(
+                            {
+                                "competitor": result["search_term"].replace(
+                                    " pricing", ""
+                                ),
+                                "plan_name": plan.get("name", ""),
+                                "price": plan.get("price", 0),
+                                "billing": plan.get("billing", "monthly"),
+                            }
+                        )
 
         # Claude analysis (using Sonnet for cost efficiency)
         analysis_prompt = f"""
@@ -260,7 +272,7 @@ class ConcurrentSerpAPIClient:
             input_tokens=len(analysis_prompt) // 4,
             output_tokens=500,
             session_id=self.session_id,
-            task_type="competitive_pricing_analysis"
+            task_type="competitive_pricing_analysis",
         )
 
         # Mock Claude response for now (in production, would call Claude API)
@@ -268,36 +280,36 @@ class ConcurrentSerpAPIClient:
             "market_positioning": {
                 "competitive_advantage": "Well-positioned in mid-market segment",
                 "pricing_percentile": "25th percentile (competitive)",
-                "value_proposition": "Strong value for AI-powered insights"
+                "value_proposition": "Strong value for AI-powered insights",
             },
             "pricing_recommendations": {
                 "basic_tier": {
                     "current": 29,
                     "recommended": 39,
-                    "rationale": "15% increase still competitive vs $49-99 market range"
+                    "rationale": "15% increase still competitive vs $49-99 market range",
                 },
                 "pro_tier": {
                     "current": 99,
                     "recommended": 119,
-                    "rationale": "Align with market leaders like Ahrefs/SEMrush"
+                    "rationale": "Align with market leaders like Ahrefs/SEMrush",
                 },
                 "enterprise_tier": {
                     "current": 299,
                     "recommended": 349,
-                    "rationale": "Premium positioning vs $400+ enterprise tools"
-                }
+                    "rationale": "Premium positioning vs $400+ enterprise tools",
+                },
             },
             "cac_impact": {
                 "price_increase_elasticity": -0.15,
                 "revenue_optimization": 0.22,
-                "customer_lifetime_value_increase": 0.17
+                "customer_lifetime_value_increase": 0.17,
             },
             "implementation_strategy": [
                 "Gradual price increase over 90 days",
                 "Grandfather existing customers for 6 months",
                 "Enhanced feature set to justify premium pricing",
-                "Market positioning as AI-first solution"
-            ]
+                "Market positioning as AI-first solution",
+            ],
         }
 
         return {
@@ -307,8 +319,8 @@ class ConcurrentSerpAPIClient:
             "recommendations_summary": {
                 "revenue_increase_potential": "22% through pricing optimization",
                 "market_position": "Competitive with room for premium pricing",
-                "implementation_timeline": "90 days for full rollout"
-            }
+                "implementation_timeline": "90 days for full rollout",
+            },
         }
 
 
@@ -331,7 +343,7 @@ class CostOptimizationDashboard:
             "daily_runs": 6,  # Every 4 hours
             "daily_cost": 0.072 * 6,
             "monthly_projection": 0.072 * 6 * 30,
-            "target_monthly_savings": 210.0
+            "target_monthly_savings": 210.0,
         }
 
         # Budget utilization
@@ -345,15 +357,17 @@ class CostOptimizationDashboard:
                 "daily_budget": daily_budget,
                 "daily_spend": daily_spend,
                 "utilization_pct": budget_utilization,
-                "remaining_budget": daily_budget - daily_spend
+                "remaining_budget": daily_budget - daily_spend,
             },
             "optimization_metrics": {
                 "cost_per_run": pipeline_costs["current_run_cost"],
-                "efficiency_rating": "Optimal" if budget_utilization < 85 else "Monitor",
+                "efficiency_rating": (
+                    "Optimal" if budget_utilization < 85 else "Monitor"
+                ),
                 "monthly_savings_target": pipeline_costs["target_monthly_savings"],
-                "actual_monthly_projection": pipeline_costs["monthly_projection"]
+                "actual_monthly_projection": pipeline_costs["monthly_projection"],
             },
-            "recommendations": self.token_monitor.get_optimization_recommendations()
+            "recommendations": self.token_monitor.get_optimization_recommendations(),
         }
 
 
@@ -371,9 +385,13 @@ async def main():
     # Monitor costs
     cost_monitoring = dashboard.monitor_pipeline_costs()
 
-    print(f"✅ Analysis complete in {analysis_result['analysis_metadata']['execution_time_seconds']}s")
+    print(
+        f"✅ Analysis complete in {analysis_result['analysis_metadata']['execution_time_seconds']}s"
+    )
     print(f"💰 Total cost: ${analysis_result['analysis_metadata']['total_cost']:.3f}")
-    print(f"📊 Competitors analyzed: {analysis_result['analysis_metadata']['competitors_analyzed']}")
+    print(
+        f"📊 Competitors analyzed: {analysis_result['analysis_metadata']['competitors_analyzed']}"
+    )
 
     # Export results
     os.makedirs("data", exist_ok=True)

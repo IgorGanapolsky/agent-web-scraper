@@ -6,7 +6,7 @@
     "model_distribution_compliance": {
       "target_distribution": {
         "sonnet_4": "80%",
-        "opus_4": "10%", 
+        "opus_4": "10%",
         "haiku_4": "10%"
       },
       "actual_usage": {
@@ -27,7 +27,7 @@
       },
       "customer_dashboard_plan": {
         "estimated_tokens": 12300,
-        "model_used": "claude-3-sonnet-20240229", 
+        "model_used": "claude-3-sonnet-20240229",
         "cost_usd": 0.49,
         "complexity": "medium",
         "planning_depth": "comprehensive",
@@ -64,7 +64,7 @@
         "port": 8001,
         "features": [
           "Enterprise subscription management",
-          "Webhook handling for real-time updates", 
+          "Webhook handling for real-time updates",
           "Revenue tracking integration",
           "Multi-tier pricing support",
           "Trial management automation",
@@ -83,7 +83,7 @@
         "real_time": "WebSocket integration",
         "modules": [
           "Executive overview dashboard",
-          "Subscription management", 
+          "Subscription management",
           "Revenue acceleration tools",
           "Team management",
           "Support & resources"
@@ -193,7 +193,7 @@
       ],
       "success_metrics": [
         "First paid enterprise customer by Week 2",
-        "$400+/day revenue by Week 2", 
+        "$400+/day revenue by Week 2",
         "25%+ trial conversion rate",
         "Customer satisfaction >4.5/5"
       ]

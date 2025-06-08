@@ -12,7 +12,7 @@
       "execution_frequency": "every_4_hours",
       "pipeline_stages": [
         "ai_cost_optimization",
-        "customer_acquisition_modeling", 
+        "customer_acquisition_modeling",
         "revenue_forecasting",
         "roi_calculation"
       ],

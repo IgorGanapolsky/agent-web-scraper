@@ -38,7 +38,9 @@ class SubscriptionPlan(BaseModel):
     features: list[str] = Field(..., description="Plan features")
     api_requests_limit: int = Field(..., description="Monthly API requests limit")
     users_limit: int = Field(..., description="Maximum users")
-    priority_support: bool = Field(default=False, description="Priority support included")
+    priority_support: bool = Field(
+        default=False, description="Priority support included"
+    )
     sla_guarantee: Optional[str] = Field(None, description="SLA guarantee level")
 
 
@@ -49,9 +51,13 @@ class CreateSubscriptionRequest(BaseModel):
     customer_name: str = Field(..., description="Customer full name")
     company_name: str = Field(..., description="Company name")
     plan_id: str = Field(..., description="Selected subscription plan")
-    billing_cycle: str = Field(default="monthly", description="Billing cycle: monthly or yearly")
+    billing_cycle: str = Field(
+        default="monthly", description="Billing cycle: monthly or yearly"
+    )
     trial_days: int = Field(default=14, description="Trial period in days")
-    payment_method_id: Optional[str] = Field(None, description="Stripe payment method ID")
+    payment_method_id: Optional[str] = Field(
+        None, description="Stripe payment method ID"
+    )
     metadata: Optional[dict[str, Any]] = Field(None, description="Additional metadata")
 
 
@@ -103,14 +109,13 @@ class StripeEnterpriseService:
                     "Basic automation workflows",
                     "Email support",
                     "Standard SLA (99.5% uptime)",
-                    "5 team members"
+                    "5 team members",
                 ],
                 api_requests_limit=10000,
                 users_limit=5,
                 priority_support=False,
-                sla_guarantee="99.5%"
+                sla_guarantee="99.5%",
             ),
-
             "professional": SubscriptionPlan(
                 plan_id="professional",
                 name="Professional",
@@ -123,14 +128,13 @@ class StripeEnterpriseService:
                     "Enhanced SLA (99.9% uptime)",
                     "25 team members",
                     "Custom integrations",
-                    "Advanced analytics"
+                    "Advanced analytics",
                 ],
                 api_requests_limit=100000,
                 users_limit=25,
                 priority_support=True,
-                sla_guarantee="99.9%"
+                sla_guarantee="99.9%",
             ),
-
             "enterprise": SubscriptionPlan(
                 plan_id="enterprise",
                 name="Enterprise",
@@ -145,21 +149,19 @@ class StripeEnterpriseService:
                     "Custom development",
                     "White-label options",
                     "On-premise deployment",
-                    "Advanced security features"
+                    "Advanced security features",
                 ],
                 api_requests_limit=-1,  # Unlimited
                 users_limit=-1,  # Unlimited
                 priority_support=True,
-                sla_guarantee="99.99%"
-            )
+                sla_guarantee="99.99%",
+            ),
         }
 
         return plans
 
     async def create_enterprise_subscription(
-        self,
-        request: CreateSubscriptionRequest,
-        background_tasks: BackgroundTasks
+        self, request: CreateSubscriptionRequest, background_tasks: BackgroundTasks
     ) -> dict[str, Any]:
         """
         Create enterprise subscription with trial period and revenue tracking.
@@ -169,7 +171,9 @@ class StripeEnterpriseService:
         try:
             # Validate plan exists
             if request.plan_id not in self.subscription_plans:
-                raise HTTPException(status_code=400, detail=f"Invalid plan: {request.plan_id}")
+                raise HTTPException(
+                    status_code=400, detail=f"Invalid plan: {request.plan_id}"
+                )
 
             plan = self.subscription_plans[request.plan_id]
 
@@ -178,7 +182,7 @@ class StripeEnterpriseService:
                 email=request.customer_email,
                 name=request.customer_name,
                 company=request.company_name,
-                metadata=request.metadata or {}
+                metadata=request.metadata or {},
             )
 
             # Create subscription with trial
@@ -187,7 +191,7 @@ class StripeEnterpriseService:
                 plan=plan,
                 billing_cycle=request.billing_cycle,
                 trial_days=request.trial_days,
-                payment_method_id=request.payment_method_id
+                payment_method_id=request.payment_method_id,
             )
 
             # Track revenue impact in CFO pipeline
@@ -195,15 +199,19 @@ class StripeEnterpriseService:
                 self._track_subscription_revenue,
                 subscription_id=subscription.id,
                 plan_id=request.plan_id,
-                customer_email=request.customer_email
+                customer_email=request.customer_email,
             )
 
             execution_time = time.time() - start_time
 
             # Track API usage for CFO monitoring
-            cost = track_api_call("claude-3-sonnet-20240229", 1200, 800, "subscription_creation")
+            cost = track_api_call(
+                "claude-3-sonnet-20240229", 1200, 800, "subscription_creation"
+            )
 
-            logger.info(f"Enterprise subscription created: {subscription.id} in {execution_time:.3f}s")
+            logger.info(
+                f"Enterprise subscription created: {subscription.id} in {execution_time:.3f}s"
+            )
 
             return {
                 "success": True,
@@ -214,7 +222,7 @@ class StripeEnterpriseService:
                 "status": subscription.status,
                 "next_payment_date": subscription.current_period_end,
                 "execution_time": execution_time,
-                "api_cost": cost
+                "api_cost": cost,
             }
 
         except stripe.error.StripeError as e:
@@ -225,11 +233,7 @@ class StripeEnterpriseService:
             raise HTTPException(status_code=500, detail="Subscription creation failed")
 
     async def _create_or_get_customer(
-        self,
-        email: str,
-        name: str,
-        company: str,
-        metadata: dict[str, Any]
+        self, email: str, name: str, company: str, metadata: dict[str, Any]
     ) -> stripe.Customer:
         """Create or retrieve Stripe customer with enterprise metadata"""
 
@@ -247,14 +251,14 @@ class StripeEnterpriseService:
             "plan_type": "enterprise",
             "signup_source": "revenue_acceleration_pipeline",
             "created_via": "cfo_optimization_system",
-            **metadata
+            **metadata,
         }
 
         customer = stripe.Customer.create(
             email=email,
             name=name,
             description=f"Enterprise customer from {company}",
-            metadata=customer_metadata
+            metadata=customer_metadata,
         )
 
         logger.info(f"Created new enterprise customer: {customer.id}")
@@ -266,7 +270,7 @@ class StripeEnterpriseService:
         plan: SubscriptionPlan,
         billing_cycle: str,
         trial_days: int,
-        payment_method_id: Optional[str] = None
+        payment_method_id: Optional[str] = None,
     ) -> stripe.Subscription:
         """Create Stripe subscription with trial period"""
 
@@ -275,9 +279,7 @@ class StripeEnterpriseService:
 
         # Create price object if it doesn't exist
         price_id = await self._ensure_price_exists(
-            plan_id=plan.plan_id,
-            amount=price,
-            billing_cycle=billing_cycle
+            plan_id=plan.plan_id, amount=price, billing_cycle=billing_cycle
         )
 
         # Calculate trial end date
@@ -292,9 +294,9 @@ class StripeEnterpriseService:
                 "billing_cycle": billing_cycle,
                 "api_limit": str(plan.api_requests_limit),
                 "users_limit": str(plan.users_limit),
-                "created_via": "revenue_acceleration_pipeline"
+                "created_via": "revenue_acceleration_pipeline",
             },
-            "expand": ["latest_invoice.payment_intent"]
+            "expand": ["latest_invoice.payment_intent"],
         }
 
         # Add payment method if provided
@@ -306,10 +308,7 @@ class StripeEnterpriseService:
         return subscription
 
     async def _ensure_price_exists(
-        self,
-        plan_id: str,
-        amount: int,
-        billing_cycle: str
+        self, plan_id: str, amount: int, billing_cycle: str
     ) -> str:
         """Ensure Stripe price object exists for the plan"""
 
@@ -333,10 +332,7 @@ class StripeEnterpriseService:
             recurring={"interval": interval},
             product=product_id,
             lookup_key=price_lookup_key,
-            metadata={
-                "plan_id": plan_id,
-                "billing_cycle": billing_cycle
-            }
+            metadata={"plan_id": plan_id, "billing_cycle": billing_cycle},
         )
 
         return price.id
@@ -358,19 +354,13 @@ class StripeEnterpriseService:
         product = stripe.Product.create(
             name=f"Enterprise {plan.name} Plan",
             description=f"Enterprise automation platform - {plan.name} tier",
-            metadata={
-                "plan_id": plan_id,
-                "features": json.dumps(plan.features)
-            }
+            metadata={"plan_id": plan_id, "features": json.dumps(plan.features)},
         )
 
         return product.id
 
     async def _track_subscription_revenue(
-        self,
-        subscription_id: str,
-        plan_id: str,
-        customer_email: str
+        self, subscription_id: str, plan_id: str, customer_email: str
     ) -> None:
         """Track subscription in CFO revenue pipeline for analytics"""
 
@@ -388,13 +378,17 @@ class StripeEnterpriseService:
                 "monthly_revenue": monthly_revenue,
                 "annual_revenue": annual_revenue,
                 "revenue_type": "subscription",
-                "created_at": datetime.now().isoformat()
+                "created_at": datetime.now().isoformat(),
             }
 
             # Execute CFO pipeline to update revenue projections
-            result = await self.cfo_pipeline.execute_optimized_revenue_pipeline(revenue_context)
+            result = await self.cfo_pipeline.execute_optimized_revenue_pipeline(
+                revenue_context
+            )
 
-            logger.info(f"Revenue tracking completed for subscription {subscription_id}: {result.revenue_impact}")
+            logger.info(
+                f"Revenue tracking completed for subscription {subscription_id}: {result.revenue_impact}"
+            )
 
         except Exception as e:
             logger.error(f"Failed to track subscription revenue: {e}")
@@ -421,7 +415,7 @@ class StripeEnterpriseService:
                 "event_id": event.id,
                 "event_type": event.type,
                 "execution_time": execution_time,
-                "result": result
+                "result": result,
             }
 
         except Exception as e:
@@ -437,13 +431,15 @@ class StripeEnterpriseService:
         customer_id = subscription["customer"]
         plan_id = subscription["metadata"].get("plan_id")
 
-        logger.info(f"New subscription created: {subscription['id']} for customer {customer_id}")
+        logger.info(
+            f"New subscription created: {subscription['id']} for customer {customer_id}"
+        )
 
         return {
             "action": "subscription_created",
             "subscription_id": subscription["id"],
             "customer_id": customer_id,
-            "plan_id": plan_id
+            "plan_id": plan_id,
         }
 
     async def _handle_subscription_updated(self, event: WebhookEvent) -> dict[str, Any]:
@@ -457,10 +453,12 @@ class StripeEnterpriseService:
         return {
             "action": "subscription_updated",
             "subscription_id": subscription["id"],
-            "changes": previous_attributes
+            "changes": previous_attributes,
         }
 
-    async def _handle_subscription_cancelled(self, event: WebhookEvent) -> dict[str, Any]:
+    async def _handle_subscription_cancelled(
+        self, event: WebhookEvent
+    ) -> dict[str, Any]:
         """Handle subscription cancellation"""
 
         subscription = event.data["object"]
@@ -472,7 +470,7 @@ class StripeEnterpriseService:
 
         return {
             "action": "subscription_cancelled",
-            "subscription_id": subscription["id"]
+            "subscription_id": subscription["id"],
         }
 
     async def _handle_payment_succeeded(self, event: WebhookEvent) -> dict[str, Any]:
@@ -490,7 +488,7 @@ class StripeEnterpriseService:
         return {
             "action": "payment_succeeded",
             "subscription_id": subscription_id,
-            "amount": amount
+            "amount": amount,
         }
 
     async def _handle_payment_failed(self, event: WebhookEvent) -> dict[str, Any]:
@@ -504,10 +502,7 @@ class StripeEnterpriseService:
         # Trigger dunning management
         await self._handle_payment_failure(subscription_id)
 
-        return {
-            "action": "payment_failed",
-            "subscription_id": subscription_id
-        }
+        return {"action": "payment_failed", "subscription_id": subscription_id}
 
     async def _handle_trial_ending(self, event: WebhookEvent) -> dict[str, Any]:
         """Handle trial ending notification"""
@@ -523,7 +518,7 @@ class StripeEnterpriseService:
         return {
             "action": "trial_ending",
             "subscription_id": subscription["id"],
-            "customer_id": customer_id
+            "customer_id": customer_id,
         }
 
     async def _track_subscription_churn(self, subscription_id: str) -> None:
@@ -533,7 +528,7 @@ class StripeEnterpriseService:
             churn_context = {
                 "subscription_id": subscription_id,
                 "event_type": "churn",
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
             await self.cfo_pipeline.execute_optimized_revenue_pipeline(churn_context)
@@ -549,7 +544,7 @@ class StripeEnterpriseService:
                 "subscription_id": subscription_id,
                 "payment_amount": amount,
                 "event_type": "payment",
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
             await self.cfo_pipeline.execute_optimized_revenue_pipeline(revenue_context)
@@ -562,19 +557,25 @@ class StripeEnterpriseService:
 
         try:
             # Implement dunning logic here
-            logger.info(f"Initiating dunning management for subscription {subscription_id}")
+            logger.info(
+                f"Initiating dunning management for subscription {subscription_id}"
+            )
 
             # Could trigger email campaigns, grace periods, etc.
 
         except Exception as e:
             logger.error(f"Dunning management failed: {e}")
 
-    async def _optimize_trial_conversion(self, subscription_id: str, customer_id: str) -> None:
+    async def _optimize_trial_conversion(
+        self, subscription_id: str, customer_id: str
+    ) -> None:
         """Optimize trial-to-paid conversion"""
 
         try:
             # Trigger conversion optimization workflows
-            logger.info(f"Optimizing trial conversion for subscription {subscription_id}")
+            logger.info(
+                f"Optimizing trial conversion for subscription {subscription_id}"
+            )
 
             # Could trigger personalized emails, offers, demos, etc.
 
@@ -613,8 +614,10 @@ class StripeEnterpriseService:
                 "total_mrr": round(total_mrr, 2),
                 "total_arr": round(total_arr, 2),
                 "plan_distribution": plan_distribution,
-                "average_revenue_per_customer": round(total_mrr / max(len(subscriptions.data), 1), 2),
-                "updated_at": datetime.now().isoformat()
+                "average_revenue_per_customer": round(
+                    total_mrr / max(len(subscriptions.data), 1), 2
+                ),
+                "updated_at": datetime.now().isoformat(),
             }
 
         except Exception as e:
@@ -637,8 +640,7 @@ def get_stripe_enterprise_service() -> StripeEnterpriseService:
 # FastAPI route implementations
 @router.post("/create-subscription")
 async def create_enterprise_subscription_endpoint(
-    request: CreateSubscriptionRequest,
-    background_tasks: BackgroundTasks
+    request: CreateSubscriptionRequest, background_tasks: BackgroundTasks
 ) -> JSONResponse:
     """Create enterprise subscription with trial period"""
 
@@ -669,7 +671,7 @@ async def stripe_webhook_endpoint(request: Request) -> JSONResponse:
         type=event["type"],
         data=event["data"],
         created=event["created"],
-        livemode=event["livemode"]
+        livemode=event["livemode"],
     )
 
     service = get_stripe_enterprise_service()
@@ -683,7 +685,9 @@ async def get_subscription_plans() -> JSONResponse:
     """Get available enterprise subscription plans"""
 
     service = get_stripe_enterprise_service()
-    plans = {plan_id: plan.dict() for plan_id, plan in service.subscription_plans.items()}
+    plans = {
+        plan_id: plan.dict() for plan_id, plan in service.subscription_plans.items()
+    }
 
     return JSONResponse(content={"plans": plans})
 
@@ -702,9 +706,11 @@ async def get_revenue_analytics_endpoint() -> JSONResponse:
 async def health_check() -> JSONResponse:
     """Health check endpoint for the Stripe service"""
 
-    return JSONResponse(content={
-        "status": "healthy",
-        "service": "stripe-enterprise",
-        "port": 8001,
-        "timestamp": datetime.now().isoformat()
-    })
+    return JSONResponse(
+        content={
+            "status": "healthy",
+            "service": "stripe-enterprise",
+            "port": 8001,
+            "timestamp": datetime.now().isoformat(),
+        }
+    )

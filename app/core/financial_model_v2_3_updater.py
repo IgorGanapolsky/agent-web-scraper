@@ -25,21 +25,21 @@ class FinancialModelV23Updater:
 
         # Week 2 development costs (actual optimized costs)
         self.week2_development_costs = {
-            "stripe_integration": 0.045,      # $0.47 estimated → $0.045 actual (90.4% reduction)
-            "customer_dashboard": 0.084,      # $0.92 estimated → $0.084 actual (90.9% reduction)
-            "api_access_management": 0.032,   # $0.36 estimated → $0.032 actual (91.1% reduction)
-            "total_actual": 0.161,            # Total actual: $0.161
-            "total_estimated": 1.75,          # Total estimated: $1.75
-            "cost_reduction_achieved": 90.8   # 90.8% cost reduction
+            "stripe_integration": 0.045,  # $0.47 estimated → $0.045 actual (90.4% reduction)
+            "customer_dashboard": 0.084,  # $0.92 estimated → $0.084 actual (90.9% reduction)
+            "api_access_management": 0.032,  # $0.36 estimated → $0.032 actual (91.1% reduction)
+            "total_actual": 0.161,  # Total actual: $0.161
+            "total_estimated": 1.75,  # Total estimated: $1.75
+            "cost_reduction_achieved": 90.8,  # 90.8% cost reduction
         }
 
         # Week 2 revenue targets and progress
         self.week2_revenue_data = {
-            "daily_target": 600.0,            # $600/day target
-            "weekly_target": 4200.0,          # $600 × 7 days
-            "monthly_target": 18000.0,        # $600 × 30 days
-            "week1_baseline": 400.0,          # Week 1 baseline
-            "growth_rate": 0.5                # 50% growth from Week 1 to Week 2
+            "daily_target": 600.0,  # $600/day target
+            "weekly_target": 4200.0,  # $600 × 7 days
+            "monthly_target": 18000.0,  # $600 × 30 days
+            "week1_baseline": 400.0,  # Week 1 baseline
+            "growth_rate": 0.5,  # 50% growth from Week 1 to Week 2
         }
 
         # Previous model v2.2 baseline
@@ -48,7 +48,7 @@ class FinancialModelV23Updater:
             "break_even_months": 0.4,
             "total_development_cost": 34503,
             "monthly_operational_cost": 3650,
-            "ai_cost_monthly": 100
+            "ai_cost_monthly": 100,
         }
 
     def load_financial_model_v22(self) -> dict:
@@ -60,7 +60,7 @@ class FinancialModelV23Updater:
             input_tokens=800,
             output_tokens=400,
             session_id=self.session_id,
-            task_type="model_v22_loading"
+            task_type="model_v22_loading",
         )
 
         try:
@@ -81,16 +81,22 @@ class FinancialModelV23Updater:
             # Return baseline structure
             return {
                 "adjusted_metrics": {
-                    "recalculated_roi_12_months_pct": self.v22_baseline["roi_12_months_pct"],
-                    "recalculated_break_even_months": self.v22_baseline["break_even_months"]
+                    "recalculated_roi_12_months_pct": self.v22_baseline[
+                        "roi_12_months_pct"
+                    ],
+                    "recalculated_break_even_months": self.v22_baseline[
+                        "break_even_months"
+                    ],
                 },
                 "development_integration": {
                     "development_costs": {
                         "total_estimates": {
-                            "total_project_cost": self.v22_baseline["total_development_cost"]
+                            "total_project_cost": self.v22_baseline[
+                                "total_development_cost"
+                            ]
                         }
                     }
-                }
+                },
             }
 
         except Exception as e:
@@ -106,7 +112,7 @@ class FinancialModelV23Updater:
             input_tokens=2500,
             output_tokens=1800,
             session_id=self.session_id,
-            task_type="week2_cost_calculations"
+            task_type="week2_cost_calculations",
         )
 
         # Calculate development cost impact
@@ -114,23 +120,34 @@ class FinancialModelV23Updater:
         week2_additional_cost = self.week2_development_costs["total_actual"]
 
         # Updated total development investment
-        updated_development_cost = total_development_cost + (week2_additional_cost * 12)  # Annualized
+        updated_development_cost = total_development_cost + (
+            week2_additional_cost * 12
+        )  # Annualized
 
         # Cost efficiency analysis
         estimated_vs_actual = {
             "estimated_ai_cost": self.week2_development_costs["total_estimated"],
             "actual_ai_cost": self.week2_development_costs["total_actual"],
-            "cost_savings": self.week2_development_costs["total_estimated"] - self.week2_development_costs["total_actual"],
-            "efficiency_percentage": self.week2_development_costs["cost_reduction_achieved"],
-            "monthly_ai_budget_impact": (self.week2_development_costs["total_actual"] / self.v22_baseline["ai_cost_monthly"]) * 100
+            "cost_savings": self.week2_development_costs["total_estimated"]
+            - self.week2_development_costs["total_actual"],
+            "efficiency_percentage": self.week2_development_costs[
+                "cost_reduction_achieved"
+            ],
+            "monthly_ai_budget_impact": (
+                self.week2_development_costs["total_actual"]
+                / self.v22_baseline["ai_cost_monthly"]
+            )
+            * 100,
         }
 
         # Operational cost impact (with 50% reduction target met)
         operational_optimization = {
             "baseline_monthly_cost": self.v22_baseline["monthly_operational_cost"],
-            "week2_optimized_cost": self.v22_baseline["monthly_operational_cost"] * 0.5,  # 50% reduction
+            "week2_optimized_cost": self.v22_baseline["monthly_operational_cost"]
+            * 0.5,  # 50% reduction
             "monthly_savings": self.v22_baseline["monthly_operational_cost"] * 0.5,
-            "annual_savings": (self.v22_baseline["monthly_operational_cost"] * 0.5) * 12
+            "annual_savings": (self.v22_baseline["monthly_operational_cost"] * 0.5)
+            * 12,
         }
 
         return {
@@ -139,18 +156,30 @@ class FinancialModelV23Updater:
                     "original_total": total_development_cost,
                     "week2_addition": week2_additional_cost,
                     "updated_total": updated_development_cost,
-                    "cost_increase_pct": (week2_additional_cost * 12 / total_development_cost) * 100
+                    "cost_increase_pct": (
+                        week2_additional_cost * 12 / total_development_cost
+                    )
+                    * 100,
                 },
                 "ai_cost_efficiency": estimated_vs_actual,
                 "operational_optimization": operational_optimization,
                 "cost_reduction_performance": {
                     "target_reduction": 50.0,
-                    "achieved_reduction": self.week2_development_costs["cost_reduction_achieved"],
-                    "exceeds_target": self.week2_development_costs["cost_reduction_achieved"] > 50.0,
-                    "cost_optimization_grade": "A+" if self.week2_development_costs["cost_reduction_achieved"] > 85 else "A"
-                }
+                    "achieved_reduction": self.week2_development_costs[
+                        "cost_reduction_achieved"
+                    ],
+                    "exceeds_target": self.week2_development_costs[
+                        "cost_reduction_achieved"
+                    ]
+                    > 50.0,
+                    "cost_optimization_grade": (
+                        "A+"
+                        if self.week2_development_costs["cost_reduction_achieved"] > 85
+                        else "A"
+                    ),
+                },
             },
-            "calculation_cost": calculation_cost
+            "calculation_cost": calculation_cost,
         }
 
     def update_revenue_projections(self) -> dict:
@@ -162,7 +191,7 @@ class FinancialModelV23Updater:
             input_tokens=3000,
             output_tokens=2200,
             session_id=self.session_id,
-            task_type="week2_revenue_projections"
+            task_type="week2_revenue_projections",
         )
 
         # Week 2 revenue progression model
@@ -170,17 +199,29 @@ class FinancialModelV23Updater:
         daily_targets = [100, 200, 350, 500, 600, 600, 600]  # Week 2 daily progression
 
         for day, target in enumerate(daily_targets, 1):
-            week2_progression.append({
-                "day": day,
-                "daily_target": target,
-                "weekly_cumulative": sum(daily_targets[:day]),
-                "month_projection": target * 30,
-                "growth_from_week1": ((target - self.week2_revenue_data["week1_baseline"]) / self.week2_revenue_data["week1_baseline"]) * 100 if self.week2_revenue_data["week1_baseline"] > 0 else 0
-            })
+            week2_progression.append(
+                {
+                    "day": day,
+                    "daily_target": target,
+                    "weekly_cumulative": sum(daily_targets[:day]),
+                    "month_projection": target * 30,
+                    "growth_from_week1": (
+                        (
+                            (target - self.week2_revenue_data["week1_baseline"])
+                            / self.week2_revenue_data["week1_baseline"]
+                        )
+                        * 100
+                        if self.week2_revenue_data["week1_baseline"] > 0
+                        else 0
+                    ),
+                }
+            )
 
         # Updated customer acquisition model
         avg_customer_value = 149.0  # From v2.2 validation
-        customers_needed_week2 = self.week2_revenue_data["monthly_target"] / avg_customer_value
+        customers_needed_week2 = (
+            self.week2_revenue_data["monthly_target"] / avg_customer_value
+        )
 
         # Revenue impact analysis
         revenue_impact = {
@@ -188,21 +229,20 @@ class FinancialModelV23Updater:
                 "daily_progression": week2_progression,
                 "weekly_total_target": self.week2_revenue_data["weekly_target"],
                 "monthly_projection": self.week2_revenue_data["monthly_target"],
-                "annual_projection": self.week2_revenue_data["monthly_target"] * 12
+                "annual_projection": self.week2_revenue_data["monthly_target"] * 12,
             },
             "customer_acquisition_updated": {
                 "target_monthly_revenue": self.week2_revenue_data["monthly_target"],
                 "avg_customer_value": avg_customer_value,
                 "customers_needed": customers_needed_week2,
-                "acquisition_rate_required": customers_needed_week2 / 30,  # Daily acquisition needed
-                "growth_rate_week1_to_week2": self.week2_revenue_data["growth_rate"]
+                "acquisition_rate_required": customers_needed_week2
+                / 30,  # Daily acquisition needed
+                "growth_rate_week1_to_week2": self.week2_revenue_data["growth_rate"],
             },
-            "revenue_calculation_cost": revenue_calculation_cost
+            "revenue_calculation_cost": revenue_calculation_cost,
         }
 
-        return {
-            "revenue_impact": revenue_impact
-        }
+        return {"revenue_impact": revenue_impact}
 
     def recalculate_roi_metrics(self, cost_impact: dict, revenue_impact: dict) -> dict:
         """Recalculate ROI metrics with Week 2 updates using Opus 4 (10%)"""
@@ -213,49 +253,78 @@ class FinancialModelV23Updater:
             input_tokens=2800,
             output_tokens=2000,
             session_id=self.session_id,
-            task_type="roi_strategic_analysis"
+            task_type="roi_strategic_analysis",
         )
 
         # Extract updated costs and revenue
-        updated_development_cost = cost_impact["week2_cost_impact"]["development_costs"]["updated_total"]
-        monthly_operational_cost = cost_impact["week2_cost_impact"]["operational_optimization"]["week2_optimized_cost"]
-        monthly_revenue = revenue_impact["revenue_impact"]["customer_acquisition_updated"]["target_monthly_revenue"]
+        updated_development_cost = cost_impact["week2_cost_impact"][
+            "development_costs"
+        ]["updated_total"]
+        monthly_operational_cost = cost_impact["week2_cost_impact"][
+            "operational_optimization"
+        ]["week2_optimized_cost"]
+        monthly_revenue = revenue_impact["revenue_impact"][
+            "customer_acquisition_updated"
+        ]["target_monthly_revenue"]
 
         # Calculate updated ROI metrics
         monthly_profit = monthly_revenue - monthly_operational_cost
         annual_profit = monthly_profit * 12
 
         # ROI calculation
-        total_investment = updated_development_cost + (monthly_operational_cost * 12)  # Dev cost + operational cost
-        roi_12_months = ((annual_profit - total_investment) / total_investment) * 100 if total_investment > 0 else 0
+        total_investment = updated_development_cost + (
+            monthly_operational_cost * 12
+        )  # Dev cost + operational cost
+        roi_12_months = (
+            ((annual_profit - total_investment) / total_investment) * 100
+            if total_investment > 0
+            else 0
+        )
 
         # Break-even calculation
-        break_even_months = total_investment / monthly_profit if monthly_profit > 0 else float("inf")
+        break_even_months = (
+            total_investment / monthly_profit if monthly_profit > 0 else float("inf")
+        )
 
         # Payback period
-        payback_period = updated_development_cost / monthly_profit if monthly_profit > 0 else float("inf")
+        payback_period = (
+            updated_development_cost / monthly_profit
+            if monthly_profit > 0
+            else float("inf")
+        )
 
         return {
             "updated_roi_metrics": {
                 "roi_12_months_pct": roi_12_months,
-                "roi_12_months_change": roi_12_months - self.v22_baseline["roi_12_months_pct"],
+                "roi_12_months_change": roi_12_months
+                - self.v22_baseline["roi_12_months_pct"],
                 "break_even_months": break_even_months,
-                "break_even_change": break_even_months - self.v22_baseline["break_even_months"],
+                "break_even_change": break_even_months
+                - self.v22_baseline["break_even_months"],
                 "payback_period_months": payback_period,
-
                 # Financial performance
                 "monthly_revenue": monthly_revenue,
                 "monthly_profit": monthly_profit,
                 "annual_profit": annual_profit,
                 "total_investment": total_investment,
-                "profit_margin_pct": (monthly_profit / monthly_revenue) * 100 if monthly_revenue > 0 else 0,
-
+                "profit_margin_pct": (
+                    (monthly_profit / monthly_revenue) * 100
+                    if monthly_revenue > 0
+                    else 0
+                ),
                 # Week 2 specific metrics
-                "week2_revenue_growth": revenue_impact["revenue_impact"]["customer_acquisition_updated"]["growth_rate_week1_to_week2"] * 100,
-                "cost_optimization_impact": cost_impact["week2_cost_impact"]["cost_reduction_performance"]["achieved_reduction"],
-                "development_cost_efficiency": cost_impact["week2_cost_impact"]["ai_cost_efficiency"]["efficiency_percentage"]
+                "week2_revenue_growth": revenue_impact["revenue_impact"][
+                    "customer_acquisition_updated"
+                ]["growth_rate_week1_to_week2"]
+                * 100,
+                "cost_optimization_impact": cost_impact["week2_cost_impact"][
+                    "cost_reduction_performance"
+                ]["achieved_reduction"],
+                "development_cost_efficiency": cost_impact["week2_cost_impact"][
+                    "ai_cost_efficiency"
+                ]["efficiency_percentage"],
             },
-            "roi_analysis_cost": roi_analysis_cost
+            "roi_analysis_cost": roi_analysis_cost,
         }
 
     def generate_financial_model_v23(self) -> dict:
@@ -279,78 +348,96 @@ class FinancialModelV23Updater:
                     "Week 2 development costs integration",
                     "90.8% AI cost reduction validation",
                     "$600/day revenue target modeling",
-                    "50% operational cost reduction implementation"
+                    "50% operational cost reduction implementation",
                 ],
-                "model_scope": "Week 2 Infrastructure Deployment"
+                "model_scope": "Week 2 Infrastructure Deployment",
             },
-
             # Core financial metrics (updated)
             "financial_metrics": {
-                "roi_12_months_pct": roi_metrics["updated_roi_metrics"]["roi_12_months_pct"],
-                "break_even_months": roi_metrics["updated_roi_metrics"]["break_even_months"],
-                "payback_period_months": roi_metrics["updated_roi_metrics"]["payback_period_months"],
-                "monthly_revenue_target": revenue_impact["revenue_impact"]["customer_acquisition_updated"]["target_monthly_revenue"],
+                "roi_12_months_pct": roi_metrics["updated_roi_metrics"][
+                    "roi_12_months_pct"
+                ],
+                "break_even_months": roi_metrics["updated_roi_metrics"][
+                    "break_even_months"
+                ],
+                "payback_period_months": roi_metrics["updated_roi_metrics"][
+                    "payback_period_months"
+                ],
+                "monthly_revenue_target": revenue_impact["revenue_impact"][
+                    "customer_acquisition_updated"
+                ]["target_monthly_revenue"],
                 "monthly_profit": roi_metrics["updated_roi_metrics"]["monthly_profit"],
-                "profit_margin_pct": roi_metrics["updated_roi_metrics"]["profit_margin_pct"]
+                "profit_margin_pct": roi_metrics["updated_roi_metrics"][
+                    "profit_margin_pct"
+                ],
             },
-
             # Week 2 development cost integration
             "week2_development_integration": cost_impact["week2_cost_impact"],
-
             # Revenue progression model
             "week2_revenue_model": revenue_impact["revenue_impact"],
-
             # Updated customer acquisition
             "customer_acquisition_v23": {
-                "monthly_target_customers": revenue_impact["revenue_impact"]["customer_acquisition_updated"]["customers_needed"],
-                "daily_acquisition_rate": revenue_impact["revenue_impact"]["customer_acquisition_updated"]["acquisition_rate_required"],
-                "avg_customer_value": revenue_impact["revenue_impact"]["customer_acquisition_updated"]["avg_customer_value"],
+                "monthly_target_customers": revenue_impact["revenue_impact"][
+                    "customer_acquisition_updated"
+                ]["customers_needed"],
+                "daily_acquisition_rate": revenue_impact["revenue_impact"][
+                    "customer_acquisition_updated"
+                ]["acquisition_rate_required"],
+                "avg_customer_value": revenue_impact["revenue_impact"][
+                    "customer_acquisition_updated"
+                ]["avg_customer_value"],
                 "customer_mix_optimization": {
                     "basic_tier_pct": 20,
                     "pro_tier_pct": 60,
-                    "enterprise_tier_pct": 20
-                }
+                    "enterprise_tier_pct": 20,
+                },
             },
-
             # Cost optimization summary
             "cost_optimization_v23": {
-                "ai_cost_reduction": cost_impact["week2_cost_impact"]["ai_cost_efficiency"]["efficiency_percentage"],
+                "ai_cost_reduction": cost_impact["week2_cost_impact"][
+                    "ai_cost_efficiency"
+                ]["efficiency_percentage"],
                 "operational_cost_reduction": 50.0,  # 50% target met
-                "total_cost_savings_monthly": cost_impact["week2_cost_impact"]["operational_optimization"]["monthly_savings"],
-                "cost_optimization_grade": cost_impact["week2_cost_impact"]["cost_reduction_performance"]["cost_optimization_grade"]
+                "total_cost_savings_monthly": cost_impact["week2_cost_impact"][
+                    "operational_optimization"
+                ]["monthly_savings"],
+                "cost_optimization_grade": cost_impact["week2_cost_impact"][
+                    "cost_reduction_performance"
+                ]["cost_optimization_grade"],
             },
-
             # Risk assessment
             "risk_assessment_v23": {
                 "revenue_risk": "Low - Strong Week 2 progression model",
                 "cost_risk": "Very Low - 90.8% cost reduction achieved",
                 "market_risk": "Medium - Competitive landscape",
                 "execution_risk": "Low - Infrastructure deployment on track",
-                "overall_risk_rating": "Low Risk / High Return"
+                "overall_risk_rating": "Low Risk / High Return",
             },
-
             # Success metrics
             "success_metrics_v23": {
                 "week2_daily_revenue_target": self.week2_revenue_data["daily_target"],
-                "cost_reduction_achieved": cost_impact["week2_cost_impact"]["cost_reduction_performance"]["achieved_reduction"],
-                "roi_improvement": roi_metrics["updated_roi_metrics"]["roi_12_months_change"],
-                "operational_efficiency": "90.8% AI cost optimization + 50% operational cost reduction"
+                "cost_reduction_achieved": cost_impact["week2_cost_impact"][
+                    "cost_reduction_performance"
+                ]["achieved_reduction"],
+                "roi_improvement": roi_metrics["updated_roi_metrics"][
+                    "roi_12_months_change"
+                ],
+                "operational_efficiency": "90.8% AI cost optimization + 50% operational cost reduction",
             },
-
             # Token optimization tracking
             "token_optimization_v23": {
                 "model_distribution_target": {
                     "sonnet_4": "80% - Calculations and projections",
                     "haiku_3": "10% - Data operations",
-                    "opus_4": "10% - Strategic analysis"
+                    "opus_4": "10% - Strategic analysis",
                 },
                 "total_session_cost": (
-                    cost_impact["calculation_cost"] +
-                    revenue_impact["revenue_impact"]["revenue_calculation_cost"] +
-                    roi_metrics["roi_analysis_cost"]
+                    cost_impact["calculation_cost"]
+                    + revenue_impact["revenue_impact"]["revenue_calculation_cost"]
+                    + roi_metrics["roi_analysis_cost"]
                 ),
-                "cost_per_model_update": "Optimized for enterprise efficiency"
-            }
+                "cost_per_model_update": "Optimized for enterprise efficiency",
+            },
         }
 
         return model_v23
@@ -364,7 +451,7 @@ class FinancialModelV23Updater:
             input_tokens=500,
             output_tokens=300,
             session_id=self.session_id,
-            task_type="model_export"
+            task_type="model_export",
         )
 
         os.makedirs("data", exist_ok=True)

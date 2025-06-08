@@ -10,9 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from app.core.colpali_multimodal import (
-    SaaSMarketIntelligenceMultiModal,
-)
+from app.core.colpali_multimodal import SaaSMarketIntelligenceMultiModal
 
 # Core system imports
 from app.core.rag_engine import SaaSMarketIntelligenceRAG
@@ -26,9 +24,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MultiModalAnalysisRequest:
     """Request for comprehensive multi-modal analysis"""
+
     query: str
     document_paths: list[Union[str, Path]] = None
-    analysis_type: str = "comprehensive"  # comprehensive, competitive, technical, revenue
+    analysis_type: str = (
+        "comprehensive"  # comprehensive, competitive, technical, revenue
+    )
     priority: TaskPriority = TaskPriority.HIGH
     target_revenue_impact: float = 300.0
     include_visual_analysis: bool = True
@@ -38,6 +39,7 @@ class MultiModalAnalysisRequest:
 @dataclass
 class EnhancedAnalysisResult:
     """Enhanced analysis result with multi-modal insights"""
+
     query: str
     text_analysis: dict[str, Any]
     visual_analysis: dict[str, Any] = None
@@ -60,7 +62,7 @@ class EnhancedMultiModalPipeline:
         self,
         openai_api_key: Optional[str] = None,
         enable_colpali: bool = True,
-        enable_rally_ai: bool = True
+        enable_rally_ai: bool = True,
     ):
         """Initialize enhanced multi-modal pipeline"""
 
@@ -71,7 +73,9 @@ class EnhancedMultiModalPipeline:
         self.multimodal_engine = None
         if enable_colpali:
             try:
-                self.multimodal_engine = SaaSMarketIntelligenceMultiModal(self.rag_engine)
+                self.multimodal_engine = SaaSMarketIntelligenceMultiModal(
+                    self.rag_engine
+                )
                 logger.info("✅ ColPali multi-modal engine initialized")
             except Exception as e:
                 logger.warning(f"⚠️ ColPali initialization failed: {e}")
@@ -80,8 +84,7 @@ class EnhancedMultiModalPipeline:
         self.rally_orchestrator = None
         if enable_rally_ai:
             self.rally_orchestrator = RallyAIOrchestrator(
-                self.rag_engine,
-                self.multimodal_engine
+                self.rag_engine, self.multimodal_engine
             )
             logger.info("✅ Rally AI orchestrator initialized")
 
@@ -91,7 +94,7 @@ class EnhancedMultiModalPipeline:
             "multimodal_analyses": 0,
             "coordinated_analyses": 0,
             "average_confidence": 0.0,
-            "total_revenue_impact": 0.0
+            "total_revenue_impact": 0.0,
         }
 
         logger.info("🚀 Enhanced Multi-Modal Pipeline initialized")
@@ -108,7 +111,9 @@ class EnhancedMultiModalPipeline:
         if self.multimodal_engine:
             # Create multi-modal index in RAG system
             try:
-                await self.multimodal_engine.integrate_with_existing_rag("multimodal_intelligence")
+                await self.multimodal_engine.integrate_with_existing_rag(
+                    "multimodal_intelligence"
+                )
                 logger.info("✅ Multi-modal integration complete")
             except Exception as e:
                 logger.warning(f"⚠️ Multi-modal integration partial: {e}")
@@ -116,8 +121,7 @@ class EnhancedMultiModalPipeline:
         logger.info("✅ Enhanced pipeline initialization complete")
 
     async def analyze_comprehensive(
-        self,
-        request: MultiModalAnalysisRequest
+        self, request: MultiModalAnalysisRequest
     ) -> EnhancedAnalysisResult:
         """
         Perform comprehensive analysis using all available capabilities
@@ -133,14 +137,15 @@ class EnhancedMultiModalPipeline:
 
         # Initialize result
         result = EnhancedAnalysisResult(
-            query=request.query,
-            text_analysis={},
-            recommendations=[],
-            sources=[]
+            query=request.query, text_analysis={}, recommendations=[], sources=[]
         )
 
         # 1. Process visual documents if provided
-        if request.document_paths and request.include_visual_analysis and self.multimodal_engine:
+        if (
+            request.document_paths
+            and request.include_visual_analysis
+            and self.multimodal_engine
+        ):
             result.visual_analysis = await self._process_visual_documents(
                 request.document_paths
             )
@@ -162,12 +167,13 @@ class EnhancedMultiModalPipeline:
         # 5. Update pipeline statistics
         await self._update_pipeline_stats(result)
 
-        logger.info(f"✅ Comprehensive analysis complete (confidence: {result.confidence_score:.2f})")
+        logger.info(
+            f"✅ Comprehensive analysis complete (confidence: {result.confidence_score:.2f})"
+        )
         return result
 
     async def _process_visual_documents(
-        self,
-        document_paths: list[Union[str, Path]]
+        self, document_paths: list[Union[str, Path]]
     ) -> dict[str, Any]:
         """Process visual documents with ColPali"""
 
@@ -178,7 +184,7 @@ class EnhancedMultiModalPipeline:
             "processed_documents": [],
             "extracted_insights": [],
             "layout_analysis": [],
-            "confidence_scores": []
+            "confidence_scores": [],
         }
 
         try:
@@ -187,24 +193,31 @@ class EnhancedMultiModalPipeline:
                 if path.exists():
                     # Process with ColPali
                     documents = await self.multimodal_engine.process_saas_document(
-                        path,
-                        document_category="market_intelligence"
+                        path, document_category="market_intelligence"
                     )
 
                     for doc in documents:
-                        visual_insights["processed_documents"].append({
-                            "file_name": path.name,
-                            "text_content": doc.text[:500] + "..." if len(doc.text) > 500 else doc.text,
-                            "metadata": doc.metadata,
-                            "confidence": doc.metadata.get("confidence_score", 0.5)
-                        })
+                        visual_insights["processed_documents"].append(
+                            {
+                                "file_name": path.name,
+                                "text_content": (
+                                    doc.text[:500] + "..."
+                                    if len(doc.text) > 500
+                                    else doc.text
+                                ),
+                                "metadata": doc.metadata,
+                                "confidence": doc.metadata.get("confidence_score", 0.5),
+                            }
+                        )
 
                         # Extract key insights
                         if "visual_layout" in doc.metadata:
-                            visual_insights["layout_analysis"].append({
-                                "document": path.name,
-                                "layout": doc.metadata["visual_layout"]
-                            })
+                            visual_insights["layout_analysis"].append(
+                                {
+                                    "document": path.name,
+                                    "layout": doc.metadata["visual_layout"],
+                                }
+                            )
 
                         visual_insights["confidence_scores"].append(
                             doc.metadata.get("confidence_score", 0.5)
@@ -212,11 +225,15 @@ class EnhancedMultiModalPipeline:
 
             # Calculate overall visual confidence
             if visual_insights["confidence_scores"]:
-                visual_insights["overall_confidence"] = sum(visual_insights["confidence_scores"]) / len(visual_insights["confidence_scores"])
+                visual_insights["overall_confidence"] = sum(
+                    visual_insights["confidence_scores"]
+                ) / len(visual_insights["confidence_scores"])
             else:
                 visual_insights["overall_confidence"] = 0.0
 
-            logger.info(f"✅ Processed {len(visual_insights['processed_documents'])} visual documents")
+            logger.info(
+                f"✅ Processed {len(visual_insights['processed_documents'])} visual documents"
+            )
 
         except Exception as e:
             logger.error(f"❌ Visual processing failed: {e}")
@@ -230,8 +247,7 @@ class EnhancedMultiModalPipeline:
 
         try:
             analysis = await self.rag_engine.analyze_market_opportunity(
-                query,
-                use_agent=True
+                query, use_agent=True
             )
 
             return {
@@ -239,7 +255,7 @@ class EnhancedMultiModalPipeline:
                 "confidence": analysis["confidence_score"],
                 "sources": analysis["sources_used"],
                 "recommendations": analysis["recommendations"],
-                "opportunity_score": analysis["opportunity_score"]
+                "opportunity_score": analysis["opportunity_score"],
             }
 
         except Exception as e:
@@ -248,12 +264,11 @@ class EnhancedMultiModalPipeline:
                 "error": str(e),
                 "confidence": 0.0,
                 "sources": [],
-                "recommendations": ["Fix RAG engine integration"]
+                "recommendations": ["Fix RAG engine integration"],
             }
 
     async def _perform_coordinated_analysis(
-        self,
-        request: MultiModalAnalysisRequest
+        self, request: MultiModalAnalysisRequest
     ) -> dict[str, Any]:
         """Perform Rally AI coordinated analysis"""
 
@@ -261,33 +276,31 @@ class EnhancedMultiModalPipeline:
             return {"status": "disabled"}
 
         try:
-            coordination_result = await self.rally_orchestrator.coordinate_market_analysis(
-                request.query,
-                target_revenue_impact=request.target_revenue_impact,
-                urgency=request.priority
+            coordination_result = (
+                await self.rally_orchestrator.coordinate_market_analysis(
+                    request.query,
+                    target_revenue_impact=request.target_revenue_impact,
+                    urgency=request.priority,
+                )
             )
 
             return {
                 "status": "completed",
                 "agent_results": coordination_result["agent_results"],
-                "unified_recommendations": coordination_result["unified_recommendations"],
+                "unified_recommendations": coordination_result[
+                    "unified_recommendations"
+                ],
                 "revenue_impact": coordination_result["revenue_impact_assessment"],
                 "next_actions": coordination_result["next_actions"],
-                "overall_confidence": coordination_result["overall_confidence"]
+                "overall_confidence": coordination_result["overall_confidence"],
             }
 
         except Exception as e:
             logger.error(f"❌ Coordinated analysis failed: {e}")
-            return {
-                "status": "failed",
-                "error": str(e),
-                "overall_confidence": 0.0
-            }
+            return {"status": "failed", "error": str(e), "overall_confidence": 0.0}
 
     async def _synthesize_multimodal_insights(
-        self,
-        result: EnhancedAnalysisResult,
-        request: MultiModalAnalysisRequest
+        self, result: EnhancedAnalysisResult, request: MultiModalAnalysisRequest
     ) -> EnhancedAnalysisResult:
         """Synthesize insights from all analysis modes"""
 
@@ -303,11 +316,17 @@ class EnhancedMultiModalPipeline:
             confidence_scores.append(result.visual_analysis["overall_confidence"])
 
         # Coordinated analysis confidence
-        if result.coordinated_insights and result.coordinated_insights.get("overall_confidence"):
+        if result.coordinated_insights and result.coordinated_insights.get(
+            "overall_confidence"
+        ):
             confidence_scores.append(result.coordinated_insights["overall_confidence"])
 
         # Calculate weighted confidence
-        result.confidence_score = sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0.0
+        result.confidence_score = (
+            sum(confidence_scores) / len(confidence_scores)
+            if confidence_scores
+            else 0.0
+        )
 
         # Synthesize recommendations
         all_recommendations = []
@@ -317,8 +336,12 @@ class EnhancedMultiModalPipeline:
             all_recommendations.extend(result.text_analysis["recommendations"])
 
         # From coordinated analysis
-        if result.coordinated_insights and result.coordinated_insights.get("unified_recommendations"):
-            all_recommendations.extend(result.coordinated_insights["unified_recommendations"])
+        if result.coordinated_insights and result.coordinated_insights.get(
+            "unified_recommendations"
+        ):
+            all_recommendations.extend(
+                result.coordinated_insights["unified_recommendations"]
+            )
 
         # Remove duplicates and prioritize
         unique_recommendations = list(dict.fromkeys(all_recommendations))
@@ -331,13 +354,18 @@ class EnhancedMultiModalPipeline:
             all_sources.extend(result.text_analysis["sources"])
 
         if result.visual_analysis and result.visual_analysis.get("processed_documents"):
-            visual_sources = [doc["file_name"] for doc in result.visual_analysis["processed_documents"]]
+            visual_sources = [
+                doc["file_name"]
+                for doc in result.visual_analysis["processed_documents"]
+            ]
             all_sources.extend(visual_sources)
 
         result.sources = list(set(all_sources))
 
         # Revenue impact synthesis
-        if result.coordinated_insights and result.coordinated_insights.get("revenue_impact"):
+        if result.coordinated_insights and result.coordinated_insights.get(
+            "revenue_impact"
+        ):
             result.revenue_impact = result.coordinated_insights["revenue_impact"]
         else:
             # Estimate based on opportunity score
@@ -345,7 +373,7 @@ class EnhancedMultiModalPipeline:
             result.revenue_impact = {
                 "daily_potential": f"${request.target_revenue_impact}",
                 "confidence": result.confidence_score,
-                "risk_level": "medium" if opportunity_score > 6.0 else "high"
+                "risk_level": "medium" if opportunity_score > 6.0 else "high",
             }
 
         return result
@@ -361,13 +389,15 @@ class EnhancedMultiModalPipeline:
         new_confidence = result.confidence_score
 
         self.pipeline_stats["average_confidence"] = (
-            (current_avg * (total - 1) + new_confidence) / total
-        )
+            current_avg * (total - 1) + new_confidence
+        ) / total
 
         # Update revenue impact
         if result.revenue_impact and "daily_potential" in result.revenue_impact:
             try:
-                daily_amount = float(result.revenue_impact["daily_potential"].replace("$", ""))
+                daily_amount = float(
+                    result.revenue_impact["daily_potential"].replace("$", "")
+                )
                 self.pipeline_stats["total_revenue_impact"] += daily_amount
             except (ValueError, AttributeError):
                 pass
@@ -377,7 +407,7 @@ class EnhancedMultiModalPipeline:
     async def analyze_competitor_documents(
         self,
         competitor_docs: list[Union[str, Path]],
-        analysis_focus: str = "pricing and features"
+        analysis_focus: str = "pricing and features",
     ) -> EnhancedAnalysisResult:
         """Specialized analysis for competitor documents"""
 
@@ -388,7 +418,7 @@ class EnhancedMultiModalPipeline:
             priority=TaskPriority.HIGH,
             target_revenue_impact=500.0,  # Competitive intel is high-value
             include_visual_analysis=True,
-            include_agent_coordination=True
+            include_agent_coordination=True,
         )
 
         return await self.analyze_comprehensive(request)
@@ -396,7 +426,7 @@ class EnhancedMultiModalPipeline:
     async def analyze_market_reports(
         self,
         report_docs: list[Union[str, Path]],
-        market_segment: str = "SaaS automation tools"
+        market_segment: str = "SaaS automation tools",
     ) -> EnhancedAnalysisResult:
         """Specialized analysis for market research reports"""
 
@@ -407,7 +437,7 @@ class EnhancedMultiModalPipeline:
             priority=TaskPriority.CRITICAL,
             target_revenue_impact=1000.0,  # Market research drives major decisions
             include_visual_analysis=True,
-            include_agent_coordination=True
+            include_agent_coordination=True,
         )
 
         return await self.analyze_comprehensive(request)
@@ -419,9 +449,13 @@ class EnhancedMultiModalPipeline:
             "pipeline_stats": self.pipeline_stats,
             "component_status": {
                 "rag_engine": "operational" if self.rag_engine else "disabled",
-                "multimodal_engine": "operational" if self.multimodal_engine else "disabled",
-                "rally_orchestrator": "operational" if self.rally_orchestrator else "disabled"
-            }
+                "multimodal_engine": (
+                    "operational" if self.multimodal_engine else "disabled"
+                ),
+                "rally_orchestrator": (
+                    "operational" if self.rally_orchestrator else "disabled"
+                ),
+            },
         }
 
         # Get RAG engine status if available
@@ -449,10 +483,7 @@ async def main():
     logger.info("🧪 Testing Enhanced Multi-Modal Pipeline")
 
     # Initialize pipeline
-    pipeline = EnhancedMultiModalPipeline(
-        enable_colpali=True,
-        enable_rally_ai=True
-    )
+    pipeline = EnhancedMultiModalPipeline(enable_colpali=True, enable_rally_ai=True)
 
     try:
         # Initialize system
@@ -463,7 +494,7 @@ async def main():
             query="Find high-revenue SaaS opportunities in Python developer productivity tools",
             analysis_type="comprehensive",
             priority=TaskPriority.HIGH,
-            target_revenue_impact=300.0
+            target_revenue_impact=300.0,
         )
 
         result = await pipeline.analyze_comprehensive(request)

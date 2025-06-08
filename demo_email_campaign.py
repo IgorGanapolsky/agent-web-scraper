@@ -15,7 +15,9 @@ from typing import Any
 class MockSerpAPIClient:
     """Mock SerpAPI client for demo"""
 
-    async def concurrent_market_research(self, search_queries: list[str]) -> dict[str, Any]:
+    async def concurrent_market_research(
+        self, search_queries: list[str]
+    ) -> dict[str, Any]:
         """Simulate concurrent market research"""
         await asyncio.sleep(0.5)  # Simulate API delay
 
@@ -28,26 +30,26 @@ class MockSerpAPIClient:
                     "cost reduction software",
                     "business efficiency",
                     "productivity tools",
-                    "digital transformation"
+                    "digital transformation",
                 ],
                 "top_domains": [
                     {"domain": "salesforce.com", "mentions": 12},
                     {"domain": "monday.com", "mentions": 8},
-                    {"domain": "zapier.com", "mentions": 6}
+                    {"domain": "zapier.com", "mentions": 6},
                 ],
                 "content_themes": [
                     "automation",
                     "efficiency",
                     "cost_reduction",
                     "growth",
-                    "digital_transformation"
+                    "digital_transformation",
                 ],
                 "market_sentiment": {
                     "sentiment_score": 0.65,
                     "positive_mentions": 89,
                     "negative_mentions": 23,
-                    "total_analyzed": 150
-                }
+                    "total_analyzed": 150,
+                },
             },
             "raw_search_results": [
                 {
@@ -57,10 +59,10 @@ class MockSerpAPIClient:
                         "organic_results": [
                             {
                                 "title": f"How {query} saves businesses 40% on costs",
-                                "snippet": "Companies using automation see significant ROI improvements..."
+                                "snippet": "Companies using automation see significant ROI improvements...",
                             }
                         ]
-                    }
+                    },
                 }
                 for query in search_queries
             ],
@@ -68,9 +70,10 @@ class MockSerpAPIClient:
                 "total_queries": len(search_queries),
                 "execution_time": 0.5,
                 "queries_per_second": len(search_queries) / 0.5,
-                "optimization_method": "concurrent_api_calls"
-            }
+                "optimization_method": "concurrent_api_calls",
+            },
         }
+
 
 class MockMemoryManager:
     """Mock memory manager for demo"""
@@ -79,24 +82,36 @@ class MockMemoryManager:
         self.memory_nodes = {}
         self.session_contexts = {}
 
-    def create_session_context(self, user_id: str, project_name: str, initial_context: dict[str, Any] | None = None) -> str:
+    def create_session_context(
+        self,
+        user_id: str,
+        project_name: str,
+        initial_context: dict[str, Any] | None = None,
+    ) -> str:
         session_id = f"session_{int(time.time())}"
         self.session_contexts[session_id] = {
             "user_id": user_id,
             "project_name": project_name,
-            "context": initial_context or {}
+            "context": initial_context or {},
         }
         return session_id
 
-    def store_memory_node(self, category: str, content: dict[str, Any], tags: list[str] | None = None, importance_score: float = 1.0) -> str:
+    def store_memory_node(
+        self,
+        category: str,
+        content: dict[str, Any],
+        tags: list[str] | None = None,
+        importance_score: float = 1.0,
+    ) -> str:
         node_id = f"node_{len(self.memory_nodes)}"
         self.memory_nodes[node_id] = {
             "category": category,
             "content": content,
             "tags": tags or [],
-            "importance_score": importance_score
+            "importance_score": importance_score,
         }
         return node_id
+
 
 class MockTokenMonitor:
     """Mock token monitor for demo"""
@@ -106,8 +121,15 @@ class MockTokenMonitor:
         self.daily_budget = 10.0
         self.current_usage = 0.0
 
-    def record_token_usage(self, model: str, input_tokens: int, output_tokens: int,
-                          session_id: str | None = None, task_type: str | None = None, user_id: str | None = None) -> float:
+    def record_token_usage(
+        self,
+        model: str,
+        input_tokens: int,
+        output_tokens: int,
+        session_id: str | None = None,
+        task_type: str | None = None,
+        user_id: str | None = None,
+    ) -> float:
         # Calculate cost based on Sonnet 4 pricing
         input_cost = (input_tokens / 1_000_000) * 3.0
         output_cost = (output_tokens / 1_000_000) * 15.0
@@ -115,14 +137,16 @@ class MockTokenMonitor:
 
         self.current_usage += total_cost
 
-        self.usage_records.append({
-            "timestamp": datetime.now(),
-            "model": model,
-            "input_tokens": input_tokens,
-            "output_tokens": output_tokens,
-            "cost_usd": total_cost,
-            "task_type": task_type
-        })
+        self.usage_records.append(
+            {
+                "timestamp": datetime.now(),
+                "model": model,
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost_usd": total_cost,
+                "task_type": task_type,
+            }
+        )
 
         return total_cost
 
@@ -133,27 +157,42 @@ class MockTokenMonitor:
                     "threshold_usd": self.daily_budget,
                     "current_usage_usd": self.current_usage,
                     "percentage_used": (self.current_usage / self.daily_budget) * 100,
-                    "status": "NORMAL" if self.current_usage < self.daily_budget * 0.8 else "WARNING"
+                    "status": (
+                        "NORMAL"
+                        if self.current_usage < self.daily_budget * 0.8
+                        else "WARNING"
+                    ),
                 }
             },
-            "recommendations": ["Token usage is within budget - continue monitoring"]
+            "recommendations": ["Token usage is within budget - continue monitoring"],
         }
 
-    def get_usage_summary(self, period_days: int = 1, task_type: str | None = None) -> dict[str, Any]:
-        filtered_records = [r for r in self.usage_records if r.get("task_type") == task_type] if task_type else self.usage_records
+    def get_usage_summary(
+        self, period_days: int = 1, task_type: str | None = None
+    ) -> dict[str, Any]:
+        filtered_records = (
+            [r for r in self.usage_records if r.get("task_type") == task_type]
+            if task_type
+            else self.usage_records
+        )
 
         return {
             "period_summary": {
                 "total_api_calls": len(filtered_records),
                 "total_cost_usd": sum(r["cost_usd"] for r in filtered_records),
-                "total_tokens": sum(r["input_tokens"] + r["output_tokens"] for r in filtered_records)
+                "total_tokens": sum(
+                    r["input_tokens"] + r["output_tokens"] for r in filtered_records
+                ),
             }
         }
+
 
 class MockBatchClient:
     """Mock batch client for demo"""
 
-    async def process_batch_prompts(self, requests: list[Any], provider: str = "anthropic") -> dict[str, Any]:
+    async def process_batch_prompts(
+        self, requests: list[Any], provider: str = "anthropic"
+    ) -> dict[str, Any]:
         await asyncio.sleep(0.3)  # Simulate processing time
 
         # Simulate successful batch processing
@@ -167,14 +206,14 @@ class MockBatchClient:
                             "pain_point": "Manual data entry consuming 20+ hours weekly",
                             "frequency_mentioned": "high",
                             "cost_impact": "$47,000 annually",
-                            "solution_opportunity": "AI automation reduces manual work by 85%"
+                            "solution_opportunity": "AI automation reduces manual work by 85%",
                         },
                         {
                             "pain_point": "Disconnected systems requiring multiple tools",
                             "frequency_mentioned": "high",
                             "cost_impact": "$23,000 in integration costs",
-                            "solution_opportunity": "Unified platform eliminates tool switching"
-                        }
+                            "solution_opportunity": "Unified platform eliminates tool switching",
+                        },
                     ]
                 }
             elif "efficiency" in request.id:
@@ -184,7 +223,7 @@ class MockBatchClient:
                             "benefit": "Automated reporting and analytics",
                             "time_savings": "15 hours/week",
                             "cost_savings": "$3,200/month",
-                            "measurable_impact": "40% operational cost reduction"
+                            "measurable_impact": "40% operational cost reduction",
                         }
                     ]
                 }
@@ -193,25 +232,37 @@ class MockBatchClient:
                     "customer_personas": [
                         {
                             "persona_name": "Operations Director",
-                            "pain_points": ["manual processes", "data silos", "reporting delays"],
-                            "decision_factors": ["ROI", "ease of implementation", "integration"],
-                            "messaging_angle": "Focus on immediate cost savings and efficiency gains"
+                            "pain_points": [
+                                "manual processes",
+                                "data silos",
+                                "reporting delays",
+                            ],
+                            "decision_factors": [
+                                "ROI",
+                                "ease of implementation",
+                                "integration",
+                            ],
+                            "messaging_angle": "Focus on immediate cost savings and efficiency gains",
                         }
                     ]
                 }
 
-            results.append({
-                "id": request.id,
-                "success": True,
-                "response": {
-                    "content": json.dumps(mock_content),
-                    "usage": {
-                        "input_tokens": len(request.prompt.split()),
-                        "output_tokens": len(json.dumps(mock_content).split()) + 50,
-                        "total_tokens": len(request.prompt.split()) + len(json.dumps(mock_content).split()) + 50
-                    }
+            results.append(
+                {
+                    "id": request.id,
+                    "success": True,
+                    "response": {
+                        "content": json.dumps(mock_content),
+                        "usage": {
+                            "input_tokens": len(request.prompt.split()),
+                            "output_tokens": len(json.dumps(mock_content).split()) + 50,
+                            "total_tokens": len(request.prompt.split())
+                            + len(json.dumps(mock_content).split())
+                            + 50,
+                        },
+                    },
                 }
-            })
+            )
 
         return {
             "success": True,
@@ -219,8 +270,9 @@ class MockBatchClient:
             "total_requests": len(requests),
             "execution_time": 0.3,
             "cost_savings": 0.15,
-            "provider": provider
+            "provider": provider,
         }
+
 
 async def demo_email_campaign():
     """Demonstrate the complete email campaign generation process"""
@@ -248,8 +300,8 @@ async def demo_email_campaign():
         initial_context={
             "daily_budget": 10.0,
             "revenue_projection": 300.0,
-            "campaign_type": "workflow_efficiency_cost_savings"
-        }
+            "campaign_type": "workflow_efficiency_cost_savings",
+        },
     )
     print(f"   ✅ Session created: {session_id}")
     print()
@@ -262,13 +314,17 @@ async def demo_email_campaign():
         "business efficiency software solutions",
         "cost reduction automation tools",
         "productivity platform features",
-        "digital transformation cost savings"
+        "digital transformation cost savings",
     ]
     print(f"   🔍 Searching {len(keywords)} keywords concurrently...")
 
     market_data = await serpapi_client.concurrent_market_research(keywords)
-    print(f"   ✅ Found {market_data['market_intelligence']['total_organic_results']} results")
-    print(f"   ⚡ Processing speed: {market_data['performance_metrics']['queries_per_second']:.1f} queries/sec")
+    print(
+        f"   ✅ Found {market_data['market_intelligence']['total_organic_results']} results"
+    )
+    print(
+        f"   ⚡ Processing speed: {market_data['performance_metrics']['queries_per_second']:.1f} queries/sec"
+    )
     print()
 
     # Step 3: Store in memory
@@ -277,7 +333,7 @@ async def demo_email_campaign():
         category="market_research_data",
         content=market_data["market_intelligence"],
         tags=["email_campaign", "market_research"],
-        importance_score=9.0
+        importance_score=9.0,
     )
     print(f"   ✅ Data stored: {memory_node_id}")
     print()
@@ -298,18 +354,18 @@ async def demo_email_campaign():
         MockBatchRequest(
             id="pain_points_analysis",
             prompt="Analyze market data for customer pain points...",
-            model="claude-3.5-sonnet"
+            model="claude-3.5-sonnet",
         ),
         MockBatchRequest(
             id="efficiency_benefits",
             prompt="Extract workflow efficiency benefits...",
-            model="claude-3.5-sonnet"
+            model="claude-3.5-sonnet",
         ),
         MockBatchRequest(
             id="customer_personas",
             prompt="Identify customer personas...",
-            model="claude-3.5-sonnet"
-        )
+            model="claude-3.5-sonnet",
+        ),
     ]
 
     batch_results = await batch_client.process_batch_prompts(analysis_requests)
@@ -324,7 +380,7 @@ async def demo_email_campaign():
         input_tokens=int(total_tokens * 0.7),
         output_tokens=int(total_tokens * 0.3),
         session_id=session_id,
-        task_type="market_data_analysis"
+        task_type="market_data_analysis",
     )
 
     print(f"   ✅ Batch analysis completed: ${analysis_cost:.4f}")
@@ -340,7 +396,7 @@ async def demo_email_campaign():
         input_tokens=1200,
         output_tokens=800,
         session_id=session_id,
-        task_type="email_content_generation"
+        task_type="email_content_generation",
     )
 
     # Create email content
@@ -429,10 +485,10 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
             "3x faster decision making with real-time insights",
             "85% less time spent on administrative tasks",
             "250% improvement in data accuracy",
-            "Guaranteed ROI or money back"
+            "Guaranteed ROI or money back",
         ],
         "call_to_action": "Calculate Your Cost Savings Now",
-        "target_roi_claim": "40% cost reduction with 250% accuracy improvement"
+        "target_roi_claim": "40% cost reduction with 250% accuracy improvement",
     }
 
     print(f"   ✅ Email content generated: ${email_cost:.4f}")
@@ -504,14 +560,19 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
     print("7️⃣ Generating token usage report...")
 
     budget_status = token_monitor.get_budget_status()
-    usage_summary = token_monitor.get_usage_summary(task_type="email_campaign_generation")
+    usage_summary = token_monitor.get_usage_summary(
+        task_type="email_campaign_generation"
+    )
 
     usage_report = {
         "cost_optimization_dashboard": {
             "daily_budget_limit": 10.0,
-            "current_daily_usage": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
-            "budget_remaining": 10.0 - budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
-            "budget_status": budget_status["budget_alerts"]["default_daily"]["status"]
+            "current_daily_usage": budget_status["budget_alerts"]["default_daily"][
+                "current_usage_usd"
+            ],
+            "budget_remaining": 10.0
+            - budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
+            "budget_status": budget_status["budget_alerts"]["default_daily"]["status"],
         },
         "session_performance": {
             "session_id": session_id,
@@ -521,12 +582,14 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
                 "Concurrent SerpAPI searches (6 parallel)",
                 "Batch AI processing (3 tasks)",
                 "Cost-optimized model selection",
-                "Session memory for context reuse"
-            ]
+                "Session memory for context reuse",
+            ],
         },
-        "total_campaign_cost": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"],
+        "total_campaign_cost": budget_status["budget_alerts"]["default_daily"][
+            "current_usage_usd"
+        ],
         "tokens_used": usage_summary["period_summary"]["total_tokens"],
-        "api_calls_made": usage_summary["period_summary"]["total_api_calls"]
+        "api_calls_made": usage_summary["period_summary"]["total_api_calls"],
     }
 
     report_file = output_dir / f"token_usage_report_{timestamp}.json"
@@ -543,8 +606,12 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
     print("=" * 60)
     print(f"📧 Email File: {email_file}")
     print(f"📊 Usage Report: {report_file}")
-    print(f"💰 Total Cost: ${budget_status['budget_alerts']['default_daily']['current_usage_usd']:.4f}")
-    print(f"💲 Budget Remaining: ${10.0 - budget_status['budget_alerts']['default_daily']['current_usage_usd']:.4f}")
+    print(
+        f"💰 Total Cost: ${budget_status['budget_alerts']['default_daily']['current_usage_usd']:.4f}"
+    )
+    print(
+        f"💲 Budget Remaining: ${10.0 - budget_status['budget_alerts']['default_daily']['current_usage_usd']:.4f}"
+    )
     print(f"⏱️  Execution Time: {execution_time:.2f} seconds")
     print("🚀 Revenue Target: $300/day acceleration")
     print()
@@ -566,8 +633,11 @@ P.S. Our platform integrates with 150+ business tools, so you can start seeing r
         "email_file": str(email_file),
         "usage_report": usage_report,
         "execution_time": execution_time,
-        "total_cost": budget_status["budget_alerts"]["default_daily"]["current_usage_usd"]
+        "total_cost": budget_status["budget_alerts"]["default_daily"][
+            "current_usage_usd"
+        ],
     }
+
 
 if __name__ == "__main__":
     result = asyncio.run(demo_email_campaign())

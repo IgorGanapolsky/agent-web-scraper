@@ -55,7 +55,7 @@ async def health_check():
             "status": "healthy",
             "timestamp": datetime.now().isoformat(),
             "service": "agent-web-scraper",
-            "version": "2.0.0"
+            "version": "2.0.0",
         }
     )
 
