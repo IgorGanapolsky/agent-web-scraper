@@ -25,7 +25,7 @@ def test_app_modules():
     """Verify core application modules are importable."""
     try:
         import importlib.util
-        
+
         spec = importlib.util.find_spec("app")
         assert spec is not None
     except ImportError:
