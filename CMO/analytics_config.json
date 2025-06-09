@@ -1,0 +1,63 @@
+{
+  "analytics": {
+    "google_analytics": {
+      "measurement_id": "G-XXXXXXXXXX",
+      "events": [
+        "page_view",
+        "trial_signup",
+        "payment_success",
+        "feature_usage"
+      ]
+    },
+    "mixpanel": {
+      "project_token": "your_mixpanel_token",
+      "events": [
+        "user_signup",
+        "subscription_created",
+        "feature_adopted",
+        "churn"
+      ]
+    },
+    "custom_metrics": {
+      "revenue_metrics": [
+        "mrr",
+        "arr",
+        "churn_rate",
+        "ltv"
+      ],
+      "usage_metrics": [
+        "dau",
+        "mau",
+        "feature_adoption",
+        "session_duration"
+      ],
+      "business_metrics": [
+        "cac",
+        "conversion_rate",
+        "trial_to_paid",
+        "nps"
+      ]
+    }
+  },
+  "monitoring": {
+    "health_checks": {
+      "database": "/health/database",
+      "redis": "/health/redis",
+      "stripe": "/health/stripe",
+      "sendgrid": "/health/sendgrid"
+    },
+    "alerts": {
+      "payment_failures": "Notify when payment failure rate > 5%",
+      "system_errors": "Notify on 5xx errors > 1%",
+      "revenue_drops": "Notify on daily revenue drop > 20%",
+      "churn_spikes": "Notify on churn rate increase > 10%"
+    },
+    "dashboards": {
+      "revenue": "Real-time revenue and subscription metrics",
+      "usage": "Customer usage and engagement metrics",
+      "system": "System health and performance metrics"
+    }
+  },
+  "retention_period": "2 years",
+  "gdpr_compliance": "enabled"
+}

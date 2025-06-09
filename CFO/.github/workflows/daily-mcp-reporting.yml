@@ -1,0 +1,208 @@
+name: Daily MCP Reporting System
+
+on:
+  schedule:
+    # Run at 6:00 PM EST (23:00 UTC) every day
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+    inputs:
+      force_report:
+        description: 'Force send report regardless of time'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  GSPREAD_CREDENTIALS_PATH: ${{ secrets.GSPREAD_CREDENTIALS_PATH }}
+
+jobs:
+  daily-reporting:
+    runs-on: ubuntu-latest
+    name: Generate and Send Daily MCP Report
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 50  # Get recent commit history
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install PyGithub slack-sdk gspread google-auth
+
+      - name: Configure Google Sheets Credentials
+        if: env.GSPREAD_CREDENTIALS_PATH != ''
+        run: |
+          echo "${{ secrets.GSPREAD_CREDENTIALS }}" > /tmp/gspread_credentials.json
+          echo "GSPREAD_CREDENTIALS_PATH=/tmp/gspread_credentials.json" >> $GITHUB_ENV
+
+      - name: Generate Daily Commit Status
+        id: github_status
+        run: |
+          python -c "
+          from app.utils.github_tracker import run_daily_commit_tracking
+          import json
+
+          result = run_daily_commit_tracking()
+          print(f'GitHub tracking result: {result}')
+
+          if result.get('success'):
+              print(f'::set-output name=issue_number::{result.get(\"issue_number\")}')
+              print('::set-output name=github_success::true')
+          else:
+              print('::set-output name=github_success::false')
+              print(f'::error::GitHub tracking failed: {result.get(\"error\")}')
+          "
+
+      - name: Test Slack Connection
+        id: slack_test
+        run: |
+          python -c "
+          from app.utils.slack_reporter import SlackReporter
+
+          try:
+              reporter = SlackReporter()
+              channel_info = reporter.get_channel_info()
+              print(f'Slack channel info: {channel_info}')
+
+              if channel_info.get('success'):
+                  print('::set-output name=slack_ready::true')
+              else:
+                  print('::set-output name=slack_ready::false')
+                  print(f'::warning::Slack channel issue: {channel_info.get(\"error\")}')
+          except Exception as e:
+              print(f'::error::Slack connection failed: {e}')
+              print('::set-output name=slack_ready::false')
+          "
+
+      - name: Send Daily Slack Report
+        id: slack_report
+        if: steps.slack_test.outputs.slack_ready == 'true'
+        run: |
+          python -c "
+          from app.utils.slack_reporter import run_daily_slack_report
+          import json
+
+          result = run_daily_slack_report()
+          print(f'Slack report result: {result}')
+
+          if result.get('success'):
+              print('::set-output name=slack_success::true')
+              print(f'::notice::Daily report sent to Slack at {result.get(\"timestamp\")}')
+          else:
+              print('::set-output name=slack_success::false')
+              print(f'::error::Slack report failed: {result.get(\"error\")}')
+          "
+
+      - name: Update Repository Metrics
+        id: repo_metrics
+        run: |
+          python -c "
+          from app.utils.github_tracker import GitHubTracker
+          from datetime import datetime
+
+          try:
+              tracker = GitHubTracker()
+              commits = tracker.get_daily_commits()
+              repo_stats = tracker.get_repository_stats()
+
+              print(f'Daily commits: {len(commits)}')
+              print(f'Total repository commits: {repo_stats.get(\"total_commits\", 0)}')
+              print(f'Open issues: {repo_stats.get(\"open_issues\", 0)}')
+              print(f'Repository size: {repo_stats.get(\"size_kb\", 0)} KB')
+
+              # Set outputs for other workflows
+              print(f'::set-output name=daily_commits::{len(commits)}')
+              print(f'::set-output name=total_commits::{repo_stats.get(\"total_commits\", 0)}')
+              print(f'::set-output name=open_issues::{repo_stats.get(\"open_issues\", 0)}')
+
+          except Exception as e:
+              print(f'::error::Repository metrics failed: {e}')
+          "
+
+      - name: Generate Summary Report
+        run: |
+          echo "## Daily MCP Report Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date '+%Y-%m-%d %H:%M:%S EST')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### 📊 Results" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.github_status.outputs.github_success }}" = "true" ]; then
+            echo "- ✅ **GitHub Status**: Issue #${{ steps.github_status.outputs.issue_number }} created/updated" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ **GitHub Status**: Failed to create daily issue" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ steps.slack_report.outputs.slack_success }}" = "true" ]; then
+            echo "- ✅ **Slack Report**: Successfully sent to #chatgpt" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ **Slack Report**: Failed to send daily report" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📈 Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Daily Commits**: ${{ steps.repo_metrics.outputs.daily_commits }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Commits**: ${{ steps.repo_metrics.outputs.total_commits }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Open Issues**: ${{ steps.repo_metrics.outputs.open_issues }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify on Failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Daily MCP Reporting Failed - ${new Date().toISOString().split('T')[0]}`,
+              body: `## Daily Reporting System Failure
+
+              The automated daily MCP reporting system failed during execution.
+
+              **Failure Details:**
+              - Workflow: ${context.workflow}
+              - Run ID: ${context.runId}
+              - Run URL: https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+
+              **Action Required:**
+              - Check workflow logs for specific error details
+              - Verify all required secrets are configured
+              - Test Slack integration manually if needed
+              - Check GitHub API rate limits
+
+              **Environment Status:**
+              - GitHub Token: ${process.env.GITHUB_TOKEN ? '✅ Available' : '❌ Missing'}
+              - Slack Token: ${process.env.SLACK_BOT_TOKEN ? '✅ Available' : '❌ Missing'}
+              - Stripe Key: ${process.env.STRIPE_SECRET_KEY ? '✅ Available' : '❌ Missing'}
+
+              🤖 Generated automatically by GitHub Actions
+              `,
+              labels: ['bug', 'automation', 'critical']
+            });
+
+  # Backup reporting job in case main job fails
+  backup-notification:
+    runs-on: ubuntu-latest
+    needs: daily-reporting
+    if: always() && needs.daily-reporting.result == 'failure'
+
+    steps:
+      - name: Send Backup Notification
+        run: |
+          echo "Daily MCP reporting failed. Manual intervention required."
+          echo "Check GitHub Actions logs and Slack integration."
+
+          # Could add webhook notification to backup channel here
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"🚨 Daily MCP Reporting System Failed - Manual check required"}' \
+            ${{ secrets.BACKUP_WEBHOOK_URL || 'echo No backup webhook configured' }}

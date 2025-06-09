@@ -1,0 +1,254 @@
+{
+  "model_metadata": {
+    "generated_at": "2025-06-06T17:56:58.389950",
+    "model_version": "2.0",
+    "current_daily_target": 400.0,
+    "scale_daily_target": 1000.0,
+    "timeline_days": 30
+  },
+  "ai_cost_optimization": {
+    "current_monthly_ai_cost": 300.0,
+    "optimized_monthly_ai_cost": 90.00000000000001,
+    "monthly_savings": 210.0,
+    "cost_per_task": 0.054,
+    "sonnet_usage_pct": 80.0,
+    "opus_usage_pct": 20.0,
+    "tasks_per_dollar": 18.51851851851852
+  },
+  "customer_acquisition": {
+    "revenue_gap": 18000.0,
+    "avg_revenue_per_customer": 125.0,
+    "additional_customers_needed": 144,
+    "optimized_cac": 39.5,
+    "avg_ltv": 3000.0,
+    "ltv_cac_ratio": 75.9493670886076,
+    "customer_mix": {
+      "basic": {
+        "price": 29.0,
+        "target_pct": 0.2
+      },
+      "pro": {
+        "price": 99.0,
+        "target_pct": 0.6
+      },
+      "enterprise": {
+        "price": 299.0,
+        "target_pct": 0.2
+      }
+    },
+    "payback_period_months": 0.316
+  },
+  "scaling_timeline": {
+    "scaling_timeline": [
+      {
+        "week": 1,
+        "new_customers": 33,
+        "cumulative_customers": 33,
+        "weekly_revenue_added": 4186,
+        "cumulative_monthly_revenue": 16186,
+        "daily_revenue": 539.53
+      },
+      {
+        "week": 2,
+        "new_customers": 33,
+        "cumulative_customers": 67,
+        "weekly_revenue_added": 4186,
+        "cumulative_monthly_revenue": 20372,
+        "daily_revenue": 679.07
+      },
+      {
+        "week": 3,
+        "new_customers": 33,
+        "cumulative_customers": 100,
+        "weekly_revenue_added": 4186,
+        "cumulative_monthly_revenue": 24558,
+        "daily_revenue": 818.6
+      },
+      {
+        "week": 4,
+        "new_customers": 33,
+        "cumulative_customers": 134,
+        "weekly_revenue_added": 4186,
+        "cumulative_monthly_revenue": 28744,
+        "daily_revenue": 958.14
+      }
+    ],
+    "total_weeks": 4.3,
+    "customers_per_week": 33,
+    "final_daily_revenue": 958.14
+  },
+  "roi_metrics": {
+    "total_cac_investment": 5688.0,
+    "additional_monthly_revenue": 18000.0,
+    "monthly_profit": 12714.7272125,
+    "break_even_months": 0.4,
+    "roi_12_months_pct": 212.5,
+    "ai_cost_savings_monthly": 210.0,
+    "payback_period_months": 0.316
+  },
+  "key_assumptions": {
+    "trial_conversion_rate": 0.15,
+    "churn_rate_monthly": 0.05,
+    "ai_optimization_savings": 0.7,
+    "operational_costs_monthly": 5285.2727875
+  },
+  "risk_factors": [
+    "Market saturation affecting conversion rates",
+    "Increased competition driving up CAC",
+    "AI model pricing changes affecting cost structure",
+    "Economic downturn reducing enterprise spending"
+  ],
+  "success_metrics": {
+    "target_ltv_cac_ratio": 3.0,
+    "target_payback_period_months": 6.0,
+    "target_monthly_churn_rate": 0.03,
+    "target_roi_12m_pct": 200.0
+  },
+  "development_integration": {
+    "development_costs": {
+      "estimation_metadata": {
+        "timestamp": "2025-06-06T17:56:58.389828",
+        "session_id": "dev_estimation_20250606_175658",
+        "components_analyzed": 4
+      },
+      "component_estimates": [
+        {
+          "name": "Stripe Integration",
+          "description": "Payment processing, webhooks, subscription management",
+          "complexity": "medium",
+          "development_hours": 40,
+          "ai_assistance_hours": 8,
+          "development_cost": 6000.0,
+          "ai_assistance_cost": 0.471,
+          "total_cost": 6000.471,
+          "cost_breakdown": {
+            "developer_time": 6000.0,
+            "ai_assistance": 0.471,
+            "savings_from_ai": 1800.0
+          }
+        },
+        {
+          "name": "Customer Dashboard",
+          "description": "User portal, analytics, subscription management",
+          "complexity": "high",
+          "development_hours": 80,
+          "ai_assistance_hours": 16,
+          "development_cost": 12000.0,
+          "ai_assistance_cost": 1.5072,
+          "total_cost": 12001.5072,
+          "cost_breakdown": {
+            "developer_time": 12000.0,
+            "ai_assistance": 1.5072,
+            "savings_from_ai": 3600.0
+          }
+        },
+        {
+          "name": "Trial & Conversion Flow",
+          "description": "Onboarding, trial tracking, conversion optimization",
+          "complexity": "medium",
+          "development_hours": 60,
+          "ai_assistance_hours": 12,
+          "development_cost": 9000.0,
+          "ai_assistance_cost": 0.7065,
+          "total_cost": 9000.7065,
+          "cost_breakdown": {
+            "developer_time": 9000.0,
+            "ai_assistance": 0.7065,
+            "savings_from_ai": 2700.0
+          }
+        },
+        {
+          "name": "API Access Management",
+          "description": "API key generation, rate limiting, usage tracking",
+          "complexity": "medium",
+          "development_hours": 50,
+          "ai_assistance_hours": 10,
+          "development_cost": 7500.0,
+          "ai_assistance_cost": 0.58875,
+          "total_cost": 7500.58875,
+          "cost_breakdown": {
+            "developer_time": 7500.0,
+            "ai_assistance": 0.58875,
+            "savings_from_ai": 2250.0
+          }
+        }
+      ],
+      "total_estimates": {
+        "total_development_cost": 34500.0,
+        "total_ai_cost": 3.2734500000000004,
+        "total_project_cost": 34503.27345,
+        "total_development_hours": 230,
+        "average_hourly_rate": 150.0,
+        "ai_cost_percentage": 0.00948736068403388
+      },
+      "ai_optimization_savings": {
+        "time_savings_hours": 69.0,
+        "cost_savings": 10350.0,
+        "efficiency_gain": "30% faster development with AI assistance"
+      }
+    },
+    "week1_optimizations": {
+      "week1_projections": {
+        "baseline_costs": {
+          "infrastructure": 200.0,
+          "ai_services": 75.0,
+          "marketing": 375.0,
+          "support": 100.0,
+          "development": 150.0
+        },
+        "optimized_costs": {
+          "infrastructure": 140.0,
+          "ai_services": 25.0,
+          "marketing": 262.5,
+          "support": 70.0,
+          "development": 105.0
+        },
+        "development_costs": 3750.294375,
+        "total_baseline": 900.0,
+        "total_optimized": 4352.7943749999995,
+        "cost_reduction_achieved": 33.05555555555556,
+        "target_reduction": 30.0,
+        "ai_cost_optimization": {
+          "baseline_ai_weekly": 75.0,
+          "optimized_ai_weekly": 25.0,
+          "monthly_ai_target": 100,
+          "savings_vs_baseline": 200.0
+        }
+      },
+      "revenue_alignment": {
+        "target_daily_revenue": 400,
+        "week1_daily_costs": 621.8277678571428,
+        "profit_margin": -55.4569419642857,
+        "break_even_daily_revenue": 621.8277678571428
+      }
+    },
+    "operational_adjustments": {
+      "baseline_monthly_costs": 3600.0,
+      "optimized_monthly_costs": 2410.0000000000005,
+      "development_amortization": 2875.2727875,
+      "total_adjusted_costs": 5285.2727875,
+      "cost_reduction_achieved": 33.05555555555556,
+      "ai_cost_target": 100
+    },
+    "revenue_alignment": {
+      "updated_daily_target": 400.0,
+      "original_target": 300.0,
+      "target_increase_rationale": "Account for development costs and operational scaling"
+    }
+  },
+  "adjusted_metrics": {
+    "recalculated_roi_12_months_pct": 212.5,
+    "recalculated_break_even_months": 0.4,
+    "adjusted_monthly_profit": 12715.0,
+    "development_cost_impact": {
+      "roi_change_vs_baseline": 0.0,
+      "break_even_change_vs_baseline": 0.0,
+      "profit_impact_monthly": 0.0
+    },
+    "cost_optimization_benefits": {
+      "operational_savings_monthly": -1685.0,
+      "ai_cost_savings_monthly": 200,
+      "total_monthly_savings": -1485.0
+    }
+  }
+}

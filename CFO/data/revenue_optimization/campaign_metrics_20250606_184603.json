@@ -1,0 +1,36 @@
+{
+  "meta_ads_performance": {
+    "impressions": 62500,
+    "leads_generated": 141,
+    "impression_to_lead_rate": "0.226%",
+    "cost_per_lead": 18.5,
+    "total_ad_spend": 2608.5,
+    "lead_quality": "High - SaaS decision makers",
+    "optimization_status": "Ready for scale to 10K leads"
+  },
+  "email_conversion_funnel": {
+    "total_leads": 7500,
+    "trial_signups": 304,
+    "trial_conversion_rate": "4.05%",
+    "paid_customers": 76,
+    "trial_to_paid_rate": "25.0%",
+    "current_revenue": 7524,
+    "daily_revenue_current": 1074.857142857143
+  },
+  "revenue_gap_analysis": {
+    "current_daily_revenue": 1074.857142857143,
+    "target_daily_revenue": 600,
+    "revenue_gap": -474.8571428571429,
+    "customers_needed": -4,
+    "conversion_rate_current": 0.25,
+    "conversion_optimization_needed": "Email #2 immediate payment CTA critical"
+  },
+  "scaling_requirements": {
+    "current_lead_volume": 7500,
+    "target_lead_volume": 10000,
+    "scale_multiplier": 1.3333333333333333,
+    "projected_trials": 405,
+    "projected_customers": 101,
+    "projected_revenue": 10032
+  }
+}

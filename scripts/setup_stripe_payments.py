@@ -245,7 +245,7 @@ def main():
     """Main setup function"""
     print("🚀 Setting up revenue engine...")
 
-    # Create payment system
+    # Create payment system and get URLs
     create_payment_links()
 
     # Generate outreach templates

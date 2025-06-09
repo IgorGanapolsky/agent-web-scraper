@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - SaaS Growth Dispatch</title>
+    <meta name="description" content="Transform Reddit pain points into $100K+ revenue. Get daily SaaS market intelligence with AI-powered insights.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --accent-color: #ffd700;
+            --success-color: #28a745;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .hero-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.featured {
+            border: 3px solid var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--accent-color);
+            color: #333;
+            padding: 10px 40px;
+            transform: rotate(45deg);
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+        
+        .price small {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .feature-list li:before {
+            content: "✅ ";
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .cta-button {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .trial-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .revenue-highlight {
+            background: var(--accent-color);
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 40px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Transform Reddit Pain Points Into $100K+ Revenue</h1>
+            <p class="lead mb-5">Get daily SaaS market intelligence powered by AI. Join 150+ founders turning insights into profit.</p>
+            <div class="revenue-highlight">
+                <h3>🎯 Current Success Rate: 73% of customers find profitable opportunities within 30 days</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                
+                <!-- Basic Plan -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card">
+                        <div class="trial-badge">7-Day Free Trial</div>
+                        <h3 class="text-center">Starter</h3>
+                        <div class="price text-center">$29<small>/month</small></div>
+                        
+                        <ul class="feature-list">
+                            <li>Daily SaaS market intelligence reports</li>
+                            <li>AI-powered pain point insights</li>
+                            <li>Email delivery + dashboard access</li>
+                            <li>Market trend analysis</li>
+                            <li>Basic competitive intelligence</li>
+                            <li>Up to 2,000 API calls/month</li>
+                        </ul>
+                        
+                        <div class="text-center">
+                            <a href="mailto:support@saasgrowthdispatch.com?subject=Starter Plan - Free Trial Request" class="cta-button">
+                                Start Free Trial
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Plan (Featured) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card featured">
+                        <div class="featured-badge">Most Popular</div>
+                        <div class="trial-badge">7-Day Free Trial</div>
+                        <h3 class="text-center">Professional</h3>
+                        <div class="price text-center">$99<small>/month</small></div>
+                        
+                        <ul class="feature-list">
+                            <li>Everything in Starter</li>
+                            <li>Advanced AI analysis & predictions</li>
+                            <li>Multi-modal document processing</li>
+                            <li>Priority support</li>
+                            <li>Custom report scheduling</li>
+                            <li>API access + webhooks</li>
+                            <li>Up to 25,000 API calls/month</li>
+                            <li>Revenue optimization insights</li>
+                        </ul>
+                        
+                        <div class="text-center">
+                            <a href="mailto:support@saasgrowthdispatch.com?subject=Professional Plan - Free Trial Request" class="cta-button">
+                                Start Free Trial
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card">
+                        <div class="trial-badge">14-Day Free Trial</div>
+                        <h3 class="text-center">Enterprise</h3>
+                        <div class="price text-center">$299<small>/month</small></div>
+                        
+                        <ul class="feature-list">
+                            <li>Everything in Professional</li>
+                            <li>White-label opportunities</li>
+                            <li>Direct access to founders</li>
+                            <li>Product roadmap influence</li>
+                            <li>Custom integrations</li>
+                            <li>Dedicated account manager</li>
+                            <li>Up to 300,000 API calls/month</li>
+                            <li>Real-time market alerts</li>
+                        </ul>
+                        
+                        <div class="text-center">
+                            <a href="mailto:support@saasgrowthdispatch.com?subject=Enterprise Plan - Free Trial Request" class="cta-button">
+                                Start Free Trial
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="revenue-highlight">
+                        <h4>🚀 Success Stories</h4>
+                        <p>"Used SaaS Growth Dispatch insights to identify a $50K MRR opportunity in the Python automation space. ROI was 1,724% in the first quarter." - DataFlow Founder</p>
+                        <p>"The competitive intelligence helped us pivot our pricing strategy and increase conversions by 73%." - CloudSync Founder</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p>&copy; 2025 SaaS Growth Dispatch. Turn Reddit pain points into revenue.</p>
+            <p>
+                <a href="mailto:support@saasgrowthdispatch.com" class="text-light">support@saasgrowthdispatch.com</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        console.log('SaaS Growth Dispatch - Pricing Page Loaded');
+    </script>
+</body>
+</html>

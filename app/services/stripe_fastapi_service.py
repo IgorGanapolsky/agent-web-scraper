@@ -190,8 +190,9 @@ class StripeSupabaseService:
             prices = stripe.Price.list(lookup_keys=[f"{plan_id}_monthly"], limit=1)
             if prices.data:
                 return prices.data[0].id
-        except Exception:
-            pass
+        except (stripe.error.StripeError, Exception) as e:
+            logger.warning(f"Failed to list prices for {plan_id}: {e!s}")
+            # Continue to create a new price if lookup fails
 
         # Create product first
         product = stripe.Product.create(

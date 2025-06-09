@@ -507,7 +507,7 @@ class ProductionAutomationDeployer:
         """Deploy automated email campaigns"""
         logger.info("📧 Deploying email automation campaigns...")
 
-        # Generate email campaigns using existing automation
+        # Generate and deploy email campaigns using existing automation
         await self.trial_generator.create_trial_campaigns()
 
         # Deploy via n8n + SendGrid integration

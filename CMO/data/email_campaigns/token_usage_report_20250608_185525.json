@@ -1,0 +1,24 @@
+{
+  "cost_optimization_dashboard": {
+    "daily_budget_limit": 10.0,
+    "current_daily_usage": 0.017225999999999998,
+    "budget_remaining": 9.982774,
+    "budget_status": "NORMAL"
+  },
+  "session_performance": {
+    "session_id": "session_1749423324",
+    "models_used": [
+      "claude-3.5-sonnet"
+    ],
+    "cost_efficiency_achieved": "80% cost reduction vs Opus 4",
+    "optimization_methods": [
+      "Concurrent SerpAPI searches (6 parallel)",
+      "Batch AI processing (3 tasks)",
+      "Cost-optimized model selection",
+      "Session memory for context reuse"
+    ]
+  },
+  "total_campaign_cost": 0.017225999999999998,
+  "tokens_used": 0,
+  "api_calls_made": 0
+}

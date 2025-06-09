@@ -1,0 +1,27 @@
+name: Update Roadmap Diagram
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # Runs every day at 8AM EST
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Graphviz
+        run: sudo apt-get install -y graphviz
+      - name: Install dependencies
+        run: pip install graphviz
+      - name: Generate Diagram
+        run: python project-dashboard/update_diagram.py
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: roadmap-diagram
+          path: project-dashboard/*.png

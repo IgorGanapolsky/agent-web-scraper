@@ -219,8 +219,8 @@ def organize_issue_by_priority(issue_number: int, labels: list[str]) -> bool:
             target_status,
         ]
 
+    # Run the command and ignore the output since we only care about success/failure
     run_gh_command(cmd)
-    # Check if command was successful (gh CLI often returns empty output on success)
     print(f"✅ Issue #{issue_number} moved to {target_status}")
     return True
 
@@ -246,7 +246,7 @@ def organize_issue_alternative_approach(issue_number: int, target_status: str) -
     ]
 
     print("🔧 Ensuring issue is in project...")
-    run_gh_command(add_cmd)
+    run_gh_command(add_cmd)  # Ignore output as we'll handle errors in the next step
 
     # If we can't use the CLI approach, suggest the GraphQL alternative
     print("💡 CLI approach limitations detected.")

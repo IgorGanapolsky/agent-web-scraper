@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Growth Dispatch - Customer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div x-data="dashboard()" class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                            SaaS Growth Dispatch
+                        </h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-700">{{ data.user.email }}</span>
+                        <button @click="logout()" class="text-sm text-red-600 hover:text-red-800">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <!-- Tabs -->
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="-mb-px flex space-x-8">
+                    <button @click="currentTab = 'overview'"
+                            :class="currentTab === 'overview' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                        <i class="fas fa-tachometer-alt mr-2"></i> Overview
+                    </button>
+                    <button @click="currentTab = 'subscription'"
+                            :class="currentTab === 'subscription' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                        <i class="fas fa-credit-card mr-2"></i> Subscription
+                    </button>
+                    <button @click="currentTab = 'api-keys'"
+                            :class="currentTab === 'api-keys' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                        <i class="fas fa-key mr-2"></i> API Keys
+                    </button>
+                    <button @click="currentTab = 'usage'"
+                            :class="currentTab === 'usage' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                        <i class="fas fa-chart-bar mr-2"></i> Usage
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Overview Tab -->
+            <div x-show="currentTab === 'overview'" class="space-y-6">
+                <!-- Status Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-crown text-yellow-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Current Plan</p>
+                                <p class="text-lg font-semibold text-gray-900 capitalize">{{ data.subscription.tier }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-calendar text-green-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Billing Cycle</p>
+                                <p class="text-lg font-semibold text-gray-900 capitalize">{{ data.subscription.billing_cycle }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-key text-blue-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">API Keys</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ data.api_keys.length }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-chart-line text-purple-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Monthly Requests</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ data.usage_stats.total_requests || 0 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="space-y-4">
+                            <template x-for="activity in recentActivity" :key="activity.timestamp">
+                                <div class="flex items-center space-x-3">
+                                    <div :class="activity.status === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'"
+                                         class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center">
+                                        <i :class="activity.type === 'api_request' ? 'fas fa-code' :
+                                                  activity.type === 'subscription' ? 'fas fa-credit-card' :
+                                                  'fas fa-key'" class="text-xs"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-900" x-text="activity.description"></p>
+                                        <p class="text-xs text-gray-500" x-text="formatDate(activity.timestamp)"></p>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription Tab -->
+            <div x-show="currentTab === 'subscription'" class="space-y-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Subscription Details</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Current Plan</label>
+                                <p class="mt-1 text-sm text-gray-900 capitalize">{{ data.subscription.tier }} - ${{ data.subscription.amount }}/{{ data.subscription.billing_cycle }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Status</label>
+                                <span class="mt-1 inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 capitalize">
+                                    {{ data.subscription.status }}
+                                </span>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Next Billing Date</label>
+                                <p class="mt-1 text-sm text-gray-900">{{ data.subscription.next_billing_date }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Payment Method</label>
+                                <p class="mt-1 text-sm text-gray-900">**** **** **** {{ data.billing.payment_method.last4 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-between">
+                        <button @click="openBillingPortal()"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                            <i class="fas fa-external-link-alt mr-2"></i> Manage Billing
+                        </button>
+                        <button @click="showUpgradeModal = true"
+                                class="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+                            <i class="fas fa-arrow-up mr-2"></i> Upgrade Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Keys Tab -->
+            <div x-show="currentTab === 'api-keys'" class="space-y-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-medium text-gray-900">API Keys</h3>
+                        <button @click="showCreateKeyModal = true"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                            <i class="fas fa-plus mr-2"></i> Create API Key
+                        </button>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="space-y-4">
+                            <template x-for="key in apiKeys" :key="key.id">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="text-sm font-medium text-gray-900" x-text="key.name"></h4>
+                                            <p class="text-xs text-gray-500" x-text="key.description"></p>
+                                            <div class="mt-2 flex items-center space-x-4 text-xs text-gray-500">
+                                                <span>Tier: <span class="capitalize" x-text="key.tier"></span></span>
+                                                <span>Created: <span x-text="formatDate(key.created_at)"></span></span>
+                                                <span>Usage: <span x-text="key.usage_count"></span> requests</span>
+                                            </div>
+                                            <div class="mt-2">
+                                                <code class="text-xs bg-gray-100 px-2 py-1 rounded" x-text="key.key_preview"></code>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span :class="key.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                                                  class="inline-flex px-2 py-1 text-xs font-medium rounded-full">
+                                                <span x-text="key.is_active ? 'Active' : 'Inactive'"></span>
+                                            </span>
+                                            <button @click="deleteApiKey(key.id)"
+                                                    class="text-red-600 hover:text-red-800 text-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Tab -->
+            <div x-show="currentTab === 'usage'" class="space-y-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Usage Analytics</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-600" x-text="usageStats.total_requests || 0"></p>
+                                <p class="text-sm text-gray-500">Total Requests</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-600" x-text="(usageStats.success_rate || 0) + '%'"></p>
+                                <p class="text-sm text-gray-500">Success Rate</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-purple-600" x-text="(usageStats.average_response_time || 0) + 'ms'"></p>
+                                <p class="text-sm text-gray-500">Avg Response Time</p>
+                            </div>
+                        </div>
+                        <div class="text-center text-gray-500">
+                            <i class="fas fa-chart-area text-4xl mb-4"></i>
+                            <p>Detailed analytics and charts coming soon!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create API Key Modal -->
+        <div x-show="showCreateKeyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Create New API Key</h3>
+                <form @submit.prevent="createApiKey()">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Name</label>
+                            <input x-model="newKey.name" type="text" required
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea x-model="newKey.description" rows="3"
+                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tier</label>
+                            <select x-model="newKey.tier"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="pro">Pro</option>
+                                <option value="enterprise">Enterprise</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button @click="showCreateKeyModal = false" type="button"
+                                class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-400">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                            Create Key
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Upgrade Plan Modal -->
+        <div x-show="showUpgradeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Upgrade Plan</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Select Plan</label>
+                        <select x-model="upgradeData.plan"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="pro">Pro - $99/month</option>
+                            <option value="enterprise">Enterprise - $299/month</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Billing Cycle</label>
+                        <select x-model="upgradeData.billing_cycle"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="monthly">Monthly</option>
+                            <option value="annual">Annual (2 months free)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button @click="showUpgradeModal = false" type="button"
+                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-400">
+                        Cancel
+                    </button>
+                    <button @click="upgradePlan()"
+                            class="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+                        Upgrade Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function dashboard() {
+            return {
+                currentTab: 'overview',
+                showCreateKeyModal: false,
+                showUpgradeModal: false,
+                apiKeys: {{ data.api_keys | tojson }},
+                recentActivity: {{ data.recent_activity | tojson }},
+                usageStats: {{ data.usage_stats | tojson }},
+                newKey: {
+                    name: '',
+                    description: '',
+                    tier: 'pro'
+                },
+                upgradeData: {
+                    plan: 'pro',
+                    billing_cycle: 'monthly'
+                },
+
+                formatDate(dateString) {
+                    return new Date(dateString).toLocaleDateString();
+                },
+
+                async createApiKey() {
+                    try {
+                        const response = await fetch('/dashboard/api/api-keys', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                            },
+                            body: JSON.stringify(this.newKey)
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            alert('API Key created successfully! Save this key: ' + result.api_key.key);
+                            this.apiKeys.push(result.api_key);
+                            this.showCreateKeyModal = false;
+                            this.newKey = { name: '', description: '', tier: 'pro' };
+                            location.reload();
+                        } else {
+                            const error = await response.json();
+                            alert('Error: ' + error.detail);
+                        }
+                    } catch (error) {
+                        alert('Error creating API key: ' + error.message);
+                    }
+                },
+
+                async deleteApiKey(keyId) {
+                    if (!confirm('Are you sure you want to delete this API key?')) return;
+
+                    try {
+                        const response = await fetch(`/dashboard/api/api-keys/${keyId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            this.apiKeys = this.apiKeys.filter(k => k.id !== keyId);
+                            alert('API key deleted successfully');
+                        } else {
+                            const error = await response.json();
+                            alert('Error: ' + error.detail);
+                        }
+                    } catch (error) {
+                        alert('Error deleting API key: ' + error.message);
+                    }
+                },
+
+                async openBillingPortal() {
+                    try {
+                        const response = await fetch('/dashboard/api/billing/portal', {
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            window.open(result.portal_url, '_blank');
+                        } else {
+                            const error = await response.json();
+                            alert('Error: ' + error.detail);
+                        }
+                    } catch (error) {
+                        alert('Error opening billing portal: ' + error.message);
+                    }
+                },
+
+                async upgradePlan() {
+                    try {
+                        const response = await fetch('/dashboard/api/subscription/update', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                            },
+                            body: JSON.stringify(this.upgradeData)
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            window.location.href = result.checkout_url;
+                        } else {
+                            const error = await response.json();
+                            alert('Error: ' + error.detail);
+                        }
+                    } catch (error) {
+                        alert('Error upgrading plan: ' + error.message);
+                    }
+                },
+
+                logout() {
+                    localStorage.removeItem('access_token');
+                    window.location.href = '/login';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

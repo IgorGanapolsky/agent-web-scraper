@@ -1,0 +1,107 @@
+name: Automated Kanban Board Management
+
+on:
+  issues:
+    types: [opened, edited, labeled, unlabeled, closed, reopened]
+  issue_comment:
+    types: [created]
+  push:
+    branches: [main]
+  schedule:
+    # Run every hour to keep board organized
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PROJECT_ID: "2"  # Your project ID
+
+jobs:
+  auto-organize-kanban:
+    runs-on: ubuntu-latest
+    name: Auto-organize GitHub Project Board
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub requests
+
+      - name: Organize Board Based on Issue Labels and Titles
+        run: |
+          python -c "
+          import sys
+          sys.path.append('.')
+
+          import os
+          import requests
+
+          # Add Slack posting function
+          def post_to_slack(message: str):
+              webhook_url = os.getenv('SLACK_WEBHOOK_CHATGPT')
+              if webhook_url:
+                  try:
+                      response = requests.post(webhook_url, json={'text': message})
+                      if response.status_code == 200:
+                          print(f'✅ Posted to Slack: {message[:50]}...')
+                      else:
+                          print(f'❌ Failed to post to Slack: {response.status_code}')
+                  except Exception as e:
+                      print(f'❌ Slack posting error: {e}')
+              else:
+                  print('⚠️ SLACK_WEBHOOK_CHATGPT not set, skipping Slack notification')
+
+          try:
+              from app.utils.github_project_manager import run_board_automation
+
+              print('🤖 Starting automated Kanban board organization...')
+              post_to_slack('🤖 Starting automated Kanban board organization...')
+
+              # Run the board automation
+              results = run_board_automation()
+
+              # Post results to Slack
+              if results['moved']:
+                  moved_summary = f\"📊 Kanban Update: {len(results['moved'])} issues organized\"
+                  post_to_slack(moved_summary)
+
+                  for item in results['moved'][:5]:  # Show first 5 moves
+                      move_msg = f\"✅ #{item['issue']}: {item['title'][:30]}... → {item['column']}\"
+                      post_to_slack(move_msg)
+
+              if results['errors']:
+                  error_summary = f\"⚠️ {len(results['errors'])} errors during Kanban automation\"
+                  post_to_slack(error_summary)
+
+              print(f'🎯 Kanban automation completed: {len(results[\"moved\"])} moved, {len(results[\"errors\"])} errors')
+
+          except Exception as e:
+              error_msg = f'❌ Kanban automation failed: {str(e)}'
+              print(error_msg)
+              post_to_slack(error_msg)
+              sys.exit(1)
+          "
+
+      - name: Generate Board Summary
+        run: |
+          echo "## 🤖 Automated Kanban Board Update" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Organization Rules Applied:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ **Done**: Issues with '✅ COMPLETED' or '✅' in title" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚧 **In Progress**: Issues with '🚀 n8n', '🚀 Dagger' in title" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 **Backlog**: Issues with '🚀 Gamma', '🚀 Meta' in title" >> $GITHUB_STEP_SUMMARY
+          echo "- 📝 **Todo**: All other issues (default)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Project Board Status:" >> $GITHUB_STEP_SUMMARY
+          echo "Your Kanban board has been automatically organized based on issue titles and labels." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**View Board:** [GitHub Project Board](https://github.com/users/IgorGanapolsky/projects/2/views/1)" >> $GITHUB_STEP_SUMMARY

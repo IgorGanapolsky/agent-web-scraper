@@ -268,7 +268,6 @@ class ConcurrentSerpAPIClient:
         """
 
         # Track Claude usage (Sonnet 4 for routine analysis)
-        len(analysis_prompt) // 4 + 500  # Estimate output tokens
         claude_cost = self.token_monitor.track_usage(
             model="claude-4-sonnet",
             input_tokens=len(analysis_prompt) // 4,
@@ -335,9 +334,6 @@ class CostOptimizationDashboard:
 
     def monitor_pipeline_costs(self) -> dict:
         """Monitor ongoing AI costs for revenue pipeline"""
-
-        # Get current usage analytics
-        self.token_monitor.get_usage_analytics(7)
 
         # Pipeline cost tracking
         pipeline_costs = {

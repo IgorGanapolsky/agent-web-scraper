@@ -329,11 +329,11 @@ class BMADAIOrchestrator:
 
         return selected_model
 
-    async def route_task(
+    async def process_with_optimal_model(
         self,
         prompt: str,
         context: dict[str, Any] | None = None,
-        force_model: Optional[ModelType] = None,
+        force_model: ModelType | None = None,
     ) -> dict[str, Any]:
         """
         Route a task to the optimal Claude model using BMAD framework.
@@ -346,10 +346,10 @@ class BMADAIOrchestrator:
         Returns:
             Task routing result with model selection and reasoning
         """
-        time.time()
+        _ = time.time()  # Remove unused variable
         context = context or {}
 
-        # Analyze task if no model is forced
+        # Analyze task complexity if no model is forced
         if force_model is None:
             task_profile = self.analyze_task_complexity(prompt, context)
             selected_model = self.select_optimal_model(task_profile, context)
@@ -469,7 +469,7 @@ class BMADAIOrchestrator:
         if task_profile is None:
             return f"Model {selected_model.value} was manually selected"
 
-        self.model_configs[selected_model]
+        _ = self.model_configs[selected_model]  # Remove unused variable
 
         reasons = []
 

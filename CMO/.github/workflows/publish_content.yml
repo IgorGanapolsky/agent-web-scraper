@@ -1,0 +1,174 @@
+name: 📱 Publish Content to All Platforms
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # 9:00 AM EST (after email_and_publish.yml)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  publish_content:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-dotenv requests markdown
+          if [ -f requirements-scripts.txt ]; then pip install -r requirements-scripts.txt; fi
+
+      - name: 🎯 Generate Affiliate CTAs
+        run: |
+          echo "🚀 Generating platform-specific affiliate CTAs..."
+          python scripts/generate_affiliate_ctas.py
+        continue-on-error: true
+
+      - name: 💼 Publish to LinkedIn
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
+        run: |
+          echo "🚀 Publishing to LinkedIn..."
+          python scripts/publish_to_linkedin.py
+        continue-on-error: true
+
+      - name: 🐦 Publish to Twitter
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+        run: |
+          echo "🚀 Publishing Twitter thread..."
+          python scripts/publish_to_twitter.py
+        continue-on-error: true
+
+      - name: 📝 Enhanced Substack Publishing
+        env:
+          ZOHO_APP_PASSWORD: ${{ secrets.ZOHO_APP_PASSWORD }}
+          SUBSTACK_EMAIL: ${{ secrets.SUBSTACK_EMAIL }}
+        run: |
+          echo "🚀 Publishing enhanced Substack post..."
+          python scripts/publish_substack_post.py
+        continue-on-error: true
+
+      - name: 🎬 Publish to TikTok (Placeholder)
+        run: |
+          echo "🚀 TikTok publishing (manual process - see logs for content ideas)..."
+          echo "TikTok content ideas generated based on today's insights"
+          echo "Manual posting required due to TikTok API limitations"
+        continue-on-error: true
+
+      - name: 📊 Generate Publishing Report
+        run: |
+          echo "📈 Content Publishing Report" > publishing_report.md
+          echo "Generated: $(date)" >> publishing_report.md
+          echo "" >> publishing_report.md
+
+          echo "## Platform Publishing Status" >> publishing_report.md
+          echo "" >> publishing_report.md
+
+          # Check log files for success/failure
+          if [ -f logs/affiliate_ctas.csv ]; then
+            echo "### 🎯 Affiliate CTAs" >> publishing_report.md
+            echo "- Status: ✅ Generated" >> publishing_report.md
+            LATEST_CTA=$(tail -n 1 logs/affiliate_ctas.csv | cut -d',' -f4)
+            echo "- CTAs Created: ${LATEST_CTA}" >> publishing_report.md
+            echo "" >> publishing_report.md
+          fi
+
+          if [ -f logs/linkedin_posts.csv ]; then
+            echo "### 💼 LinkedIn" >> publishing_report.md
+            LINKEDIN_STATUS=$(tail -n 1 logs/linkedin_posts.csv | cut -d',' -f6)
+            echo "- Status: ${LINKEDIN_STATUS}" >> publishing_report.md
+            echo "" >> publishing_report.md
+          fi
+
+          if [ -f logs/twitter_posts.csv ]; then
+            echo "### 🐦 Twitter" >> publishing_report.md
+            TWITTER_STATUS=$(tail -n 1 logs/twitter_posts.csv | cut -d',' -f6)
+            echo "- Status: ${TWITTER_STATUS}" >> publishing_report.md
+            echo "" >> publishing_report.md
+          fi
+
+          if [ -f logs/substack_posts.csv ]; then
+            echo "### 📝 Substack" >> publishing_report.md
+            SUBSTACK_STATUS=$(tail -n 1 logs/substack_posts.csv | cut -d',' -f5)
+            echo "- Status: ${SUBSTACK_STATUS}" >> publishing_report.md
+            echo "" >> publishing_report.md
+          fi
+
+          echo "## Today's Content Summary" >> publishing_report.md
+          echo "" >> publishing_report.md
+
+          # Extract today's report summary
+          TODAY_REPORT="reports/insight_daily_$(date +%Y-%m-%d).md"
+          if [ -f "$TODAY_REPORT" ]; then
+            echo "### Key Insights Published:" >> publishing_report.md
+            grep -A 3 "## 🎯 Key Themes Analysis" "$TODAY_REPORT" | tail -n +2 >> publishing_report.md
+            echo "" >> publishing_report.md
+
+            echo "### Niche Opportunities Shared:" >> publishing_report.md
+            grep -A 5 "🔥 High\|⚠️ Moderate" "$TODAY_REPORT" | head -n 10 >> publishing_report.md
+            echo "" >> publishing_report.md
+          fi
+
+          echo "## Next Steps" >> publishing_report.md
+          echo "- Monitor engagement across all platforms" >> publishing_report.md
+          echo "- Track affiliate link clicks in UTM analytics" >> publishing_report.md
+          echo "- Respond to comments and questions" >> publishing_report.md
+          echo "- Prepare content for tomorrow's analysis" >> publishing_report.md
+
+          echo "---" >> publishing_report.md
+          echo "🤖 Generated by Content Publishing Automation" >> publishing_report.md
+
+          cat publishing_report.md
+
+      - name: 📄 Upload Publishing Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: content-publishing-report
+          path: publishing_report.md
+
+      - name: 📊 Commit Publishing Logs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Add any new log files
+          if [[ -n $(git status --porcelain logs/) ]]; then
+            git add logs/affiliate_ctas.csv logs/linkedin_posts.csv logs/twitter_posts.csv logs/substack_posts.csv
+            git add logs/affiliate_ctas_*.json
+            git commit -m "📱 Update content publishing logs" || echo "No new logs to commit"
+            git push
+          else
+            echo "📝 No new publishing logs to commit"
+          fi
+
+      - name: 🎉 Publishing Summary
+        run: |
+          echo "🎯 Content Publishing Workflow Complete!"
+          echo ""
+          echo "📊 Published across platforms:"
+          echo "💼 LinkedIn: Professional insights post"
+          echo "🐦 Twitter: Threaded market intelligence"
+          echo "📝 Substack: Enhanced blog post with CTAs"
+          echo "🎬 TikTok: Content ideas generated (manual posting required)"
+          echo ""
+          echo "📈 Check artifacts for detailed publishing report"
+          echo "🔗 Monitor UTM analytics for engagement tracking"

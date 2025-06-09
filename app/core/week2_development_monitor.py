@@ -357,10 +357,6 @@ class Week2DevelopmentMonitor:
 
     def create_token_usage_report(self) -> dict:
         """Create detailed token usage report for Week 2"""
-
-        # Get session analytics
-        self.token_monitor.get_usage_analytics(1)
-
         return {
             "week2_token_usage": {
                 "report_metadata": {

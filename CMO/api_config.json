@@ -1,0 +1,41 @@
+{
+  "base_url": "https://your-domain.com/api",
+  "version": "v1",
+  "endpoints": {
+    "auth": {
+      "login": "/api/auth/login",
+      "logout": "/api/auth/logout",
+      "refresh": "/api/auth/refresh",
+      "register": "/api/auth/register"
+    },
+    "customers": {
+      "profile": "/api/customers/profile",
+      "subscription": "/api/customers/subscription",
+      "billing": "/api/customers/billing",
+      "usage": "/api/customers/usage"
+    },
+    "payments": {
+      "checkout": "/api/payments/checkout",
+      "webhook": "/api/payments/webhook",
+      "portal": "/api/payments/portal"
+    },
+    "analytics": {
+      "events": "/api/analytics/events",
+      "dashboard": "/api/analytics/dashboard",
+      "revenue": "/api/analytics/revenue"
+    },
+    "automation": {
+      "workflows": "/api/automation/workflows",
+      "triggers": "/api/automation/triggers",
+      "status": "/api/automation/status"
+    }
+  },
+  "rate_limits": {
+    "public": "100 requests/hour",
+    "authenticated": "1000 requests/hour",
+    "premium": "5000 requests/hour",
+    "enterprise": "unlimited"
+  },
+  "authentication": "JWT Bearer tokens",
+  "documentation": "https://your-domain.com/api/docs"
+}

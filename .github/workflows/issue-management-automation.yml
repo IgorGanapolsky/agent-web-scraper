@@ -5,8 +5,6 @@ on:
     types: [opened, edited, closed, reopened, assigned, unassigned, labeled, unlabeled]
   issue_comment:
     types: [created, edited, deleted]
-  schedule:
-    - cron: '0 14 * * 0'  # Sundays at 9 AM EST
 
 jobs:
   manage-issues:
@@ -196,5 +194,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-# Schedule weekly reports (Sundays at 9 AM EST)
-# Note: This should be added to the main 'on:' section at the top
+  scheduled-reports:
+    name: Scheduled Reports
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+
+    steps:
+    - name: 📅 Scheduled Weekly Summary
+      run: |
+        echo "Scheduled weekly summary placeholder"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,136 @@
+{
+  "tables": {
+    "events": {
+      "description": "Firebase Analytics events for conversion tracking",
+      "schema": [
+        {
+          "name": "event_timestamp",
+          "type": "TIMESTAMP",
+          "description": "Event occurrence time"
+        },
+        {
+          "name": "user_id",
+          "type": "STRING",
+          "description": "Unique user identifier"
+        },
+        {
+          "name": "event_name",
+          "type": "STRING",
+          "description": "Event type name"
+        },
+        {
+          "name": "event_params",
+          "type": "RECORD",
+          "mode": "REPEATED",
+          "description": "Event parameters"
+        },
+        {
+          "name": "user_properties",
+          "type": "RECORD",
+          "mode": "REPEATED",
+          "description": "User properties"
+        },
+        {
+          "name": "geo",
+          "type": "RECORD",
+          "description": "Geographic information"
+        },
+        {
+          "name": "device",
+          "type": "RECORD",
+          "description": "Device information"
+        },
+        {
+          "name": "traffic_source",
+          "type": "RECORD",
+          "description": "Traffic source data"
+        }
+      ]
+    },
+    "revenue": {
+      "description": "Revenue data from Stripe integration",
+      "schema": [
+        {
+          "name": "transaction_id",
+          "type": "STRING",
+          "description": "Stripe transaction ID"
+        },
+        {
+          "name": "user_id",
+          "type": "STRING",
+          "description": "Customer user ID"
+        },
+        {
+          "name": "amount",
+          "type": "NUMERIC",
+          "description": "Transaction amount in USD"
+        },
+        {
+          "name": "tier",
+          "type": "STRING",
+          "description": "Customer tier"
+        },
+        {
+          "name": "transaction_timestamp",
+          "type": "TIMESTAMP",
+          "description": "Payment timestamp"
+        },
+        {
+          "name": "subscription_id",
+          "type": "STRING",
+          "description": "Stripe subscription ID"
+        },
+        {
+          "name": "payment_method",
+          "type": "STRING",
+          "description": "Payment method used"
+        }
+      ]
+    },
+    "customer_metrics": {
+      "description": "Aggregated customer and business metrics",
+      "schema": [
+        {
+          "name": "date",
+          "type": "DATE",
+          "description": "Metric date"
+        },
+        {
+          "name": "daily_revenue",
+          "type": "NUMERIC",
+          "description": "Total daily revenue"
+        },
+        {
+          "name": "new_customers",
+          "type": "INTEGER",
+          "description": "New customers acquired"
+        },
+        {
+          "name": "trial_signups",
+          "type": "INTEGER",
+          "description": "Trial signups count"
+        },
+        {
+          "name": "diagnostic_sessions",
+          "type": "INTEGER",
+          "description": "Diagnostic sessions booked"
+        },
+        {
+          "name": "pilot_conversions",
+          "type": "INTEGER",
+          "description": "Pilot tier conversions"
+        },
+        {
+          "name": "mrr",
+          "type": "NUMERIC",
+          "description": "Monthly recurring revenue"
+        },
+        {
+          "name": "churn_rate",
+          "type": "NUMERIC",
+          "description": "Customer churn rate"
+        }
+      ]
+    }
+  }
+}

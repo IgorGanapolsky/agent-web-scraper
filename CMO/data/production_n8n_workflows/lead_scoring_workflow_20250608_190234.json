@@ -1,0 +1,59 @@
+{
+  "workflow_config": {
+    "name": "Lead Scoring & Routing",
+    "description": "Automatically score and route leads for maximum conversion",
+    "nodes": [
+      {
+        "name": "Webhook Lead Capture",
+        "type": "n8n-nodes-base.webhook",
+        "parameters": {
+          "path": "lead-capture",
+          "httpMethod": "POST"
+        }
+      },
+      {
+        "name": "Lead Scoring Function",
+        "type": "n8n-nodes-base.function",
+        "parameters": {
+          "functionCode": "\n                        // AI-powered lead scoring based on multiple factors\n                        const lead = items[0].json;\n                        let score = 0;\n\n                        // Company size scoring\n                        if (lead.employees > 100) score += 30;\n                        else if (lead.employees > 10) score += 20;\n                        else score += 10;\n\n                        // Industry scoring\n                        const highValueIndustries = ['saas', 'fintech', 'healthtech'];\n                        if (highValueIndustries.includes(lead.industry?.toLowerCase())) {\n                            score += 25;\n                        }\n\n                        // Role scoring\n                        if (['ceo', 'founder', 'cto'].includes(lead.role?.toLowerCase())) {\n                            score += 20;\n                        }\n\n                        // Email domain scoring\n                        if (lead.email && !lead.email.includes('gmail') && !lead.email.includes('yahoo')) {\n                            score += 15;\n                        }\n\n                        // Engagement scoring\n                        if (lead.website_visits > 3) score += 10;\n                        if (lead.email_opens > 2) score += 10;\n\n                        lead.score = score;\n                        lead.tier = score >= 70 ? 'hot' : score >= 40 ? 'warm' : 'cold';\n\n                        return [{ json: lead }];\n                        "
+        }
+      },
+      {
+        "name": "Route by Score",
+        "type": "n8n-nodes-base.switch",
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $json.tier }}",
+                "operation": "equal",
+                "value2": "hot"
+              },
+              {
+                "value1": "={{ $json.tier }}",
+                "operation": "equal",
+                "value2": "warm"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook Lead Capture": {
+        "main": [
+          [
+            "Lead Scoring Function"
+          ]
+        ]
+      },
+      "Lead Scoring Function": {
+        "main": [
+          [
+            "Route by Score"
+          ]
+        ]
+      }
+    }
+  }
+}

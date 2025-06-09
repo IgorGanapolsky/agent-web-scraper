@@ -1,0 +1,30 @@
+{
+  "workflow_config": {
+    "name": "Trial Conversion Optimization",
+    "description": "Automated trial-to-paid conversion with personalized sequences",
+    "nodes": [
+      {
+        "name": "Trial Activity Monitor",
+        "type": "n8n-nodes-base.schedule",
+        "parameters": {
+          "cron": "0 9 * * *"
+        }
+      },
+      {
+        "name": "Check Trial Status",
+        "type": "n8n-nodes-base.httpRequest",
+        "parameters": {
+          "method": "GET",
+          "url": "https://your-domain.com/api/trials/active"
+        }
+      },
+      {
+        "name": "Conversion Optimization",
+        "type": "n8n-nodes-base.function",
+        "parameters": {
+          "functionCode": "\n                        // Analyze trial usage and trigger appropriate conversion actions\n                        const trials = items[0].json.trials;\n                        const actions = [];\n\n                        trials.forEach(trial => {\n                            const daysLeft = Math.ceil((new Date(trial.trial_end) - new Date()) / (1000 * 60 * 60 * 24));\n\n                            if (trial.usage_score > 80 && daysLeft <= 3) {\n                                // High usage, trial ending soon - direct conversion offer\n                                actions.push({\n                                    type: 'conversion_offer',\n                                    customer_id: trial.customer_id,\n                                    template: 'high_usage_conversion',\n                                    urgency: 'high'\n                                });\n                            } else if (trial.usage_score < 30 && daysLeft > 7) {\n                                // Low usage, plenty of time - engagement campaign\n                                actions.push({\n                                    type: 'engagement_campaign',\n                                    customer_id: trial.customer_id,\n                                    template: 'feature_discovery',\n                                    urgency: 'low'\n                                });\n                            } else if (daysLeft <= 1) {\n                                // Trial ending tomorrow - final conversion push\n                                actions.push({\n                                    type: 'final_conversion',\n                                    customer_id: trial.customer_id,\n                                    template: 'last_chance',\n                                    urgency: 'critical'\n                                });\n                            }\n                        });\n\n                        return actions.map(action => ({ json: action }));\n                        "
+        }
+      }
+    ]
+  }
+}

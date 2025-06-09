@@ -165,11 +165,11 @@ class DaggerParallelBuilder:
         # Parallel linting tasks
         if "linting_splitting" in analysis.get("parallel_opportunities", []):
             lint_groups = ["app/core", "app/api", "app/web", "app/services"]
-            for _i, group in enumerate(lint_groups):
+            for group in lint_groups:
                 tasks.append(
                     BuildTask(
                         name=f"lint-{group.replace('/', '-')}",
-                        command=f"ruff check {group} && black --check {group}",
+                        command=f"pylint {group} --rcfile=pyproject.toml",
                         dependencies=["setup"],
                         parallel_group="linting",
                         timeout=300,

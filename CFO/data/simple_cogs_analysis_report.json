@@ -1,0 +1,107 @@
+{
+  "generated_at": "2025-06-08T12:18:40.397245",
+  "scenario_results": {
+    "pilot_light_user": {
+      "description": "Pilot customer - weekly analysis",
+      "total_monthly_cogs": 0.0388,
+      "operation_breakdown": [
+        {
+          "operation": "market_analysis (medium)",
+          "count": 4,
+          "unit_cost": 0.0076,
+          "monthly_cost": 0.0304
+        },
+        {
+          "operation": "pain_point_extraction (simple)",
+          "count": 4,
+          "unit_cost": 0.0021,
+          "monthly_cost": 0.0084
+        }
+      ]
+    },
+    "professional_regular_user": {
+      "description": "Professional customer - regular usage",
+      "total_monthly_cogs": 0.2744,
+      "operation_breakdown": [
+        {
+          "operation": "market_analysis (medium)",
+          "count": 8,
+          "unit_cost": 0.0076,
+          "monthly_cost": 0.0608
+        },
+        {
+          "operation": "competitive_intel (medium)",
+          "count": 8,
+          "unit_cost": 0.0069,
+          "monthly_cost": 0.0552
+        },
+        {
+          "operation": "content_generation (medium)",
+          "count": 12,
+          "unit_cost": 0.0132,
+          "monthly_cost": 0.15839999999999999
+        }
+      ]
+    },
+    "enterprise_heavy_user": {
+      "description": "Enterprise customer - intensive usage",
+      "total_monthly_cogs": 1.4835,
+      "operation_breakdown": [
+        {
+          "operation": "market_analysis (complex)",
+          "count": 15,
+          "unit_cost": 0.0151,
+          "monthly_cost": 0.2265
+        },
+        {
+          "operation": "competitive_intel (complex)",
+          "count": 20,
+          "unit_cost": 0.0204,
+          "monthly_cost": 0.40800000000000003
+        },
+        {
+          "operation": "content_generation (complex)",
+          "count": 30,
+          "unit_cost": 0.0243,
+          "monthly_cost": 0.729
+        },
+        {
+          "operation": "pain_point_extraction (medium)",
+          "count": 20,
+          "unit_cost": 0.006,
+          "monthly_cost": 0.12
+        }
+      ]
+    }
+  },
+  "profitability_analysis": {
+    "pilot": {
+      "monthly_price": 99.0,
+      "monthly_cogs": 0.0388,
+      "monthly_profit": 98.96,
+      "profit_margin_percent": 100.0,
+      "annual_profit": 1187.53,
+      "profitable": true
+    },
+    "professional": {
+      "monthly_price": 299.0,
+      "monthly_cogs": 0.2744,
+      "monthly_profit": 298.73,
+      "profit_margin_percent": 99.9,
+      "annual_profit": 3584.71,
+      "profitable": true
+    },
+    "enterprise": {
+      "monthly_price": 1199.0,
+      "monthly_cogs": 1.4835,
+      "monthly_profit": 1197.52,
+      "profit_margin_percent": 99.9,
+      "annual_profit": 14370.2,
+      "profitable": true
+    }
+  },
+  "summary": {
+    "all_tiers_profitable": true,
+    "avg_monthly_cogs": 0.5989
+  }
+}

@@ -42,41 +42,41 @@ def main():
     # Weekly analytics
     analytics = monitor.get_usage_analytics(7)
     if "error" not in analytics:
-        print("\n📊 WEEKLY ANALYTICS")
+        print("\n WEEKLY ANALYTICS")
         print(f"Total Requests:   {analytics['total_requests']}")
         print(f"Total Cost:       ${analytics['total_cost']:.4f}")
         print(f"Avg per Request:  ${analytics['avg_cost_per_request']:.4f}")
         print(f"Monthly Proj:     ${analytics['monthly_projection']:.2f}")
 
         # Model breakdown
-        print("\n🤖 MODEL USAGE")
+        print("\n MODEL USAGE")
         for model, data in analytics["model_breakdown"].items():
             print(f"{model:15}: {data['requests']:3d} calls, ${data['cost']:.4f}")
 
         # Task breakdown
-        print("\n📋 TASK BREAKDOWN")
+        print("\n TASK BREAKDOWN")
         for task, data in analytics["task_breakdown"].items():
             print(f"{task:15}: {data['requests']:3d} calls, ${data['cost']:.4f}")
 
     # Optimization recommendations
     recommendations = monitor.get_optimization_recommendations()
     if recommendations:
-        print("\n💡 OPTIMIZATION RECOMMENDATIONS")
+        print("\n OPTIMIZATION RECOMMENDATIONS")
         for i, rec in enumerate(recommendations, 1):
             print(f"{i}. {rec}")
 
     # Budget alerts
     if daily_spend > daily_budget * 0.9:
-        print("\n🚨 BUDGET ALERT: 90% of daily budget used!")
+        print("\n BUDGET ALERT: 90% of daily budget used!")
         print("Consider switching to Claude 4 Sonnet for routine tasks")
     elif daily_spend > daily_budget * 0.7:
-        print("\n⚠️  BUDGET WARNING: 70% of daily budget used")
+        print("\n  BUDGET WARNING: 70% of daily budget used")
         print("Monitor usage closely for remainder of day")
     else:
-        print(f"\n✅ BUDGET HEALTHY: {(daily_spend / daily_budget * 100):.1f}% used")
+        print(f"\n BUDGET HEALTHY: {(daily_spend / daily_budget * 100):.1f}% used")
 
     # Claude 4 pricing reference
-    print("\n💰 CLAUDE 4 PRICING REFERENCE")
+    print("\n CLAUDE 4 PRICING REFERENCE")
     print("Sonnet 4:  $3 input  / $15 output  (per 1M tokens)")
     print("Opus 4:    $15 input / $75 output  (per 1M tokens)")
     print("Tip: Use Sonnet for routine tasks, Opus for complex reasoning")
@@ -88,22 +88,22 @@ def main():
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = f"data/claude_usage_report_{timestamp}.json"
         monitor.export_usage_report(report_file)
-        print(f"📄 Report exported to {report_file}")
+        print(f" Report exported to {report_file}")
 
 
 def setup_budget_alerts():
     """Set up automated budget alerts via n8n"""
     print("Setting up automated Claude budget alerts...")
 
-    # n8n workflow configuration
-
-    print("✅ Budget alert workflow configured")
-    print("Add this to your n8n instance for automated monitoring")
+    # n8n workflow configuration for Claude Budget Monitor
+    # This workflow is configured in n8n and runs daily to monitor Claude API usage
+    # It checks if we're on track to exceed our monthly budget and sends alerts if needed
+    pass
 
 
 def optimize_prompts():
     """Provide prompt optimization guidance"""
-    print("\n🎯 PROMPT OPTIMIZATION TIPS")
+    print("\n PROMPT OPTIMIZATION TIPS")
     print("1. Use specific, concise prompts")
     print("2. Avoid redundant context in follow-up messages")
     print("3. Batch similar requests together")

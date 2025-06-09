@@ -3,6 +3,10 @@ Basic tests to ensure SonarQube quality gate passes.
 These tests are designed to provide basic coverage for core functionality.
 """
 
+<<<<<<< HEAD
+=======
+import importlib.util
+>>>>>>> f93f027 (Push changes from the CTO)
 import os
 import sys
 
@@ -23,12 +27,21 @@ def test_app_structure():
 
 def test_app_modules():
     """Verify core application modules are importable."""
+<<<<<<< HEAD
     try:
         import importlib.util
 
         spec = importlib.util.find_spec("app")
         assert spec is not None
     except ImportError:
+=======
+    # Check if app module is importable
+    if importlib.util.find_spec("app") is None:
+        pytest.fail("Failed to find app module")
+
+    spec = importlib.util.find_spec("app")
+    if spec is None:
+>>>>>>> f93f027 (Push changes from the CTO)
         pytest.skip("App module not importable")
 
 

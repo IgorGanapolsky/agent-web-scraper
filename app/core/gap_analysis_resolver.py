@@ -157,7 +157,8 @@ class GapAnalysisResolver:
             # Parse the plan (assuming JSON response)
             try:
                 resolution_plan = json.loads(plan_content)
-            except (json.JSONDecodeError, KeyError, ValueError):
+            except (json.JSONDecodeError, KeyError, IndexError) as e:
+                logger.warning(f"Failed to parse plan content: {e}")
                 # Fallback to structured plan
                 resolution_plan = self._create_fallback_plan()
         else:
@@ -424,7 +425,8 @@ class GapAnalysisResolver:
             strategy_content = strategy_results["completed"][0]["result"]["content"]
             try:
                 updated_strategy = json.loads(strategy_content)
-            except (json.JSONDecodeError, KeyError, ValueError):
+            except (json.JSONDecodeError, KeyError, IndexError) as e:
+                logger.warning(f"Failed to parse strategy content: {e}")
                 updated_strategy = self._create_fallback_updated_strategy(
                     execution_results
                 )
@@ -642,7 +644,7 @@ class GapAnalysisResolver:
                     for gap in ["stripe_integration", "trial_conversion_flow"]
                 ),
                 "full_automation_ready": all(
-                    gap_status.get(gap) == "resolved" for gap in gap_status
+                    status == "resolved" for status in gap_status.values()
                 ),
                 "projected_week1_revenue": (
                     f"${self.week1_revenue_target}/day achievable"

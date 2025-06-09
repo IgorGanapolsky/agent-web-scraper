@@ -1,0 +1,468 @@
+{
+  "generated_at": "2025-06-08T18:42:58.273031",
+  "model_type": "SaaS Gurus (Anthony Nitsos) Methodology",
+  "company_stage": "early_stage_saas",
+  "pricing_strategy": {
+    "pilot": {
+      "monthly_price": 99,
+      "annual_price": 990,
+      "target_customers": 90,
+      "customer_profile": "early_adopters",
+      "expansion_opportunity": "high"
+    },
+    "professional": {
+      "monthly_price": 299,
+      "annual_price": 2990,
+      "target_customers": 30,
+      "customer_profile": "growth_companies",
+      "expansion_opportunity": "medium"
+    },
+    "enterprise": {
+      "monthly_price": 1199,
+      "annual_price": 11990,
+      "target_customers": 8,
+      "customer_profile": "established_businesses",
+      "expansion_opportunity": "low_but_high_value"
+    }
+  },
+  "saas_metrics": {
+    "customer_acquisition": {
+      "cac_pilot": 25,
+      "cac_professional": 75,
+      "cac_enterprise": 250,
+      "blended_cac": 85,
+      "acquisition_channels": [
+        "organic",
+        "paid",
+        "referral",
+        "partnership"
+      ]
+    },
+    "customer_lifetime": {
+      "ltv_pilot": 891,
+      "ltv_professional": 2691,
+      "ltv_enterprise": 10791,
+      "blended_ltv": 2424,
+      "retention_rate": 95
+    },
+    "growth_metrics": {
+      "monthly_churn_rate": 5,
+      "expansion_revenue": 15,
+      "net_revenue_retention": 115,
+      "time_to_value": 7,
+      "activation_rate": 85
+    }
+  },
+  "unit_economics": {
+    "pilot": {
+      "pricing": {
+        "monthly": 99,
+        "annual": 990,
+        "annual_discount": 16.7
+      },
+      "unit_economics": {
+        "cac": 25,
+        "ltv": 891,
+        "ltv_cac_ratio": 35.6,
+        "payback_months": 0.3,
+        "gross_margin": 99.0
+      },
+      "cohort_analysis": {
+        "target_customers": 90,
+        "monthly_cohort_value": 8910,
+        "annual_cohort_value": 89100,
+        "revenue_per_customer": 99
+      },
+      "investor_metrics": {
+        "acv": 990,
+        "customer_profile": "early_adopters",
+        "expansion_potential": "high"
+      }
+    },
+    "professional": {
+      "pricing": {
+        "monthly": 299,
+        "annual": 2990,
+        "annual_discount": 16.7
+      },
+      "unit_economics": {
+        "cac": 75,
+        "ltv": 2691,
+        "ltv_cac_ratio": 35.9,
+        "payback_months": 0.3,
+        "gross_margin": 99.0
+      },
+      "cohort_analysis": {
+        "target_customers": 30,
+        "monthly_cohort_value": 8970,
+        "annual_cohort_value": 89700,
+        "revenue_per_customer": 299
+      },
+      "investor_metrics": {
+        "acv": 2990,
+        "customer_profile": "growth_companies",
+        "expansion_potential": "medium"
+      }
+    },
+    "enterprise": {
+      "pricing": {
+        "monthly": 1199,
+        "annual": 11990,
+        "annual_discount": 16.7
+      },
+      "unit_economics": {
+        "cac": 250,
+        "ltv": 10791,
+        "ltv_cac_ratio": 43.2,
+        "payback_months": 0.2,
+        "gross_margin": 99.0
+      },
+      "cohort_analysis": {
+        "target_customers": 8,
+        "monthly_cohort_value": 9592,
+        "annual_cohort_value": 95920,
+        "revenue_per_customer": 1199
+      },
+      "investor_metrics": {
+        "acv": 11990,
+        "customer_profile": "established_businesses",
+        "expansion_potential": "low_but_high_value"
+      }
+    }
+  },
+  "investor_metrics": {
+    "executive_summary": {
+      "business_model": "B2B SaaS - Market Intelligence Platform",
+      "target_market": "Series A/B SaaS companies",
+      "revenue_model": "Subscription-based with tiered pricing",
+      "current_arr": 109500.0,
+      "target_arr_12m": 438000.0
+    },
+    "key_metrics": {
+      "arr": 109500.0,
+      "mrr": 9125.0,
+      "growth_rate": "15.0% monthly",
+      "gross_margin": "99%+",
+      "ltv_cac_ratio": "28.5:1",
+      "payback_period": "1.2 months",
+      "churn_rate": "5% monthly"
+    },
+    "forty_percent_rule": {
+      "growth_rate": 15.0,
+      "profit_margin": 85.0,
+      "rule_score": 100.0,
+      "grade": "Exceptional (Top 5% SaaS)",
+      "investor_appeal": true,
+      "benchmark": "40% minimum for VC funding"
+    },
+    "unit_economics_by_tier": {
+      "pilot": {
+        "pricing": {
+          "monthly": 99,
+          "annual": 990,
+          "annual_discount": 16.7
+        },
+        "unit_economics": {
+          "cac": 25,
+          "ltv": 891,
+          "ltv_cac_ratio": 35.6,
+          "payback_months": 0.3,
+          "gross_margin": 99.0
+        },
+        "cohort_analysis": {
+          "target_customers": 90,
+          "monthly_cohort_value": 8910,
+          "annual_cohort_value": 89100,
+          "revenue_per_customer": 99
+        },
+        "investor_metrics": {
+          "acv": 990,
+          "customer_profile": "early_adopters",
+          "expansion_potential": "high"
+        }
+      },
+      "professional": {
+        "pricing": {
+          "monthly": 299,
+          "annual": 2990,
+          "annual_discount": 16.7
+        },
+        "unit_economics": {
+          "cac": 75,
+          "ltv": 2691,
+          "ltv_cac_ratio": 35.9,
+          "payback_months": 0.3,
+          "gross_margin": 99.0
+        },
+        "cohort_analysis": {
+          "target_customers": 30,
+          "monthly_cohort_value": 8970,
+          "annual_cohort_value": 89700,
+          "revenue_per_customer": 299
+        },
+        "investor_metrics": {
+          "acv": 2990,
+          "customer_profile": "growth_companies",
+          "expansion_potential": "medium"
+        }
+      },
+      "enterprise": {
+        "pricing": {
+          "monthly": 1199,
+          "annual": 11990,
+          "annual_discount": 16.7
+        },
+        "unit_economics": {
+          "cac": 250,
+          "ltv": 10791,
+          "ltv_cac_ratio": 43.2,
+          "payback_months": 0.2,
+          "gross_margin": 99.0
+        },
+        "cohort_analysis": {
+          "target_customers": 8,
+          "monthly_cohort_value": 9592,
+          "annual_cohort_value": 95920,
+          "revenue_per_customer": 1199
+        },
+        "investor_metrics": {
+          "acv": 11990,
+          "customer_profile": "established_businesses",
+          "expansion_potential": "low_but_high_value"
+        }
+      }
+    },
+    "growth_drivers": [
+      "Automated customer acquisition through AI-generated content",
+      "High-value enterprise expansion opportunities",
+      "Product-led growth with viral coefficient >1.2",
+      "International market expansion (3x TAM)"
+    ],
+    "competitive_advantages": [
+      "90.8% AI cost optimization vs competitors",
+      "5.7x faster execution speed",
+      "99%+ gross margins (pure software)",
+      "Proprietary market intelligence algorithms"
+    ],
+    "funding_use": {
+      "sales_marketing": "40% - Accelerate customer acquisition",
+      "product_development": "30% - Feature expansion and AI optimization",
+      "operations": "20% - Team scaling and infrastructure",
+      "working_capital": "10% - Cash flow buffer"
+    }
+  },
+  "cash_flow_projection": {
+    "projections": [
+      {
+        "month": 1,
+        "revenue": 9000.0,
+        "burn": 8500.0,
+        "net_cash_flow": 500.0,
+        "cash_balance": 50500.0,
+        "runway_months": 5.9
+      },
+      {
+        "month": 2,
+        "revenue": 10350.0,
+        "burn": 8670.0,
+        "net_cash_flow": 1680.0,
+        "cash_balance": 52180.0,
+        "runway_months": 6.0
+      },
+      {
+        "month": 3,
+        "revenue": 11902.0,
+        "burn": 8843.0,
+        "net_cash_flow": 3059.0,
+        "cash_balance": 55239.0,
+        "runway_months": 6.2
+      },
+      {
+        "month": 4,
+        "revenue": 13688.0,
+        "burn": 9020.0,
+        "net_cash_flow": 4668.0,
+        "cash_balance": 59907.0,
+        "runway_months": 6.6
+      },
+      {
+        "month": 5,
+        "revenue": 15741.0,
+        "burn": 9201.0,
+        "net_cash_flow": 6540.0,
+        "cash_balance": 66447.0,
+        "runway_months": 7.2
+      },
+      {
+        "month": 6,
+        "revenue": 18102.0,
+        "burn": 9385.0,
+        "net_cash_flow": 8718.0,
+        "cash_balance": 75165.0,
+        "runway_months": 8.0
+      },
+      {
+        "month": 7,
+        "revenue": 20818.0,
+        "burn": 9572.0,
+        "net_cash_flow": 11245.0,
+        "cash_balance": 86410.0,
+        "runway_months": 9.0
+      },
+      {
+        "month": 8,
+        "revenue": 23940.0,
+        "burn": 9764.0,
+        "net_cash_flow": 14176.0,
+        "cash_balance": 100586.0,
+        "runway_months": 10.3
+      },
+      {
+        "month": 9,
+        "revenue": 27531.0,
+        "burn": 9959.0,
+        "net_cash_flow": 17572.0,
+        "cash_balance": 118158.0,
+        "runway_months": 11.9
+      },
+      {
+        "month": 10,
+        "revenue": 31661.0,
+        "burn": 10158.0,
+        "net_cash_flow": 21503.0,
+        "cash_balance": 139661.0,
+        "runway_months": 13.7
+      },
+      {
+        "month": 11,
+        "revenue": 36410.0,
+        "burn": 10361.0,
+        "net_cash_flow": 26049.0,
+        "cash_balance": 165709.0,
+        "runway_months": 16.0
+      },
+      {
+        "month": 12,
+        "revenue": 41872.0,
+        "burn": 10569.0,
+        "net_cash_flow": 31303.0,
+        "cash_balance": 197012.0,
+        "runway_months": 18.6
+      },
+      {
+        "month": 13,
+        "revenue": 48152.0,
+        "burn": 10780.0,
+        "net_cash_flow": 37372.0,
+        "cash_balance": 234384.0,
+        "runway_months": 21.7
+      },
+      {
+        "month": 14,
+        "revenue": 55375.0,
+        "burn": 10996.0,
+        "net_cash_flow": 44379.0,
+        "cash_balance": 278764.0,
+        "runway_months": 25.4
+      },
+      {
+        "month": 15,
+        "revenue": 63681.0,
+        "burn": 11216.0,
+        "net_cash_flow": 52466.0,
+        "cash_balance": 331230.0,
+        "runway_months": 29.5
+      },
+      {
+        "month": 16,
+        "revenue": 73234.0,
+        "burn": 11440.0,
+        "net_cash_flow": 61794.0,
+        "cash_balance": 393023.0,
+        "runway_months": 34.4
+      },
+      {
+        "month": 17,
+        "revenue": 84219.0,
+        "burn": 11669.0,
+        "net_cash_flow": 72550.0,
+        "cash_balance": 465573.0,
+        "runway_months": 39.9
+      },
+      {
+        "month": 18,
+        "revenue": 96851.0,
+        "burn": 11902.0,
+        "net_cash_flow": 84949.0,
+        "cash_balance": 550523.0,
+        "runway_months": 46.3
+      },
+      {
+        "month": 19,
+        "revenue": 111379.0,
+        "burn": 12140.0,
+        "net_cash_flow": 99239.0,
+        "cash_balance": 649762.0,
+        "runway_months": 53.5
+      },
+      {
+        "month": 20,
+        "revenue": 128086.0,
+        "burn": 12383.0,
+        "net_cash_flow": 115703.0,
+        "cash_balance": 765465.0,
+        "runway_months": 61.8
+      },
+      {
+        "month": 21,
+        "revenue": 147299.0,
+        "burn": 12631.0,
+        "net_cash_flow": 134668.0,
+        "cash_balance": 900133.0,
+        "runway_months": 71.3
+      },
+      {
+        "month": 22,
+        "revenue": 169394.0,
+        "burn": 12883.0,
+        "net_cash_flow": 156510.0,
+        "cash_balance": 1056643.0,
+        "runway_months": 82.0
+      },
+      {
+        "month": 23,
+        "revenue": 194803.0,
+        "burn": 13141.0,
+        "net_cash_flow": 181662.0,
+        "cash_balance": 1238305.0,
+        "runway_months": 94.2
+      },
+      {
+        "month": 24,
+        "revenue": 224023.0,
+        "burn": 13404.0,
+        "net_cash_flow": 210619.0,
+        "cash_balance": 1448925.0,
+        "runway_months": 108.1
+      }
+    ],
+    "break_even_month": 1,
+    "minimum_cash_balance": 50500.0,
+    "runway_analysis": {
+      "current_runway": 5.9,
+      "break_even_timeline": "1 months",
+      "funding_needed": 0,
+      "recommendation": "Excellent - Break-even within 12 months, minimal funding risk"
+    }
+  },
+  "recommendations": [
+    "Focus on Professional tier ($299) for optimal CAC:LTV balance",
+    "Implement annual contract incentives (15% discount) for cash flow acceleration",
+    "Deploy automated customer success to maintain >95% retention",
+    "Target Series A funding at $2M ARR with 40%+ rule validation",
+    "Implement usage-based pricing tiers for expansion revenue",
+    "Optimize pilot tier as enterprise trial pathway",
+    "Deploy predictive churn models for proactive retention",
+    "Scale enterprise sales for higher ACV and lower churn"
+  ]
+}

@@ -597,7 +597,7 @@ def verify_deployment(deployment_result: dict, env_config: dict) -> dict:
     critical_passed = 0
     total_critical = 0
 
-    for check_data in verification_checks.values():
+    for _check_id, check_data in verification_checks.values():
         if check_data["status"]:
             passed_checks += 1
             print(f"   ✅ {check_data['check']}")

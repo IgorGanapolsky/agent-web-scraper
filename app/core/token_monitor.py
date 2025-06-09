@@ -10,9 +10,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, ClassVar, Optional
 
-from app.config.logging import get_logger
+import structlog
 
-logger = get_logger(__name__)
+# Configure logging
+logger = structlog.get_logger(__name__)
 
 
 @dataclass
@@ -49,7 +50,7 @@ class TokenMonitor:
     """
 
     # Claude 4 pricing (per million tokens)
-    CLAUDE_4_PRICING: ClassVar[dict] = {
+    CLAUDE_4_PRICING: ClassVar[dict[str, dict[str, float]]] = {
         "claude-4": {
             "input": 15.0,  # $15 per million input tokens
             "output": 75.0,  # $75 per million output tokens
@@ -499,9 +500,9 @@ class TokenMonitor:
 
         # Model selection recommendations
         if len(model_performance) > 1:
-            best_model = min(
-                model_performance.keys(), key=lambda m: model_performance[m]["avg_cost"]
-            )
+            best_model = min(model_performance.items(), key=lambda x: x[1]["avg_cost"])[
+                0
+            ]
             recommendations.append(
                 f"For {task_type} tasks, {best_model} offers the best cost efficiency"
             )

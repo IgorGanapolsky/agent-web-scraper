@@ -281,7 +281,7 @@ class N8nOrchestrator:
         """Calculate projected revenue impact from parallel workflows"""
 
         # Extract key metrics from workflow results
-        market_results.get("results", {}).get("market_research", {})
+        _market_data = market_results.get("results", {}).get("market_research", {})
         outreach_data = market_results.get("results", {}).get("customer_outreach", {})
 
         # Base projections

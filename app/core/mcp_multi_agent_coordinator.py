@@ -328,72 +328,85 @@ class MCPCoordinator:
 
         url = f"{self.agents[AgentType.GEMINI]['api_url']}?key={self.agents[AgentType.GEMINI]['api_key']}"
 
-        async with (
-            aiohttp.ClientSession() as session,
-            session.post(url, json=payload, headers=headers, timeout=300) as response,
-        ):
-            if response.status == 200:
-                result = await response.json()
-                candidates = result.get("candidates", [])
-                if candidates:
-                    content = (
-                        candidates[0]
-                        .get("content", {})
-                        .get("parts", [{}])[0]
-                        .get("text", "")
-                    )
-                    return {
-                        "agent": "gemini",
-                        "content": content,
-                        "usage": result.get("usageMetadata", {}),
-                        "job_type": job.job_type,
-                    }
+        try:
+            async with (
+                aiohttp.ClientSession() as session,
+                session.post(
+                    url, json=payload, headers=headers, timeout=300
+                ) as response,
+            ):
+                if response.status == 200:
+                    result = await response.json()
+                    candidates = result.get("candidates", [])
+                    if candidates:
+                        content = (
+                            candidates[0]
+                            .get("content", {})
+                            .get("parts", [{}])[0]
+                            .get("text", "")
+                        )
+                        return {
+                            "agent": "gemini",
+                            "content": content,
+                            "usage": result.get("usageMetadata", {}),
+                            "job_type": job.job_type,
+                        }
+                    else:
+                        raise Exception("No candidates returned from Gemini")
                 else:
-                    raise Exception("No candidates returned from Gemini")
-            else:
-                error_text = await response.text()
-                raise Exception(f"Gemini API error {response.status}: {error_text}")
+                    error_text = await response.text()
+                    raise Exception(f"Gemini API error {response.status}: {error_text}")
+        except Exception as e:
+            logger.error(f"Error executing Gemini job: {e!s}")
+            raise
 
     async def _execute_chatgpt_job(self, job: AgentJob) -> dict:
         """Execute job using ChatGPT"""
+        try:
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.agents[AgentType.CHATGPT]['api_key']}",
+            }
 
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.agents[AgentType.CHATGPT]['api_key']}",
-        }
+            prompt = self._build_chatgpt_prompt(job)
 
-        prompt = self._build_chatgpt_prompt(job)
+            payload = {
+                "model": "gpt-4",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 4000,
+                "temperature": 0.7,
+            }
 
-        payload = {
-            "model": "gpt-4",
-            "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 4000,
-            "temperature": 0.7,
-        }
-
-        async with (
-            aiohttp.ClientSession() as session,
-            session.post(
-                self.agents[AgentType.CHATGPT]["api_url"],
-                json=payload,
-                headers=headers,
-                timeout=300,
-            ) as response,
-        ):
-            if response.status == 200:
-                result = await response.json()
-                content = (
-                    result.get("choices", [{}])[0].get("message", {}).get("content", "")
-                )
-                return {
-                    "agent": "chatgpt",
-                    "content": content,
-                    "usage": result.get("usage", {}),
-                    "job_type": job.job_type,
-                }
-            else:
-                error_text = await response.text()
-                raise Exception(f"ChatGPT API error {response.status}: {error_text}")
+            async with (
+                aiohttp.ClientSession() as session,
+                session.post(
+                    self.agents[AgentType.CHATGPT]["api_url"],
+                    json=payload,
+                    headers=headers,
+                    timeout=300,
+                ) as response,
+            ):
+                if response.status == 200:
+                    result = await response.json()
+                    content = (
+                        result.get("choices", [{}])[0]
+                        .get("message", {})
+                        .get("content", "")
+                    )
+                    return {
+                        "agent": "chatgpt",
+                        "content": content,
+                        "usage": result.get("usage", {}),
+                        "job_type": job.job_type,
+                    }
+                else:
+                    error_text = await response.text()
+                    raise Exception(
+                        f"ChatGPT API error {response.status}: {error_text}"
+                    )
+        except Exception as e:
+            logger.error(f"Error executing ChatGPT job: {e!s}")
+            raise
 
     def _build_claude_prompt(self, job: AgentJob) -> str:
         """Build Claude-specific prompt"""

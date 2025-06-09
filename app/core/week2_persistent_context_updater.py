@@ -66,13 +66,6 @@ class Week2PersistentContextUpdater:
 
     def create_week2_update(self, reports: dict) -> dict:
         """Create Week 2 context update"""
-
-        # Extract key metrics from reports
-        reports.get("development_costs", {}).get("week2_development_report", {})
-        reports.get("token_usage", {}).get("week2_token_usage", {})
-        reports.get("financial_model_v23", {})
-        reports.get("n8n_workflow_4", {})
-
         week2_update = {
             "week2_infrastructure_deployment": {
                 "deployment_status": "COMPLETED",

@@ -206,24 +206,19 @@ class SupabaseService:
             logger.error(f"Failed to get trial contexts for email trigger: {e}")
             return []
 
-    def mark_email_cta_sent(self, context_id: str):
+    def mark_email_cta_sent(self, context_id: str) -> None:
         """Mark that 24-hour email CTA has been sent"""
         try:
             # Update metadata to mark email as sent
-            (
-                self.client.table("persistent_context")
-                .update(
-                    {
-                        "metadata": {
-                            "email_cta_scheduled": True,
-                            "email_sent_at": datetime.utcnow().isoformat(),
-                        },
-                        "updated_at": datetime.utcnow().isoformat(),
-                    }
-                )
-                .eq("id", context_id)
-                .execute()
-            )
+            self.client.table("persistent_context").update(
+                {
+                    "metadata": {
+                        "email_cta_scheduled": True,
+                        "email_sent_at": datetime.utcnow().isoformat(),
+                    },
+                    "updated_at": datetime.utcnow().isoformat(),
+                }
+            ).eq("id", context_id).execute()
 
             logger.info(f"Marked email CTA as sent for context {context_id}")
         except Exception as e:

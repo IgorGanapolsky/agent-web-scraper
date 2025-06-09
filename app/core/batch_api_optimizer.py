@@ -142,19 +142,6 @@ class BatchAPIOptimizer:
 
     async def _execute_native_batch(self, calls: list[APICall]) -> list[dict[str, Any]]:
         """Execute calls using native API batching"""
-        # Create batch payload
-        {
-            "requests": [
-                {
-                    "custom_id": f"call_{i}",
-                    "method": call.method,
-                    "url": call.endpoint,
-                    "body": call.payload,
-                }
-                for i, call in enumerate(calls)
-            ]
-        }
-
         # Execute batch (simplified - would use actual API client)
         results = []
         for i, call in enumerate(calls):

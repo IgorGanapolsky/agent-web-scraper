@@ -348,14 +348,14 @@ def main():
     print("💰 Target: $600/day Week 2 Revenue")
     print("=" * 60)
 
-    # Step 1: Check existing credentials
+    # Step 1: Check and set up Stripe API connection
     setup_stripe_api_connection()
 
-    # Step 2: Create environment file
+    # Step 2: Create environment file for Stripe credentials
     create_stripe_environment_file()
 
     # Step 3: Generate real Stripe client code
-    stripe_code = create_real_stripe_client()
+    create_real_stripe_client()
 
     # Step 4: Create real revenue dashboard
     create_real_revenue_dashboard()
@@ -368,13 +368,95 @@ def main():
     print('3. Run: python -c "from real_stripe_integration import *; main()"')
     print("4. Launch dashboard: uvicorn real_stripe_dashboard:app --reload")
     print("5. Visit: http://localhost:8000/revenue/dashboard")
-    print("\n🔥 REAL MONEY TRACKING READY!")
+    print("\n REAL MONEY TRACKING READY!")
 
     # Save the Stripe client code
     with open("real_stripe_client.py", "w") as f:
-        f.write(stripe_code)
+        f.write("import os\n")
+        f.write("import stripe\n")
+        f.write("from datetime import datetime, timedelta\n\n")
+        f.write("class RealStripeRevenueTracker:\n")
+        f.write('    """Real Stripe revenue tracking for $600/day target"""\n')
+        f.write("    \n")
+        f.write("    def __init__(self):\n")
+        f.write("        self.target_daily_revenue = 600\n")
+        f.write("        self.week2_start = datetime.now().replace(\n")
+        f.write("            hour=0, minute=0, second=0, microsecond=0\n")
+        f.write("        )\n")
+        f.write("    \n")
+        f.write("    def get_real_revenue_data(self):\n")
+        f.write('        """Get actual revenue from Stripe dashboard"""\n')
+        f.write("        try:\n")
+        f.write("            # Get data for the last 7 days\n")
+        f.write(
+            "            week_ago = int((datetime.now() - timedelta(days=7)).timestamp())\n"
+        )
+        f.write("            \n")
+        f.write("            # Get payment intents\n")
+        f.write("            payment_intents = stripe.PaymentIntent.list(limit=100)\n")
+        f.write("            \n")
+        f.write("            # Get charges\n")
+        f.write(
+            "            charges = stripe.Charge.list(limit=100, created={'gte': week_ago})\n"
+        )
+        f.write("            \n")
+        f.write("            # Get subscriptions\n")
+        f.write("            subscriptions = stripe.Subscription.list(\n")
+        f.write('                created={"gte": week_ago}, \n')
+        f.write("                limit=100\n")
+        f.write("            )\n")
+        f.write("            \n")
+        f.write("            return {\n")
+        f.write('                "payment_intents": payment_intents,\n')
+        f.write('                "charges": charges,\n')
+        f.write('                "subscriptions": subscriptions,\n')
+        f.write('                "total_revenue": sum(\n')
+        f.write(
+            "                    charge.amount / 100 for charge in charges if charge.paid\n"
+        )
+        f.write("                ),\n")
+        f.write('                "total_customers": len({\n')
+        f.write("                    charge.customer \n")
+        f.write("                    for charge in charges \n")
+        f.write("                    if charge.customer\n")
+        f.write("                }),\n")
+        f.write("            }\n")
+        f.write("            \n")
+        f.write("        except stripe.error.AuthenticationError as e:\n")
+        f.write(
+            '            return {"error": f"Stripe authentication failed: {str(e)}"}\n'
+        )
+        f.write("        except Exception as e:\n")
+        f.write(
+            '            return {"error": f"Error fetching Stripe data: {str(e)}"}\n\n'
+        )
+        f.write("# Usage example\n")
+        f.write('if __name__ == "__main__":\n')
+        f.write("    import os\n")
+        f.write("    \n")
+        f.write("    # Initialize Stripe with your API key\n")
+        f.write('    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")\n')
+        f.write("    \n")
+        f.write("    if not stripe.api_key:\n")
+        f.write(
+            '        print(" Error: STRIPE_SECRET_KEY environment variable not set")\n'
+        )
+        f.write("    else:\n")
+        f.write("        tracker = RealStripeRevenueTracker()\n")
+        f.write("        revenue_data = tracker.get_real_revenue_data()\n")
+        f.write("        \n")
+        f.write('        if "error" in revenue_data:\n')
+        f.write('            print(f" Error: {revenue_data["error"]}")\n')
+        f.write("        else:\n")
+        f.write('            print(" Successfully connected to Stripe")\n')
+        f.write(
+            '            print(f" Total Revenue (7 days): ${revenue_data["total_revenue"]:,.2f}")\n'
+        )
+        f.write(
+            '            print(f" Total Customers: {revenue_data["total_customers"]}")\n'
+        )
 
-    print("✅ Saved real_stripe_client.py - Your live revenue tracker")
+    print(" Saved real_stripe_client.py - Your live revenue tracker")
 
 
 if __name__ == "__main__":

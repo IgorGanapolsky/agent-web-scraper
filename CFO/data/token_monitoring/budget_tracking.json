@@ -1,0 +1,10 @@
+{
+  "monthly_start_date": "2025-06-01T12:18:40.393792",
+  "total_monthly_cost": 0.10324710000000001,
+  "daily_costs": {
+    "2025-06-08": 0.10324710000000001
+  },
+  "last_reset": "2025-06-08T12:18:40.393797",
+  "budget_alerts_triggered": [],
+  "last_updated": "2025-06-08T12:18:40.397128"
+}

@@ -7,11 +7,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.revenue.stripe_revenue_engine import (
-    RevenueMetrics,
-    StripeRevenueEngine,
-    SubscriptionTier,
-)
+from app.core.revenue_dashboard import RevenueMetrics
+from app.revenue.stripe_revenue_engine import StripeRevenueEngine
+from app.services.payment_service import SubscriptionTier
 
 
 class TestSubscriptionTier:
@@ -393,7 +391,11 @@ class TestStripeRevenueEngineScenarios:
         daily_total_cents = int(1074.86 * 100)  # 107486 cents
         charges_per_customer = daily_total_cents // 76  # ~1414 cents per customer
         mock_charges = []
+<<<<<<< HEAD
         for _ in range(76):
+=======
+        for _i in range(76):
+>>>>>>> f93f027 (Push changes from the CTO)
             charge = MagicMock()
             charge.amount = charges_per_customer
             charge.paid = True

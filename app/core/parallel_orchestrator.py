@@ -389,7 +389,7 @@ def get_parallel_orchestrator(session_id: Optional[str] = None) -> ParallelOrche
 
 # Convenience functions for common enterprise patterns
 async def execute_market_research_pipeline(
-    query: str, sources: list[str] | None = None
+    query: str, sources: Optional[list[str]] = None
 ) -> dict[str, Any]:
     """Execute complete market research pipeline in parallel"""
 

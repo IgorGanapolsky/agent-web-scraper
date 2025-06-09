@@ -27,7 +27,7 @@ class FinancialModelUpdater:
     def update_model_with_development_costs(self) -> dict:
         """Update financial model accounting for development costs"""
 
-        # Get baseline financial model
+        # Generate comprehensive model (result not used directly but may have side effects)
         self.revenue_model.generate_comprehensive_model()
 
         # Get development cost estimates

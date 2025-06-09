@@ -1,0 +1,5 @@
+{
+  "starter": "https://buy.stripe.com/starter",
+  "professional": "https://buy.stripe.com/professional",
+  "enterprise": "https://buy.stripe.com/enterprise"
+}

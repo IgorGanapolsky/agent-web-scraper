@@ -146,9 +146,6 @@ class EnterpriseTokenOptimizer:
 
         cost = self.track_sonnet_4_usage("token_efficiency_analysis", 1200, 800)
 
-        # Get session analytics
-        self.token_monitor.get_usage_analytics(1)
-
         efficiency_report = {
             "enterprise_token_efficiency_report": {
                 "report_metadata": {

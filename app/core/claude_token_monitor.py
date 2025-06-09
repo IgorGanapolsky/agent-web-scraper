@@ -33,7 +33,7 @@ class ClaudeTokenMonitor:
     """Monitor and optimize Claude token usage"""
 
     # Claude 4 pricing (per million tokens)
-    PRICING: ClassVar[dict] = {
+    PRICING: ClassVar[dict[str, dict[str, float]]] = {
         "claude-4-opus": {"input": 15.0, "output": 75.0},
         "claude-4-sonnet": {"input": 3.0, "output": 15.0},
     }

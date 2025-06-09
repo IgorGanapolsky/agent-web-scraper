@@ -48,6 +48,20 @@ dependencies = [
     "serpapi>=0.1.5",
     "praw>=7.7.0",
 
+    # Task queue and caching
+    "celery>=5.3.0",
+    "redis>=5.0.0",
+
+    # LLM Observability and Tracing
+    "langsmith>=0.1.0",
+    "langchain>=0.1.0",
+
+    # P1: Structured Logging
+    "structlog>=23.2.0",
+
+    # P2: Metrics and Monitoring
+    "prometheus-fastapi-instrumentator>=6.1.0",
+
     # Agentic RAG and Vector Search
     "llama-index>=0.10.0",
     "llama-index-embeddings-openai>=0.1.0",

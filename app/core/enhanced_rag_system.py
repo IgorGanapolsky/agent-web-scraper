@@ -109,7 +109,7 @@ class EnterpriseRAGSystem:
                     name=self.collection_name
                 )
                 logger.info(f"Loaded existing collection: {self.collection_name}")
-            except Exception:
+            except ValueError:  # Raised when collection doesn't exist
                 self.collection = self.chroma_client.create_collection(
                     name=self.collection_name,
                     metadata={
@@ -217,7 +217,9 @@ class EnterpriseRAGSystem:
                     relevance += 0.2
                 elif days_old < 90:
                     relevance += 0.1
-            except Exception:
+            except (TypeError, ValueError, AttributeError) as e:
+                logger.debug(f"Error calculating document age: {e}")
+                # Continue with default relevance if date parsing fails
                 pass
 
         return min(relevance, 1.0)
@@ -362,16 +364,15 @@ class EnterpriseRAGSystem:
                 )
 
                 # Process and filter results
-                for _i, (doc, metadata, distance) in enumerate(
-                    zip(
-                        results["documents"][0],
-                        results["metadatas"][0],
-                        results["distances"][0],
-                        strict=False,
-                    )
+                for doc, metadata, distance in zip(
+                    results["documents"][0],
+                    results["metadatas"][0],
+                    results["distances"][0],
+                    strict=False,
                 ):
-                    # Convert distance to similarity score
-                    similarity_score = 1.0 - distance
+                    if distance < rag_query.min_relevance_score:
+                        # Convert distance to similarity score
+                        similarity_score = 1.0 - distance
 
                     if similarity_score >= rag_query.min_relevance_score:
                         # Apply document type filter
@@ -471,14 +472,6 @@ class EnterpriseRAGSystem:
 
         if not search_results:
             return "I don't have sufficient information in the knowledge base to answer this query. Please consider adding relevant documentation or refining your search."
-
-        # Combine relevant content
-        "\n\n".join(
-            [
-                f"Source {i+1} (Relevance: {r['similarity_score']:.2f}):\n{r['content']}"
-                for i, r in enumerate(search_results)
-            ]
-        )
 
         # Role-specific response formatting
         if user_role.lower() in ["ceo", "executive", "strategic"]:

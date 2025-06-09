@@ -514,15 +514,10 @@ def simulate_week1_operations():
     ]
 
     print("📊 Tracking Week 1 Operations:")
-    total_tracked_cost = 0
 
     for operation, model, input_tokens, output_tokens, cost in operations:
         monitor.track_token_usage(operation, model, input_tokens, output_tokens, cost)
-        total_tracked_cost += cost
         print(f"• {operation}: {model} - ${cost:.2f}")
-
-    print(f"\nTotal simulated cost: ${total_tracked_cost:.2f}")
-    print()
 
     # Generate Week 1 report
     reports = monitor.generate_week1_progress_report()

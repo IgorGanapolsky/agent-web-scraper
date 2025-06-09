@@ -115,8 +115,6 @@ def verify_daily_logging():
 
     print("🔧 Testing daily logging function...")
 
-    # Test with minimal data to ensure function works
-
     # Don't actually add this - just test the function logic
     try:
         # Test credential loading

@@ -430,7 +430,6 @@ def main():
 
     # Run marketing cycle
     github_engine.run_github_marketing_cycle()
-
     print("\n✅ GITHUB MARKETING CYCLE COMPLETE!")
     print("🎯 High-quality prospects identified and contacted")
     print("📈 Expect 2-3x higher response rates from GitHub outreach")

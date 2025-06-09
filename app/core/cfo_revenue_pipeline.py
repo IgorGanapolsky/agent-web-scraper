@@ -70,7 +70,7 @@ class CFORevenuePipeline:
         self._load_pipeline_memory()
 
     async def execute_optimized_revenue_pipeline(
-        self, context: dict[str, Any] | None = None
+        self, context: Optional[dict[str, Any]] = None
     ) -> PipelineResult:
         """
         Execute complete revenue pipeline with CFO cost optimization.
@@ -154,7 +154,7 @@ class CFORevenuePipeline:
         }
 
     async def _create_optimized_tasks(
-        self, context: dict[str, Any]
+        self, context: dict[str, Any] | None
     ) -> list[ParallelTask]:
         """Create parallel tasks with intelligent model routing for cost optimization"""
 
@@ -323,7 +323,12 @@ class CFORevenuePipeline:
                 else "∞"
             ),
             "roi_multiple": (
-                round(projected_revenue_monthly / (self.current_daily_cost * 30), 1)
+                round(
+                    context.get("current_revenue", 0)
+                    * 30
+                    / (self.current_daily_cost * 30),
+                    1,
+                )
                 if self.current_daily_cost > 0
                 else "∞"
             ),
@@ -437,7 +442,7 @@ class CFORevenuePipeline:
     async def _generate_api_endpoints(
         self,
         endpoint_type: str,
-        model: ModelType = None,
+        model: ModelType | None = None,
         context: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Generate API endpoints with specified model"""
@@ -454,7 +459,7 @@ class CFORevenuePipeline:
     async def _batch_generate_components(
         self,
         components: list[str],
-        model: ModelType = None,
+        model: ModelType | None = None,
         context: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Batch generate UI components"""
@@ -471,7 +476,7 @@ class CFORevenuePipeline:
     async def _automated_market_research(
         self,
         keywords: list[str],
-        model: ModelType = None,
+        model: ModelType | None = None,
         context: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Automated market research"""
@@ -490,7 +495,7 @@ class CFORevenuePipeline:
         self,
         current_revenue: float,
         target_revenue: float,
-        model: ModelType = None,
+        model: ModelType | None = None,
         context: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Optimize revenue strategy (complex task for Opus 4)"""
@@ -509,7 +514,7 @@ class CFORevenuePipeline:
     async def _analyze_customer_pipeline(
         self,
         prospects: list[dict[str, Any]],
-        model: ModelType = None,
+        model: ModelType | None = None,
         context: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Analyze customer pipeline"""

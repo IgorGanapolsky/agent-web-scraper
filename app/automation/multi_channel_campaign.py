@@ -211,8 +211,8 @@ class MultiChannelCampaignGenerator:
             f"🔍 Fetching engagement trends: {len(engagement_keywords)} concurrent searches"
         )
 
-        # Simulate concurrent SerpAPI searches
-        await self.serpapi_client.concurrent_market_research(engagement_keywords)
+        # Simulate concurrent SerpAPI searches (results not used directly)
+        _ = await self.serpapi_client.concurrent_market_research(engagement_keywords)
 
         # Extract engagement insights
         engagement_insights = {
@@ -1162,11 +1162,10 @@ return qualifiedLeads;
 
     def _generate_usage_report(self, session_id: str) -> dict[str, Any]:
         """Generate comprehensive token usage report"""
-
-        self.token_monitor.get_usage_summary(
+        # Get budget status (usage summary not used directly)
+        _ = self.token_monitor.get_usage_summary(
             period_days=1, task_type="multi_channel_campaign"
         )
-
         budget_status = self.token_monitor.get_budget_status()
 
         return {

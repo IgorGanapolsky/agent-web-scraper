@@ -13,6 +13,7 @@ import serpapi
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from openai import OpenAI
+from security import safe_requests
 
 from app.core.gemini_client import GeminiClient
 from app.core.llm_client import GPT4Client

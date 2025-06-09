@@ -247,8 +247,8 @@ class Week1CostFinalizer:
     def create_comprehensive_token_report(self) -> dict:
         """Create comprehensive token usage report for the session"""
 
-        # Get session analytics
-        self.token_monitor.get_usage_analytics(1)  # Today only
+        # Get session analytics (commented out as not currently used)
+        # session_analytics = self.token_monitor.get_usage_analytics(1)  # Today only
 
         return {
             "token_usage_report": {

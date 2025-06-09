@@ -85,7 +85,8 @@ class TestCostTracker:
             months=customer_data["months_active"],
         )
 
-        99.00 * (1 / 0.05)  # ~$1,980
+        # Verify LTV is within expected business range
+        # Expected LTV is around $1,980 (99 * 1/0.05)
         assert ltv >= 1500  # Minimum viable LTV
         assert ltv <= 2500  # Realistic maximum
 

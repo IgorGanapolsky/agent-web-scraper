@@ -53,9 +53,7 @@ class FinancialModelV23Updater:
 
     def load_financial_model_v22(self) -> dict:
         """Load the existing financial model v2.2"""
-
-        # Track model loading with Haiku 3 (10% - simple data operations)
-        self.token_monitor.track_usage(
+        _ = self.token_monitor.track_usage(
             model="claude-3-haiku",
             input_tokens=800,
             output_tokens=400,
@@ -330,8 +328,8 @@ class FinancialModelV23Updater:
     def generate_financial_model_v23(self) -> dict:
         """Generate complete financial model v2.3"""
 
-        # Load v2.2 baseline
-        self.load_financial_model_v22()
+        # Load v2.2 baseline (result not used, just ensuring it loads)
+        _ = self.load_financial_model_v22()
 
         # Calculate Week 2 impacts
         cost_impact = self.calculate_week2_cost_impact()
@@ -445,7 +443,7 @@ class FinancialModelV23Updater:
     def export_model_v23(self, model_v23: dict) -> str:
         """Export financial model v2.3 to JSON file"""
 
-        # Use Haiku 3 for file operations (10%)
+        # Track usage for file operations (10%)
         self.token_monitor.track_usage(
             model="claude-3-haiku",
             input_tokens=500,

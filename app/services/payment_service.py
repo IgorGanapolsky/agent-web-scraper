@@ -37,7 +37,7 @@ class PaymentService:
     """Handles all payment and subscription operations"""
 
     # Pricing tiers with annual options
-    TIERS: ClassVar[dict] = {
+    TIERS: ClassVar[dict[str, SubscriptionTier]] = {
         "basic": SubscriptionTier(
             name="Basic",
             price_id_monthly="price_basic_monthly",

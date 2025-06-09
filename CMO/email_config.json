@@ -1,0 +1,91 @@
+{
+  "provider": "SendGrid",
+  "templates": {
+    "welcome": {
+      "subject": "Welcome to SaaS Intelligence!",
+      "template_id": "d-welcome123",
+      "trigger": "customer_signup"
+    },
+    "trial_started": {
+      "subject": "Your trial has started - Here's what's next",
+      "template_id": "d-trial123",
+      "trigger": "trial_subscription_created"
+    },
+    "trial_ending": {
+      "subject": "Your trial ends in 3 days - Don't lose your progress",
+      "template_id": "d-ending123",
+      "trigger": "trial_ending_soon"
+    },
+    "payment_succeeded": {
+      "subject": "Payment confirmed - Thank you!",
+      "template_id": "d-payment123",
+      "trigger": "invoice_payment_succeeded"
+    },
+    "payment_failed": {
+      "subject": "Payment issue - Let's fix this quickly",
+      "template_id": "d-failed123",
+      "trigger": "invoice_payment_failed"
+    }
+  },
+  "workflows": {
+    "onboarding_sequence": {
+      "name": "Customer Onboarding",
+      "emails": [
+        {
+          "delay": 0,
+          "template": "welcome"
+        },
+        {
+          "delay": 24,
+          "template": "getting_started"
+        },
+        {
+          "delay": 72,
+          "template": "feature_highlight"
+        },
+        {
+          "delay": 168,
+          "template": "success_tips"
+        }
+      ]
+    },
+    "trial_conversion": {
+      "name": "Trial to Paid Conversion",
+      "emails": [
+        {
+          "delay": 72,
+          "template": "trial_value_demo"
+        },
+        {
+          "delay": 240,
+          "template": "trial_ending"
+        },
+        {
+          "delay": 336,
+          "template": "final_chance"
+        }
+      ]
+    },
+    "customer_retention": {
+      "name": "Customer Retention",
+      "emails": [
+        {
+          "delay": 720,
+          "template": "monthly_insights"
+        },
+        {
+          "delay": 2160,
+          "template": "usage_tips"
+        },
+        {
+          "delay": 4320,
+          "template": "success_stories"
+        }
+      ]
+    }
+  },
+  "sender_domain": "your-domain.com",
+  "from_name": "SaaS Intelligence Team",
+  "from_email": "noreply@your-domain.com",
+  "unsubscribe_url": "https://your-domain.com/unsubscribe"
+}

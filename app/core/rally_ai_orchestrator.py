@@ -504,7 +504,7 @@ class RallyAIOrchestrator:
         ]
 
         if revenue_results:
-            revenue_results[0].result
+            _revenue_analysis = revenue_results[0].result
             return {
                 "daily_potential": "$300",
                 "monthly_potential": "$9,000",
