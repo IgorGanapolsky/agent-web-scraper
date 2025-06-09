@@ -1,23 +1,23 @@
-# 🧠 SaaS Market Intelligence Platform
+# 🤖 Agent Web Scraper
 
-**Autonomous revenue generation through AI-powered market intelligence**
+**AI-powered web scraping and automation platform for market intelligence**
 
 [![CI](https://github.com/IgorGanapolsky/agent-web-scraper/workflows/CI/badge.svg)](https://github.com/IgorGanapolsky/agent-web-scraper/actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=IgorGanapolsky_agent-web-scraper&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=IgorGanapolsky_agent-web-scraper)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=IgorGanapolsky_agent-web-scraper&metric=coverage)](https://sonarcloud.io/summary/new_code?id=IgorGanapolsky_agent-web-scraper)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=IgorGanapolsky_agent-web-scraper&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=IgorGanapolsky_agent-web-scraper)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Revenue Target](https://img.shields.io/badge/revenue-$300%2Fday-green.svg)](docs/business-model.md)
+[![Development](https://img.shields.io/badge/status-active%20development-blue.svg)](README.md)
 
-## 🎯 What We Do
+## 🎯 What This Does
 
-Transform SaaS market research through **autonomous AI agents** that discover pain points, generate insights, and drive revenue automatically.
+An experimental platform for automated web scraping and AI-powered content analysis using modern agent-based architectures.
 
-- **$320/day Enterprise transformation** (8 customers × $1,199/month)
-- **McKinsey-quality intelligence at 1/50th cost**
-- **Real-time competitive insights** vs 6-month consulting projects
-- **Series A/B SaaS founder targeting** ($5M+ ARR focus)
-- **Multi-agent revenue system** (CEO, CMO, CFO, CTO coordination)
+- **Automated web scraping** with multiple data sources (Reddit, GitHub)
+- **AI-powered content analysis** using Claude and other LLMs
+- **Multi-agent coordination** for complex workflows
+- **Revenue tracking experiments** with Stripe integration
+- **Modern development stack** with FastAPI, Docker, and CI/CD
 
 ## 🏗️ Modern Architecture (2025)
 
