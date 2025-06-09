@@ -25,24 +25,51 @@ Token Count: ~500-2,000 characters
 Cost: Low $
 ```
 
-## Implementation Steps
+## Implementation Steps (Following Anthropic's Best Practices)
 
-### Step 1: Create Feature Branch and Worktree
+### Step 1: Set Up Bare Repository (One-time setup)
 ```bash
-# Create new branch for the feature
-git switch -c feature/csv-writer
+# Clone as bare repository (no working directory)
+git clone --bare https://github.com/IgorGanapolsky/agent-web-scraper.git agent-web-scraper-bare
+cd agent-web-scraper-bare
 
-# Create separate, clean directory (worktree) for this feature
-git worktree add ../agent-scraper-csv-writer feature/csv-writer
+# The bare repo will show all remote branches - this is normal!
+git branch -a  # Shows all branches including remotes
 ```
 
-### Step 2: Work in Isolated Environment
+### Step 2: Create Feature Worktree from Bare Repo
 ```bash
-# Navigate to isolated workspace
-cd ../agent-scraper-csv-writer
+# Create new branch and worktree from bare repo
+git worktree add ../agent-feature-name -b feature/feature-name
 
-# Your terminal is now focused only on this feature
-# All other project files are out of sight
+# Or checkout existing branch
+git worktree add ../agent-existing-feature feature/existing-feature
+```
+
+### Step 3: Generate Source Map for Focused Context
+```bash
+# In your bare repo, generate targeted source maps
+cd agent-web-scraper-bare
+
+# For API work - only 12 files
+./generate_src_map.sh main api_map.txt app/api/
+
+# For core logic work - only 56 files  
+./generate_src_map.sh main core_map.txt app/core/
+
+# For specific service work - minimal files
+./generate_src_map.sh main services_map.txt app/services/
+```
+
+### Step 4: Work in Isolated Environment with Minimal Context
+```bash
+# Navigate to your worktree
+cd ../agent-feature-name
+
+# Copy the relevant source map
+cp ../agent-web-scraper-bare/api_map.txt .
+
+# Your Claude prompt now only includes 12 API files instead of 1000+ project files!
 ```
 
 ### Step 3: Create Minimal, Cost-Effective Prompt

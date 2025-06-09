@@ -1,0 +1,7 @@
+# pack-refs with: peeled fully-peeled sorted 
+8abef317f446990cb214589bd831f103271d41ce refs/heads/feature/enterprise-stack-complete
+4b4369e74ce63a2a11aa09bbaa7840423452def9 refs/heads/fix-sonarqube-quality-gate-2025-comprehensive
+388165c7d205aa7aae008a9bd34681b696c234c2 refs/heads/fix-sonarqube-setup
+efcf9ca0ad4962bd658ef3cb0acaa8e4aab4336b refs/heads/fix/sonarqube-setup
+1d0d7a33936bf3c2b63a64c0a520f32eec65333f refs/heads/fleet-local-history
+32e9e6b534d0ffa7d3eda2117f5b26a210f10289 refs/heads/main
