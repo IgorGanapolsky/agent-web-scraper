@@ -1,4 +1,0 @@
-dagger-io>=0.9.0
-asyncio
-pathlib
-security==1.3.1
