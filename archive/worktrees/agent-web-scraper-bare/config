@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	ignorecase = true
+	precomposeunicode = true
+	sshCommand = ssh -i ~/.ssh/id_ed25519_personal -F /dev/null
+[remote "origin"]
+	url = git@github.com:IgorGanapolsky/agent-web-scraper.git

@@ -1,0 +1,774 @@
+{
+  "last_validation": "2025-06-06T17:52:19.474123",
+  "validation_session": "validation_20250606_175219",
+  "financial_model_v2_1": {
+    "model_metadata": {
+      "generated_at": "2025-06-06T17:52:19.473872",
+      "model_version": "2.0",
+      "current_daily_target": 300.0,
+      "scale_daily_target": 1000.0,
+      "timeline_days": 30
+    },
+    "ai_cost_optimization": {
+      "current_monthly_ai_cost": 300.0,
+      "optimized_monthly_ai_cost": 90.00000000000001,
+      "monthly_savings": 210.0,
+      "cost_per_task": 0.054,
+      "sonnet_usage_pct": 80.0,
+      "opus_usage_pct": 20.0,
+      "tasks_per_dollar": 18.51851851851852
+    },
+    "customer_acquisition": {
+      "revenue_gap": 21000.0,
+      "avg_revenue_per_customer": 149.0,
+      "additional_customers_needed": 141,
+      "optimized_cac": 45.425,
+      "avg_ltv": 3576.0,
+      "ltv_cac_ratio": 78.72317006053936,
+      "customer_mix": {
+        "basic": {
+          "price": 39,
+          "target_pct": 0.2
+        },
+        "pro": {
+          "price": 119,
+          "target_pct": 0.6
+        },
+        "enterprise": {
+          "price": 349,
+          "target_pct": 0.2
+        }
+      },
+      "payback_period_months": 0.3048657718120805
+    },
+    "scaling_timeline": {
+      "scaling_timeline": [
+        {
+          "week": 1,
+          "new_customers": 33,
+          "cumulative_customers": 33,
+          "weekly_revenue_added": 4886,
+          "cumulative_monthly_revenue": 13886,
+          "daily_revenue": 462.86
+        },
+        {
+          "week": 2,
+          "new_customers": 33,
+          "cumulative_customers": 66,
+          "weekly_revenue_added": 4886,
+          "cumulative_monthly_revenue": 18772,
+          "daily_revenue": 625.72
+        },
+        {
+          "week": 3,
+          "new_customers": 33,
+          "cumulative_customers": 98,
+          "weekly_revenue_added": 4886,
+          "cumulative_monthly_revenue": 23657,
+          "daily_revenue": 788.58
+        },
+        {
+          "week": 4,
+          "new_customers": 33,
+          "cumulative_customers": 131,
+          "weekly_revenue_added": 4886,
+          "cumulative_monthly_revenue": 28543,
+          "daily_revenue": 951.44
+        }
+      ],
+      "total_weeks": 4.3,
+      "customers_per_week": 33,
+      "final_daily_revenue": 951.44
+    },
+    "roi_metrics": {
+      "total_cac_investment": 6404.924999999999,
+      "additional_monthly_revenue": 21000.0,
+      "monthly_profit": 17400.0,
+      "break_even_months": 0.4,
+      "roi_12_months_pct": 408.0,
+      "ai_cost_savings_monthly": 210.0,
+      "payback_period_months": 0.3048657718120805
+    },
+    "key_assumptions": {
+      "trial_conversion_rate": 0.15,
+      "churn_rate_monthly": 0.05,
+      "ai_optimization_savings": 0.7,
+      "operational_costs_monthly": 3600.0
+    },
+    "risk_factors": [
+      "Market saturation affecting conversion rates",
+      "Increased competition driving up CAC",
+      "AI model pricing changes affecting cost structure",
+      "Economic downturn reducing enterprise spending"
+    ],
+    "success_metrics": {
+      "target_ltv_cac_ratio": 3.0,
+      "target_payback_period_months": 6.0,
+      "target_monthly_churn_rate": 0.03,
+      "target_roi_12m_pct": 200.0
+    },
+    "market_adjustments": {
+      "pricing_changes": {
+        "basic_tier_price": 39,
+        "pro_tier_price": 119,
+        "enterprise_tier_price": 349
+      },
+      "cac_adjustment": {
+        "original": 50.0,
+        "adjusted": 57.49999999999999,
+        "change_pct": 14.999999999999986
+      },
+      "revenue_impact": {
+        "ltv_increase_pct": 17.0,
+        "price_elasticity": -0.15,
+        "net_revenue_impact": {
+          "original_avg_price": 125.0,
+          "new_avg_price": 149.0,
+          "price_increase_pct": 19.2,
+          "customer_retention_rate": 0.971,
+          "revenue_multiplier": 1.354,
+          "net_revenue_change_pct": 35.4
+        }
+      },
+      "competitive_positioning": {
+        "competitive_advantage": "Well-positioned in mid-market segment",
+        "pricing_percentile": "25th percentile (competitive)",
+        "value_proposition": "Strong value for AI-powered insights"
+      }
+    }
+  },
+  "competitive_analysis": {
+    "analysis_metadata": {
+      "timestamp": "2025-06-06T17:52:19.473852",
+      "competitors_analyzed": 10,
+      "execution_time_seconds": 0.0,
+      "total_cost": 0.5,
+      "session_id": "serpapi_20250606_175219"
+    },
+    "pricing_analysis": {
+      "competitive_landscape": [
+        {
+          "competitor": "ahrefs",
+          "plan_name": "Lite",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "ahrefs",
+          "plan_name": "Standard",
+          "price": 179,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "ahrefs",
+          "plan_name": "Advanced",
+          "price": 399,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "ahrefs",
+          "plan_name": "Agency",
+          "price": 999,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "semrush",
+          "plan_name": "Pro",
+          "price": 119,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "semrush",
+          "plan_name": "Guru",
+          "price": 229,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "semrush",
+          "plan_name": "Business",
+          "price": 449,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "similarweb",
+          "plan_name": "Starter",
+          "price": 167,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "similarweb",
+          "plan_name": "Professional",
+          "price": 333,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "similarweb",
+          "plan_name": "Team",
+          "price": 583,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "buzzsumo",
+          "plan_name": "Pro",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "buzzsumo",
+          "plan_name": "Plus",
+          "price": 179,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "buzzsumo",
+          "plan_name": "Large",
+          "price": 299,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "brandwatch",
+          "plan_name": "Essentials",
+          "price": 108,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "brandwatch",
+          "plan_name": "Premium",
+          "price": 249,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "brandwatch",
+          "plan_name": "Enterprise",
+          "price": 400,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "sprout social",
+          "plan_name": "Basic",
+          "price": 49,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "sprout social",
+          "plan_name": "Pro",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "sprout social",
+          "plan_name": "Enterprise",
+          "price": 199,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "hootsuite",
+          "plan_name": "Basic",
+          "price": 49,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "hootsuite",
+          "plan_name": "Pro",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "hootsuite",
+          "plan_name": "Enterprise",
+          "price": 199,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "buffer",
+          "plan_name": "Basic",
+          "price": 49,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "buffer",
+          "plan_name": "Pro",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "buffer",
+          "plan_name": "Enterprise",
+          "price": 199,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "later",
+          "plan_name": "Basic",
+          "price": 49,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "later",
+          "plan_name": "Pro",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "later",
+          "plan_name": "Enterprise",
+          "price": 199,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "socialbakers",
+          "plan_name": "Basic",
+          "price": 49,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "socialbakers",
+          "plan_name": "Pro",
+          "price": 99,
+          "billing": "monthly"
+        },
+        {
+          "competitor": "socialbakers",
+          "plan_name": "Enterprise",
+          "price": 199,
+          "billing": "monthly"
+        }
+      ],
+      "analysis": {
+        "market_positioning": {
+          "competitive_advantage": "Well-positioned in mid-market segment",
+          "pricing_percentile": "25th percentile (competitive)",
+          "value_proposition": "Strong value for AI-powered insights"
+        },
+        "pricing_recommendations": {
+          "basic_tier": {
+            "current": 29,
+            "recommended": 39,
+            "rationale": "15% increase still competitive vs $49-99 market range"
+          },
+          "pro_tier": {
+            "current": 99,
+            "recommended": 119,
+            "rationale": "Align with market leaders like Ahrefs/SEMrush"
+          },
+          "enterprise_tier": {
+            "current": 299,
+            "recommended": 349,
+            "rationale": "Premium positioning vs $400+ enterprise tools"
+          }
+        },
+        "cac_impact": {
+          "price_increase_elasticity": -0.15,
+          "revenue_optimization": 0.22,
+          "customer_lifetime_value_increase": 0.17
+        },
+        "implementation_strategy": [
+          "Gradual price increase over 90 days",
+          "Grandfather existing customers for 6 months",
+          "Enhanced feature set to justify premium pricing",
+          "Market positioning as AI-first solution"
+        ]
+      },
+      "claude_cost": 0.010433999999999999,
+      "recommendations_summary": {
+        "revenue_increase_potential": "22% through pricing optimization",
+        "market_position": "Competitive with room for premium pricing",
+        "implementation_timeline": "90 days for full rollout"
+      }
+    },
+    "raw_search_results": [
+      {
+        "search_term": "ahrefs pricing",
+        "data": {
+          "search_metadata": {
+            "query": "ahrefs pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472902"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Lite",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Standard",
+                "price": 179,
+                "billing": "monthly"
+              },
+              {
+                "name": "Advanced",
+                "price": 399,
+                "billing": "monthly"
+              },
+              {
+                "name": "Agency",
+                "price": 999,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Ahrefs - Pricing Plans",
+              "link": "https://ahrefs.com/pricing",
+              "snippet": "Choose the perfect ahrefs plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "semrush pricing",
+        "data": {
+          "search_metadata": {
+            "query": "semrush pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472915"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Pro",
+                "price": 119,
+                "billing": "monthly"
+              },
+              {
+                "name": "Guru",
+                "price": 229,
+                "billing": "monthly"
+              },
+              {
+                "name": "Business",
+                "price": 449,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Semrush - Pricing Plans",
+              "link": "https://semrush.com/pricing",
+              "snippet": "Choose the perfect semrush plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "similarweb pricing",
+        "data": {
+          "search_metadata": {
+            "query": "similarweb pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472921"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Starter",
+                "price": 167,
+                "billing": "monthly"
+              },
+              {
+                "name": "Professional",
+                "price": 333,
+                "billing": "monthly"
+              },
+              {
+                "name": "Team",
+                "price": 583,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Similarweb - Pricing Plans",
+              "link": "https://similarweb.com/pricing",
+              "snippet": "Choose the perfect similarweb plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "buzzsumo pricing",
+        "data": {
+          "search_metadata": {
+            "query": "buzzsumo pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472926"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Pro",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Plus",
+                "price": 179,
+                "billing": "monthly"
+              },
+              {
+                "name": "Large",
+                "price": 299,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Buzzsumo - Pricing Plans",
+              "link": "https://buzzsumo.com/pricing",
+              "snippet": "Choose the perfect buzzsumo plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "brandwatch pricing",
+        "data": {
+          "search_metadata": {
+            "query": "brandwatch pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472930"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Essentials",
+                "price": 108,
+                "billing": "monthly"
+              },
+              {
+                "name": "Premium",
+                "price": 249,
+                "billing": "monthly"
+              },
+              {
+                "name": "Enterprise",
+                "price": 400,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Brandwatch - Pricing Plans",
+              "link": "https://brandwatch.com/pricing",
+              "snippet": "Choose the perfect brandwatch plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "sprout social pricing",
+        "data": {
+          "search_metadata": {
+            "query": "sprout social pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472934"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Basic",
+                "price": 49,
+                "billing": "monthly"
+              },
+              {
+                "name": "Pro",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Enterprise",
+                "price": 199,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Sprout Social - Pricing Plans",
+              "link": "https://sproutsocial.com/pricing",
+              "snippet": "Choose the perfect sprout social plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "hootsuite pricing",
+        "data": {
+          "search_metadata": {
+            "query": "hootsuite pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472939"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Basic",
+                "price": 49,
+                "billing": "monthly"
+              },
+              {
+                "name": "Pro",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Enterprise",
+                "price": 199,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Hootsuite - Pricing Plans",
+              "link": "https://hootsuite.com/pricing",
+              "snippet": "Choose the perfect hootsuite plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "buffer pricing",
+        "data": {
+          "search_metadata": {
+            "query": "buffer pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472942"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Basic",
+                "price": 49,
+                "billing": "monthly"
+              },
+              {
+                "name": "Pro",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Enterprise",
+                "price": 199,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Buffer - Pricing Plans",
+              "link": "https://buffer.com/pricing",
+              "snippet": "Choose the perfect buffer plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "later pricing",
+        "data": {
+          "search_metadata": {
+            "query": "later pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472946"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Basic",
+                "price": 49,
+                "billing": "monthly"
+              },
+              {
+                "name": "Pro",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Enterprise",
+                "price": 199,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Later - Pricing Plans",
+              "link": "https://later.com/pricing",
+              "snippet": "Choose the perfect later plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      },
+      {
+        "search_term": "socialbakers pricing",
+        "data": {
+          "search_metadata": {
+            "query": "socialbakers pricing",
+            "status": "Success",
+            "created_at": "2025-06-06T17:52:19.472950"
+          },
+          "pricing_info": {
+            "plans": [
+              {
+                "name": "Basic",
+                "price": 49,
+                "billing": "monthly"
+              },
+              {
+                "name": "Pro",
+                "price": 99,
+                "billing": "monthly"
+              },
+              {
+                "name": "Enterprise",
+                "price": 199,
+                "billing": "monthly"
+              }
+            ]
+          },
+          "organic_results": [
+            {
+              "title": "Socialbakers - Pricing Plans",
+              "link": "https://socialbakers.com/pricing",
+              "snippet": "Choose the perfect socialbakers plan for your business needs."
+            }
+          ]
+        },
+        "status": "success"
+      }
+    ]
+  },
+  "implementation_plan": {
+    "pricing_rollout_timeline": "90 days",
+    "customer_communication_plan": "60-day notice period",
+    "feature_enhancement_roadmap": "Q2 2025",
+    "monitoring_metrics": [
+      "customer_retention_rate",
+      "average_revenue_per_user",
+      "customer_acquisition_cost",
+      "monthly_recurring_revenue"
+    ]
+  },
+  "ai_cost_optimization": {
+    "daily_budget": 10.0,
+    "current_efficiency": "Optimal",
+    "monthly_savings_target": 210.0,
+    "cost_per_pipeline_run": 0.072
+  }
+}

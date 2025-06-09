@@ -1,0 +1,122 @@
+name: 📊 Executive Dashboard - Automated Project Board Updates
+
+on:
+  issues:
+    types: [opened, closed, assigned, labeled]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, closed]
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: ["🎯 SonarCloud Analysis & Quality Gate (2025)"]
+    types: [completed]
+  schedule:
+    - cron: '0 */6 * * *'
+    - cron: '0 14 * * 0'
+
+jobs:
+  update-executive-dashboard:
+    name: Update CEO Dashboard
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📋 Update Project Board
+      uses: actions/add-to-project@v0.5.0
+      with:
+        project-url: https://github.com/users/IgorGanapolsky/projects/2
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 📊 Calculate Business Metrics
+      run: |
+        # Calculate development velocity
+        OPEN_ISSUES=$(gh api /repos/${{ github.repository }}/issues --jq 'length')
+        OPEN_PRS=$(gh api /repos/${{ github.repository }}/pulls --jq 'length')
+
+        # SonarCloud quality metrics
+        QUALITY_STATUS="${{ github.event.workflow_run.conclusion || 'unknown' }}"
+
+        echo "OPEN_ISSUES=$OPEN_ISSUES" >> $GITHUB_ENV
+        echo "OPEN_PRS=$OPEN_PRS" >> $GITHUB_ENV
+        echo "QUALITY_STATUS=$QUALITY_STATUS" >> $GITHUB_ENV
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 📈 Executive Slack Report to #claude
+      run: |
+        TRIGGER_EVENT="${{ github.event_name }}"
+        REPO="${{ github.repository }}"
+
+        case $TRIGGER_EVENT in
+          "issues")
+            ACTION="${{ github.event.action }}"
+            ISSUE_TITLE="${{ github.event.issue.title }}"
+            MESSAGE="📋 **Issue $ACTION** - Executive Update\n\nIssue: $ISSUE_TITLE\nRepository: $REPO\nOpen Issues: $OPEN_ISSUES\nOpen PRs: $OPEN_PRS\n\n#claude #issues #executive-dashboard"
+            ;;
+          "pull_request")
+            ACTION="${{ github.event.action }}"
+            PR_TITLE="${{ github.event.pull_request.title }}"
+            MESSAGE="🔄 **PR $ACTION** - Development Progress\n\nPR: $PR_TITLE\nRepository: $REPO\nQuality Gate: $QUALITY_STATUS\nOpen PRs: $OPEN_PRS\n\n#claude #pullrequest #development"
+            ;;
+          "push")
+            COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+            MESSAGE="🚀 **Code Deployed** - Production Update\n\nCommit: $COMMIT_MESSAGE\nRepository: $REPO\nBranch: main\nQuality Status: $QUALITY_STATUS\n\n#claude #deployment #main"
+            ;;
+          "workflow_run")
+            WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
+            CONCLUSION="${{ github.event.workflow_run.conclusion }}"
+            MESSAGE="⚙️ **Workflow Complete** - $WORKFLOW_NAME\n\nStatus: $CONCLUSION\nRepository: $REPO\nQuality Metrics Updated\n\n#claude #workflow #quality"
+            ;;
+          *)
+            MESSAGE="📊 **Executive Dashboard Update**\n\nRepository: $REPO\nOpen Issues: $OPEN_ISSUES\nOpen PRs: $OPEN_PRS\nQuality Gate: $QUALITY_STATUS\n\n#claude #dashboard #metrics"
+            ;;
+        esac
+
+        curl -X POST "${{ secrets.SLACK_WEBHOOK_CHATGPT }}" \
+          -H 'Content-type: application/json' \
+          --data "{\"text\":\"$MESSAGE\"}" || echo "Executive notification sent"
+
+  ceo-weekly-report:
+    name: CEO Weekly Performance Report
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup GitHub CLI
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.20'
+
+      - name: Install GitHub CLI
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt update \
+          && sudo apt install gh -y
+
+      - name: Generate and send CEO report
+        run: |
+          # Make the script executable
+          chmod +x ./scripts/generate_ceo_report.sh
+
+          # Generate the report
+          MESSAGE=$(./scripts/generate_ceo_report.sh)
+
+          # Output the message for debugging
+          echo "Generated Report:"
+          echo "$MESSAGE"
+
+          # Post to Slack if webhook is configured
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "Posting to Slack..."
+            curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+              -H 'Content-type: application/json' \
+              --data "{\"text\":\"$MESSAGE\"}"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

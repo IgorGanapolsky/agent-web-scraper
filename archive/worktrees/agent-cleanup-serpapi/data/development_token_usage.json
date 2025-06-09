@@ -1,0 +1,59 @@
+{
+  "token_usage_summary": {
+    "timestamp": "2025-06-06T17:55:52.802346",
+    "session_id": "dev_estimation_20250606_175552",
+    "total_estimated_tokens": 230000,
+    "total_estimated_cost": 2.70825,
+    "development_context": "Missing SaaS components implementation"
+  },
+  "model_distribution": {
+    "sonnet_4": {
+      "percentage": 80.0,
+      "tokens": 184000,
+      "cost": 1.656,
+      "primary_tasks": [
+        "Code generation for CRUD operations",
+        "API endpoint development",
+        "Database schema design"
+      ],
+      "use_case": "Routine development tasks and code generation"
+    },
+    "haiku_3": {
+      "percentage": 10.0,
+      "tokens": 23000,
+      "cost": 0.017249999999999998,
+      "primary_tasks": [
+        "Code formatting and cleanup",
+        "Simple refactoring tasks",
+        "Comment generation",
+        "Basic troubleshooting",
+        "Status updates"
+      ],
+      "use_case": "Simple updates and formatting"
+    },
+    "opus_4": {
+      "percentage": 10.0,
+      "tokens": 23000,
+      "cost": 1.035,
+      "primary_tasks": [
+        "Architecture design decisions",
+        "Complex algorithm optimization"
+      ],
+      "use_case": "Complex architecture and optimization decisions"
+    }
+  },
+  "cost_optimization": {
+    "vs_all_opus": {
+      "all_opus_cost": 10.35,
+      "optimized_cost": 2.70825,
+      "savings": 7.64175,
+      "savings_percentage": 73.83333333333334
+    },
+    "monthly_budget_impact": {
+      "development_ai_cost": 2.70825,
+      "monthly_ai_budget": 100,
+      "budget_utilization": 2.70825,
+      "remaining_budget": 97.29175
+    }
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Agent Web Scraper{% endblock %}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0; padding: 20px; background: #f5f5f5;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select, textarea {
+            width: 100%; padding: 10px; border: 1px solid #ddd;
+            border-radius: 4px; box-sizing: border-box;
+        }
+        button {
+            background: #007bff; color: white; padding: 12px 24px;
+            border: none; border-radius: 4px; cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        .status { padding: 8px 12px; border-radius: 4px; margin: 5px 0; }
+        .status.pending { background: #fff3cd; color: #856404; }
+        .status.progress { background: #d1ecf1; color: #0c5460; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.failure { background: #f8d7da; color: #721c24; }
+        .job-list { display: grid; gap: 15px; }
+        .job-item {
+            background: #f8f9fa; padding: 15px; border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+        .progress-bar {
+            width: 100%; height: 8px; background: #e9ecef;
+            border-radius: 4px; margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%; background: #007bff; border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Agent Web Scraper - Job Dashboard</h1>
+            <p>Background task management and monitoring</p>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Auto-refresh job status every 5 seconds
+        function refreshJobs() {
+            location.reload();
+        }
+
+        // Set up auto-refresh
+        setInterval(refreshJobs, 5000);
+
+        // Progress bar animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => bar.style.width = width, 100);
+            });
+        });
+    </script>
+</body>
+</html>

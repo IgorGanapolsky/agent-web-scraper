@@ -1,0 +1,10 @@
+📊 Add OpenAI and n8n to architecture diagram
+
+- Updated pipeline diagram to show complete flow: Reddit → LangChain → OpenAI → Claude → Slack
+- Added n8n workflow automation as available component
+- Clarified OpenAI's role in ReAct agent reasoning
+- Separated working pipeline from available workflow automation
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>

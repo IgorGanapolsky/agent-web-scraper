@@ -1,0 +1,53 @@
+{
+  "campaign_name": "AI Business Intelligence Platform - SaaS Target",
+  "objective": "conversions",
+  "budget": {
+    "daily_budget": 16.67,
+    "total_budget": 50,
+    "duration_days": 3
+  },
+  "targeting": {
+    "demographics": {
+      "age_range": "25-55",
+      "interests": [
+        "Software as a Service",
+        "Business Intelligence",
+        "Data Analytics",
+        "Artificial Intelligence",
+        "Startup",
+        "Entrepreneurship",
+        "Business automation"
+      ],
+      "behaviors": [
+        "Small business owners",
+        "Technology early adopters",
+        "SaaS tool users"
+      ]
+    },
+    "custom_audiences": {
+      "lookalike_source": "SaaS newsletter subscribers",
+      "website_visitors": "90 days"
+    }
+  },
+  "ad_creative": {
+    "primary_text": "Stop spending hours on market research. Our AI does it in minutes. Get actionable business intelligence automatically. 3-day free trial, then $79/month.",
+    "headline": "AI-Powered Market Intelligence for SaaS",
+    "description": "Automated competitor analysis, market trends, and customer insights. Try free for 3 days.",
+    "call_to_action": "Start Free Trial",
+    "landing_page": "https://igorganapolsky.github.io/agent-web-scraper/pricing.html"
+  },
+  "conversion_tracking": {
+    "pixel_events": [
+      "trial_signup",
+      "payment_method_added",
+      "subscription_created"
+    ],
+    "cost_per_acquisition_target": 0.50,
+    "conversion_goal": "100 trial signups"
+  },
+  "optimization": {
+    "bidding_strategy": "cost_per_conversion",
+    "audience_expansion": true,
+    "automatic_placements": true
+  }
+}

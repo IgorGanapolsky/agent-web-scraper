@@ -1,0 +1,38 @@
+name: Deploy to Railway Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          python -m pytest tests/ -v
+
+      - name: Deploy to Railway
+        uses: railwayapp/railway-deploy@v1.1.6
+        with:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          service: agent-web-scraper-production
+
+      - name: Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          cname: scraper.yourdomain.com

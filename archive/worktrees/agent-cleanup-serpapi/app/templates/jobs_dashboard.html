@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Jobs Dashboard - Agent Web Scraper{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Submit New Job</h2>
+    <form method="post" action="/dashboard/submit-job">
+        <div class="form-group">
+            <label for="job_type">Job Type:</label>
+            <select name="job_type" id="job_type" required>
+                <option value="">Select job type...</option>
+                <option value="reddit_scrape">Reddit Pain Points Scrape</option>
+                <option value="market_analysis">Market Trend Analysis</option>
+                <option value="insight_report">AI Insight Report</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="query">Search Query:</label>
+            <input type="text" name="query" id="query" placeholder="e.g., SaaS pain points, startup challenges" value="SaaS pain points">
+        </div>
+
+        <div class="form-group">
+            <label for="max_posts">Max Posts (for Reddit scrape):</label>
+            <input type="number" name="max_posts" id="max_posts" value="50" min="10" max="200">
+        </div>
+
+        <button type="submit">Submit Job</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Job Status</h2>
+    {% if jobs %}
+        <div class="job-list">
+            {% for job in jobs %}
+            <div class="job-item">
+                <h3>{{ job.name or job.task_id[:8] }}...</h3>
+                <p><strong>Task ID:</strong> {{ job.task_id }}</p>
+                <p><strong>Status:</strong>
+                    <span class="status {{ job.status.lower() }}">{{ job.status }}</span>
+                </p>
+
+                {% if job.status == "PROGRESS" %}
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ (job.current / job.total * 100) if job.total > 0 else 0 }}%"></div>
+                    </div>
+                    <p>Progress: {{ job.current }}/{{ job.total }} ({{ "%.1f"|format((job.current / job.total * 100) if job.total > 0 else 0) }}%)</p>
+                {% endif %}
+
+                {% if job.result %}
+                    <details>
+                        <summary>View Results</summary>
+                        <pre>{{ job.result | tojson(indent=2) }}</pre>
+                    </details>
+                {% endif %}
+
+                {% if job.error %}
+                    <p><strong>Error:</strong> <span style="color: red;">{{ job.error }}</span></p>
+                {% endif %}
+
+                {% if job.status in ["RUNNING", "PROGRESS"] %}
+                    <form method="post" action="/dashboard/cancel-job" style="display: inline;">
+                        <input type="hidden" name="task_id" value="{{ job.task_id }}">
+                        <button type="submit" style="background: #dc3545;">Cancel Job</button>
+                    </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No jobs found. Submit a job above to get started!</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>System Health</h2>
+    {% if health %}
+        <p><strong>Status:</strong>
+            <span class="status {{ 'success' if health.status == 'healthy' else 'failure' }}">
+                {{ health.status.upper() }}
+            </span>
+        </p>
+        <p><strong>Workers:</strong> {{ health.workers }}</p>
+        <p><strong>Message:</strong> {{ health.message }}</p>
+    {% else %}
+        <p class="status failure">Unable to check system health</p>
+    {% endif %}
+</div>
+{% endblock %}

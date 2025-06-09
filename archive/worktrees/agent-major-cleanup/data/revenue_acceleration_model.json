@@ -1,0 +1,107 @@
+{
+  "model_metadata": {
+    "generated_at": "2025-06-06T17:16:52.927991",
+    "model_version": "2.0",
+    "current_daily_target": 300.0,
+    "scale_daily_target": 1000.0,
+    "timeline_days": 30
+  },
+  "ai_cost_optimization": {
+    "current_monthly_ai_cost": 300.0,
+    "optimized_monthly_ai_cost": 90.00000000000001,
+    "monthly_savings": 210.0,
+    "cost_per_task": 0.054,
+    "sonnet_usage_pct": 80.0,
+    "opus_usage_pct": 20.0,
+    "tasks_per_dollar": 18.51851851851852
+  },
+  "customer_acquisition": {
+    "revenue_gap": 21000.0,
+    "avg_revenue_per_customer": 125.0,
+    "additional_customers_needed": 168,
+    "optimized_cac": 39.5,
+    "avg_ltv": 3000.0,
+    "ltv_cac_ratio": 75.9493670886076,
+    "customer_mix": {
+      "basic": {
+        "price": 29.0,
+        "target_pct": 0.2
+      },
+      "pro": {
+        "price": 99.0,
+        "target_pct": 0.6
+      },
+      "enterprise": {
+        "price": 299.0,
+        "target_pct": 0.2
+      }
+    },
+    "payback_period_months": 0.316
+  },
+  "scaling_timeline": {
+    "scaling_timeline": [
+      {
+        "week": 1,
+        "new_customers": 39,
+        "cumulative_customers": 39,
+        "weekly_revenue_added": 4884,
+        "cumulative_monthly_revenue": 13884,
+        "daily_revenue": 462.79
+      },
+      {
+        "week": 2,
+        "new_customers": 39,
+        "cumulative_customers": 78,
+        "weekly_revenue_added": 4884,
+        "cumulative_monthly_revenue": 18767,
+        "daily_revenue": 625.58
+      },
+      {
+        "week": 3,
+        "new_customers": 39,
+        "cumulative_customers": 117,
+        "weekly_revenue_added": 4884,
+        "cumulative_monthly_revenue": 23651,
+        "daily_revenue": 788.37
+      },
+      {
+        "week": 4,
+        "new_customers": 39,
+        "cumulative_customers": 156,
+        "weekly_revenue_added": 4884,
+        "cumulative_monthly_revenue": 28535,
+        "daily_revenue": 951.16
+      }
+    ],
+    "total_weeks": 4.3,
+    "customers_per_week": 39,
+    "final_daily_revenue": 951.16
+  },
+  "roi_metrics": {
+    "total_cac_investment": 6636.0,
+    "additional_monthly_revenue": 21000.0,
+    "monthly_profit": 17400.0,
+    "break_even_months": 0.4,
+    "roi_12_months_pct": 405.7,
+    "ai_cost_savings_monthly": 210.0,
+    "payback_period_months": 0.316
+  },
+  "key_assumptions": {
+    "trial_conversion_rate": 0.15,
+    "churn_rate_monthly": 0.05,
+    "ai_optimization_savings": 0.7,
+    "operational_costs_monthly": 3600.0
+  },
+  "risk_factors": [
+    "Market saturation affecting conversion rates",
+    "Increased competition driving up CAC",
+    "AI model pricing changes affecting cost structure",
+    "Economic downturn reducing enterprise spending"
+  ],
+  "success_metrics": {
+    "target_ltv_cac_ratio": 3.0,
+    "target_payback_period_months": 6.0,
+    "target_monthly_churn_rate": 0.03,
+    "target_roi_12m_pct": 200.0
+  }
+}
