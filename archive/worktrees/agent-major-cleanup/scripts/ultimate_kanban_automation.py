@@ -7,12 +7,13 @@ Automatically sets up GitHub Project automation rules - NO MANUAL WORK!
 import json
 import subprocess
 import sys
+from security import safe_command
 
 
 def run_command(command: list[str]) -> tuple[bool, str]:
     """Run command and return success status and output"""
     try:
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        result = safe_command.run(subprocess.run, command, capture_output=True, text=True, check=True)
         return True, result.stdout.strip()
     except subprocess.CalledProcessError as e:
         return False, e.stderr.strip()

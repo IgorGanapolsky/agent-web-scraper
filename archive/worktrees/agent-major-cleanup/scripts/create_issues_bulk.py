@@ -8,6 +8,7 @@ import os
 import subprocess
 
 from dotenv import load_dotenv
+from security import safe_command
 
 load_dotenv()
 
@@ -35,7 +36,7 @@ def create_issue_via_curl(title, body, labels):
     ]
 
     try:
-        result = subprocess.run(curl_cmd, capture_output=True, text=True)
+        result = safe_command.run(subprocess.run, curl_cmd, capture_output=True, text=True)
         print(f"Status: {result.returncode}")
         print(f"Response: {result.stdout}")
         if result.stderr:
