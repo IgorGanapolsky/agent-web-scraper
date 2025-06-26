@@ -1,0 +1,38 @@
+{
+  "total_costs": 7.2635115,
+  "commits": [
+    {
+      "branch": "main",
+      "commit_hash": "af168c0c",
+      "timestamp": "2025-06-26T15:41:44.130517",
+      "changes": {
+        "files_changed": 1,
+        "lines_added": 124,
+        "lines_removed": 1,
+        "changed_files": [
+          "plan.md"
+        ]
+      },
+      "context": {
+        "total_files": 1183,
+        "total_tokens": 2416645
+      },
+      "cost_estimate": {
+        "full_repo_cost": 7.2635115,
+        "worktree_cost": 0.028576499999999998,
+        "savings_potential": 7.234935,
+        "input_tokens": 2417938,
+        "output_tokens": 646.5,
+        "worktree_input_tokens": 6293
+      }
+    }
+  ],
+  "daily_totals": {
+    "2025-06-26": 7.2635115
+  },
+  "project_stats": {
+    "total_tokens_processed": 2417938,
+    "total_files_changed": 1,
+    "cost_per_commit_avg": 7.2635115
+  }
+}
