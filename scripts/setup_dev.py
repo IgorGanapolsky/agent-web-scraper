@@ -9,6 +9,7 @@ Python packaging standards with Hatch.
 import subprocess
 import sys
 from pathlib import Path
+from security import safe_command
 
 
 class Colors:
@@ -48,7 +49,7 @@ def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProce
     """Run a command and handle errors gracefully."""
     try:
         print(f"{Colors.OKCYAN}▶️  Running: {' '.join(cmd)}{Colors.ENDC}")
-        result = subprocess.run(cmd, check=check, capture_output=True, text=True)
+        result = safe_command.run(subprocess.run, cmd, check=check, capture_output=True, text=True)
         if result.stdout:
             print(result.stdout)
         return result

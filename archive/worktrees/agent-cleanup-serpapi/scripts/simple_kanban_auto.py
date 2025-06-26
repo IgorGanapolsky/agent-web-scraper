@@ -19,13 +19,14 @@ which uses the GraphQL API directly.
 import json
 import subprocess
 import sys
+from security import safe_command
 
 
 def run_gh_command(command: list[str]) -> str:
     """Run GitHub CLI command and return output"""
     try:
         print(f"🔧 Running command: {' '.join(command)}")
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        result = safe_command.run(subprocess.run, command, capture_output=True, text=True, check=True)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"❌ Command failed: {' '.join(command)}")
