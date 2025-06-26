@@ -1,5 +1,5 @@
 {
-  "total_costs": 7.2635115,
+  "total_costs": 14.5242285,
   "commits": [
     {
       "branch": "main",
@@ -25,14 +25,42 @@
         "output_tokens": 646.5,
         "worktree_input_tokens": 6293
       }
+    },
+    {
+      "branch": "main",
+      "commit_hash": "b15b710c",
+      "timestamp": "2025-06-26T16:03:46.596286",
+      "changes": {
+        "files_changed": 4,
+        "lines_added": 46,
+        "lines_removed": 2,
+        "changed_files": [
+          "commit_costs.json",
+          "diagram.pdf",
+          "last_commit_cost.json",
+          "proposal.pdf"
+        ]
+      },
+      "context": {
+        "total_files": 1185,
+        "total_tokens": 2417134
+      },
+      "cost_estimate": {
+        "full_repo_cost": 7.2607170000000005,
+        "worktree_cost": 0.024315,
+        "savings_potential": 7.236402000000001,
+        "input_tokens": 2417739,
+        "output_tokens": 500,
+        "worktree_input_tokens": 5605
+      }
     }
   ],
   "daily_totals": {
-    "2025-06-26": 7.2635115
+    "2025-06-26": 14.5242285
   },
   "project_stats": {
-    "total_tokens_processed": 2417938,
-    "total_files_changed": 1,
-    "cost_per_commit_avg": 7.2635115
+    "total_tokens_processed": 4835677,
+    "total_files_changed": 5,
+    "cost_per_commit_avg": 7.26211425
   }
 }
