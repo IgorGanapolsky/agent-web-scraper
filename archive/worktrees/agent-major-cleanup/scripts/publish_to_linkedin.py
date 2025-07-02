@@ -211,8 +211,8 @@ class LinkedInPublisher:
             }
 
             response = requests.post(
-                f"{self.api_base}/ugcPosts", headers=headers, json=payload
-            )
+                f"{self.api_base}/ugcPosts", headers=headers, json=payload, 
+            timeout=60)
 
             if response.status_code == 201:
                 post_response = response.json()

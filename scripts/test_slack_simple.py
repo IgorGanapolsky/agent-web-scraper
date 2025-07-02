@@ -25,7 +25,7 @@ if webhook_url:
     }
     
     try:
-        response = requests.post(webhook_url, json=test_message)
+        response = requests.post(webhook_url, json=test_message, timeout=60)
         print(f"Response: {response.status_code}")
         print(f"Text: {response.text}")
         

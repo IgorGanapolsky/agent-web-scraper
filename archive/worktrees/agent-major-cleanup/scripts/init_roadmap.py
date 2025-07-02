@@ -126,7 +126,7 @@ class RoadmapInitializer:
         params = {"state": "all", "per_page": 100}
 
         try:
-            response = requests.get(url, headers=self.headers, params=params)
+            response = requests.get(url, headers=self.headers, params=params, timeout=60)
             response.raise_for_status()
             issues = response.json()
 
@@ -149,7 +149,7 @@ class RoadmapInitializer:
         url = f"https://api.github.com/repos/{self.repo}/issues"
 
         try:
-            response = requests.post(url, json=issue_data, headers=self.headers)
+            response = requests.post(url, json=issue_data, headers=self.headers, timeout=60)
             response.raise_for_status()
 
             issue = response.json()
@@ -185,7 +185,7 @@ class RoadmapInitializer:
                 "https://api.github.com/graphql",
                 json={"query": query, "variables": variables},
                 headers=self.graphql_headers,
-            )
+            timeout=60)
             response.raise_for_status()
 
             data = response.json()
@@ -238,7 +238,7 @@ class RoadmapInitializer:
                 "https://api.github.com/graphql",
                 json={"query": mutation, "variables": variables},
                 headers=self.graphql_headers,
-            )
+            timeout=60)
             response.raise_for_status()
 
             data = response.json()
@@ -263,7 +263,7 @@ class RoadmapInitializer:
         url = f"https://api.github.com/repos/{self.repo}/labels"
 
         try:
-            response = requests.get(url, headers=self.headers)
+            response = requests.get(url, headers=self.headers, timeout=60)
             response.raise_for_status()
             existing_labels = {label["name"] for label in response.json()}
 
@@ -299,7 +299,7 @@ class RoadmapInitializer:
                         f"https://api.github.com/repos/{self.repo}/labels",
                         json=label_data,
                         headers=self.headers,
-                    )
+                    timeout=60)
 
                     if create_response.status_code == 201:
                         print(f"✅ Created label: {label}")

@@ -147,7 +147,7 @@ Based on our AI analysis of Reddit discussions:
         }
         
         try:
-            response = requests.post(self.slack_webhook, json=slack_message)
+            response = requests.post(self.slack_webhook, json=slack_message, timeout=60)
             if response.status_code == 200:
                 print("✅ Newsletter sent to Slack successfully!")
                 return True
