@@ -78,6 +78,17 @@ This document summarizes the evaluation and planning discussion for the AI-Power
 
 **Total Monthly Estimate**: $300-1,200 (varies by usage)
 
+### Cost Scaling Examples
+- **Starting (100-500 users)**: ~$300-500/month
+- **Growth (1,000-2,500 users)**: ~$600-800/month
+- **Scale (5,000+ users)**: ~$1,000-1,200/month
+
+### Important Cost Notes
+1. **Costs scale with usage** - You only pay more as you get more customers
+2. **Already profitable** - Current operation shows $9,000 revenue vs ~$2,770 total costs
+3. **69% gross margin** - For every $100 in revenue, you keep $69 after costs
+4. **Client only pays monthly operating costs** - Development provided free by FissionLabs
+
 ## Client Responsibilities
 1. Provide AWS account with required permissions
 2. Set up Stripe account and share credentials/webhooks
