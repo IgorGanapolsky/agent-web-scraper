@@ -99,7 +99,7 @@ class AutoKanbanOrganizer:
                 "https://api.github.com/graphql",
                 json={"query": query, "variables": variables},
                 headers=self.graphql_headers,
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 data = response.json()
@@ -242,7 +242,7 @@ class AutoKanbanOrganizer:
                 "https://api.github.com/graphql",
                 json={"query": mutation, "variables": variables},
                 headers=self.graphql_headers,
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 data = response.json()
@@ -274,7 +274,7 @@ class AutoKanbanOrganizer:
                 "https://api.github.com/graphql",
                 json={"query": query, "variables": variables},
                 headers=self.graphql_headers,
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 data = response.json()

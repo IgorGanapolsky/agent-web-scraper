@@ -78,7 +78,7 @@ A new AI-powered analysis of our market data has been generated with key finding
     }
 
     try:
-        response = requests.post(url, json=data, headers=headers)
+        response = requests.post(url, json=data, headers=headers, timeout=60)
 
         if response.status_code == 201:
             issue_data = response.json()

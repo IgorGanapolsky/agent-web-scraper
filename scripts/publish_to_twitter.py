@@ -204,8 +204,8 @@ What SaaS opportunities are you exploring? 👇
                     payload["reply"] = {"in_reply_to_tweet_id": reply_to_id}
 
                 response = requests.post(
-                    "https://api.twitter.com/2/tweets", headers=headers, json=payload
-                )
+                    "https://api.twitter.com/2/tweets", headers=headers, json=payload, 
+                timeout=60)
 
                 if response.status_code == 201:
                     tweet_response = response.json()

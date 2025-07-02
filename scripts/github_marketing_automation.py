@@ -60,7 +60,7 @@ class GitHubMarketingEngine:
                         "order": "desc",
                         "per_page": 10,
                     },
-                )
+                timeout=60)
 
                 if response.status_code == 200:
                     repos = response.json().get("items", [])
@@ -87,8 +87,8 @@ class GitHubMarketingEngine:
         """Get detailed information about a GitHub user"""
         try:
             response = requests.get(
-                f"{self.base_url}/users/{username}", headers=self.headers
-            )
+                f"{self.base_url}/users/{username}", headers=self.headers, 
+            timeout=60)
 
             if response.status_code == 200:
                 return response.json()
@@ -325,7 +325,7 @@ Founder, SaaS Growth Dispatch"""
                     "body": issue_body,
                     "labels": ["enhancement", "discussion"],
                 },
-            )
+            timeout=60)
 
             if response.status_code == 201:
                 print(f"✅ Created strategic issue in {repo_owner}/{repo_name}")
@@ -350,7 +350,7 @@ Founder, SaaS Growth Dispatch"""
                     "order": "desc",
                     "per_page": 20,
                 },
-            )
+            timeout=60)
 
             if response.status_code == 200:
                 trending_repos = response.json().get("items", [])
