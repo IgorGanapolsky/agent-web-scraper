@@ -1,5 +1,5 @@
 {
-  "total_costs": 29.0484885,
+  "total_costs": 43.5904005,
   "commits": [
     {
       "branch": "main",
@@ -108,15 +108,68 @@
         "output_tokens": 500,
         "worktree_input_tokens": 5806
       }
+    },
+    {
+      "branch": "main",
+      "commit_hash": "39c61496",
+      "timestamp": "2025-06-27T13:19:25.570720",
+      "changes": {
+        "files_changed": 3,
+        "lines_added": 41,
+        "lines_removed": 11,
+        "changed_files": [
+          "commit_costs.json",
+          "last_commit_cost.json",
+          "project-documents/proposal.pdf"
+        ]
+      },
+      "context": {
+        "total_files": 1185,
+        "total_tokens": 2417784
+      },
+      "cost_estimate": {
+        "full_repo_cost": 7.263186,
+        "worktree_cost": 0.024834,
+        "savings_potential": 7.238352,
+        "input_tokens": 2418562,
+        "output_tokens": 500,
+        "worktree_input_tokens": 5778
+      }
+    },
+    {
+      "branch": "main",
+      "commit_hash": "7f86ebd8",
+      "timestamp": "2025-07-01T23:26:34.118904",
+      "changes": {
+        "files_changed": 1,
+        "lines_added": 50,
+        "lines_removed": 12,
+        "changed_files": [
+          "project-documents/plan.md"
+        ]
+      },
+      "context": {
+        "total_files": 1186,
+        "total_tokens": 2422754
+      },
+      "cost_estimate": {
+        "full_repo_cost": 7.278726000000001,
+        "worktree_cost": 0.025464,
+        "savings_potential": 7.253262,
+        "input_tokens": 2423742,
+        "output_tokens": 500,
+        "worktree_input_tokens": 5988
+      }
     }
   ],
   "daily_totals": {
     "2025-06-26": 21.7859115,
-    "2025-06-27": 7.262577
+    "2025-06-27": 14.525763000000001,
+    "2025-07-01": 7.278726000000001
   },
   "project_stats": {
-    "total_tokens_processed": 9672097,
-    "total_files_changed": 12,
-    "cost_per_commit_avg": 7.262122125
+    "total_tokens_processed": 14514401,
+    "total_files_changed": 16,
+    "cost_per_commit_avg": 7.26506675
   }
 }

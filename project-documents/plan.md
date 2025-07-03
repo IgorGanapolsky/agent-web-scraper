@@ -1,21 +1,25 @@
 # AI-Powered Newsletter Insights Generator - Project Plan
+## Master Services Agreement Aligned Version
 
 ## Overview
-This document summarizes the evaluation and planning discussion for the AI-Powered Newsletter Insights Generator proposed by FissionLabs for MAX Smith KDP LLC.
+This document outlines the project plan for the AI-Powered Newsletter Insights Generator as per the Master Services Agreement between Fission Labs, Inc. and MAX Smith KDP LLC dated July 2, 2025.
 
 ## Project Summary
-- **Product**: Automated weekly newsletter that aggregates Reddit insights using AI
-- **Target**: 5,000 free trial users initially
-- **Technology**: AWS serverless architecture with Claude AI via Bedrock
-- **Timeline**: 125-day implementation (9 milestones)
-- **Cost**: $0 development cost (provided free by FissionLabs)
+- **Product**: AI-powered newsletter automation platform for B2B market intelligence
+- **Revenue Target**: $300/day ($108K ARR) within operational timeline
+- **Technology**: FastAPI/Python platform (35% existing codebase) with AI integration
+- **Timeline**: Phased implementation per Fission Labs methodology
+- **Development Cost**: $0 (provided free by Fission Labs as strategic partnership)
+- **Operating Costs**: Client covers monthly infrastructure costs only
 
-## Key Features
-1. **Reddit Data Ingestion**: Scheduled Lambda functions to collect posts from specified subreddits
-2. **AI-Powered Insights**: Claude (or other LLMs via FloTorch) generates summaries and insights
-3. **Vector Search**: OpenSearch for semantic similarity and RAG capabilities
-4. **Email Delivery**: Weekly insights via Amazon SES with unsubscribe handling
-5. **Subscription Management**: Stripe integration for 7-day trial to paid conversion
+## Key Features (Building on Existing 35% Complete Platform)
+1. **Multi-Source Data Collection**: Reddit, Twitter, HackerNews integration (70% complete)
+2. **AI-Powered Analysis**: OpenAI/Claude for business insights (existing, operational)
+3. **Subscription Management**: Stripe integration for $29/$99/$299 tiers (to be added)
+4. **Customer Dashboard**: Self-service portal for subscription management (30% complete)
+5. **Automated Newsletter**: Daily/weekly personalized insights delivery
+6. **API Access**: Professional and Enterprise tier features
+7. **Production Deployment**: AWS infrastructure with auto-scaling
 
 ## Technical Architecture
 
@@ -83,19 +87,35 @@ This document summarizes the evaluation and planning discussion for the AI-Power
 - **Growth (1,000-2,500 users)**: ~$600-800/month
 - **Scale (5,000+ users)**: ~$1,000-1,200/month
 
-### Important Cost Notes
-1. **Costs scale with usage** - You only pay more as you get more customers
-2. **Already profitable** - Current operation shows $9,000 revenue vs ~$2,770 total costs
-3. **69% gross margin** - For every $100 in revenue, you keep $69 after costs
-4. **Client only pays monthly operating costs** - Development provided free by FissionLabs
+### Important Cost & Break-Even Analysis
+1. **Development Cost**: $0 (provided free by Fission Labs per MSA)
+2. **Monthly Operating Costs**: $300-1,200 (scales with usage)
+3. **Break-Even Timeline**: Month 2 (weeks 5-6 of operation)
+4. **Initial Investment Needed**: $300-1,000 for first 1-2 months only
+5. **Gross Margin**: 69% - highly profitable SaaS model
+6. **Month 3 Projection**: $8,000+ monthly profit after all costs
+
+### Cash Flow Timeline
+- **Month 1**: -$210 to -$410 (small loss)
+- **Month 2**: +$3,120 to +$3,720 (profitable)
+- **Month 3**: +$8,460 to +$9,060 (strong profit)
+- **Month 6**: +$14,290 to +$14,990 (scaling profit)
 
 ## Client Responsibilities
 1. Provide AWS account with required permissions
 2. Set up Stripe account and share credentials/webhooks
 3. Verify domain and sender email ID in SES
-4. Specify maximum five subreddit(s) for Reddit scraping
+4. Specify target subreddits and data sources
 5. Provide GitHub repository for code maintenance
 6. Authorize web domains and SSL certificates
+7. **Cover operating costs**: $300-1,000 for first 1-2 months until break-even
+
+## Critical MSA Clarifications Needed
+1. **Statement of Work (SOW)**: Required before signing MSA
+2. **Confirm $0 development cost**: Explicitly stated in SOW
+3. **Technical approach**: Build on existing FastAPI platform (35% complete)
+4. **No invoices during development**: Only operating costs after launch
+5. **Revenue-first priorities**: Payment processing, customer registration, production deployment
 
 ## Risk Mitigation
 - Reddit rate limiting included in PoC
